@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+
+<document>
+
+  <properties>
+    <title>Example of the security models</title>
+    <author email="hhernandez@itweb.com.mx">Humberto Hernandez</author>
+  </properties>
+
+  <body>
+
+  <section name="Example">
+    <subsection name="Requirements">
+      <p>
+      This is example is inspired in Scarab but it doesn't follow it exactly. The system controls bug reports in a software project.
+      The system allows  the following operations.
+      </p>
+      <ul>
+        <li>create an issue.</li>
+        <li>view an issue.</li>
+        <li>modify an issue.</li>
+        <li>close an issue.</li>
+      </ul>
+      <p>The system is able to manage several projects.</p>
+      <ul>
+        <li>Project A.</li>
+        <li>Project B.</li>
+      </ul>
+      <p>And there are several roles in each project:</p>
+      <ul>
+        <li>Manager - It can create an issue, view an issue, modify an issue and close an issue.</li>
+        <li>Developer - It can create an issue, view an issue and modify an issue.</li>
+        <li>Observer - It can view an issue.</li>
+      </ul>
+      <p>Project A has the following roles and users:</p>
+      <ul>
+        <li>Salma is the manager.</li>
+        <li>Britney and Demi are developers.</li>
+        <li>Cameron is an observer.</li>
+      </ul>
+      <p>Project B has the following roles and users:</p>
+      <ul>
+        <li>Demi is the manager.</li>
+        <li>Madona and Britney are developers.</li>
+        <li>Barbara is an observer.</li>
+      </ul>
+    </subsection>
+    <subsection name="Turbine">
+    <ul>
+    <li>Declare two groups. One for each project.</li>
+    <li>Declare four permissions. One for each operation.</li>
+    <li>Declare three roles. Manager, Developer and Observer</li>
+    <li>Create users for Salma, Britney, Demi, Cameron, Madona and Barbara</li>
+    <li>Grant Salma the role of manager in project A.</li>
+    <li>Grant Britney the role of develop in projects A and B.</li>
+    <li>Grant Demi the role of developer in project A and the role of manager in project B</li>
+    <li>Grant Cameron the role of observer in project A.</li>
+    <li>Grant Madona the role of developer in project B.</li>
+    <li>Grant Barbara the role of observer in project B.</li>
+    </ul>
+    </subsection>
+    <subsection name="Dynamic">
+    <ul>
+    <li>Declare a group of "managers for project A"</li>
+    <li>Declare a group of "developers for project A"</li>
+    <li>Declare a group of "observers for project A"</li>
+    <li>Declare a group of "managers for project B"</li>
+    <li>Declare a group of "developers for project B"</li>
+    <li>Declare a group of "observers for project B"</li>
+    <li>Declare four permissions. One for each operation.</li>
+    <li>Declare three roles. Manager, Developer and Observer</li>
+    <li>Declare another three groups. One for each role.</li>
+    <li>Declare another two roles. One for each</li>
+    <li>Create users for Salma, Britney, Demi, Cameron, Madona and Barbara</li>
+    <li>Make Salma, Britney, Demi and Cameron part of group "project A".</li>
+    <li>Make Demi, Madona, Britney and Barbara part of group "project B".</li>
+    </ul>
+    <p>We need to do more work on this</p>
+    </subsection>
+    <subsection name="Basic">
+    <ul>
+    <li>Declare two groups. One for each project</li>
+    <li>Create users for Salma, Britney, Demi, Cameron, Madona and Barbara</li>
+    <li>Make Salma, Britney, Demi and Cameron part of group "project A".</li>
+    <li>Make Demi, Madona, Britney and Barbara part of group "project B".</li>
+    </ul>
+    <p>
+    With this configuration you can control that one project is afected only by the members
+    of the project. However, you don't have control over which operations can be done by each member
+    within the project.
+    </p>
+    </subsection>
+
+  </section>
+  </body>
+</document>
+

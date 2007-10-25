@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+
+<document>
+
+  <properties>
+    <title>Authenticator Component</title>
+    <author email="epugh@upstate.com">Eric PUgh</author>
+  </properties>
+
+  <body>
+
+  <section name="Overview">
+    <p>
+      The security system has the concept of pluggable authenticators.  For instance,
+      you may keep your user information in the database, but you want to authenticate
+      against NT.  Or you keep your passwords in the database, but you have different
+      encryptions schemes.  Via the component config file you can specify what authenticator
+      to use.
+    </p>
+    <subsection name="NoOpAuthenticator">
+      <p>
+      Always returns true, regardless of what is passed in.
+      </p>
+    </subsection>
+    <subsection name="TextMatchAuthenticator">
+      <p>
+      Does a plain text match of the passwords.  Case does matter.
+      </p>
+    </subsection>
+    <subsection name="NTAuthenticator">
+      <p>
+      Attempts to authenticate the user against an NT domain.  The
+	  username must look like CVILLE\epugh.  You will need to configure your
+	  system to use the tagish library.
+      </p>
+	<p>
+	http://www.mooreds.com/jaas.html
+	<br/>
+	http://free.tagish.net/jaas/doc.html
+	<br/>
+	http://www.raibledesigns.com/page/rd/20030217
+	<br/>
+	This application uses a small DLL to provide security.  Put the NTSecurity.dll in your JAVA_HOME/jre/bin directory.
+	This provides the JNI interface to NT used by JAAS.
+	<br/>
+	Then put the tagish.login fil in the ${java.home}/jre/lib/security/ directory.  This tells the Tagish
+	code what classes to load for security.
+	<br/>
+	Lastly, you must edit the ${java.home}/jre/lib/security/java.security file and add this line:
+	<source>
+	login.config.url.1=file:${java.home}/lib/security/tagish.login
+	</source>
+	This tells the java security policy how to find the tagish information.
+
+	</p>
+	<p>
+	<!--The last thing is to put the file jaas.jar in your tomcat server/lib/ directory so the JAAS realm can function.-->
+	</p>
+
+    </subsection>
+
+  <subsection name="CryptoAuthenticator">
+      <p>
+      Uses the fulcrum crypto service to check the password
+	  against the encrypted one.  You can specify the algorithm and cipher to use.
+      </p>
+      <p>
+      Using the combined format looks like this:
+      </p>
+<source>
+
+<![CDATA[
+  <component
+    role="org.apache.fulcrum.security.authenticator.Authenticator"
+    class="org.apache.fulcrum.security.authenticator.CryptoAuthenticator">
+      <algorithm>java</algorithm>
+      <cipher>SHA1</cipher>
+  </component>
+
+   <component
+    role="org.apache.fulcrum.crypto.CryptoService"
+    class="org.apache.fulcrum.crypto.DefaultCryptoService">
+ 	<algorithm>
+      	<unix>org.apache.fulcrum.crypto.provider.UnixCrypt</unix>
+        <clear>org.apache.fulcrum.crypto.provider.ClearCrypt</clear>
+        <java>org.apache.fulcrum.crypto.provider.JavaCrypt</java>
+        <oldjava>org.apache.fulcrum.crypto.provider.OldJavaCrypt</oldjava>
+      </algorithm>
+  </component>
+]]>
+</source>
+    </subsection>
+
+  </section>
+
+
+
+</body>
+</document>

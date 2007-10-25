@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<project>
+  <extend>${basedir}/../../project.xml</extend>
+  <id>fulcrum-security-adapter-turbine</id>
+  <name>Fulcrum Security Turbine Adapter</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-security-api</artifactId>
+      <version>1.0.8-dev</version>
+    </dependency>
+
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-crypto</artifactId>
+      <version>1.0.5</version>
+    </dependency>
+
+    <dependency>
+      <groupId>cryptix</groupId>
+      <artifactId>cryptix</artifactId>
+      <version>3.2.0</version>
+      <url>http://www.cryptix.org/</url>
+    </dependency>
+
+     <dependency>
+       <groupId>commons-beanutils</groupId>
+       <artifactId>commons-beanutils</artifactId>
+       <version>1.7.0</version>
+     </dependency>
+
+     <dependency>
+       <groupId>commons-configuration</groupId>
+       <artifactId>commons-configuration</artifactId>
+       <version>1.2</version>
+     </dependency>
+
+
+
+
+    <!-- Needed only for the Turbine Adapter -->
+    <dependency>
+      <groupId>turbine</groupId>
+      <artifactId>turbine</artifactId>
+      <version>2.3.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>xstream</groupId>
+      <artifactId>xstream</artifactId>
+      <version>1.1.2</version>
+      <url>http://xstream.codehaus.org/</url>
+    </dependency>
+
+    <dependency>
+      <groupId>servletapi</groupId>
+      <artifactId>servletapi</artifactId>
+      <version>2.3</version>
+      <url>http://java.sun.com/products/servlet/</url>
+    </dependency>
+
+    <dependency>
+      <groupId>torque</groupId>
+      <artifactId>torque</artifactId>
+      <version>3.2</version>
+      <url>http://db.apache.org/torque/</url>
+    </dependency>
+
+    <!-- testing -->
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-security-memory</artifactId>
+      <version>1.0.8-dev</version>
+    </dependency>
+
+ <!-- Needed only for testing the Turbine Adaptor -->
+
+    <dependency>
+      <groupId>mockobjects</groupId>
+      <artifactId>mockobjects-jdk1.4-j2ee1.3</artifactId>
+      <version>0.09</version>
+    </dependency>
+
+    <dependency>
+      <groupId>mockobjects</groupId>
+      <artifactId>mockobjects-core</artifactId>
+      <version>0.09</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>ecs</groupId>
+      <artifactId>ecs</artifactId>
+      <version>1.4.2</version>
+      <url>http://jakarta.apache.org/ecs/</url>
+    </dependency>
+
+    <dependency>
+      <groupId>xml-apis</groupId>
+      <artifactId>xml-apis</artifactId>
+      <version>2.0.2</version>
+      <url>http://xml.apache.org/commons/</url>
+    </dependency>
+
+	<!-- ECM dependencies -->
+    <dependency>
+      <groupId>excalibur-component</groupId>
+      <artifactId>excalibur-component</artifactId>
+      <version>2.1</version>
+      <url>http://excalibur.apache.org/</url>
+    </dependency>
+
+    <dependency>
+      <groupId>excalibur-instrument</groupId>
+      <artifactId>excalibur-instrument-api</artifactId>
+      <version>2.1</version>
+      <url>http://excalibur.apache.org/</url>
+    </dependency>
+
+    <dependency>
+      <groupId>excalibur-logger</groupId>
+      <artifactId>excalibur-logger</artifactId>
+      <version>2.1</version>
+      <url>http://excalibur.apache.org/</url>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.1</version>
+      <url>http://jakarta.apache.org/commons/collections.html</url>
+    </dependency>
+
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.8</version>
+      <url>http://jakarta.apache.org/log4j/</url>
+    </dependency>
+
+    <dependency>
+      <groupId>excalibur-pool</groupId>
+      <artifactId>excalibur-pool-api</artifactId>
+      <version>2.1</version>
+      <url>http://excalibur.apache.org/</url>
+    </dependency>
+
+    <dependency>
+      <groupId>avalon-logkit</groupId>
+      <artifactId>avalon-logkit</artifactId>
+      <version>2.1</version>
+      <url>http://excalibur.apache.org</url>
+    </dependency>
+
+  </dependencies>
+
+</project>
+

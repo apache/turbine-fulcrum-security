@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+  <!DOCTYPE hibernate-mapping PUBLIC
+   "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+   "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+  <hibernate-mapping auto-import="true">
+    <class name="org.apache.fulcrum.security.model.turbine.entity.impl.TurbinePermissionImpl" table="PERMISSION" >
+      <id name="id" type="long" column="PERMISSION_ID" unsaved-value="0">
+           <generator class="native"/>
+        </id>
+      <property name="name" column="NAME" type="string"/>
+
+      <set name="rolesAsSet" lazy="true" table="ROLE_PERMISSION" inverse="true" cascade="none">
+        <key column="PERMISSION_ID"/>
+        <many-to-many class="org.apache.fulcrum.security.model.turbine.entity.impl.TurbineRoleImpl" column="ROLE_ID"/>
+      </set>
+    </class>
+
+    <class name="org.apache.fulcrum.security.model.turbine.entity.impl.TurbineRoleImpl" table="ROLE" >
+      <id name="id" type="long" column="ROLE_ID" unsaved-value="0">
+           <generator class="native"/>
+        </id>
+      <property name="name" column="NAME" type="string"/>
+
+    <set name="permissionsAsSet" lazy="true" table="ROLE_PERMISSION" cascade="none">
+        <key column="ROLE_ID"/>
+        <many-to-many class="org.apache.fulcrum.security.model.turbine.entity.impl.TurbinePermissionImpl" column="PERMISSION_ID"/>
+      </set>
+
+    <set inverse="true" name="userGroupRoleSet">
+      <key column="role_id" />
+      <one-to-many class="org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole" />
+    </set>
+
+    </class>
+
+    <class name="org.apache.fulcrum.security.model.turbine.entity.impl.TurbineGroupImpl" table="GROUPS" >
+      <id name="id" type="long" column="GROUP_ID" unsaved-value="0">
+           <generator class="native"/>
+        </id>
+      <property name="name" column="NAME" type="string"/>
+
+        <set inverse="true" name="userGroupRoleSet">
+      <key column="group_id" />
+      <one-to-many class="org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole" />
+    </set>
+    </class>
+
+	<class name="org.apache.fulcrum.security.model.turbine.entity.impl.TurbineUserImpl"
+		table="HIBUSER" >
+		<id name="id" type="long" column="HIBUSER_ID" unsaved-value="0">
+			<generator class="native"/>
+		</id>
+		<property name="name" column="USERNAME" type="string"/>
+		<property name="password" column="PASSWORD" type="string"/>
+    <set inverse="true" name="userGroupRoleSet">
+      <key column="user_id" />
+      <one-to-many class="org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole" />
+    </set>
+
+	</class>
+
+  <class name="org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole" table="turbine_user_group_role"
+    lazy="true">
+
+    <composite-id>
+        <key-many-to-one name="Role" column="role_id"
+            class="org.apache.fulcrum.security.model.turbine.entity.impl.TurbineRoleImpl"
+            />
+        <key-many-to-one name="User" column="user_id"
+            class="org.apache.fulcrum.security.model.turbine.entity.impl.TurbineUserImpl"
+            />
+        <key-many-to-one name="Group" column="group_id"
+            class="org.apache.fulcrum.security.model.turbine.entity.impl.TurbineGroupImpl"
+            />
+    </composite-id>
+  </class>
+
+  </hibernate-mapping>

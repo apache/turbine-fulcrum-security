@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<document>
+
+  <properties>
+    <title>Tasks</title>
+    <author email="epugh@upstate.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+    <section name="Tasks">
+      <p>
+        Lists of todos and ideas for future versions.
+      </p>
+       <p>
+
+          <ul>
+           <li>
+              Need to use the encryption component!
+            </li>
+           <li>
+              Finish fleshing out the Adapters for Turbine.  Right now they are a pretty minimal implementation
+              to validate that the Adapter concept would work.  Currently they only support moving objects from
+              fulcrum to turbine.  Sending objects from Turbine back to Fulcrum is not supported.  Just needs some
+              grunt work.
+            </li>
+            <li>
+              Try and figure out how to get both NTLM authentication, as well as retrieving the password, or the groups
+              directly to use with "Basic" security model.
+            </li>
+            <li>
+              Upgrade to using Merlin for unit tests instead of ECM..  Also have demos showing using the security module
+              in Merlin.
+            </li>
+          </ul>
+        </p>
+
+    </section>
+
+    <section name="Things to Resolve">
+
+
+
+
+
+    </section>
+
+  </body>
+</document>

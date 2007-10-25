@@ -1,0 +1,239 @@
+<?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+
+<document>
+
+  <properties>
+    <title>Security Component</title>
+    <author email="epugh@upstate.com">Eric PUgh</author>
+  </properties>
+
+  <body>
+
+  <section name="Overview">
+    <p>
+      This component provides a highly flexible security framework  It is based on code from the
+      Turbine framework, but has been expanded and can be used in any container compatible
+      with the Avalon framework.
+    <ul>
+      <li>Allow pluggability via Avalon components of various entities.</li>
+      <li>Explicit Model interface allows generic entities to be glued together in a custom model very quickly.</li>
+      <li>Provide adapters to various other security systems</li>
+      <li>Solve most common problems in dealing with security</li>
+      <li>Not enforce assumptions about how a security framework should be setup.</li>
+    </ul>
+    </p>
+    <subsection name="Matrix">
+      <table>
+        <tr>
+          <th/><th colspan="2">Basic Model</th><th colspan="5">Dynamic Model</th><th colspan="5">Turbine Model</th>
+        </tr>
+        <tr>
+          <th/><th>User</th><th>Group</th><th>User</th><th>Group</th><th>Role</th><th>Permission</th><th>Delegates</th><th>User</th><th>Group</th><th>Role</th><th>Permission</th><th>UserGroupRole</th>
+        </tr>
+        <tr><th>Memory</th><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td></tr>
+        <tr><th>Hibernate</th><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td></tr>
+        <tr><th>Torque</th><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td></tr>
+        <tr><th>NT</th><td>X</td><td>X</td><td>X</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </table>
+    </subsection>
+  </section>
+
+  <section name="Common Security Implementations">
+    <p>
+    The two most common models for security are embodied in the "Basic" and "Dynamic" models.  A third model, "Turbine",
+    demonstrates customizing the "Dynamic" model by adding a concept of a global group.
+    </p>
+    <subsection name="Dynamic">
+      <p>
+      For lack of a better name, this one is called Dynamic because you can configure all the relationships.
+      In it, you have a set of permissions that are related in a many to many relation ship with a set or roles.
+      Those roles are related
+      in a many to many relationship with a set of groups.  A user is in a many to many relationship
+      with a set of groups.  <i>note: I will try and get a diagram. any suggestions on diagram tools?</i>
+      </p>
+      <p>
+      The <code>memory</code>, <code>hibernate</code> and <code>torque</code> packages currently implements this security model.
+      </p>
+    </subsection>
+
+    <subsection name="Turbine">
+      <p>
+    This model is based on what the Turbine application server uses, and leverages the Dynamic model.  It merely adds
+    the concept of a "global group" which is a toplevel group to the Dynamic model.
+    However, what makes this different is that instead of roles
+    being related just to groups, there instead is a many to many relationship between users and
+    groups and roles.  So you pick a user, pick their role, and their group, and that is their permissions.
+    </p>
+    </subsection>
+    <subsection name="Basic">
+      <p>
+    This model is very simple and was originally inspired by OSUser's security model.  In it, you have users, and groups, and security
+    is based on a user belonging to a group.  Users can belong to multiple groups.  So groups become
+    the equivalent of roles/permissions.
+      </p>
+      <p>
+      The <code>memory</code>, <code>nt</code> <code>torque</code> and <code>hibernate</code>  packages currently implements this security model.
+      </p>
+    </subsection>
+  </section>
+
+<section name="Simple">
+
+    <subsection name="Usage of InMemory components">
+    <p>
+    The InMemory components implement the Basic model.  All data is strictly in memory, and is
+    not persisted.  Therefore when your application stops, all values are lost.  However, this is
+    very useful in unit testing and prototyping using the Security component.  Notice how role,
+    user, group, and permission managers are all Avalon components as well?  This allows you to swap one
+    component out for another.  Say you wanted to provide your own group manager that checked that
+    a group existed in NT.  You could swap out the MemoryGroupManager implementation for a NTGroupManager,
+    assuming you kept the API the same.
+    </p>
+    </subsection>
+    <subsection name="Configuration">
+    <p>
+    This uses the integrated role and component config XML.  Check the /src/test directory for the most uptodate
+    examples of the configuration files used in unit testing!
+    </p>
+    <p>
+<source>
+<![CDATA[
+<my-system>
+  <component
+    role="org.apache.fulcrum.security.SecurityService"
+    class="org.apache.fulcrum.security.BaseSecurityService">
+  </component>
+
+  <component
+    role="org.apache.fulcrum.security.UserManager"
+    class="org.apache.fulcrum.security.memory.MemoryUserManagerImpl">
+  </component>
+  <component
+    role="org.apache.fulcrum.security.GroupManager"
+    class="org.apache.fulcrum.security.memory.MemoryGroupManagerImpl">
+  </component>
+
+  <component
+    role="org.apache.fulcrum.security.RoleManager"
+    class="org.apache.fulcrum.security.memory.MemoryRoleManagerImpl">
+  </component>
+
+  <component
+    role="org.apache.fulcrum.security.PermissionManager"
+    class="org.apache.fulcrum.security.memory.MemoryPermissionManagerImpl">
+  </component>
+
+  <component
+    role="org.apache.fulcrum.security.ModelManager"
+    class="org.apache.fulcrum.security.memory.basic.MemoryModelManagerImpl">
+  </component>
+</my-system>
+]]>
+</source>
+    </p>
+    </subsection>
+
+  </section>
+
+<section name="Adapters">
+  <subsection name="Turbine">
+    <p>
+    In <code>org.apache.fulcrum.security.adapter.turbine</code> is an implementation of the Turbine Security Service.
+    This is designed to allow you to run the Fulcrum Security Service, but have Turbine 2.3's be able to query, through
+    the adapter the Fulcrum Security service.
+    </p>
+    </subsection>
+
+  <subsection name="OSUser">
+    <p>
+    In <code>org.apache.fulcrum.security.adapter.osuser</code> is an implementation of the various *Provider classes
+    required by OSUser.  In order to have OSUser load up these classes, you must add this to your <code>ouser.xml</code> configuration
+    file.
+    </p>
+   <p>
+<source>
+<![CDATA[
+    <!-- Fulcrum providers -->
+    <provider class="org.apache.fulcrum.security.adapter.osuser.FulcrumAccessProvider"/>
+    <provider class="org.apache.fulcrum.security.adapter.osuser.FulcrumCredentialsProvider"/>
+  <!-- don't have a propertyset provider, so just return a memory one. -->
+    <provider class="com.opensymphony.user.provider.memory.MemoryProfileProvider" />
+]]>
+</source>
+    </p>
+    <p>
+      When using the FulcrumAccessProvider and FulcrumCredentialsProvider, you must first pass into them the
+      Fulcrum SecurityService class.  They both inherit from BaseFulcrumProvider, so you can just do
+      <code>BaseFulcrumProvider.setSecurityService(securityService)</code> before OSUser calls them for the
+      first time.
+    </p>
+    </subsection>
+</section>
+
+<section name="Implementation Details">
+  <subsection name="Hibernate">
+    <p>
+    With the Hibernate SPI, you can just subclass the BasicUserImpl/DynamicUserImpl class, or implement the User interface, provide your own mapping .hbm file
+    and then any additional user properties will be persisted!  Very easy customization for your environment!
+    </p>
+  </subsection>
+  <subsection name="Torque">
+    <p>
+    The Torque SPI provides three different schema mappings for the different security models (in the schema directory). You can easily adjust these to your
+    needs. If adjustments are needed, set up the <code>project.properties</code> file according to your database environment (see the
+    <a href="http://db.apache.org/torque/releases/torque-3.3/maven-plugin/index.html">Torque Maven Plugin Documentation</a> for reference) and use Maven to
+    generate the Torque-OM-classes and to re-built the JAR.
+    </p>
+    <p>
+    The component configuration must refer to the correct Torque-OM-classes as in the following example for the Dynamic model:
+    <source>
+<![CDATA[
+    <userManager>
+        <className>org.apache.fulcrum.security.torque.om.TorqueDynamicUser</className>
+    </userManager>
+    <groupManager>
+        <className>org.apache.fulcrum.security.torque.om.TorqueDynamicGroup</className>
+    </groupManager>
+    <roleManager>
+        <className>org.apache.fulcrum.security.torque.om.TorqueDynamicRole</className>
+    </roleManager>
+    <permissionManager>
+        <className>org.apache.fulcrum.security.torque.om.TorqueDynamicPermission</className>
+    </permissionManager>
+]]>
+    </source>
+    </p>
+    <p>
+    As a default, the Torque Security Service uses <code>fulcrum</code> as the name of the connection pool for the tables used. This should be considered
+    in the Torque configuration when the service is deployed.
+    </p>
+  </subsection>
+  <subsection name="NT">
+    <p>
+    If you use the BasicModel with the NT implementation, you have a wholly NT based authentication scheme!  The groups map onto NT groups, while the
+    users are authenticated against NT as well.  This does require you to ask your users for their NT username and password however, we
+    don't have NTLM working as yet.
+    </p>
+  </subsection>
+</section>
+
+</body>
+</document>
