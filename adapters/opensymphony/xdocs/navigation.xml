@@ -23,9 +23,7 @@
 ]>
 <project
   name="Secuirty"
-  href="http://jakarta.apache.org/turbine/fulcrum/sites/security.html/">
-
-
+  href="http://turbine.apache.org/fulcrum/sites/security.html/">
 
 &security-nav;
 
