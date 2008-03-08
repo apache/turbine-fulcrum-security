@@ -25,6 +25,9 @@
 
   <body>
     <release version="1.0.8" date="">
+    <action type="update" dev="tv">
+        Update to latest release of Torque (3.3).
+    </action>
       <action dev="tv" type="update" fixes="TRB-40">
         Changed BasicUser, BasicGroup, DynamicUser, DynamicGroup, DynamicRole,
         DynamicPermission, TurbineUser, TurbineGroup, TurbineRole and TurbinePermission to
