@@ -20,8 +20,6 @@ package org.apache.fulcrum.security.adapter.osuser;
 import java.util.Properties;
 
 import org.apache.avalon.framework.component.ComponentException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.util.DataBackendException;
 
@@ -40,8 +38,6 @@ import com.opensymphony.user.provider.UserProvider;
 public abstract class BaseFulcrumProvider implements UserProvider
 {
 
-	/** Logging */
-	private static Log log = LogFactory.getLog(BaseFulcrumProvider.class);
 	/** Our Fulcrum Security Service to use */
 	private static SecurityService securityService;
 
@@ -143,6 +139,4 @@ public abstract class BaseFulcrumProvider implements UserProvider
 	{
 		securityService = asecurityService;
 	}
-
-
 }

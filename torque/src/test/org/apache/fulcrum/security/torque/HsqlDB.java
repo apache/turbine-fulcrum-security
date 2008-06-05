@@ -21,17 +21,11 @@ package org.apache.fulcrum.security.torque;
 
 import java.io.File;
 import java.io.FileReader;
-import java.net.URL;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.hsqldb.jdbcDriver;
 
 /**
@@ -45,8 +39,6 @@ import org.hsqldb.jdbcDriver;
 public class HsqlDB
 {
     private Connection connection = null;
-
-    private static Log log = LogFactory.getLog(HsqlDB.class);
 
     public HsqlDB(String uri, String loadFile) throws Exception
     {

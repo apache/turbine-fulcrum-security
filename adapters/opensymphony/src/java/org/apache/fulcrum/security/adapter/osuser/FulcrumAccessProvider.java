@@ -21,8 +21,6 @@ package org.apache.fulcrum.security.adapter.osuser;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.dynamic.DynamicAccessControlList;
@@ -45,9 +43,6 @@ public class FulcrumAccessProvider
 	extends BaseFulcrumProvider
 	implements AccessProvider
 {
-	/** Logging */
-	private static Log log = LogFactory.getLog(FulcrumAccessProvider.class);
-
 	/*
 	 * Not implemented.   Should use SecurityService directly.
 	 *
