@@ -190,9 +190,9 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
             catch (TorqueException e)
             {
                 throw new DataBackendException("grant('"
-                        + (user != null ? user.getName() : "null") + "', '"
-                        + (group != null ? group.getName() : "null") + "', '"
-                        + (role != null ? role.getName() : "null") + "') failed", e);
+                        + user.getName() + "', '"
+                        + group.getName() + "', '"
+                        + role.getName() + "') failed", e);
             }
             finally
             {
@@ -271,9 +271,9 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
             catch (TorqueException e)
             {
                 throw new DataBackendException("revoke('"
-                        + (user != null ? user.getName() : "null") + "', '"
-                        + (group != null ? group.getName() : "null") + "', '"
-                        + (role != null ? role.getName() : "null") + "') failed", e);
+                        + user.getName() + "', '"
+                        + group.getName() + "', '"
+                        + role.getName() + "') failed", e);
             }
             finally
             {
