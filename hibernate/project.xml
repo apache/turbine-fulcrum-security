@@ -39,12 +39,6 @@
       <artifactId>commons-collections</artifactId>
       <version>3.1</version>
     </dependency>
-    <dependency>
-      <groupId>cryptix</groupId>
-      <artifactId>cryptix</artifactId>
-      <version>3.2.0</version>
-      <url>http://www.cryptix.org/</url>
-    </dependency>
 
 <!-- Needed for the Hibernate SPI -->
      <dependency>

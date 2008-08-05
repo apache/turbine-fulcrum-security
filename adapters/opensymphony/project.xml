@@ -34,13 +34,6 @@
       <version>1.0.5</version>
     </dependency>
 
-    <dependency>
-      <groupId>cryptix</groupId>
-      <artifactId>cryptix</artifactId>
-      <version>3.2.0</version>
-      <url>http://www.cryptix.org/</url>
-    </dependency>
-
      <dependency>
        <groupId>commons-beanutils</groupId>
        <artifactId>commons-beanutils</artifactId>

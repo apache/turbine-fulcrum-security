@@ -35,13 +35,6 @@
       <version>1.0.5</version>
     </dependency>
 
-    <dependency>
-      <groupId>cryptix</groupId>
-      <artifactId>cryptix</artifactId>
-      <version>3.2.0</version>
-      <url>http://www.cryptix.org/</url>
-    </dependency>
-
      <dependency>
        <groupId>commons-beanutils</groupId>
        <artifactId>commons-beanutils</artifactId>
@@ -53,9 +46,6 @@
        <artifactId>commons-configuration</artifactId>
        <version>1.2</version>
      </dependency>
-
-
-
 
     <!-- Needed only for the Turbine Adapter -->
     <dependency>
@@ -81,7 +71,7 @@
     <dependency>
       <groupId>torque</groupId>
       <artifactId>torque</artifactId>
-      <version>3.2</version>
+      <version>3.3</version>
       <url>http://db.apache.org/torque/</url>
     </dependency>
 
@@ -151,7 +141,7 @@
     <dependency>
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
-      <version>3.1</version>
+      <version>3.2</version>
       <url>http://commons.apache.org/collections/</url>
     </dependency>
 

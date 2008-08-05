@@ -34,13 +34,6 @@
       <version>1.0.5</version>
     </dependency>
 
-    <dependency>
-      <groupId>cryptix</groupId>
-      <artifactId>cryptix</artifactId>
-      <version>3.2.0</version>
-      <url>http://www.cryptix.org/</url>
-    </dependency>
-
      <dependency>
       <groupId>tagishauth</groupId>
       <artifactId>tagishauth</artifactId>
@@ -52,7 +45,7 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-security-memory</artifactId>
-      <version>1.0.7</version>
+      <version>1.0.8-dev</version>
     </dependency>
 
   </dependencies>
