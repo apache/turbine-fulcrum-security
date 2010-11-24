@@ -24,10 +24,16 @@
   </properties>
 
   <body>
-    <release version="1.0.8" date="">
-    <action type="update" dev="tv">
+    <release version="1.1.0" date="">
+      <action type="update" dev="tv" issue="TRB-78" due-to="Ludwig Magnusson">
+        Move API build to Maven-2.
+      </action>
+      <action type="update" dev="tv">
+        Moved tests to src/test
+      </action>
+      <action type="update" dev="tv">
         Update to latest release of Torque (3.3).
-    </action>
+      </action>
       <action dev="tv" type="update" fixes="TRB-40">
         Changed BasicUser, BasicGroup, DynamicUser, DynamicGroup, DynamicRole,
         DynamicPermission, TurbineUser, TurbineGroup, TurbineRole and TurbinePermission to
