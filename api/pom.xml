@@ -46,32 +46,21 @@
 
     <dependencies>
         <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.4</version>
-        </dependency>
-        <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>2.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.fulcrum</groupId>
-            <artifactId>fulcrum-crypto</artifactId>
-            <version>1.0.7</version>
         </dependency>
         <dependency>
             <groupId>org.apache.avalon.framework</groupId>
             <artifactId>avalon-framework-api</artifactId>
             <version>4.3.1</version>
         </dependency>
-
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.2</version>
-            <scope>test</scope>
+            <groupId>org.apache.fulcrum</groupId>
+            <artifactId>fulcrum-crypto</artifactId>
+            <version>1.0.7</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.fulcrum</groupId>
             <artifactId>fulcrum-testcontainer</artifactId>
@@ -91,15 +80,6 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.2</version>
                 <executions>
@@ -112,16 +92,6 @@
             </plugin>
         </plugins>
     </build>
-    <reporting>
-        <plugins>
-            <plugin>
-                <artifactId>maven-changes-plugin</artifactId>
-                <configuration>
-                    <xmlPath>${basedir}/xdocs/changes.xml</xmlPath>
-                </configuration>
-            </plugin>
-        </plugins>
-    </reporting>
 
     <profiles>
         <profile>
