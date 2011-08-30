@@ -28,6 +28,20 @@
   <name>Fulcrum Security NT Impl</name>
   <version>1.1.0-SNAPSHOT</version>
   <url>http://turbine.apache.org/fulcrum/fulcrum-security-nt</url>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/nt/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/nt/</developerConnection>
+    <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/security/nt/</url>
+  </scm>
+
+  <distributionManagement>
+    <site>
+      <id>apache.website</id>
+      <name>Fulcrum Website</name>
+      <url>${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/fulcrum/fulcrum-security-nt/</url>
+    </site>
+  </distributionManagement>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.fulcrum</groupId>
@@ -59,4 +73,26 @@
     	<scope>compile</scope>
     </dependency>
   </dependencies>
+
+  <profiles>
+    <profile>
+      <id>rc</id>
+      <distributionManagement>
+        <!-- Cannot define in parent ATM, see COMMONSSITE-26 -->
+        <site>
+          <id>apache.website</id>
+          <name>Apache Fulcrum Release Candidate Staging Site</name>
+          <url>${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/builds/fulcrum/${fulcrum.componentid}/${fulcrum.release.version}/${fulcrum.rc.version}/site</url>
+        </site>
+      </distributionManagement>
+    </profile>
+  </profiles>
+
+  <properties>
+    <!-- This bits are used for the staging directory -->
+    <fulcrum.release.version>1.1.0</fulcrum.release.version>
+    <fulcrum.rc.version>RC1</fulcrum.rc.version>
+    <fulcrum.deployment.protocol>scpexe</fulcrum.deployment.protocol>
+  </properties>
+    
 </project>

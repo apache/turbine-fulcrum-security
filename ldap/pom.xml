@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <parent>
+        <artifactId>fulcrum-security-parent</artifactId>
+        <groupId>org.apache.fulcrum</groupId>
+        <version>1.1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.apache.fulcrum</groupId>
+    <artifactId>fulcrum-security-ldap</artifactId>
+    <name>Fulcrum Security LDAP Impl</name>
+    <version>1.1.0-SNAPSHOT</version>
+    
+    <url>http://turbine.apache.org/fulcrum/fulcrum-security-ldap</url>
+    <scm>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/ldap/</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/ldap/</developerConnection>
+        <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/security/ldap/</url>
+    </scm>
+
+    <distributionManagement>
+        <site>
+            <id>apache.website</id>
+            <name>Fulcrum Website</name>
+            <url>${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/fulcrum/fulcrum-security-ldap/</url>
+        </site>
+    </distributionManagement>
+
+    <build>
+        <sourceDirectory>${basedir}/src/java/</sourceDirectory>
+        <testSourceDirectory>${basedir}/src/test/</testSourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>${basedir}/src/test</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </testResource>
+        </testResources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <forkMode>always</forkMode>
+                    <includes>
+                        <include>**/*Test.*</include>
+                        <include>**/*TestCase.*</include>
+                    </includes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.avalon.framework</groupId>
+            <artifactId>avalon-framework-api</artifactId>
+            <version>4.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.fulcrum</groupId>
+            <artifactId>fulcrum-security-api</artifactId>
+            <version>1.1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.fulcrum</groupId>
+            <artifactId>fulcrum-security-api</artifactId>
+            <version>1.1.0-SNAPSHOT</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.fulcrum</groupId>
+            <artifactId>fulcrum-security-memory</artifactId>
+            <version>1.1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.fulcrum</groupId>
+            <artifactId>fulcrum-testcontainer</artifactId>
+            <version>1.0.6</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.fulcrum</groupId>
+            <artifactId>fulcrum-yaafi</artifactId>
+            <version>1.0.6</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    
+    <profiles>
+        <profile>
+            <id>rc</id>
+            <distributionManagement>
+                <!-- Cannot define in parent ATM, see COMMONSSITE-26 -->
+                <site>
+                    <id>apache.website</id>
+                    <name>Apache Fulcrum Release Candidate Staging Site</name>
+                    <url>${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/builds/fulcrum/${fulcrum.componentid}/${fulcrum.release.version}/${fulcrum.rc.version}/site</url>
+                </site>
+            </distributionManagement>
+        </profile>
+    </profiles>
+
+    <properties>
+        <!-- This bits are used for the staging directory -->
+        <fulcrum.release.version>1.1.0</fulcrum.release.version>
+        <fulcrum.rc.version>RC1</fulcrum.rc.version>
+        <fulcrum.deployment.protocol>scpexe</fulcrum.deployment.protocol>
+    </properties>
+    
+    <reporting>
+        <plugins>
+            <plugin>
+                <artifactId>maven-changes-plugin</artifactId>
+                <configuration>
+                    <xmlPath>${basedir}/xdocs/changes.xml</xmlPath>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+</project>
