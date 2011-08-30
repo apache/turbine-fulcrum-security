@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  Licensed to the Apache Software Foundation (ASF) under one
  or more contributor license agreements.  See the NOTICE file
@@ -17,14 +17,12 @@
  specific language governing permissions and limitations
  under the License.
 -->
-
-<!DOCTYPE project [
-<!ENTITY security-nav SYSTEM "../../incl_nav.xml">
-]>
 <project
-  name="Fulcrum Security"
-  href="http://turbine.apache.org/fulcrum/sites/security.html/">
+  name="Fulcrum Security Memory Implementation"
+  href="http://turbine.apache.org/fulcrum/fulcrum-security-memory/">
 
-&security-nav;
+<body>
+
+</body>
 
 </project>

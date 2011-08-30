@@ -17,7 +17,12 @@
  specific language governing permissions and limitations
  under the License.
 -->
-<project default="jar:jar" xmlns:maven="jelly:maven" xmlns:j="jelly:core" xmlns:util="jelly:util">
+<project
+  name="Fulcrum Security Hibernate Implementation"
+  href="http://turbine.apache.org/fulcrum/fulcrum-security-hibernate/">
 
+<body>
+
+</body>
 
 </project>

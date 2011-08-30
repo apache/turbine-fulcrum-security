@@ -35,7 +35,7 @@
         Changed BasicUser, BasicGroup, DynamicUser, DynamicGroup, DynamicRole,
         DynamicPermission, TurbineUser, TurbineGroup, TurbineRole and TurbinePermission to
         interfaces. Added default implementations for existing security services.
-        Changed all occurences of these classes to use BasicUserImpl, BasicGroupImpl,
+        Changed all occurrences of these classes to use BasicUserImpl, BasicGroupImpl,
         DynamicUserImpl, DynamicGroupImpl, DynamicRoleImpl, DynamicPermissionImpl,
         TurbineUserImpl, TurbineGroupImpl, TurbineRoleImpl and TurbinePermissionImpl instead.
       </action>

@@ -17,27 +17,12 @@
  specific language governing permissions and limitations
  under the License.
 -->
-<project default="jar:jar" xmlns:maven="jelly:maven" xmlns:j="jelly:core" xmlns:util="jelly:util">
+<project
+  name="Fulcrum Security NT Implementation"
+  href="http://turbine.apache.org/fulcrum/fulcrum-security-nt/">
 
-  <preGoal name="java:compile">
-    <attainGoal name="torque:om"/>
-  </preGoal>
+<body>
 
-  <preGoal name="torque:init">
-    <attainGoal name="torque-gen:prepare"/>
-  </preGoal>
-
-  <goal name="torque-gen:prepare">
-    <property file="project.properties" />
-
-    <copy todir="${torque.schema.dir}">
-      <fileset dir="schema">
-        <include name="*" />
-      </fileset>
-      <filterset>
-        <filter token="DATABASE_DEFAULT" value="${torque.project}"/>
-      </filterset>
-    </copy>
-  </goal>
+</body>
 
 </project>

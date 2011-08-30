@@ -28,7 +28,7 @@
 <!-- @version $Id: torque-security-schema.xml,v 1.1 2005/09/26 14:10:04 tvan Exp $ -->
 <!-- ====================================================================     -->
 
-<database name="@DATABASE_DEFAULT@">
+<database name="fulcrum">
 
   <table name="FULCRUM_TURBINE_PERMISSION" javaName="TorqueTurbinePermission" idMethod="idbroker"
       baseClass="org.apache.fulcrum.security.torque.turbine.TorqueAbstractTurbinePermission">
