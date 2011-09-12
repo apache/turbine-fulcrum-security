@@ -25,6 +25,12 @@
 
   <body>
     <release version="1.1.0" date="">
+      <action type="update" dev="tv">
+        Update fulcrum-hibernate to use a recent version of Hibernate (3.6.7-Final).
+      </action>
+      <action type="update" dev="tv">
+        Move all builds to Maven2
+      </action>
       <action type="update" dev="tv" issue="TRB-78" due-to="Ludwig Magnusson">
         Move API build to Maven-2.
       </action>

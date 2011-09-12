@@ -18,8 +18,8 @@
  under the License.
 -->
   <!DOCTYPE hibernate-mapping PUBLIC
-   "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
-   "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+   "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
   <hibernate-mapping auto-import="true">
     <class name="org.apache.fulcrum.security.model.turbine.entity.impl.TurbinePermissionImpl" table="PERMISSION" >

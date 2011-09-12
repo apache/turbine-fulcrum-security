@@ -17,9 +17,6 @@ package org.apache.fulcrum.security.hibernate.dynamic;
  * specific language governing permissions and limitations
  * under the License.
  */
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
@@ -33,6 +30,8 @@ import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.hibernate.Transaction;
+import org.hibernate.classic.Session;
 /**
  * This implementation persists to a database via Hibernate.
  *

@@ -18,11 +18,10 @@ package org.apache.fulcrum.security.hibernate.dynamic;
  * under the License.
  */
 
-import net.sf.hibernate.avalon.HibernateService;
-
 import org.apache.fulcrum.security.SecurityService;
-import org.apache.fulcrum.security.model.test.AbstractGroupManagerTest;
 import org.apache.fulcrum.security.hibernate.HibernateHelper;
+import org.apache.fulcrum.security.hibernate.PersistenceHelper;
+import org.apache.fulcrum.security.model.test.AbstractGroupManagerTest;
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
@@ -35,8 +34,8 @@ public class HibernateExtendedUserGroupManagerTest extends AbstractGroupManagerT
         {
             this.setRoleFileName("src/test/DynamicHibernateRoleConfig.xml");
             this.setConfigurationFileName("src/test/DynamicHibernateExtendedUserComponentConfig.xml");
-            HibernateService hibernateService = (HibernateService) lookup(HibernateService.ROLE);
-            HibernateHelper.exportSchema(hibernateService.getConfiguration());
+            PersistenceHelper helper = (PersistenceHelper) lookup(PersistenceHelper.ROLE);
+            HibernateHelper.exportSchema(helper.getConfiguration());
             securityService = (SecurityService) lookup(SecurityService.ROLE);
             groupManager = securityService.getGroupManager();
         }

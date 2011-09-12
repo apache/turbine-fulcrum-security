@@ -58,9 +58,11 @@
         </testResources>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.4.3</version>
                 <configuration>
-                    <forkMode>always</forkMode>
+                    <forkMode>perTest</forkMode>
                     <includes>
                         <include>**/*Test.*</include>
                         <include>**/*TestCase.*</include>
@@ -69,20 +71,6 @@
             </plugin>
         </plugins>
     </build>
-    <repositories>
-    	<repository>
-    		<releases>
-    			<enabled>true</enabled>
-    		</releases>
-    		<snapshots>
-    			<enabled>false</enabled>
-    		</snapshots>
-    		<id>turbine</id>
-    		<name>Turbine Maven Repository</name>
-    		<url>http://turbine.apache.org/repo</url>
-    		<layout>legacy</layout>
-    	</repository>
-    </repositories>
     <dependencies>
         <dependency>
             <groupId>org.apache.fulcrum</groupId>
@@ -92,58 +80,21 @@
     
         <!-- Needed for the Hibernate SPI -->
         <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>1.7.0</version>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>3.6.7.Final</version>
         </dependency>
         <dependency>
-            <groupId>hibernate</groupId>
-            <artifactId>hibernate</artifactId>
-            <version>2.1.6</version>
-        </dependency>
-        <dependency>
-            <groupId>ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <version>1.2beta4</version>
-        </dependency>
-        <dependency>
-            <groupId>hibernate</groupId>
-            <artifactId>hibernate-avalon-api</artifactId>
-            <version>0.4</version>
-        </dependency>
-        <dependency>
-            <groupId>hibernate</groupId>
-            <artifactId>hibernate-avalon-impl</artifactId>
-            <version>0.4</version>
-        </dependency>
-        <dependency>
-            <groupId>odmg</groupId>
-            <artifactId>odmg</artifactId>
-            <version>3.0</version>
+            <groupId>javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.12.1.GA</version>
         </dependency>
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
-            <version>2.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>asm</groupId>
-            <artifactId>asm</artifactId>
-            <version>1.4.1</version>
-        </dependency>
-    
-        <dependency>
-            <groupId>javax.transaction</groupId>
-            <artifactId>jta</artifactId>
-            <version>1.1</version>
-        </dependency>
-    
-        <dependency>
-            <groupId>dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-            <version>1.6.1</version>
-        </dependency>
-
+            <version>2.2.2</version>
+        </dependency>     
+           
         <dependency>
             <groupId>org.apache.fulcrum</groupId>
             <artifactId>fulcrum-security-api</artifactId>
@@ -180,6 +131,20 @@
             <artifactId>fulcrum-yaafi</artifactId>
             <version>1.0.6</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+        	<groupId>org.slf4j</groupId>
+        	<artifactId>slf4j-log4j12</artifactId>
+        	<version>1.6.1</version>
+        	<type>jar</type>
+        	<scope>test</scope>
+        </dependency>
+        <dependency>
+        	<groupId>log4j</groupId>
+        	<artifactId>log4j</artifactId>
+        	<version>1.2.16</version>
+        	<type>jar</type>
+        	<scope>test</scope>
         </dependency>
     </dependencies>
 

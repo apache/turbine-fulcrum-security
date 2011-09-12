@@ -28,25 +28,25 @@
       <roleManager><className>org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicRoleImpl</className></roleManager>
       <permissionManager><className>org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicPermissionImpl</className></permissionManager>
 
-    <persistenceHelper/>
-    <hibernateService>
+    <persistenceHelper>
         <parameter name="default.configuration" value="false"/>
         <session-factory >
-            <property name="show_sql">false</property>
-            <property name="use_outer_join">auto</property>
+            <property name="hibernate.show_sql">false</property>
+            <property name="hibernate.use_outer_join">auto</property>
 
             <!-- properties for this SessionFactory only -->
-            <property name="hibernate.cglib.use_reflection_optimizer">false</property>
-            <property name="connection.driver_class">com.mckoi.JDBCDriver</property>
-            <property name="connection.username">test</property>
-            <property name="connection.password">test</property>
-            <property name="connection.url">jdbc:mckoi:local://./src/test/mcKoi.conf?create=true</property>
-            <property name="dialect">net.sf.hibernate.dialect.MckoiDialect</property>
+            <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+            <property name="hibernate.connection.autocommit">true</property>
+            <property name="hibernate.connection.driver_class">com.mckoi.JDBCDriver</property>
+            <property name="hibernate.connection.username">test</property>
+            <property name="hibernate.connection.password">test</property>
+            <property name="hibernate.connection.url">jdbc:mckoi:local://./src/test/mcKoi.conf?create=true</property>
+            <property name="hibernate.dialect">org.hibernate.dialect.MckoiDialect</property>
 
             <!-- mapping files -->
         </session-factory>
         <mappings>
             <resource>DynamicHibernate.hbm.xml</resource>
         </mappings>
-    </hibernateService>
+    </persistenceHelper>
 </my-system>

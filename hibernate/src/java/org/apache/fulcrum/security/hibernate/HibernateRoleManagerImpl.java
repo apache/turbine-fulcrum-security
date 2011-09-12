@@ -19,16 +19,14 @@ package org.apache.fulcrum.security.hibernate;
  */
 import java.util.List;
 
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.spi.AbstractRoleManager;
 import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
 /**
  *
  * This implementation persists to a database via Hibernate.
@@ -38,12 +36,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public class HibernateRoleManagerImpl extends AbstractRoleManager
 {
-    /** Logging */
-    private static Log log = LogFactory.getLog(HibernateRoleManagerImpl.class);
-
 	private PersistenceHelper persistenceHelper;
-
-
 
     /**
     * Renames an existing Role.
@@ -159,8 +152,6 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
         }
         catch (Exception e)
         {
-            log.error("Failed to delete a Role");
-            log.error(e);
             throw new DataBackendException("removeRole(Role) failed", e);
         }
     }
@@ -168,7 +159,7 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
 	/**
 	 * @return Returns the persistenceHelper.
 	 */
-	public PersistenceHelper getPersistenceHelper() throws DataBackendException
+	public PersistenceHelper getPersistenceHelper()
 	{
 		if (persistenceHelper == null)
 		{

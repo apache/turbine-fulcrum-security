@@ -18,16 +18,14 @@ package org.apache.fulcrum.security.hibernate.basic;
  * under the License.
  */
 
-import net.sf.hibernate.Transaction;
-import net.sf.hibernate.avalon.HibernateService;
-
 import org.apache.fulcrum.security.SecurityService;
-
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.hibernate.HibernateHelper;
 import org.apache.fulcrum.security.hibernate.HibernateUserManagerImpl;
+import org.apache.fulcrum.security.hibernate.PersistenceHelper;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 import org.apache.fulcrum.security.model.basic.test.AbstractModelManagerTest;
+import org.hibernate.Transaction;
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
@@ -36,25 +34,23 @@ public class HibernateBasicModelManagerTest extends AbstractModelManagerTest
 {
     public void setUp() throws Exception
     {
-
         this.setRoleFileName("src/test/BasicHibernateRoleConfig.xml");
         this.setConfigurationFileName("src/test/BasicHibernateComponentConfig.xml");
-        HibernateService hibernateService =
-            (HibernateService) lookup(HibernateService.ROLE);
-        HibernateHelper.exportSchema(hibernateService.getConfiguration());
+        PersistenceHelper helper = (PersistenceHelper) lookup(PersistenceHelper.ROLE);
+        HibernateHelper.exportSchema(helper.getConfiguration());
         securityService = (SecurityService) lookup(SecurityService.ROLE);
         super.setUp();
-
     }
 
-	public void testRevokeAllUser() throws Exception{
+	public void testRevokeAllUser() throws Exception
+	{
 	    super.testRevokeAllUser();
-	    ((HibernateUserManagerImpl)userManager).getPersistenceHelper().retrieveSession().close();
+	    // FIXME: Why is this here?
+	    // ((HibernateUserManagerImpl)userManager).getPersistenceHelper().retrieveSession().close();
 	    Transaction tx = ((HibernateUserManagerImpl)userManager).getPersistenceHelper().retrieveSession().beginTransaction();
 		User user = userManager.getUserInstance("Clint2");
 		assertEquals(0, ((BasicUser) user).getGroups().size());
 		tx.commit();
-
 	}
 
     public void tearDown()

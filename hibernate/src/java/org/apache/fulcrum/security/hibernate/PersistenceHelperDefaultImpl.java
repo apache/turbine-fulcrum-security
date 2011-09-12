@@ -17,17 +17,19 @@ package org.apache.fulcrum.security.hibernate;
  * specific language governing permissions and limitations
  * under the License.
  */
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.SessionFactory;
-import net.sf.hibernate.Transaction;
-import net.sf.hibernate.cfg.Configuration;
-
-import org.apache.avalon.framework.component.Component;
+import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.fulcrum.security.entity.SecurityEntity;
 import org.apache.fulcrum.security.spi.AbstractManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.hibernate.HibernateException;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.classic.Session;
 /**
  *
  * This persistenceHelper expects you to either pass in a SessionFactory to use,
@@ -38,11 +40,11 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public class PersistenceHelperDefaultImpl
     extends AbstractManager
-    implements PersistenceHelper, Component
+    implements PersistenceHelper, Configurable, Initializable, Disposable
 {
+    private Configuration configuration;
     private SessionFactory sessionFactory;
     private Session session;
-    protected Transaction transaction;
 
     /**
      * Deletes an entity object
@@ -53,9 +55,11 @@ public class PersistenceHelperDefaultImpl
      */
     public void removeEntity(SecurityEntity entity) throws DataBackendException
     {
+        Transaction transaction = null;
+
         try
         {
-            session = retrieveSession();
+            Session session = retrieveSession();
             transaction = session.beginTransaction();
             session.delete(entity);
             transaction.commit();
@@ -68,6 +72,7 @@ public class PersistenceHelperDefaultImpl
             }
             catch (HibernateException hex)
             {
+                // ignore
             }
             throw new DataBackendException(
                 "Problem removing entity:" + he.getMessage(),
@@ -83,15 +88,14 @@ public class PersistenceHelperDefaultImpl
      */
     public void updateEntity(SecurityEntity entity) throws DataBackendException
     {
+        Transaction transaction = null;
+
         try
         {
-
-            session = retrieveSession();
-
+            Session session = retrieveSession();
             transaction = session.beginTransaction();
             session.update(entity);
             transaction.commit();
-
         }
         catch (HibernateException he)
         {
@@ -118,6 +122,7 @@ public class PersistenceHelperDefaultImpl
             }
             catch (HibernateException hex)
             {
+                // ignore
             }
 
         }
@@ -132,9 +137,11 @@ public class PersistenceHelperDefaultImpl
      */
     public void addEntity(SecurityEntity entity) throws DataBackendException
     {
+        Transaction transaction = null;
+
         try
         {
-            session = retrieveSession();
+            Session session = retrieveSession();
             transaction = session.beginTransaction();
             session.save(entity);
             transaction.commit();
@@ -147,19 +154,13 @@ public class PersistenceHelperDefaultImpl
             }
             catch (HibernateException hex)
             {
+                // ignore
             }
             throw new DataBackendException("addEntity(s,name)", he);
         }
         return;
     }
 
-    /**
-     * Allow an external session to be passed in.
-     * @param session
-     */
-    public void setSession(Session session){
-        this.session = session;
-    }
     /**
      * Returns a hibernate session, or if is null, opens one.
      * @return An Open hibernate session.
@@ -172,6 +173,14 @@ public class PersistenceHelperDefaultImpl
             session = getSessionFactory().openSession();
         }
         return session;
+    }
+
+    /**
+     * Return the hibernate configuration
+     */
+    public Configuration getConfiguration()
+    {
+        return configuration;
     }
 
     /**
@@ -191,13 +200,68 @@ public class PersistenceHelperDefaultImpl
      */
     public SessionFactory getSessionFactory() throws HibernateException
     {
-        if (sessionFactory == null)
-        {
-            sessionFactory = new Configuration().buildSessionFactory();
-
-        }
         return sessionFactory;
     }
 
+    /** Avalon lifecycle method
+     * @see org.apache.avalon.framework.activity.Initializable#initialize()
+     */
+    public void initialize() throws Exception
+    {
+        sessionFactory = configuration.buildSessionFactory();
+    }
 
+    /** Avalon lifecycle method
+     * @see org.apache.fulcrum.security.spi.AbstractManager#dispose()
+     */
+    public void dispose()
+    {
+        sessionFactory.close();
+        super.dispose();
+    }
+
+    /** Avalon lifecycle method
+     * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
+     */
+    public void configure(org.apache.avalon.framework.configuration.Configuration conf) throws ConfigurationException
+    {
+        configuration = new Configuration();
+
+        // read properties
+        org.apache.avalon.framework.configuration.Configuration[] props =
+            conf.getChild("session-factory").getChildren("property");
+
+        for (int i = 0; i < props.length; i++)
+        {
+            String value = props[i].getValue(null);
+            String key = props[i].getAttribute("name", null);
+
+            if (key != null && value != null)
+            {
+                configuration.setProperty(key, value);
+            }
+            else
+            {
+                throw new ConfigurationException("Invalid configuration", props[i]);
+            }
+        }
+
+        // read mappings
+        org.apache.avalon.framework.configuration.Configuration[] maps =
+            conf.getChild("mappings").getChildren("resource");
+
+        for (int i = 0; i < maps.length; i++)
+        {
+            String value = maps[i].getValue(null);
+
+            if (value != null)
+            {
+                configuration.addResource(value);
+            }
+            else
+            {
+                throw new ConfigurationException("Invalid configuration", maps[i]);
+            }
+        }
+    }
 }

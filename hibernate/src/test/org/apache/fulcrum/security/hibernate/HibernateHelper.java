@@ -18,9 +18,8 @@ package org.apache.fulcrum.security.hibernate;
  * under the License.
  */
 
-import net.sf.hibernate.SessionFactory;
-import net.sf.hibernate.cfg.Configuration;
-import net.sf.hibernate.tool.hbm2ddl.SchemaExport;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
 /**
  * @author Eric Pugh
  *
@@ -28,19 +27,8 @@ import net.sf.hibernate.tool.hbm2ddl.SchemaExport;
  */
 public class HibernateHelper
 {
-    private static SessionFactory sessions;
-    /**
-     * @return
-     */
-    public static SessionFactory getSessions()
-    {
-        return sessions;
-    }
-
     public static void exportSchema(Configuration cfg) throws Exception
     {
-
         new SchemaExport(cfg).create(true, true);
-        sessions = cfg.buildSessionFactory();
     }
 }

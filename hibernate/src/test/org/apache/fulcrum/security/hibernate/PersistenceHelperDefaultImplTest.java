@@ -18,10 +18,9 @@ package org.apache.fulcrum.security.hibernate;
  * under the License.
  */
 
-import net.sf.hibernate.Session;
-
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.hibernate.classic.Session;
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$

@@ -18,18 +18,10 @@ package org.apache.fulcrum.security.hibernate.dynamic;
  * under the License.
  */
 
-import net.sf.hibernate.avalon.HibernateService;
-
 import org.apache.fulcrum.security.SecurityService;
-import org
-    .apache
-    .fulcrum
-    .security
-    .model
-    .dynamic
-    .test
-    .AbstractDynamicModelManagerTest;
 import org.apache.fulcrum.security.hibernate.HibernateHelper;
+import org.apache.fulcrum.security.hibernate.PersistenceHelper;
+import org.apache.fulcrum.security.model.dynamic.test.AbstractDynamicModelManagerTest;
 
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
@@ -44,18 +36,17 @@ public class HibernateDynamicModelManagerTest
         {
             this.setRoleFileName("src/test/DynamicHibernateRoleConfig.xml");
             this.setConfigurationFileName("src/test/DynamicHibernateComponentConfig.xml");
-            HibernateService hibernateService =
-                (HibernateService) lookup(HibernateService.ROLE);
-            HibernateHelper.exportSchema(hibernateService.getConfiguration());
+            PersistenceHelper helper = (PersistenceHelper) lookup(PersistenceHelper.ROLE);
+            HibernateHelper.exportSchema(helper.getConfiguration());
             securityService = (SecurityService) lookup(SecurityService.ROLE);
             super.setUp();
-
         }
         catch (Exception e)
         {
             fail(e.toString());
         }
     }
+
     public void tearDown()
     {
         try
@@ -69,6 +60,7 @@ public class HibernateDynamicModelManagerTest
 
         securityService = null;
     }
+
     /**
     * Constructor for HibernatePermissionManagerTest.
     *

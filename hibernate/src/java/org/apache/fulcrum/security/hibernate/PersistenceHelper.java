@@ -18,11 +18,11 @@ package org.apache.fulcrum.security.hibernate;
  * under the License.
  */
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-
 import org.apache.fulcrum.security.entity.SecurityEntity;
 import org.apache.fulcrum.security.util.DataBackendException;
+import org.hibernate.HibernateException;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.classic.Session;
 
 /**
  * @author Eric Pugh
@@ -32,14 +32,15 @@ import org.apache.fulcrum.security.util.DataBackendException;
  */
 public interface PersistenceHelper
 {
-	public static final String ROLE = PersistenceHelper.class.getName();
-	public void removeEntity(SecurityEntity entity)throws DataBackendException;
+	String ROLE = PersistenceHelper.class.getName();
 
-	public void updateEntity(SecurityEntity entity) throws DataBackendException;
+	void removeEntity(SecurityEntity entity)throws DataBackendException;
 
-	public void addEntity(SecurityEntity entity) throws DataBackendException;
+	void updateEntity(SecurityEntity entity) throws DataBackendException;
 
-	public Session retrieveSession() throws HibernateException;
+	void addEntity(SecurityEntity entity) throws DataBackendException;
 
+	Configuration getConfiguration();
 
+	Session retrieveSession() throws HibernateException;
 }

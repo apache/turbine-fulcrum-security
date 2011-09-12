@@ -48,11 +48,6 @@
     <role
         name="org.apache.fulcrum.security.hibernate.PersistenceHelper"
         shorthand="persistenceHelper"
-        default-class="org.apache.fulcrum.security.hibernate.PersistenceHelperHibernateServiceImpl"/>
-
-    <role
-        name="net.sf.hibernate.avalon.HibernateService"
-        shorthand="hibernateService"
-        default-class="net.sf.hibernate.avalon.HibernateServiceImpl"/>
+        default-class="org.apache.fulcrum.security.hibernate.PersistenceHelperDefaultImpl"/>
 </role-list>
 

@@ -18,7 +18,6 @@ package org.apache.fulcrum.security.hibernate;
  * under the License.
  */
 
-import net.sf.hibernate.avalon.HibernateService;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractPermissionManagerTest;
 /**
@@ -32,23 +31,24 @@ public class HibernatePermissionManagerTest extends AbstractPermissionManagerTes
 
         this.setRoleFileName("src/test/DynamicHibernateRoleConfig.xml");
         this.setConfigurationFileName("src/test/DynamicHibernateComponentConfig.xml");
-            HibernateService hibernateService = (HibernateService) lookup(HibernateService.ROLE);
-            HibernateHelper.exportSchema(hibernateService.getConfiguration());
-            securityService = (SecurityService) lookup(SecurityService.ROLE);
-            permissionManager = securityService.getPermissionManager();
+        PersistenceHelper helper = (PersistenceHelper) lookup(PersistenceHelper.ROLE);
+        HibernateHelper.exportSchema(helper.getConfiguration());
+        securityService = (SecurityService) lookup(SecurityService.ROLE);
+        permissionManager = securityService.getPermissionManager();
 
     }
+
     public void tearDown()
     {
-
         permission = null;
         permissionManager = null;
         securityService = null;
     }
+
     /**
-    	   * Constructor for HibernatePermissionManagerTest.
-    	   * @param arg0
-    	   */
+	   * Constructor for HibernatePermissionManagerTest.
+	   * @param arg0
+	   */
     public HibernatePermissionManagerTest(String arg0)
     {
         super(arg0);

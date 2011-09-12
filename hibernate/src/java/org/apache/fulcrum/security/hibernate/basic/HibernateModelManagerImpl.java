@@ -17,9 +17,6 @@ package org.apache.fulcrum.security.hibernate.basic;
  * specific language governing permissions and limitations
  * under the License.
  */
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.hibernate.PersistenceHelper;
@@ -29,6 +26,8 @@ import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 import org.apache.fulcrum.security.spi.AbstractManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.hibernate.Transaction;
+import org.hibernate.classic.Session;
 /**
  * This implementation persists to a database via Hibernate.
  *

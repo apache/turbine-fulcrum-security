@@ -19,14 +19,14 @@ package org.apache.fulcrum.security.hibernate;
  */
 import java.util.List;
 
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.spi.AbstractGroupManager;
 import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
 /**
  * This implementation persists to a database via Hibernate.
  *

@@ -18,18 +18,10 @@ package org.apache.fulcrum.security.hibernate.turbine;
  * under the License.
  */
 
-import net.sf.hibernate.avalon.HibernateService;
-
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.hibernate.HibernateHelper;
-import org
-    .apache
-    .fulcrum
-    .security
-    .model
-    .turbine
-    .test
-    .AbstractTurbineModelManagerTest;
+import org.apache.fulcrum.security.hibernate.PersistenceHelper;
+import org.apache.fulcrum.security.model.turbine.test.AbstractTurbineModelManagerTest;
 
 /**
  * @author Eric Pugh
@@ -47,18 +39,15 @@ public class HibernateTurbineModelManagerTest
         {
             this.setRoleFileName("src/test/TurbineHibernateRoleConfig.xml");
             this.setConfigurationFileName("src/test/TurbineHibernateComponentConfig.xml");
-            HibernateService hibernateService =
-                (HibernateService) lookup(HibernateService.ROLE);
-            HibernateHelper.exportSchema(hibernateService.getConfiguration());
+            PersistenceHelper helper = (PersistenceHelper) lookup(PersistenceHelper.ROLE);
+            HibernateHelper.exportSchema(helper.getConfiguration());
             securityService = (SecurityService) lookup(SecurityService.ROLE);
             super.setUp();
-
         }
         catch (Exception e)
         {
             fail(e.toString());
         }
-
     }
     public void tearDown()
     {
