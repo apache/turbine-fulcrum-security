@@ -36,7 +36,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public class MemoryPermissionManagerImpl extends AbstractPermissionManager
 {
-    private static List permissions = new ArrayList();
+    private static List<Permission> permissions = new ArrayList<Permission>();
 
     /** Our Unique ID counter */
     // private static int uniqueId = 0;

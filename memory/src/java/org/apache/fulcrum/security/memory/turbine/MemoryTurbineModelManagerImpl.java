@@ -18,8 +18,6 @@ package org.apache.fulcrum.security.memory.turbine;
  * specific language governing permissions and limitations
  * under the License.
  */
-import java.util.Iterator;
-
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
@@ -158,13 +156,19 @@ public class MemoryTurbineModelManagerImpl extends AbstractTurbineModelManager i
             roleExists = getRoleManager().checkExists(role);
             userExists = getUserManager().checkExists(user);
             groupExists = getGroupManager().checkExists(group);
-            if (roleExists && groupExists && userExists) {
+            if (roleExists && groupExists && userExists)
+            {
                 boolean ugrFound = false;
-                TurbineUserGroupRole ugr = null;
-                for(Iterator i = ((TurbineUser) user).getUserGroupRoleSet().iterator();i.hasNext();){
-                    ugr = (TurbineUserGroupRole)i.next();
-                    if(ugr.getUser().equals(user)&& ugr.getGroup().equals(group) && ugr.getRole().equals(role)){
+                for(TurbineUserGroupRole ugr : ((TurbineUser) user).getUserGroupRoleSet())
+                {
+                    if(ugr.getUser().equals(user)&& ugr.getGroup().equals(group) && ugr.getRole().equals(role))
+                    {
                         ugrFound=true;
+
+                        ((TurbineUser) user).removeUserGroupRole(ugr);
+                        ((TurbineGroup) group).removeUserGroupRole(ugr);
+                        ((TurbineRole) role).removeUserGroupRole(ugr);
+
                         break;
                     }
                 }
@@ -172,9 +176,6 @@ public class MemoryTurbineModelManagerImpl extends AbstractTurbineModelManager i
                     throw new UnknownEntityException("Could not find User/Group/Role");
                 }
 
-                ((TurbineUser) user).removeUserGroupRole(ugr);
-                ((TurbineGroup) group).removeUserGroupRole(ugr);
-                ((TurbineRole) role).removeUserGroupRole(ugr);
                 return;
             }
         } catch (Exception e) {

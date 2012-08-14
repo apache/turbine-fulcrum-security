@@ -39,7 +39,7 @@ public class MemoryGroupManagerImpl
     extends AbstractGroupManager
     implements GroupManager
 {
-    private static List groups = new ArrayList();
+    private static List<Group> groups = new ArrayList<Group>();
 
     /** Our Unique ID counter */
     // private static int uniqueId = 0;

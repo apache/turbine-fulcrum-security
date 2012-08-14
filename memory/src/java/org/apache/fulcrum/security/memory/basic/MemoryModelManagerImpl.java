@@ -17,8 +17,6 @@ package org.apache.fulcrum.security.memory.basic;
  * specific language governing permissions and limitations
  * under the License.
  */
-import java.util.Iterator;
-
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.basic.BasicModelManager;
@@ -134,10 +132,9 @@ public class MemoryModelManagerImpl
             userExists = getUserManager().checkExists(user);
             if (userExists)
             {
-                for (Iterator i = ((BasicUser) user).getGroups().iterator(); i.hasNext();)
+                for (Group group : ((BasicUser) user).getGroups())
                 {
-                    BasicGroup group = (BasicGroup) i.next();
-                    group.removeUser(user);
+                    ((BasicGroup)group).removeUser(user);
                 }
                 ((BasicUser) user).setGroups(new GroupSet());
                 return;

@@ -38,7 +38,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 public class MemoryRoleManagerImpl extends AbstractRoleManager
 {
     /** List to store all our roles in */
-    private static List roles = new ArrayList();
+    private static List<Role> roles = new ArrayList<Role>();
 
     /** Our Unique ID counter */
     // private static int uniqueId = 0;

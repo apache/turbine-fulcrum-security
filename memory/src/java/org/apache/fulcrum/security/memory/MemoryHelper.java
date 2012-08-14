@@ -18,7 +18,6 @@ package org.apache.fulcrum.security.memory;
  * under the License.
  */
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.fulcrum.security.entity.SecurityEntity;
@@ -43,11 +42,11 @@ public class MemoryHelper
         return new Integer(++uniqueId);
     }
 
-    public static boolean checkExists(List securityEntities, String name){
+    public static boolean checkExists(List<? extends SecurityEntity> securityEntities, String name)
+    {
         boolean exists = false;
-        for (Iterator i = securityEntities.iterator(); i.hasNext();)
+        for (SecurityEntity securityEntity : securityEntities)
         {
-            SecurityEntity securityEntity = (SecurityEntity) i.next();
             if (securityEntity.getName().equalsIgnoreCase(name))
             {
                 exists = true;

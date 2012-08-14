@@ -38,7 +38,7 @@ import org.apache.fulcrum.security.util.UserSet;
 public class MemoryUserManagerImpl
     extends AbstractUserManager
 {
-    private static List users = new ArrayList();
+    private static List<User> users = new ArrayList<User>();
 
     /** Our Unique ID counter */
     // private static int uniqueId = 0;
