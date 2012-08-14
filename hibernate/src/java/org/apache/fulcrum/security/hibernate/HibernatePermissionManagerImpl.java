@@ -25,7 +25,6 @@ import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 /**
  * This implementation persists to a database via Hibernate.
@@ -33,6 +32,7 @@ import org.hibernate.HibernateException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
+@SuppressWarnings("unchecked")
 public class HibernatePermissionManagerImpl extends AbstractPermissionManager
 {
 	private PersistenceHelper persistenceHelper;
@@ -49,14 +49,15 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager
         PermissionSet permissionSet = new PermissionSet();
         try
         {
-
-            List permissions = getPersistenceHelper().retrieveSession().find("from " + Permission.class.getName() + "");
+            List<Permission> permissions =
+            	getPersistenceHelper()
+            		.retrieveSession().createQuery("from " + Permission.class.getName())
+            		.list();
             permissionSet.add(permissions);
-
         }
         catch (HibernateException e)
         {
-            throw new DataBackendException("Error retriving permission information", e);
+            throw new DataBackendException("Error retrieving permission information", e);
         }
         return permissionSet;
     }
@@ -78,7 +79,6 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager
         {
             permission.setName(name);
 			getPersistenceHelper().updateEntity(permission);
-            return;
         }
         else
         {
@@ -95,17 +95,19 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager
     */
     public boolean checkExists(String permissionName) throws DataBackendException
     {
-        List permissions;
+        List<Permission> permissions;
         try
         {
-
             permissions =
-			getPersistenceHelper().retrieveSession().find("from " + Permission.class.getName() + " sp where sp.name=?", permissionName, Hibernate.STRING);
-
+            	getPersistenceHelper()
+            		.retrieveSession()
+            		.createQuery("from " + Permission.class.getName() + " sp where sp.name=:name")
+            		.setString("name", permissionName)
+            		.list();
         }
         catch (HibernateException e)
         {
-            throw new DataBackendException("Error retriving permission information", e);
+            throw new DataBackendException("Error retrieving permission information", e);
         }
         if (permissions.size() > 1)
         {
@@ -147,7 +149,6 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager
     protected synchronized Permission persistNewPermission(Permission permission)
         throws DataBackendException
     {
-
 		getPersistenceHelper().addEntity(permission);
         return permission;
     }
@@ -176,28 +177,32 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager
 	 *             if the permission does not exist.
 	 */
 	public Permission getPermissionById(Object id)
-	throws DataBackendException, UnknownEntityException {
+		throws DataBackendException, UnknownEntityException
+	{
 
 		Permission permission = null;
 
-		if (id != null)
+		if (id != null) {
 			try {
-				List permissions =
-					getPersistenceHelper().retrieveSession().find(
-							"from " + Permission.class.getName() + " sp where sp.id=?",
-							id,
-							Hibernate.LONG);
+				List<Permission> permissions =
+					getPersistenceHelper()
+						.retrieveSession()
+						.createQuery(
+							"from " + Permission.class.getName() + " sp where sp.id=:id")
+						.setLong("id", ((Long)id).longValue())
+						.list();
 				if (permissions.size() == 0) {
 					throw new UnknownEntityException(
 							"Could not find permission by id " + id);
 				}
-				permission = (Permission) permissions.get(0);
+				permission = permissions.get(0);
 
 			} catch (HibernateException e) {
 				throw new DataBackendException(
-						"Error retriving permission information",
+						"Error retrieving permission information",
 						e);
 			}
+		}
 
 		return permission;
 	}

@@ -25,7 +25,6 @@ import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 /**
  *
@@ -34,6 +33,7 @@ import org.hibernate.HibernateException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
+@SuppressWarnings("unchecked")
 public class HibernateRoleManagerImpl extends AbstractRoleManager
 {
 	private PersistenceHelper persistenceHelper;
@@ -72,16 +72,18 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
       */
     public boolean checkExists(String roleName) throws DataBackendException
     {
-        List roles;
+        List<Role> roles;
         try
         {
-
-            roles = getPersistenceHelper().retrieveSession().find("from " + Role.class.getName() + " sr where sr.name=?", roleName, Hibernate.STRING);
-
+            roles = getPersistenceHelper()
+            	.retrieveSession()
+            	.createQuery("from " + Role.class.getName() + " sr where sr.name=:name")
+            	.setString("name", roleName)
+            	.list();
         }
         catch (HibernateException e)
         {
-            throw new DataBackendException("Error retriving role information", e);
+            throw new DataBackendException("Error retrieving role information", e);
         }
         if (roles.size() > 1)
         {
@@ -101,12 +103,15 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
         RoleSet roleSet = new RoleSet();
         try
         {
-            List roles = getPersistenceHelper().retrieveSession().find("from " + Role.class.getName() + "");
+            List<Role> roles = getPersistenceHelper()
+            	.retrieveSession()
+            	.createQuery("from " + Role.class.getName())
+            	.list();
             roleSet.add(roles);
         }
         catch (HibernateException e)
         {
-            throw new DataBackendException("Error retriving role information", e);
+            throw new DataBackendException("Error retrieving role information", e);
         }
         return roleSet;
     }
@@ -123,7 +128,6 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
     */
     protected synchronized Role persistNewRole(Role role) throws DataBackendException
     {
-
 		getPersistenceHelper().addEntity(role);
         return role;
     }
@@ -184,24 +188,27 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
 
 		Role role = null;
 
-		if (id != null)
+		if (id != null) {
 			try {
-				List roles =
-					getPersistenceHelper().retrieveSession().find(
-							"from " + Role.class.getName() + " sr where sr.id=?",
-							id,
-							Hibernate.LONG);
+				List<Role> roles =
+					getPersistenceHelper()
+						.retrieveSession()
+						.createQuery(
+							"from " + Role.class.getName() + " sr where sr.id=:id")
+						.setLong("id", ((Long)id).longValue())
+						.list();
 				if (roles.size() == 0) {
 					throw new UnknownEntityException(
 							"Could not find role by id " + id);
 				}
-				role = (Role) roles.get(0);
+				role = roles.get(0);
 
 			} catch (HibernateException e) {
 				throw new DataBackendException(
-						"Error retriving role information",
+						"Error retrieving role information",
 						e);
 			}
+		}
 
 		return role;
 	}

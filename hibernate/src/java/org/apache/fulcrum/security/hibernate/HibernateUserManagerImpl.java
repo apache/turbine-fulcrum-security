@@ -25,7 +25,6 @@ import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.UserSet;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 /**
  * This implementation persists to a database via Hibernate.
@@ -33,6 +32,7 @@ import org.hibernate.HibernateException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
+@SuppressWarnings("unchecked")
 public class HibernateUserManagerImpl extends AbstractUserManager
 {
 	private PersistenceHelper persistenceHelper;
@@ -49,15 +49,19 @@ public class HibernateUserManagerImpl extends AbstractUserManager
      */
     public boolean checkExists(String userName) throws DataBackendException
     {
-        List users = null;
+        List<User> users = null;
         userName = userName.toLowerCase();
         try
         {
-            users = getPersistenceHelper().retrieveSession().find("from " + User.class.getName() + " su where su.name=?", userName, Hibernate.STRING);
+            users = getPersistenceHelper()
+            	.retrieveSession()
+            	.createQuery("from " + User.class.getName() + " su where su.name=:name")
+            	.setString("name", userName)
+            	.list();
         }
         catch (HibernateException e)
         {
-            throw new DataBackendException("Error retriving user information", e);
+            throw new DataBackendException("Error retrieving user information", e);
         }
         if (users.size() > 1)
         {
@@ -78,18 +82,19 @@ public class HibernateUserManagerImpl extends AbstractUserManager
      */
     public User getUser(String userName) throws UnknownEntityException, DataBackendException
     {
-        List users = null;
+        List<User> users = null;
         try
         {
-            users =
-			getPersistenceHelper().retrieveSession().find(
-                    "from " + User.class.getName() + " su where su.name=?",
-                    userName.toLowerCase(),
-                    Hibernate.STRING);
+            users =	getPersistenceHelper()
+            	.retrieveSession()
+            	.createQuery(
+                    "from " + User.class.getName() + " su where su.name=:name")
+                .setString("name", userName.toLowerCase())
+                .list();
         }
         catch (HibernateException e)
         {
-            throw new DataBackendException("Error retriving user information", e);
+            throw new DataBackendException("Error retrieving user information", e);
         }
         if (users.size() > 1)
         {
@@ -97,7 +102,7 @@ public class HibernateUserManagerImpl extends AbstractUserManager
         }
         if (users.size() == 1)
         {
-            return (User) users.get(0);
+            return users.get(0);
         }
         throw new UnknownEntityException("Unknown user '" + userName + "'");
     }
@@ -114,21 +119,22 @@ public class HibernateUserManagerImpl extends AbstractUserManager
 		UserSet userSet = new UserSet();
 		try
 		{
-
-			List users =
-			getPersistenceHelper().retrieveSession().find(
-					"from " + User.class.getName() + "");
+			List<User> users = getPersistenceHelper()
+				.retrieveSession()
+				.createQuery(
+					"from " + User.class.getName())
+				.list();
 			userSet.add(users);
 		}
 		catch (HibernateException e)
 		{
 			throw new DataBackendException(
-				"Error retriving all users",
+				"Error retrieving all users",
 				e);
 		}
 		return userSet;
-
 	}
+
     /**
 	* Removes an user account from the system.
 	*
@@ -141,6 +147,7 @@ public class HibernateUserManagerImpl extends AbstractUserManager
     {
 		getPersistenceHelper().removeEntity(user);
     }
+
     /**
        * Creates new user account with specified attributes.
        *
@@ -153,10 +160,10 @@ public class HibernateUserManagerImpl extends AbstractUserManager
        */
     public User persistNewUser(User user) throws DataBackendException
     {
-
 		getPersistenceHelper().addEntity(user);
 		return user;
     }
+
     /**
        * Stores User attributes. The User is required to exist in the system.
        *
@@ -203,28 +210,30 @@ public class HibernateUserManagerImpl extends AbstractUserManager
 	 *             if the user does not exist.
 	 */
 	public User getUserById(Object id)
-	throws DataBackendException, UnknownEntityException {
-
+		throws DataBackendException, UnknownEntityException
+	{
 		User user = null;
 
-		if (id != null)
+		if (id != null) {
 			try {
-				List users =
-					getPersistenceHelper().retrieveSession().find(
-							"from " + User.class.getName() + " su where su.id=?",
-							id,
-							Hibernate.LONG);
+				List<User> users = getPersistenceHelper()
+					.retrieveSession()
+					.createQuery(
+							"from " + User.class.getName() + " su where su.id=:id")
+					.setLong("id", ((Long)id).longValue())
+					.list();
 				if (users.size() == 0) {
 					throw new UnknownEntityException(
 							"Could not find user by id " + id);
 				}
-				user = (User) users.get(0);
+				user = users.get(0);
 				//session.close();
 			} catch (HibernateException e) {
 				throw new DataBackendException(
-						"Error retriving user information",
+						"Error retrieving user information",
 						e);
 			}
+		}
 
 		return user;
 	}

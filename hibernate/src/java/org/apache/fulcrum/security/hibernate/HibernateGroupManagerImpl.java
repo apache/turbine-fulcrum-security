@@ -25,7 +25,6 @@ import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 /**
  * This implementation persists to a database via Hibernate.
@@ -33,6 +32,7 @@ import org.hibernate.HibernateException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
+@SuppressWarnings("unchecked")
 public class HibernateGroupManagerImpl extends AbstractGroupManager
 {
     private PersistenceHelper persistenceHelper;
@@ -52,25 +52,25 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager
         Group group = null;
         try
         {
-
-            List groups =
-			getPersistenceHelper().retrieveSession().find(
-                    "from "
-                        + Group.class.getName()
-                        + " g where g.name=?",
-                    name.toLowerCase(),
-                    Hibernate.STRING);
+			List<Group> groups =
+				getPersistenceHelper()
+					.retrieveSession()
+					.createQuery(
+	                    "from "
+	                        + Group.class.getName()
+	                        + " g where g.name=:name")
+	                .setString("name", name.toLowerCase())
+	                .list();
             if (groups.size() == 0)
             {
                 throw new UnknownEntityException("Could not find group" + name);
             }
-            group = (Group) groups.get(0);
-            //session.close();
+            group = groups.get(0);
         }
         catch (HibernateException e)
         {
             throw new DataBackendException(
-                "Error retriving group information",
+                "Error retrieving group information",
                 e);
         }
         return group;
@@ -89,15 +89,18 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager
         try
         {
 
-            List groups =
-			getPersistenceHelper().retrieveSession().find(
-                    "from " + Group.class.getName() + "");
+            List<Group> groups =
+				getPersistenceHelper()
+					.retrieveSession()
+					.createQuery(
+		                    "from " + Group.class.getName())
+	                .list();
             groupSet.add(groups);
         }
         catch (HibernateException e)
         {
             throw new DataBackendException(
-                "Error retriving group information",
+                "Error retrieving group information",
                 e);
         }
         return groupSet;
@@ -150,22 +153,23 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager
      */
     public boolean checkExists(String groupName) throws DataBackendException
 	{
-    	List groups;
+    	List<Group> groups;
     	try
 		{
-
     		groups =
-    			getPersistenceHelper().retrieveSession().find(
+    			getPersistenceHelper()
+    				.retrieveSession()
+    				.createQuery(
     					"from "
     					+ Group.class.getName()
-						+ " sg where sg.name=?",
-						groupName,
-						Hibernate.STRING);
+						+ " sg where sg.name=:name")
+					.setString("name", groupName)
+					.list();
     	}
     	catch (HibernateException e)
 		{
     		throw new DataBackendException(
-    				"Error retriving user information",
+    				"Error retrieving user information",
 					e);
     	}
     	if (groups.size() > 1)
@@ -187,7 +191,6 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager
     protected synchronized Group persistNewGroup(Group group)
         throws DataBackendException
     {
-
 		getPersistenceHelper().addEntity(group);
         return group;
     }
@@ -220,27 +223,28 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager
 
     	Group group = null;
 
-    	if (id != null)
-    		try {
-    			List groups =
-    				getPersistenceHelper().retrieveSession().find(
-    						"from " + Group.class.getName() + " sr where sr.id=?",
-							id,
-							Hibernate.LONG);
+    	if (id != null) {
+			try {
+    			List<Group> groups =
+    				getPersistenceHelper()
+    					.retrieveSession()
+    					.createQuery(
+    						"from " + Group.class.getName() + " sr where sr.id=:id")
+    					.setLong("id", ((Long)id).longValue())
+    					.list();
     			if (groups.size() == 0) {
     				throw new UnknownEntityException(
     						"Could not find group by id " + id);
     			}
-    			group = (Group) groups.get(0);
+    			group = groups.get(0);
 
     		} catch (HibernateException e) {
     			throw new DataBackendException(
-    					"Error retriving group information",
+    					"Error retrieving group information",
 						e);
     		}
+		}
 
-    		return group;
+		return group;
     }
-
-
 }

@@ -17,8 +17,6 @@ package org.apache.fulcrum.security.hibernate.turbine;
  * specific language governing permissions and limitations
  * under the License.
  */
-import java.util.Iterator;
-
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
@@ -184,11 +182,20 @@ public class HibernateModelManagerImpl extends AbstractTurbineModelManager imple
                 groupExists = getGroupManager().checkExists(group);
                 if (roleExists && groupExists && userExists) {
                     boolean ugrFound = false;
-                    TurbineUserGroupRole ugr = null;
-                    for(Iterator i = ((TurbineUser) user).getUserGroupRoleSet().iterator();i.hasNext();){
-                        ugr = (TurbineUserGroupRole)i.next();
-                        if(ugr.getUser().equals(user)&& ugr.getGroup().equals(group) && ugr.getRole().equals(role)){
+                    for(TurbineUserGroupRole ugr : ((TurbineUser) user).getUserGroupRoleSet())
+                    {
+                        if(ugr.getUser().equals(user)&& ugr.getGroup().equals(group) && ugr.getRole().equals(role))
+                        {
                             ugrFound=true;
+
+                            ((TurbineUser) user).removeUserGroupRole(ugr);
+                            ((TurbineGroup) group).removeUserGroupRole(ugr);
+                            ((TurbineRole) role).removeUserGroupRole(ugr);
+
+                            getPersistenceHelper().updateEntity(user);
+                            getPersistenceHelper().updateEntity(group);
+                            getPersistenceHelper().updateEntity(role);
+
                             break;
                         }
                     }
@@ -196,12 +203,6 @@ public class HibernateModelManagerImpl extends AbstractTurbineModelManager imple
                         throw new UnknownEntityException("Could not find User/Group/Role");
                     }
 
-                    ((TurbineUser) user).removeUserGroupRole(ugr);
-                    ((TurbineGroup) group).removeUserGroupRole(ugr);
-                    ((TurbineRole) role).removeUserGroupRole(ugr);
-                    getPersistenceHelper().updateEntity(user);
-                    getPersistenceHelper().updateEntity(group);
-                    getPersistenceHelper().updateEntity(role);
                     return;
                 }
             } catch (Exception e) {
