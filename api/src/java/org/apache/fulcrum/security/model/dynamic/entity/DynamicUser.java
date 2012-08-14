@@ -21,6 +21,7 @@ package org.apache.fulcrum.security.model.dynamic.entity;
 
 import java.util.Set;
 
+import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 
 /**
@@ -38,24 +39,30 @@ import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 public interface DynamicUser extends BasicUser
 {
     /**
+     * Get the set of delegatees for this user
+     *
      * @return Returns the delegatees.
      */
-    public Set getDelegatees();
+    public <T extends User> Set<T> getDelegatees();
 
     /**
-     * @param delegatees
-     *            The delegatees to set.
+     * Set the delegatees for this user
+     *
+     * @param delegatees The delegatees to set.
      */
-    public void setDelegatees(Set delegatees);
+    public <T extends User> void setDelegatees(Set<T> delegatees);
 
     /**
+     * Get the set of delegators for this user
+     *
      * @return Returns the delegators.
      */
-    public Set getDelegators();
+    public <T extends User> Set<T> getDelegators();
 
     /**
-     * @param delegates
-     *            The delegators to set.
+     * Set the delegators for this user
+     *
+     * @param delegators The delegators to set.
      */
-    public void setDelegators(Set delegates);
+    public <T extends User> void setDelegators(Set<T> delegators);
 }

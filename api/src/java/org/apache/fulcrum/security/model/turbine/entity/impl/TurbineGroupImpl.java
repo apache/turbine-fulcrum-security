@@ -19,12 +19,7 @@ package org.apache.fulcrum.security.model.turbine.entity.impl;
  * under the License.
  */
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineGroup;
-import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
 
 /**
  * Represents the "turbine" model where permissions are in a many to many
@@ -34,32 +29,7 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @version $Id: TurbineGroup.java 223081 2004-10-07 15:11:58Z epugh $
  */
-public class TurbineGroupImpl extends SecurityEntityImpl implements TurbineGroup
+public class TurbineGroupImpl extends AbstractTurbineSecurityEntityImpl implements TurbineGroup
 {
-    private Set userGroupRoleSet = new HashSet();
-
-    /**
-     * @return
-     */
-    public Set getUserGroupRoleSet() {
-
-        return userGroupRoleSet;
-    }
-
-    /**
-     * @param userGroupRoleSet
-     */
-    public void setUserGroupRoleSet(Set userGroupRoleSet) {
-        this.userGroupRoleSet = userGroupRoleSet;
-
-    }
-
-    public void addUserGroupRole(TurbineUserGroupRole userGroupRole) {
-        getUserGroupRoleSet().add(userGroupRole);
-    }
-
-    public void removeUserGroupRole(TurbineUserGroupRole userGroupRole) {
-        getUserGroupRoleSet().remove(userGroupRole);
-    }
-
+	// empty
 }

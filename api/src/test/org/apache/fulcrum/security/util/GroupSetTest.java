@@ -21,9 +21,7 @@ package org.apache.fulcrum.security.util;
 import junit.framework.TestCase;
 
 import org.apache.fulcrum.security.entity.Group;
-import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicGroupImpl;
-import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicRoleImpl;
 
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
@@ -71,28 +69,10 @@ public class GroupSetTest extends TestCase
         group3.setName("Eric");
         groupSet.add(group3);
         assertTrue(groupSet.contains(group));
-        assertTrue(groupSet.contains((Object) group));
+        assertTrue(groupSet.contains(group));
         assertTrue(groupSet.contains(group2));
         assertTrue(groupSet.contains(group3));
         assertTrue(groupSet.contains(group));
-
-        Role role = new DynamicRoleImpl();
-        role.setName("role");
-        role.setId("role");
-        try {
-            groupSet.add(role);
-            fail("Should have thrown ClassCastException");
-        }
-        catch (ClassCastException cce){
-            assertTrue(cce.getMessage().indexOf("GroupSet")>-1);
-        }
-        try {
-            ((SecuritySet)groupSet).add(role);
-            fail("Should have thrown ClassCastException");
-        }
-        catch (ClassCastException cce){
-            assertTrue(cce.getMessage().indexOf("GroupSet")>-1);
-        }
     }
 
     public void testGroupSetWithSubclass() throws Exception

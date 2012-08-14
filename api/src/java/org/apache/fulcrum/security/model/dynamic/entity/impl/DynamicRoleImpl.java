@@ -37,42 +37,58 @@ import org.apache.fulcrum.security.util.PermissionSet;
  */
 public class DynamicRoleImpl extends SecurityEntityImpl implements DynamicRole
 {
-    private Set permissionSet = new PermissionSet();
+    private Set<? extends Permission> permissionSet = new PermissionSet();
 
-    private Set groupSet = new GroupSet();
+    private Set<? extends Group> groupSet = new GroupSet();
+
     /**
-     * @return
+     * Get the permission that are part of this role
+     *
+     * @return a set of permissions
      */
     public PermissionSet getPermissions()
     {
-    	if( permissionSet instanceof PermissionSet )
-    		return (PermissionSet) permissionSet;
-    	else {
+    	if( permissionSet instanceof PermissionSet ) {
+			return (PermissionSet) permissionSet;
+		} else {
     		permissionSet = new PermissionSet(permissionSet);
     		return (PermissionSet)permissionSet;
     	}
     }
+
     /**
-     * @return
+     * Get the permission that are part of this role as Set
+     *
+     * @return a set of permissions
      */
-    public Set getPermissionsAsSet()
+    @SuppressWarnings("unchecked")
+	public <T extends Permission> Set<T> getPermissionsAsSet()
     {
-        return permissionSet;
+        return (Set<T>)permissionSet;
     }
 
-    public void setPermissionsAsSet(Set permissions)
-    {
-        this.permissionSet = permissions;
-    }
     /**
-     * @param permissionSet
+     * Set the permission that are part of this role
+     *
+     * @param permissionSet a set of permissions
      */
     public void setPermissions(PermissionSet permissionSet)
     {
-    	if( permissionSet != null )
-    		this.permissionSet = permissionSet;
-    	else
-    		this.permissionSet = new PermissionSet();
+    	if( permissionSet != null ) {
+			this.permissionSet = permissionSet;
+		} else {
+			this.permissionSet = new PermissionSet();
+		}
+    }
+
+    /**
+     * Set the permission that are part of this role as Set
+     *
+     * @param permissions a set of permissions
+     */
+    public <T extends Permission> void setPermissionsAsSet(Set<T> permissions)
+    {
+        this.permissionSet = permissions;
     }
 
     /**
@@ -83,6 +99,7 @@ public class DynamicRoleImpl extends SecurityEntityImpl implements DynamicRole
     {
         getPermissions().add(permission);
     }
+
     /**
      * This method should only be used by a RoleManager.  Not directly.
      * @param permission
@@ -93,51 +110,70 @@ public class DynamicRoleImpl extends SecurityEntityImpl implements DynamicRole
     }
 
     /**
-    	* @return
-    	*/
+     * Get the groups this role belongs to
+     *
+     * @return a set of groups
+     */
     public GroupSet getGroups()
     {
-    	if( groupSet instanceof GroupSet )
-    		return (GroupSet) groupSet;
-    	else {
+    	if( groupSet instanceof GroupSet ) {
+			return (GroupSet) groupSet;
+		} else {
     		groupSet = new GroupSet(groupSet);
     		return (GroupSet)groupSet;
     	}
     }
+
     /**
-    	* @param groupSet
-    	*/
+     * Set the groups this role belongs to
+     *
+     * @param groups the set of groups
+     */
     public void setGroups(GroupSet groupSet)
     {
-    	if( groupSet != null )
-    		this.groupSet = groupSet;
-    	else
-    		this.groupSet = new GroupSet();
+    	if( groupSet != null ) {
+			this.groupSet = groupSet;
+		} else {
+			this.groupSet = new GroupSet();
+		}
     }
 
     /**
-    * This method should only be used by a RoleManager.  Not directly.
-    * @param group
-    */
-    public void addGroup(Group group)
-    {
-        getGroups().add(group);
-    }
-    /**
-	* This method should only be used by a RoleManager.  Not directly.
-	* @param group
-	*/
+     * This method should only be used by a RoleManager.  Not directly.
+     * @param group
+     */
     public void removeGroup(Group group)
     {
         getGroups().remove(group);
     }
 
-    public void setGroupsAsSet(Set groups)
+    /**
+     * This method should only be used by a RoleManager.  Not directly.
+     * @param group
+     */
+    public void addGroup(Group group)
+    {
+        getGroups().add(group);
+    }
+
+    /**
+     * Set the groups this role belongs to as a Set
+     *
+     * @param groups the set of groups
+     */
+    public <T extends Group> void setGroupsAsSet(Set<T> groups)
     {
         this.groupSet = groups;
     }
-    public Set getGroupsAsSet()
+
+    /**
+     * Get the groups this role belongs to as a Set
+     *
+     * @return a set of groups
+     */
+    @SuppressWarnings("unchecked")
+	public <T extends Group> Set<T> getGroupsAsSet()
     {
-        return groupSet;
+        return (Set<T>)groupSet;
     }
 }

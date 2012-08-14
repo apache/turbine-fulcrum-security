@@ -17,7 +17,6 @@ package org.apache.fulcrum.security.model.dynamic;
  * specific language governing permissions and limitations
  * under the License.
  */
-import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.fulcrum.security.entity.Group;
@@ -44,15 +43,16 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
     private static final long serialVersionUID = -5180551537096244085L;
 
     /** The sets of roles that the user has in different groups */
-    private Map roleSets;
+    private Map<? extends Group, ? extends RoleSet> roleSets;
     /** The sets of permissions that the user has in different groups */
-    private Map permissionSets;
+    private Map<? extends Role, ? extends PermissionSet> permissionSets;
     /** The distinct list of groups that this user is part of */
     private GroupSet groupSet = new GroupSet();
     /** The distinct list of roles that this user is part of */
     private RoleSet roleSet = new RoleSet();
     /** the distinct list of permissions that this user has */
     private PermissionSet permissionSet = new PermissionSet();
+
     /**
      * Constructs a new AccessControlList.
      *
@@ -68,25 +68,28 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
      * @param roleSets a hashtable containing RoleSet objects keyed with Group objects
      * @param permissionSets a hashtable containing PermissionSet objects keyed with Roles objects
      */
-    public DynamicAccessControlListImpl(Map roleSets, Map permissionSets)
+    public DynamicAccessControlListImpl(
+    		Map<? extends Group, ? extends RoleSet> roleSets,
+    		Map<? extends Role, ? extends PermissionSet> permissionSets)
     {
         this.roleSets = roleSets;
         this.permissionSets = permissionSets;
-        for (Iterator i = roleSets.keySet().iterator(); i.hasNext();)
+        for (Map.Entry<? extends Group, ? extends RoleSet> entry : roleSets.entrySet())
         {
-            Group group = (Group) i.next();
+            Group group = entry.getKey();
             groupSet.add(group);
-            RoleSet rs = (RoleSet) roleSets.get(group);
+            RoleSet rs = entry.getValue();
             roleSet.add(rs);
         }
-        for (Iterator i = permissionSets.keySet().iterator(); i.hasNext();)
+        for (Map.Entry<? extends Role, ? extends PermissionSet> entry : permissionSets.entrySet())
         {
-            Role role = (Role) i.next();
+            Role role = entry.getKey();
             roleSet.add(role);
-            PermissionSet ps = (PermissionSet) permissionSets.get(role);
+            PermissionSet ps = entry.getValue();
             permissionSet.add(ps);
         }
     }
+
     /**
      * Retrieves a set of Roles an user is assigned in a Group.
      *
@@ -99,8 +102,10 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
         {
             return null;
         }
-        return (RoleSet) roleSets.get(group);
+
+        return roleSets.get(group);
     }
+
     /**
      * Retrieves a set of Roles an user is assigned in the global Group.
      *
@@ -110,6 +115,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
     {
         return roleSet;
     }
+
     /**
      * Retrieves a set of Permissions an user is assigned in a Group.
      *
@@ -121,18 +127,17 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
         PermissionSet permissionSet = new PermissionSet();
         if (roleSets.containsKey(group))
         {
-            RoleSet rs = (RoleSet) roleSets.get(group);
-            for (Iterator i = rs.iterator(); i.hasNext();)
+            for (Role role : roleSets.get(group))
             {
-                Role role = (Role) i.next();
                 if (permissionSets.containsKey(role))
                 {
-                    permissionSet.add((PermissionSet) permissionSets.get(role));
+                    permissionSet.add(permissionSets.get(role));
                 }
             }
         }
         return permissionSet;
     }
+
     /**
      * Retrieves a set of Permissions an user is assigned in the global Group.
      *
@@ -142,6 +147,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
     {
         return permissionSet;
     }
+
     /**
      * Checks if the user is assigned a specific Role in the Group.
      *
@@ -158,6 +164,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
         }
         return set.contains(role);
     }
+
     /**
      * Checks if the user is assigned a specific Role in any of the given
      * Groups
@@ -173,20 +180,18 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
         {
             return false;
         }
-        for (Iterator groups = groupset.iterator(); groups.hasNext();)
+
+        for (Group group : groupset)
         {
-            Group group = (Group) groups.next();
             RoleSet roles = getRoles(group);
-            if (roles != null)
+            if (roles != null && roles.contains(role))
             {
-                if (roles.contains(role))
-                {
-                    return true;
-                }
+                return true;
             }
         }
         return false;
     }
+
     /**
      * Checks if the user is assigned a specific Role in the Group.
      *
@@ -199,12 +204,12 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
         boolean roleFound = false;
         try
         {
-            for (Iterator i = roleSets.keySet().iterator(); i.hasNext();)
+            for (Map.Entry<? extends Group, ? extends RoleSet> entry : roleSets.entrySet())
             {
-                Group g = (Group) i.next();
+                Group g = entry.getKey();
                 if (g.getName().equalsIgnoreCase(group))
                 {
-                    RoleSet rs = (RoleSet) roleSets.get(g);
+                    RoleSet rs = entry.getValue();
                     roleFound = rs.containsName(role);
                 }
             }
@@ -215,8 +220,9 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
         }
         return roleFound;
     }
+
     /**
-     * Checks if the user is assigned a specifie Role in any of the given
+     * Checks if the user is assigned a specific Role in any of the given
      * Groups
      *
      * @param rolename the name of the Role
@@ -229,7 +235,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
         Role role;
         try
         {
-            role = roleSet.getRoleByName(rolename);
+            role = roleSet.getByName(rolename);
         }
         catch (Exception e)
         {
@@ -239,20 +245,17 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
         {
             return false;
         }
-        for (Iterator groups = groupset.iterator(); groups.hasNext();)
+        for (Group group : groupset)
         {
-            Group group = (Group) groups.next();
             RoleSet roles = getRoles(group);
-            if (roles != null)
+            if (roles != null && roles.contains(role))
             {
-                if (roles.contains(role))
-                {
-                    return true;
-                }
+                return true;
             }
         }
         return false;
     }
+
     /**
      * Checks if the user is assigned a specific Role
      *
@@ -263,6 +266,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
     {
         return roleSet.contains(role);
     }
+
     /**
      * Checks if the user is assigned a specific Role .
      *
@@ -280,6 +284,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
             return false;
         }
     }
+
     /**
      * Checks if the user is assigned a specific Permission in the Group.
      *
@@ -296,6 +301,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
         }
         return set.contains(permission);
     }
+
     /**
      * Checks if the user is assigned a specific Permission in any of the given
      * Groups
@@ -311,20 +317,17 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
         {
             return false;
         }
-        for (Iterator groups = groupset.iterator(); groups.hasNext();)
+        for (Group group : groupset)
         {
-            Group group = (Group) groups.next();
             PermissionSet permissions = getPermissions(group);
-            if (permissions != null)
+            if (permissions != null && permissions.contains(permission))
             {
-                if (permissions.contains(permission))
-                {
-                    return true;
-                }
+                return true;
             }
         }
         return false;
     }
+
     /**
      * Checks if the user is assigned a specific Permission in the Group.
      *
@@ -336,13 +339,14 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
     {
         try
         {
-            return hasPermission(permissionSet.getPermissionByName(permission), groupSet.getGroupByName(group));
+            return hasPermission(permissionSet.getByName(permission), groupSet.getByName(group));
         }
         catch (Exception e)
         {
             return false;
         }
     }
+
     /**
      * Checks if the user is assigned a specific Permission in the Group.
      *
@@ -354,7 +358,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
     {
         try
         {
-            return hasPermission(permissionSet.getPermissionByName(permission), group);
+            return hasPermission(permissionSet.getByName(permission), group);
         }
         catch (Exception e)
         {
@@ -375,7 +379,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
         Permission permission;
         try
         {
-            permission = permissionSet.getPermissionByName(permissionName);
+            permission = permissionSet.getByName(permissionName);
         }
         catch (Exception e)
         {
@@ -385,9 +389,8 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
         {
             return false;
         }
-        for (Iterator groups = groupset.iterator(); groups.hasNext();)
+        for (Group group : groupset)
         {
-            Group group = (Group) groups.next();
             PermissionSet permissions = getPermissions(group);
             if (permissions != null)
             {

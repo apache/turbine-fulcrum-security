@@ -22,6 +22,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 import org.apache.fulcrum.security.util.GroupSet;
@@ -40,60 +41,109 @@ public class BasicUserImpl extends SecurityEntityImpl implements BasicUser
      */
     private static final long serialVersionUID = 7911631916604987203L;
 
+    /** The password */
     private String password;
-    private Set groupSet = new GroupSet();
+
+    /** Set of related groups */
+    private Set<? extends Group> groupSet = new GroupSet();
 
     /**
-     * @return
+     * Returns the user's password. This method should not be used by
+     * the application directly, because it's meaning depends upon
+     * the implementation of UserManager that manages this particular
+     * user object. Some implementations will use this attribute for
+     * storing a password encrypted in some way, other will not use
+     * it at all, when user entered password is presented to some external
+     * authority (like NT domain controller) to validate it.
+     * See also {@link org.apache.fulcrum.security.UserManager#authenticate(User,String)}.
+     *
+     * @return A String with the password for the user.
      */
     public String getPassword()
     {
         return password;
     }
+
     /**
-     * @param password
+     * Set password. Application should not use this method
+     * directly, see {@link #getPassword()}.
+     * See also {@link org.apache.fulcrum.security.UserManager#changePassword(User,String,String)}.
+     *
+     * @param password The new password.
      */
     public void setPassword(String password)
     {
         this.password = password;
     }
+
     /**
-    * @return
-    */
+     * Get the groups this user is part of
+     *
+     * @return a set of groups
+     */
     public GroupSet getGroups()
     {
-        if( groupSet instanceof GroupSet )
-            return (GroupSet) groupSet;
-        else {
+        if( groupSet instanceof GroupSet ) {
+			return (GroupSet) groupSet;
+		} else {
             groupSet = new GroupSet(groupSet);
             return (GroupSet)groupSet;
         }
     }
+
     /**
-     * @param groups
+     * Set the groups this user is part of
+     *
+     * @param groups the set of groups
      */
     public void setGroups(GroupSet groups)
     {
-        if( groups != null )
-            this.groupSet = groups;
-        else
-            this.groupSet = new GroupSet();
+        if( groups != null ) {
+			this.groupSet = groups;
+		} else {
+			this.groupSet = new GroupSet();
+		}
     }
+
+    /**
+     * Remove the group from the list of groups
+     *
+     * @param group the group to remove
+     */
     public void removeGroup(Group group)
     {
         getGroups().remove(group);
     }
+
+    /**
+     * Add the group to the list of groups
+     *
+     * @param group the group to add
+     */
     public void addGroup(Group group)
     {
         getGroups().add(group);
     }
-    public void setGroupsAsSet(Set groups)
+
+    /**
+     * Set the groups this user is part of as a Set
+     *
+     * @param groups the set of groups
+     */
+    public <T extends Group> void setGroupsAsSet(Set<T> groups)
     {
         this.groupSet = groups;
     }
-    public Set getGroupsAsSet()
+
+    /**
+     * Get the groups this user is part of as a Set
+     *
+     * @return a set of groups
+     */
+    @SuppressWarnings("unchecked")
+	public <T extends Group> Set<T> getGroupsAsSet()
     {
-        return groupSet;
+        return (Set<T>)groupSet;
     }
 
     /**

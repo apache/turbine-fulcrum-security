@@ -17,7 +17,7 @@ package org.apache.fulcrum.security.acl;
  * specific language governing permissions and limitations
  * under the License.
  */
-import org.apache.fulcrum.security.util.TurbineSecurityException;
+import org.apache.fulcrum.security.util.FulcrumSecurityException;
 
 /**
  * Thrown to indicate that the User attempted to perform an operation that
@@ -27,7 +27,7 @@ import org.apache.fulcrum.security.util.TurbineSecurityException;
  * @version $Id$
  */
 public class AccessControlException
-    extends TurbineSecurityException
+    extends FulcrumSecurityException
 {
     /**
      * Serial number

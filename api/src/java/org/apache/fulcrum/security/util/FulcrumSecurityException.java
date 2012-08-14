@@ -25,7 +25,7 @@ package org.apache.fulcrum.security.util;
  * @author <a href="mailto:krzewski@e-point.pl">Rafal Krzewski</a>
  * @version $Id$
  */
-public class TurbineSecurityException
+public class FulcrumSecurityException
     extends Exception
 {
     /**
@@ -38,7 +38,7 @@ public class TurbineSecurityException
      *
      * @param msg The detail message.
      */
-    public TurbineSecurityException(String msg)
+    public FulcrumSecurityException(String msg)
     {
         super(msg);
     }
@@ -51,7 +51,7 @@ public class TurbineSecurityException
      * @param nested the exception or error that caused this exception
      *               to be thrown.
      */
-    public TurbineSecurityException(String msg, Throwable nested)
+    public FulcrumSecurityException(String msg, Throwable nested)
     {
         super(msg, nested);
     }

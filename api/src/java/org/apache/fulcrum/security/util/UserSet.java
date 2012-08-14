@@ -20,7 +20,6 @@ package org.apache.fulcrum.security.util;
  */
 
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.apache.fulcrum.security.entity.User;
 
@@ -33,7 +32,7 @@ import org.apache.fulcrum.security.entity.User;
  * @version $Id$
  */
 public class UserSet
-        extends SecuritySet
+        extends SecuritySet<User>
 {
     /**
      * Serial number
@@ -56,112 +55,11 @@ public class UserSet
      *
      * @param users A collection of users to be contained in the set.
      */
-    public UserSet(Collection users)
+    public UserSet(Collection<? extends User> users)
     {
-        super();
-        add(users);
+        this();
+        addAll(users);
     }
-
-    /**
-     * Adds a User to this UserSet.
-     *
-     * @param user A User.
-     * @return True if User was added; false if UserSet already
-     * contained the User.
-     */
-    public boolean add(User user)
-    {
-        if (contains(user)){
-            return false;
-        }
-        else {
-            idMap.put(user.getId(), user);
-            return true;
-        }
-    }
-
-    /**
-     * Adds a User to this UserSet.
-     *
-     * @param obj A User.
-     * @return True if User was added; false if UserSet already
-     * contained the User.
-     */
-    public boolean add(Object obj) {
-        if(obj instanceof User){
-            return add((User)obj);
-        }
-        else {
-            throw new ClassCastException("Object passed to add to UserSet is not of type User");
-        }
-    }
-
-    /**
-     * Adds the Users in a Collection to this UserSet.
-     *
-     * @param users A Collection of Users.
-     * @return True if this UserSet changed as a result; false
-     * if no change to this UserSet occurred (this UserSet
-     * already contained all members of the added UserSet).
-     */
-    public boolean add(Collection users)
-    {
-        boolean res = false;
-        for (Iterator it = users.iterator(); it.hasNext();)
-        {
-            User r = (User) it.next();
-            res |= add(r);
-        }
-        return res;
-    }
-
-    /**
-     * Adds the Users in another UserSet to this UserSet.
-     *
-     * @param userSet A UserSet.
-     * @return True if this UserSet changed as a result; false
-     * if no change to this UserSet occurred (this UserSet
-     * already contained all members of the added UserSet).
-     */
-    public boolean add(UserSet userSet)
-    {
-        boolean res = false;
-        for( Iterator it = userSet.iterator(); it.hasNext();)
-        {
-            User r = (User) it.next();
-            res |= add(r);
-        }
-        return res;
-    }
-
-    /**
-     * Removes a User from this UserSet.
-     *
-     * @param user A User.
-     * @return True if this UserSet contained the User
-     * before it was removed.
-     */
-    public boolean remove(User user)
-    {
-        boolean res = contains(user);
-       // nameMap.remove(user.getName());
-        idMap.remove(user.getId());
-        return res;
-    }
-
-    /**
-     * Checks whether this UserSet contains a User based on the
-     * name of the User.
-     *
-     * @param user A User.
-     * @return True if this UserSet contains the User,
-     * false otherwise.
-     */
-    public boolean contains(User user)
-    {
-		return super.contains(user);
-    }
-
 
     /**
      * Returns a User with the given name, if it is contained in
@@ -170,15 +68,11 @@ public class UserSet
      * @param userName Name of User.
      * @return User if argument matched a User in this
      * UserSet; null if no match.
+     * @deprecated use getByName()
      */
     public User getUserByName(String userName)
     {
-        return (User)getByName(userName);
-        /*
-         *		userName=userName.toLowerCase();
-         *        return (StringUtils.isNotEmpty(userName))
-         *                ? (User) nameMap.get(userName) : null;
-         */
+        return getByName(userName);
     }
 
     /**
@@ -188,21 +82,11 @@ public class UserSet
      * @param userId id of the User.
      * @return User if argument matched a User in this UserSet; null
      * if no match.
+     * @deprecated use getById()
      */
     public User getUserById(Object userId)
     {
-        return (userId != null)
-                ? (User) idMap.get(userId) : null;
-    }
-
-    /**
-     * Returns an Array of Users in this UserSet.
-     *
-     * @return An Array of User objects.
-     */
-    public User[] getUsersArray()
-    {
-        return (User[]) getSet().toArray(new User[0]);
+    	return getById(userId);
     }
 
     /**
@@ -215,20 +99,7 @@ public class UserSet
     {
         StringBuffer sb = new StringBuffer();
         sb.append("UserSet: ");
-
-        for(Iterator it = iterator(); it.hasNext();)
-        {
-            User r = (User) it.next();
-            sb.append('[');
-            sb.append(r.getName());
-            sb.append(" -> ");
-            sb.append(r.getId());
-            sb.append(']');
-            if (it.hasNext())
-            {
-                sb.append(", ");
-            }
-        }
+        sb.append(super.toString());
 
         return sb.toString();
     }

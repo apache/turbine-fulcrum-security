@@ -28,10 +28,10 @@ import org.apache.fulcrum.crypto.CryptoService;
  */
 public class PasswordUtils
 {
-    private PasswordUtils(){
-
+    private PasswordUtils()
+    {
+    	// empty
     }
-
 
 	/**
 	   * This method provides client-side encryption of passwords.

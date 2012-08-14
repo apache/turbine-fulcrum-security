@@ -27,7 +27,7 @@ package org.apache.fulcrum.security.util;
  * @version $Id$
  */
 public class EntityExistsException
-    extends TurbineSecurityException
+    extends FulcrumSecurityException
 {
     /**
      * Serial number

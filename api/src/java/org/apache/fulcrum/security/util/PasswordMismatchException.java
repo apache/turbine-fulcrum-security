@@ -26,7 +26,7 @@ package org.apache.fulcrum.security.util;
  * @version $Id$
  */
 public class PasswordMismatchException
-    extends TurbineSecurityException
+    extends FulcrumSecurityException
 {
     /**
      * Serial number

@@ -34,57 +34,81 @@ import org.apache.fulcrum.security.util.UserSet;
  */
 public class BasicGroupImpl extends SecurityEntityImpl implements BasicGroup
 {
-	private Set userSet = new UserSet();
-	/**
-	 * @return
-	 */
+	private Set<? extends User> userSet = new UserSet();
+
+    /**
+     * Get the users that are part of this group
+     *
+     * @return a set of users
+     */
 	public UserSet getUsers()
 	{
 	    if( userSet instanceof UserSet )
+	    {
 	        return (UserSet) userSet;
-	    else {
+	    }
+	    else
+	    {
 	        userSet = new UserSet(userSet);
 	        return (UserSet)userSet;
 	    }
 	}
 
-	/**
-	 * @param userSet
+    /**
+     * Set the users that are part of this group
+     *
+	 * @param userSet a set of users
 	 */
 	public void setUsers(UserSet userSet)
 	{
 	    if( userSet != null )
+	    {
 	        this.userSet = userSet;
+	    }
 	    else
+	    {
 	        this.userSet = new UserSet();
+	    }
 	}
 
-	/**
-	 * @return
-	 */
-	public Set getUsersAsSet()
+    /**
+     * Get the users that are part of this group as a Set
+     *
+     * @return a set of users
+     */
+	@SuppressWarnings("unchecked")
+	public <T extends User> Set<T> getUsersAsSet()
 	{
-	    return userSet;
+	    return (Set<T>)userSet;
 	}
 
-	/**
-	 * @param userSet
-	 */
-	public void setUsersAsSet(Set users)
+    /**
+     * Set the users that are part of this group as a Set
+     *
+     * @param userSet a set of users
+     */
+	public <T extends User> void setUsersAsSet(Set<T> users)
 	{
 	    this.userSet = users;
 	}
 
-
-
+    /**
+     * Add a user to this group
+     *
+     * @param user the user to add
+     */
 	public void addUser(User user)
 	{
 		getUsers().add(user);
 	}
+
+    /**
+     * Remove a user from this group
+     *
+     * @param user the user to remove
+     */
 	public void removeUser(User user)
 	{
 		getUsers().remove(user);
 	}
-
-
 }

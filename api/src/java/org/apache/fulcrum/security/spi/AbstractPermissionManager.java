@@ -89,7 +89,7 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
     public Permission getPermissionByName(String name)
         throws DataBackendException, UnknownEntityException
     {
-        Permission permission = getAllPermissions().getPermissionByName(name);
+        Permission permission = getAllPermissions().getByName(name);
         if (permission == null)
         {
             throw new UnknownEntityException("The specified permission does not exist");
@@ -110,7 +110,7 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
     public Permission getPermissionById(Object id)
         throws DataBackendException, UnknownEntityException
     {
-        Permission permission = getAllPermissions().getPermissionById(id);
+        Permission permission = getAllPermissions().getById(id);
         if (permission == null)
         {
             throw new UnknownEntityException("The specified permission does not exist");

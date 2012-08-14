@@ -48,10 +48,6 @@ public class TurbineUserGroupRole
 
     private Role role;
 
-    private int hashCode;
-
-    private boolean hashCodeGenerated = false;
-
     /**
      * Get the group
      *
@@ -167,36 +163,27 @@ public class TurbineUserGroupRole
 
     public int hashCode()
     {
-        if (!hashCodeGenerated)
+        HashCodeBuilder hcBuilder = new HashCodeBuilder(39, 17);
+
+        Role role = getRole();
+        if (null != role)
         {
-            HashCodeBuilder hcBuilder = new HashCodeBuilder(39, 17);
-
-            Role role = getRole();
-            if (null != role)
-            {
-                hcBuilder.append(role.getId());
-                hcBuilder.append(role.getName());
-            }
-
-            User user = getUser();
-            if (null != user)
-            {
-                hcBuilder.append(user.getId());
-                hcBuilder.append(user.getName());
-                hcBuilder.append(user.getPassword());
-            }
-
-            Group group = getGroup();
-            if (null != group)
-            {
-                hcBuilder.append(group.getId());
-                hcBuilder.append(group.getName());
-            }
-
-            this.hashCode = hcBuilder.toHashCode();
+            hcBuilder.append(role);
         }
 
-        return this.hashCode;
+        User user = getUser();
+        if (null != user)
+        {
+            hcBuilder.append(user);
+        }
+
+        Group group = getGroup();
+        if (null != group)
+        {
+            hcBuilder.append(group);
+        }
+
+        return hcBuilder.toHashCode();
     }
 
     public String toString()

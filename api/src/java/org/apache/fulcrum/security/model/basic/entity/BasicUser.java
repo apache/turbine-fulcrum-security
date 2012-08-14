@@ -66,12 +66,12 @@ public interface BasicUser extends User
      *
      * @param groups the set of groups
      */
-    public void setGroupsAsSet(Set groups);
+    public <T extends Group> void setGroupsAsSet(Set<T> groups);
 
     /**
      * Get the groups this user is part of as a Set
      *
      * @return a set of groups
      */
-    public Set getGroupsAsSet();
+    public <T extends Group> Set<T> getGroupsAsSet();
 }

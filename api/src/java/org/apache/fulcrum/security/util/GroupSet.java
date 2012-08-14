@@ -20,7 +20,6 @@ package org.apache.fulcrum.security.util;
  */
 
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.apache.fulcrum.security.entity.Group;
 
@@ -37,7 +36,7 @@ import org.apache.fulcrum.security.entity.Group;
  * @version $Id$
  */
 public class GroupSet
-        extends SecuritySet
+        extends SecuritySet<Group>
 {
     /**
      * Serial number
@@ -60,112 +59,11 @@ public class GroupSet
      *
      * @param groups A collection of groups to be contained in the set.
      */
-    public GroupSet(Collection groups)
+    public GroupSet(Collection<? extends Group> groups)
     {
-        super();
-        add(groups);
+        this();
+        addAll(groups);
     }
-
-    /**
-     * Adds a Group to this GroupSet.
-     *
-     * @param group A Group.
-     * @return True if Group was added; false if GroupSet
-     * already contained the Group.
-     */
-    public boolean add(Group group)
-    {
-        if (contains(group)){
-            return false;
-        }
-        else {
-            idMap.put(group.getId(), group);
-            return true;
-        }
-    }
-
-    /**
-     * Adds a Group to this GroupSet.
-     *
-     * @param obj A Group.
-     * @return True if Group was added; false if GroupSet already
-     * contained the Group.
-     */
-    public boolean add(Object obj) {
-        if(obj instanceof Group){
-            return add((Group)obj);
-        }
-        else {
-            throw new ClassCastException("Object passed to add to GroupSet is not of type Group");
-        }
-    }
-
-    /**
-     * Adds the Groups in a Collection to this GroupSet.
-     *
-     * @param groups A Collection of Groups.
-     * @return True if this GroupSet changed as a result; false
-     * if no change to this GroupSet occurred (this GroupSet
-     * already contained all members of the added GroupSet).
-     */
-    public boolean add(Collection groups)
-    {
-        boolean res = false;
-        for (Iterator it = groups.iterator(); it.hasNext();)
-        {
-            Group g = (Group) it.next();
-            res |= add(g);
-        }
-        return res;
-    }
-
-    /**
-     * Adds the Groups in another GroupSet to this GroupSet.
-     *
-     * @param groupSet A GroupSet.
-     * @return True if this GroupSet changed as a result; false
-     * if no change to this GroupSet occurred (this GroupSet
-     * already contained all members of the added GroupSet).
-     */
-    public boolean add(GroupSet groupSet)
-    {
-        boolean res = false;
-        for( Iterator it = groupSet.iterator(); it.hasNext();)
-        {
-            Group g = (Group) it.next();
-            res |= add(g);
-        }
-        return res;
-    }
-
-    /**
-     * Removes a Group from this GroupSet.
-     *
-     * @param group A Group.
-     * @return True if this GroupSet contained the Group
-     * before it was removed.
-     */
-    public boolean remove(Group group)
-    {
-        boolean res = contains(group);
-        //nameMap.remove(group.getName());
-        idMap.remove(group.getId());
-        return res;
-    }
-
-    /**
-     * Checks whether this GroupSet contains a Group.
-     *
-     * @param group A Group.
-     * @return True if this GroupSet contains the Group,
-     * false otherwise.
-     */
-    public boolean contains(Group group)
-    {
-        return super.contains(group);
-    }
-
-
 
     /**
      * Returns a Group with the given name, if it is contained in
@@ -174,14 +72,11 @@ public class GroupSet
      * @param groupName Name of Group.
      * @return Group if argument matched a Group in this
      * GroupSet; null if no match.
+     * @deprecated Use getByName()
      */
     public Group getGroupByName(String groupName)
     {
-    	/*groupName=groupName.toLowerCase();
-        return (StringUtils.isNotEmpty(groupName))
-                ? (Group) nameMap.get(groupName) : null;
-                */
-		return (Group)getByName(groupName);
+		return getByName(groupName);
     }
 
     /**
@@ -191,21 +86,11 @@ public class GroupSet
      * @param groupId Id of the group
      * @return Group if argument matched a Group in this
      * GroupSet; null if no match.
+     * @deprecated Use getById()
      */
     public Group getGroupById(Object groupId)
     {
-        return (groupId != null)
-                ? (Group) idMap.get(groupId) : null;
-    }
-
-    /**
-     * Returns an Array of Groups in this GroupSet.
-     *
-     * @return An Array of Group objects.
-     */
-    public Group[] getGroupsArray()
-    {
-        return (Group[]) getSet().toArray(new Group[0]);
+    	return getById(groupId);
     }
 
     /**
@@ -218,23 +103,8 @@ public class GroupSet
     {
         StringBuffer sb = new StringBuffer();
         sb.append("GroupSet: ");
-
-        for(Iterator it = iterator(); it.hasNext();)
-        {
-            Group g = (Group) it.next();
-            sb.append('[');
-            sb.append(g.getName());
-            sb.append(" -> ");
-            sb.append(g.getId());
-            sb.append(']');
-            if (it.hasNext())
-            {
-                sb.append(", ");
-            }
-        }
+        sb.append(super.toString());
 
         return sb.toString();
     }
-
-
 }

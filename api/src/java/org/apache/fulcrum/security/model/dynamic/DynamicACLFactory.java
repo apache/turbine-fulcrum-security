@@ -20,18 +20,19 @@ package org.apache.fulcrum.security.model.dynamic;
  */
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.ACLFactory;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 import org.apache.fulcrum.security.spi.AbstractManager;
+import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
@@ -45,6 +46,35 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public class DynamicACLFactory extends AbstractManager implements ACLFactory
 {
+    /**
+	 * @see org.apache.fulcrum.security.model.ACLFactory#getAccessControlList(org.apache.fulcrum.security.entity.User)
+	 */
+	public AccessControlList getAccessControlList(User user)
+    {
+        Map<Group, RoleSet> roleSets = new HashMap<Group, RoleSet>();
+        Map<Role, PermissionSet> permissionSets = new HashMap<Role, PermissionSet>();
+
+        Set<DynamicUser> users = new HashSet<DynamicUser>();
+
+        // add the root user
+        users.add((DynamicUser) user);
+        addDelegators((DynamicUser) user, users);
+
+        for (DynamicUser aUser : users)
+        {
+            addRolesAndPermissions(aUser, roleSets, permissionSets);
+        }
+
+        try
+        {
+            return getAclInstance(roleSets, permissionSets);
+        }
+        catch (UnknownEntityException uue)
+        {
+            throw new RuntimeException(uue.getMessage(), uue);
+        }
+    }
+
     /**
      * Construct a new ACL object.
      *
@@ -60,14 +90,15 @@ public class DynamicACLFactory extends AbstractManager implements ACLFactory
      * @throws UnknownEntityException
      *             if the object could not be instantiated.
      */
-    private AccessControlList getAclInstance(Map roles, Map permissions)
+    private AccessControlList getAclInstance(Map<? extends Group, ? extends RoleSet> roles,
+    										 Map<? extends Role, ? extends PermissionSet> permissions)
             throws UnknownEntityException
     {
-        // Object[] objects = { roles, permissions };
-        // String[] signatures = { Map.class.getName(), Map.class.getName() };
         AccessControlList accessControlList;
         try
         {
+            // Object[] objects = { roles, permissions };
+            // String[] signatures = { Map.class.getName(), Map.class.getName() };
             /*
              *
              * @todo I think this is overkill for now.. accessControlList =
@@ -86,38 +117,18 @@ public class DynamicACLFactory extends AbstractManager implements ACLFactory
         return accessControlList;
     }
 
-    public AccessControlList getAccessControlList(User user)
+    /**
+     * Add delegators to the user list
+     *
+     * @param user the user to add to
+     * @param users the set of delegators
+     */
+    public <T extends DynamicUser> void addDelegators(DynamicUser user, Set<T> users)
     {
-        Map roleSets = new HashMap();
-        Map permissionSets = new HashMap();
-
-        Set users = new HashSet();
-        // add the root user
-        users.add(user);
-        addDelegators((DynamicUser) user, users);
-
-        Iterator i = users.iterator();
-        while (i.hasNext())
+        for (User u : user.getDelegators())
         {
-            DynamicUser aUser = (DynamicUser) i.next();
-            addRolesAndPermissions(aUser, roleSets, permissionSets);
-        }
-
-        try
-        {
-            return getAclInstance(roleSets, permissionSets);
-        }
-        catch (UnknownEntityException uue)
-        {
-            throw new RuntimeException(uue.getMessage(), uue);
-        }
-    }
-
-    public void addDelegators(DynamicUser user, Set users)
-    {
-        for (Iterator iter = user.getDelegators().iterator(); iter.hasNext();)
-        {
-            DynamicUser delegatorUser = (DynamicUser) iter.next();
+            @SuppressWarnings("unchecked")
+			T delegatorUser = (T) u;
 
             if (users.add(delegatorUser))
             {
@@ -136,18 +147,17 @@ public class DynamicACLFactory extends AbstractManager implements ACLFactory
      * @param roleSets
      * @param permissionSets
      */
-    private void addRolesAndPermissions(User user, Map roleSets,
-            Map permissionSets)
+    private void addRolesAndPermissions(User user,
+		    		Map<Group, RoleSet> roleSets,
+		            Map<Role, PermissionSet> permissionSets)
     {
-        for (Iterator i = ((DynamicUser) user).getGroups().iterator(); i
-                .hasNext();)
+        for (Group group : ((DynamicUser) user).getGroups())
         {
-            Group group = (Group) i.next();
-            RoleSet roleSet = (RoleSet) ((DynamicGroup) group).getRoles();
+            RoleSet roleSet = ((DynamicGroup) group).getRoles();
             roleSets.put(group, roleSet);
-            for (Iterator j = roleSet.iterator(); j.hasNext();)
+            for (Role r : roleSet)
             {
-                DynamicRole role = (DynamicRole) j.next();
+                DynamicRole role = (DynamicRole) r;
                 permissionSets.put(role, role.getPermissions());
             }
         }

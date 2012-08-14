@@ -20,7 +20,6 @@ package org.apache.fulcrum.security.util;
  */
 
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.apache.fulcrum.security.entity.Role;
 
@@ -37,7 +36,7 @@ import org.apache.fulcrum.security.entity.Role;
  * @version $Id$
  */
 public class RoleSet
-        extends SecuritySet
+        extends SecuritySet<Role>
 {
     /**
      * Serial number
@@ -60,111 +59,11 @@ public class RoleSet
      *
      * @param roles A collection of roles to be contained in the set.
      */
-    public RoleSet(Collection roles)
+    public RoleSet(Collection<? extends Role> roles)
     {
-        super();
-        add(roles);
+        this();
+        addAll(roles);
     }
-
-    /**
-     * Adds a Role to this RoleSet.
-     *
-     * @param role A Role.
-     * @return True if Role was added; false if RoleSet already
-     * contained the Role.
-     */
-    public boolean add(Role role)
-    {
-        if (contains(role)){
-            return false;
-        }
-        else {
-            idMap.put(role.getId(), role);
-            return true;
-        }
-    }
-
-    /**
-     * Adds a Role to this RoleSet.
-     *
-     * @param obj A Role.
-     * @return True if Role was added; false if RoleSet already
-     * contained the Role.
-     */
-    public boolean add(Object obj) {
-        if(obj instanceof Role){
-            return add((Role)obj);
-        }
-        else {
-            throw new ClassCastException("Object passed to add to RoleSet is not of type Role");
-        }
-    }
-
-    /**
-     * Adds the Roles in a Collection to this RoleSet.
-     *
-     * @param roles A Collection of Roles.
-     * @return True if this RoleSet changed as a result; false
-     * if no change to this RoleSet occurred (this RoleSet
-     * already contained all members of the added RoleSet).
-     */
-    public boolean add(Collection roles)
-    {
-        boolean res = false;
-        for (Iterator it = roles.iterator(); it.hasNext();)
-        {
-            Role r = (Role) it.next();
-            res |= add(r);
-        }
-        return res;
-    }
-
-    /**
-     * Adds the Roles in another RoleSet to this RoleSet.
-     *
-     * @param roleSet A RoleSet.
-     * @return True if this RoleSet changed as a result; false
-     * if no change to this RoleSet occurred (this RoleSet
-     * already contained all members of the added RoleSet).
-     */
-    public boolean add(RoleSet roleSet)
-    {
-        boolean res = false;
-        for( Iterator it = roleSet.iterator(); it.hasNext();)
-        {
-            Role r = (Role) it.next();
-            res |= add(r);
-        }
-        return res;
-    }
-
-    /**
-     * Removes a Role from this RoleSet.
-     *
-     * @param role A Role.
-     * @return True if this RoleSet contained the Role
-     * before it was removed.
-     */
-    public boolean remove(Role role)
-    {
-        boolean res = contains(role);
-      //  nameMap.remove(role.getName());
-        idMap.remove(role.getId());
-        return res;
-    }
-
-    /**
-     * Checks whether this RoleSet contains a Role.
-     *
-     * @param role A Role.
-     * @return True if this RoleSet contains the Role,
-     * false otherwise.
-     */
-    public boolean contains(Role role)
-    {
-		return super.contains(role);
-    }
-
 
     /**
      * Returns a Role with the given name, if it is contained in
@@ -173,13 +72,11 @@ public class RoleSet
      * @param roleName Name of Role.
      * @return Role if argument matched a Role in this
      * RoleSet; null if no match.
+     * @deprecated use getByName()
      */
     public Role getRoleByName(String roleName)
     {
-		return (Role)getByName(roleName);
-		/*roleName=roleName.toLowerCase();
-        return (StringUtils.isNotEmpty(roleName))
-                ? (Role) nameMap.get(roleName) : null;*/
+		return getByName(roleName);
     }
 
     /**
@@ -189,21 +86,11 @@ public class RoleSet
      * @param roleId id of the Role.
      * @return Role if argument matched a Role in this RoleSet; null
      * if no match.
+     * @deprecated Use getById()
      */
     public Role getRoleById(Object roleId)
     {
-        return (roleId != null)
-                ? (Role) idMap.get(roleId) : null;
-    }
-
-    /**
-     * Returns an Array of Roles in this RoleSet.
-     *
-     * @return An Array of Role objects.
-     */
-    public Role[] getRolesArray()
-    {
-        return (Role[]) getSet().toArray(new Role[0]);
+    	return getById(roleId);
     }
 
     /**
@@ -216,23 +103,8 @@ public class RoleSet
     {
         StringBuffer sb = new StringBuffer();
         sb.append("RoleSet: ");
-
-        for(Iterator it = iterator(); it.hasNext();)
-        {
-            Role r = (Role) it.next();
-            sb.append('[');
-            sb.append(r.getName());
-            sb.append(" -> ");
-            sb.append(r.getId());
-            sb.append(']');
-            if (it.hasNext())
-            {
-                sb.append(", ");
-            }
-        }
+        sb.append(super.toString());
 
         return sb.toString();
     }
-
-
 }

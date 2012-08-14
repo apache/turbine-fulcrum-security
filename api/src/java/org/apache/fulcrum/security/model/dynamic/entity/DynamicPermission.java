@@ -67,12 +67,12 @@ public interface DynamicPermission extends Permission
      *
      * @param roles a set of roles
      */
-    public void setRolesAsSet(Set roles);
+    public <T extends Role> void setRolesAsSet(Set<T> roles);
 
     /**
      * Get the roles that this permission belongs to as Set
      *
      * @return a set of roles
      */
-    public Set getRolesAsSet();
+    public <T extends Role> Set<T> getRolesAsSet();
 }

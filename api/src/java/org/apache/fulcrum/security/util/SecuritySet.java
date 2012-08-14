@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.fulcrum.security.entity.SecurityEntity;
 /**
@@ -43,71 +44,66 @@ import org.apache.fulcrum.security.entity.SecurityEntity;
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
-public abstract class SecuritySet implements Serializable, Set
+public abstract class SecuritySet<T extends SecurityEntity>
+	implements Serializable, Set<T>, Iterable<T>
 {
-    /** Map for "name" -> "security object" */
-  //  protected Map nameMap = null;
+    /** Serial version */
+	private static final long serialVersionUID = 2251987059226422569L;
+
+	/** Map for "name" -> "security object" */
+    protected Map<String, T> nameMap = null;
     /** Map for "id" -> "security object" */
-    protected Map idMap = null;
+    protected Map<Object, T> idMap = null;
+
     /**
 	 * Constructs an empty Set
 	 */
     public SecuritySet()
     {
-        //nameMap = new TreeMap();
-        idMap = new TreeMap();
+        nameMap = new TreeMap<String, T>();
+        idMap = new TreeMap<Object, T>();
     }
 
-    /*
-     * To enable the typesafe handling, make this abstract
-     * and rely on the implementing classes like RoleSet to
-     * properly cast the Object type.
-     *
-     * @see java.util.Collection#add(java.lang.Object)
-     */
-    public abstract boolean add(Object o);
     /**
 	 * Returns a set of security objects in this object.
 	 *
 	 * @return A Set Object
 	 *
 	 */
-    public Set getSet()
+    public Set<T> getSet()
     {
-        return new HashSet(idMap.values());
+        return new HashSet<T>(idMap.values());
     }
+
     /**
 	 * Returns a set of Names in this Object.
 	 *
 	 * @return The Set of Names in this Object, backed by the actual data.
 	 */
-    public Set getNames()
+    public Set<String> getNames()
     {
-        Set names = new HashSet();
-        for (Iterator i = getSet().iterator();i.hasNext();){
-            SecurityEntity se = (SecurityEntity)i.next();
-            names.add(se.getName());
-        }
-        return names;
-        //return nameMap.keySet();
+        return nameMap.keySet();
     }
+
     /**
 	 * Returns a set of Id values in this Object.
 	 *
 	 * @return The Set of Ids in this Object, backed by the actual data.
 	 */
-    public Set getIds()
+    public Set<Object> getIds()
     {
         return idMap.keySet();
     }
+
     /**
 	 * Removes all Objects from this Set.
 	 */
     public void clear()
     {
-      //  nameMap.clear();
+        nameMap.clear();
         idMap.clear();
     }
+
     /**
 	 * Searches if an Object with a given name is in the Set
 	 *
@@ -117,16 +113,11 @@ public abstract class SecuritySet implements Serializable, Set
 	 */
     public boolean containsName(String name)
     {
-
 		return (StringUtils.isNotEmpty(name))
-				   ? getNames().contains(name.toLowerCase())
-				   : false;
-        /*
-         *        return (StringUtils.isNotEmpty(name))
-         *            ? nameMap.containsKey(name.toLowerCase())
-         *            : false;
-         */
+		    ? nameMap.containsKey(name.toLowerCase())
+		    : false;
     }
+
     /**
 	 * Searches if an Object with a given Id is in the Set
 	 *
@@ -138,15 +129,17 @@ public abstract class SecuritySet implements Serializable, Set
     {
         return (id == null) ? false : idMap.containsKey(id);
     }
+
     /**
 	 * Returns an Iterator for Objects in this Set.
 	 *
 	 * @return An iterator for the Set
 	 */
-    public Iterator iterator()
+    public Iterator<T> iterator()
     {
         return idMap.values().iterator();
     }
+
     /**
 	 * Returns size (cardinality) of this set.
 	 *
@@ -156,6 +149,7 @@ public abstract class SecuritySet implements Serializable, Set
     {
         return idMap.size();
     }
+
     /**
 	 * list of role names in this set
 	 *
@@ -164,28 +158,80 @@ public abstract class SecuritySet implements Serializable, Set
     public String toString()
     {
         StringBuffer sbuf = new StringBuffer(12 * size());
-        for (Iterator it = idMap.keySet().iterator(); it.hasNext();)
+
+        for(Iterator<T> it = iterator(); it.hasNext();)
         {
-            sbuf.append((String) it.next());
+            T se = it.next();
+            sbuf.append('[');
+            sbuf.append(se.getName());
+            sbuf.append(" -> ");
+            sbuf.append(se.getId());
+            sbuf.append(']');
             if (it.hasNext())
             {
                 sbuf.append(", ");
             }
         }
+
         return sbuf.toString();
     }
+
     // methods from Set
-    public boolean addAll(Collection collection)
+    /**
+     * @see java.util.Collection#add(java.lang.Object)
+     */
+    public boolean add(T o)
     {
-        return add((Collection) collection);
+        if (contains(o))
+        {
+            return false;
+        }
+
+        if (o.getId() != null)
+        {
+        	idMap.put(o.getId(), o);
+        }
+        if (o.getName() != null)
+        {
+        	nameMap.put(o.getName(), o);
+        }
+
+    	return true;
     }
+
+    /**
+     * Adds the entities in a Collection to this SecuritySet.
+     *
+     * @param collection A Collection of entities.
+     * @return True if this Set changed as a result; false
+     * if no change to this Set occurred (this Set
+     * already contained all members of the added Set).
+     */
+    public boolean add(Collection<? extends T> collection)
+    {
+    	return addAll(collection);
+    }
+
+    public boolean addAll(Collection<? extends T> collection)
+    {
+    	boolean res = false;
+
+    	for (T o : collection)
+    	{
+    		res |= add(o);
+    	}
+
+        return res;
+    }
+
     public boolean isEmpty()
     {
         return idMap.isEmpty();
     }
-    public boolean containsAll(Collection collection)
+
+    public boolean containsAll(Collection<?> collection)
     {
-        for (Iterator i = collection.iterator(); i.hasNext();)
+        for (Iterator<?> i = collection.iterator(); i.hasNext();)
         {
             Object object = i.next();
             if (!contains(object))
@@ -195,10 +241,11 @@ public abstract class SecuritySet implements Serializable, Set
         }
         return true;
     }
-    public boolean removeAll(Collection collection)
+
+    public boolean removeAll(Collection<?> collection)
     {
         boolean changed = false;
-        for (Iterator i = collection.iterator(); i.hasNext();)
+        for (Iterator<?> i = collection.iterator(); i.hasNext();)
         {
             Object object = i.next();
             boolean result = remove(object);
@@ -207,12 +254,15 @@ public abstract class SecuritySet implements Serializable, Set
                 changed = true;
             }
         }
+
         return changed;
     }
-    public boolean retainAll(Collection collection)
+
+    public boolean retainAll(Collection<?> collection)
     {
         throw new RuntimeException("not implemented");
     }
+
     /*
      * (non-Javadoc)
      *
@@ -223,55 +273,76 @@ public abstract class SecuritySet implements Serializable, Set
         return getSet().toArray();
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Checks whether this SecuritySet contains an entity.
      *
-     * @see java.util.Collection#contains(java.lang.Object)
+     * @param o An entity.
+     * @return True if this Set contains the entity,
+     * false otherwise.
      */
     public boolean contains(Object o)
     {
-        if (o == null)
+        if (o == null || !(o instanceof SecurityEntity))
         {
             return false;
         }
         else
         {
-            return containsName(((SecurityEntity) o).getName());
+            return containsName(((SecurityEntity)o).getName());
         }
     }
-    /*
-     * (non-Javadoc)
+
+    /**
+     * Removes an entity from this SecuritySet.
      *
-     * @see java.util.Collection#remove(java.lang.Object)
+     * @param o An entity.
+     * @return True if this Set contained the entity
+     * before it was removed.
      */
     public boolean remove(Object o)
     {
-        SecurityEntity se = (SecurityEntity)o;
-		boolean res = contains(se);
-		idMap.remove(se.getId());
-		return res;
+    	if (o instanceof SecurityEntity)
+    	{
+			boolean res = contains(o);
+			idMap.remove(((SecurityEntity)o).getId());
+			nameMap.remove(((SecurityEntity)o).getName());
+			return res;
+    	}
+
+    	return false;
     }
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.util.Collection#toArray(java.lang.Object[])
-     */
-    public Object[] toArray(Object[] a)
-    {
+
+    /* (non-Javadoc)
+	 * @see java.util.Set#toArray(T[])
+	 */
+	public <A> A[] toArray(A[] a)
+	{
         return getSet().toArray(a);
     }
 
-    public SecurityEntity getByName(String name){
-        SecurityEntity securityEntity = null;
-        for (Iterator i = getSet().iterator();i.hasNext();){
-            SecurityEntity se = (SecurityEntity)i.next();
-            if(se.getName().equalsIgnoreCase(name)){
-                securityEntity = se;
-                break;
-            }
-        }
-        return securityEntity;
+    /**
+     * Returns an entity with the given name, if it is contained in
+     * this SecuritySet.
+     *
+     * @param name Name of entity.
+     * @return entity if argument matched an entity in this
+     * Set; null if no match.
+     */
+    public T getByName(String name)
+    {
+    	return nameMap.get(name);
+    }
 
-
+    /**
+     * Returns an entity with the given id, if it is contained in
+     * this SecuritySet.
+     *
+     * @param id ID of entity.
+     * @return entity if argument matched an entity in this
+     * Set; null if no match.
+     */
+    public T getById(Object id)
+    {
+    	return idMap.get(id);
     }
 }

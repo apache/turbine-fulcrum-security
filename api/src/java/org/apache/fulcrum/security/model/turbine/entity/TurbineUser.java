@@ -19,8 +19,6 @@ package org.apache.fulcrum.security.model.turbine.entity;
  * under the License.
  */
 
-import java.util.Set;
-
 import org.apache.fulcrum.security.entity.User;
 
 /**
@@ -31,33 +29,7 @@ import org.apache.fulcrum.security.entity.User;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public interface TurbineUser extends User
+public interface TurbineUser extends User, TurbineUserGroupRoleEntity
 {
-    /**
-     * Get the User/Group/Role set associated with this user
-     *
-     * @return a set of User/GRoup/Role relations
-     */
-    public Set getUserGroupRoleSet();
-
-    /**
-     * Get the User/Group/Role set associated with this user
-     *
-     * @param userGroupRoleSet a set of User/GRoup/Role relations
-     */
-    public void setUserGroupRoleSet(Set userGroupRoleSet);
-
-    /**
-     * Add a User/Group/Role relation to this user
-     *
-     * @param userGroupRole a User/GRoup/Role relation to add
-     */
-    public void addUserGroupRole(TurbineUserGroupRole userGroupRole);
-
-    /**
-     * Remove a User/Group/Role relation from this user
-     *
-     * @param userGroupRole a User/GRoup/Role relation to remove
-     */
-    public void removeUserGroupRole(TurbineUserGroupRole userGroupRole);
+	// empty
 }

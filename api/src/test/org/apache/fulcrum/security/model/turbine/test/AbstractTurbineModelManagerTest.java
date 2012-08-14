@@ -19,7 +19,6 @@ package org.apache.fulcrum.security.model.turbine.test;
  * under the License.
  */
 
-import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.fulcrum.security.GroupManager;
@@ -156,9 +155,9 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
         modelManager.grant(user, group, role);
 
         group = groupManager.getGroupById(group.getId());
-        Set userGroupRoleSet = ((TurbineGroup) group).getUserGroupRoleSet();
+        Set<TurbineUserGroupRole> userGroupRoleSet = ((TurbineGroup) group).getUserGroupRoleSet();
         assertEquals(1, userGroupRoleSet.size());
-        Set userGroupRoleSet2 = ((TurbineGroup) group).getUserGroupRoleSet();
+        Set<TurbineUserGroupRole> userGroupRoleSet2 = ((TurbineGroup) group).getUserGroupRoleSet();
         assertEquals(1, userGroupRoleSet2.size());
 
         modelManager.revokeAll(user);
@@ -183,21 +182,20 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
         userManager.addUser(user, "clint");
         modelManager.grant(user, group, role);
         boolean ugrFound = false;
-        TurbineUserGroupRole ugr = null;
-        for (Iterator i = ((TurbineUser) user).getUserGroupRoleSet().iterator(); i
-                .hasNext();)
+        TurbineUserGroupRole ugrTest = null;
+        for (TurbineUserGroupRole ugr : ((TurbineUser) user).getUserGroupRoleSet())
         {
-            ugr = (TurbineUserGroupRole) i.next();
             if (ugr.getUser().equals(user) && ugr.getGroup().equals(group)
                     && ugr.getRole().equals(role))
             {
                 ugrFound = true;
+                ugrTest = ugr;
                 break;
             }
         }
         assertTrue(ugrFound);
-        assertTrue(ugr.getGroup().equals(group));
-        assertTrue(ugr.getUser().equals(user));
+        assertTrue(ugrTest.getGroup().equals(group));
+        assertTrue(ugrTest.getUser().equals(user));
 
     }
 
@@ -214,11 +212,8 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
         modelManager.grant(user, group, role);
         modelManager.revoke(user, group, role);
         boolean ugrFound = false;
-        TurbineUserGroupRole ugr = null;
-        for (Iterator i = ((TurbineUser) user).getUserGroupRoleSet().iterator(); i
-                .hasNext();)
+        for (TurbineUserGroupRole ugr : ((TurbineUser) user).getUserGroupRoleSet())
         {
-            ugr = (TurbineUserGroupRole) i.next();
             if (ugr.getUser().equals(user) && ugr.getGroup().equals(group)
                     && ugr.getRole().equals(role))
             {

@@ -47,13 +47,13 @@ public class SecuritySetTest extends TestCase
 
     public void testNull() throws Exception
     {
-        SecuritySet securitySet = new GroupSet();
+        SecuritySet<Group> securitySet = new GroupSet();
         assertFalse(securitySet.contains(null));
     }
 
     public void testContainsName()
     {
-        SecuritySet securitySet = new GroupSet();
+        SecuritySet<Group> securitySet = new GroupSet();
         assertFalse(securitySet.containsName(null));
         Group g = new DynamicGroupImpl();
         g.setName("BOB");
@@ -66,7 +66,7 @@ public class SecuritySetTest extends TestCase
 
     public void testRemoveAll()
     {
-        SecuritySet securitySet = new GroupSet();
+        SecuritySet<Group> securitySet = new GroupSet();
         assertFalse(securitySet.containsName(null));
         Group g = new DynamicGroupImpl();
         g.setName("BOB");
@@ -74,7 +74,7 @@ public class SecuritySetTest extends TestCase
 
         ((GroupSet) securitySet).add(g);
 
-        SecuritySet securitySet2 = new GroupSet();
+        SecuritySet<Group> securitySet2 = new GroupSet();
         assertFalse(securitySet.containsName(null));
         g = new DynamicGroupImpl();
         g.setName("BOB");
@@ -87,7 +87,7 @@ public class SecuritySetTest extends TestCase
 
     public void testToArray() throws Exception
     {
-        SecuritySet securitySet = getTestData();
+        SecuritySet<Group> securitySet = getTestData();
         Object array[] = securitySet.toArray();
         assertEquals(2, array.length);
         Object array2[] = new Object[2];
@@ -105,9 +105,9 @@ public class SecuritySetTest extends TestCase
         assertTrue(securitySet.add(g));
     }
 
-    private SecuritySet getTestData()
+    private SecuritySet<Group> getTestData()
     {
-        SecuritySet securitySet = new GroupSet();
+        SecuritySet<Group> securitySet = new GroupSet();
         assertFalse(securitySet.containsName(null));
         Group g = new DynamicGroupImpl();
         g.setName("JOE");

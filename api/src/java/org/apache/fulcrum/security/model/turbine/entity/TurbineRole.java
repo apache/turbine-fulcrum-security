@@ -33,7 +33,7 @@ import org.apache.fulcrum.security.util.PermissionSet;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @version $Id$
  */
-public interface TurbineRole extends Role
+public interface TurbineRole extends Role, TurbineUserGroupRoleEntity
 {
     /**
      * Get the permission that are part of this role
@@ -47,7 +47,7 @@ public interface TurbineRole extends Role
      *
      * @return a set of permissions
      */
-    public Set getPermissionsAsSet();
+    public <T extends Permission> Set<T> getPermissionsAsSet();
 
     /**
      * Set the permission that are part of this role
@@ -61,7 +61,7 @@ public interface TurbineRole extends Role
      *
      * @param permissions a set of permissions
      */
-    public void setPermissionsAsSet(Set permissions);
+    public <T extends Permission> void setPermissionsAsSet(Set<T> permissions);
 
     /**
     * This method should only be used by a RoleManager.  Not directly.
@@ -74,32 +74,4 @@ public interface TurbineRole extends Role
      * @param permission
      */
     public void removePermission(Permission permission);
-
-    /**
-     * Get the User/Group/Role set associated with this role
-     *
-     * @return a set of User/GRoup/Role relations
-     */
-    public Set getUserGroupRoleSet();
-
-    /**
-     * Get the User/Group/Role set associated with this group
-     *
-     * @param userGroupRoleSet a set of User/GRoup/Role relations
-     */
-    public void setUserGroupRoleSet(Set userGroupRoleSet);
-
-    /**
-     * Add a User/Group/Role relation to this role
-     *
-     * @param userGroupRole a User/GRoup/Role relation to add
-     */
-    public void addUserGroupRole(TurbineUserGroupRole userGroupRole);
-
-    /**
-     * Remove a User/Group/Role relation from this role
-     *
-     * @param userGroupRole a User/GRoup/Role relation to remove
-     */
-    public void removeUserGroupRole(TurbineUserGroupRole userGroupRole);
 }

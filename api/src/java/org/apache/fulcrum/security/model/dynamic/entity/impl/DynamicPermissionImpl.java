@@ -35,61 +35,75 @@ import org.apache.fulcrum.security.util.RoleSet;
  */
 public class DynamicPermissionImpl extends SecurityEntityImpl implements DynamicPermission
 {
-
-    private Set roleSet = new RoleSet();
-
+    private Set<? extends Role> roleSet = new RoleSet();
 
     /**
-     * @return
+     * Get the roles that this permission belongs to
+     *
+     * @return a set of roles
      */
-    public RoleSet getRoles() {
-        if (roleSet instanceof RoleSet)
-            return (RoleSet) roleSet;
-        else {
+    public RoleSet getRoles()
+    {
+        if (roleSet instanceof RoleSet) {
+			return (RoleSet) roleSet;
+		} else {
             roleSet = new RoleSet(roleSet);
             return (RoleSet) roleSet;
         }
     }
 
     /**
-     * @param roleSet
+     * Set the roles that this permission belongs to
+     *
+     * @param roleSet a set of roles
      */
-    public void setRoles(RoleSet roleSet) {
-        if (roleSet != null)
-            this.roleSet = roleSet;
-        else
-            this.roleSet = new RoleSet();
+    public void setRoles(RoleSet roleSet)
+    {
+        if (roleSet != null) {
+			this.roleSet = roleSet;
+		} else {
+			this.roleSet = new RoleSet();
+		}
     }
 
     /**
-     * Add a role to the RoleSet
+     * Add a role to this permission
+     *
      * @param role the role to add
      */
-    public void addRole(Role role) {
+    public void addRole(Role role)
+    {
         getRoles().add(role);
     }
 
     /**
-     * Remove a role from the RoleSet
+     * Remove a role from this permission
+     *
      * @param role the role to remove
      */
-    public void removeRole(Role role) {
+    public void removeRole(Role role)
+    {
         getRoles().remove(role);
     }
 
     /**
+     * Set the roles that this permission belongs to as Set
      *
-     * @param roles
+     * @param roles a set of roles
      */
-    public void setRolesAsSet(Set roles) {
+    public <T extends Role> void setRolesAsSet(Set<T> roles)
+    {
         this.roleSet = roles;
     }
 
     /**
+     * Get the roles that this permission belongs to as Set
      *
-     * @return
+     * @return a set of roles
      */
-    public Set getRolesAsSet() {
-        return roleSet;
+    @SuppressWarnings("unchecked")
+	public <T extends Role> Set<T> getRolesAsSet()
+    {
+        return (Set<T>)roleSet;
     }
 }

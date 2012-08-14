@@ -94,7 +94,7 @@ public abstract class AbstractGroupManager
     public Group getGroupByName(String name)
         throws DataBackendException, UnknownEntityException
     {
-        Group group = getAllGroups().getGroupByName(name);
+        Group group = getAllGroups().getByName(name);
         if (group == null)
         {
             throw new UnknownEntityException("The specified group does not exist");
@@ -117,7 +117,7 @@ public abstract class AbstractGroupManager
     public Group getGroupById(Object id)
         throws DataBackendException, UnknownEntityException
     {
-        Group group = getAllGroups().getGroupById(id);
+        Group group = getAllGroups().getById(id);
         if (group == null)
         {
             throw new UnknownEntityException("The specified group does not exist");

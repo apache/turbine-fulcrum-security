@@ -20,7 +20,6 @@ package org.apache.fulcrum.security.model.dynamic.test;
  */
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.fulcrum.security.GroupManager;
@@ -293,16 +292,17 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest {
 				group);
 		assertTrue(((DynamicGroup) group).getUsers().contains(user));
 		group = groupManager.getGroupByName(GROUP_NAME);
-		Set users = ((DynamicGroup) group).getUsers();
+		Set<User> users = ((DynamicGroup) group).getUsers();
 		int size = users.size();
 		assertEquals(1, size);
 		// assertTrue("Check class:" + users.getClass().getName(),users
 		// instanceof UserSet);
 		boolean found = false;
-		Set newSet = new HashSet();
-		for (Iterator i = users.iterator(); i.hasNext();) {
-			User u = (User) i.next();
-			if (u.equals(user)) {
+		Set<User> newSet = new HashSet<User>();
+		for (User u : users)
+		{
+			if (u.equals(user))
+			{
 				found = true;
 				newSet.add(u);
 			}

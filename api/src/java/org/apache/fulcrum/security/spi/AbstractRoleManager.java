@@ -95,7 +95,7 @@ public abstract class AbstractRoleManager
     public Role getRoleByName(String name)
         throws DataBackendException, UnknownEntityException
     {
-        Role role = getAllRoles().getRoleByName(name);
+        Role role = getAllRoles().getByName(name);
         if (role == null)
         {
             throw new UnknownEntityException("The specified role does not exist");
@@ -118,7 +118,7 @@ public abstract class AbstractRoleManager
     public Role getRoleById(Object id)
         throws DataBackendException, UnknownEntityException
     {
-        Role role = getAllRoles().getRoleById(id);
+        Role role = getAllRoles().getById(id);
         if (role == null)
         {
             throw new UnknownEntityException("The specified role does not exist");

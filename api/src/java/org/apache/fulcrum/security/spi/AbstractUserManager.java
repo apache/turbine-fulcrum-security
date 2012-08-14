@@ -93,7 +93,7 @@ public abstract class AbstractUserManager
     public User getUser(String name)
     	throws DataBackendException, UnknownEntityException
     {
-    	User user = getAllUsers().getUserByName(name);
+    	User user = getAllUsers().getByName(name);
     	if (user == null)
     	{
     		throw new UnknownEntityException("The specified user does not exist");
@@ -116,7 +116,7 @@ public abstract class AbstractUserManager
     public User getUserById(Object id)
     	throws DataBackendException, UnknownEntityException
 		{
-    	User user = getAllUsers().getUserById(id);
+    	User user = getAllUsers().getById(id);
     	if (user == null)
     	{
     		throw new UnknownEntityException("The specified user does not exist");

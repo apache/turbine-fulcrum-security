@@ -19,13 +19,10 @@ package org.apache.fulcrum.security.model.turbine.entity.impl;
  * under the License.
  */
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.fulcrum.security.entity.Permission;
-import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineRole;
-import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
 import org.apache.fulcrum.security.util.PermissionSet;
 
 /**
@@ -36,20 +33,20 @@ import org.apache.fulcrum.security.util.PermissionSet;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @version $Id: TurbineRole.java 437451 2006-08-27 20:20:44Z tv $
  */
-public class TurbineRoleImpl extends SecurityEntityImpl implements TurbineRole
+public class TurbineRoleImpl extends AbstractTurbineSecurityEntityImpl implements TurbineRole
 {
-    private Set permissionSet = new PermissionSet();
-
-    private Set userGroupRoleSet = new HashSet();
+    private Set<? extends Permission> permissionSet = new PermissionSet();
 
     /**
-     * @return
+     * Get the permission that are part of this role
+     *
+     * @return a set of permissions
      */
     public PermissionSet getPermissions()
     {
-        if (permissionSet instanceof PermissionSet)
-            return (PermissionSet) permissionSet;
-        else
+        if (permissionSet instanceof PermissionSet) {
+			return (PermissionSet) permissionSet;
+		} else
         {
             permissionSet = new PermissionSet(permissionSet);
             return (PermissionSet) permissionSet;
@@ -57,86 +54,55 @@ public class TurbineRoleImpl extends SecurityEntityImpl implements TurbineRole
     }
 
     /**
-     * @return
+     * Get the permission that are part of this role as Set
+     *
+     * @return a set of permissions
      */
-    public Set getPermissionsAsSet()
+    @SuppressWarnings("unchecked")
+	public <T extends Permission> Set<T> getPermissionsAsSet()
     {
-        return permissionSet;
+        return (Set<T>)permissionSet;
     }
 
-    public void setPermissionsAsSet(Set permissions)
+    /**
+     * Set the permission that are part of this role
+     *
+     * @param permissionSet a set of permissions
+     */
+    public void setPermissions(PermissionSet permissionSet)
+    {
+        if (permissionSet != null) {
+			this.permissionSet = permissionSet;
+		} else {
+			this.permissionSet = new PermissionSet();
+		}
+    }
+
+    /**
+     * Set the permission that are part of this role as Set
+     *
+     * @param permissions a set of permissions
+     */
+    public <T extends Permission> void setPermissionsAsSet(Set<T> permissions)
     {
         this.permissionSet = permissions;
     }
 
     /**
-     * @param permissionSet
-     */
-    public void setPermissions(PermissionSet permissionSet)
-    {
-        if (permissionSet != null)
-            this.permissionSet = permissionSet;
-        else
-            this.permissionSet = new PermissionSet();
-    }
-
-    /**
-     * This method should only be used by a RoleManager. Not directly.
-     *
-     * @param permission
-     */
+    * This method should only be used by a RoleManager.  Not directly.
+    * @param permission
+    */
     public void addPermission(Permission permission)
     {
         getPermissions().add(permission);
     }
 
     /**
-     * This method should only be used by a RoleManager. Not directly.
-     *
+     * This method should only be used by a RoleManager.  Not directly.
      * @param permission
      */
     public void removePermission(Permission permission)
     {
         getPermissions().remove(permission);
     }
-
-    /**
-     * @return
-     */
-    public Set getUserGroupRoleSet()
-    {
-
-        return userGroupRoleSet;
-    }
-
-    /**
-     * @param userGroupRoleSet
-     */
-    public void setUserGroupRoleSet(Set userGroupRoleSet)
-    {
-
-        this.userGroupRoleSet = userGroupRoleSet;
-
-    }
-
-    /**
-     * This method should only be used by a RoleManager. Not directly.
-     *
-     * @param group
-     */
-    public void addUserGroupRole(TurbineUserGroupRole userGroupRole)
-    {
-        getUserGroupRoleSet().add(userGroupRole);
-    }
-
-    /**
-     * This method should only be used by a RoleManager. Not directly.
-     *
-     * @param group
-     */
-    public void removeUserGroupRole(TurbineUserGroupRole userGroupRole)
-    {
-        getUserGroupRoleSet().remove(userGroupRole);
-    }
-
 }

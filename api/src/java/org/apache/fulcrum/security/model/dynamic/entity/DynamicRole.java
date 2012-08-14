@@ -48,7 +48,7 @@ public interface DynamicRole extends Role
      *
      * @return a set of permissions
      */
-    public Set getPermissionsAsSet();
+    public <T extends Permission> Set<T> getPermissionsAsSet();
 
     /**
      * Set the permission that are part of this role
@@ -62,7 +62,7 @@ public interface DynamicRole extends Role
      *
      * @param permissions a set of permissions
      */
-    public void setPermissionsAsSet(Set permissions);
+    public <T extends Permission> void setPermissionsAsSet(Set<T> permissions);
 
     /**
     * This method should only be used by a RoleManager.  Not directly.
@@ -107,12 +107,12 @@ public interface DynamicRole extends Role
      *
      * @param groups the set of groups
      */
-    public void setGroupsAsSet(Set groups);
+    public <T extends Group> void setGroupsAsSet(Set<T> groups);
 
     /**
      * Get the groups this role belongs to as a Set
      *
      * @return a set of groups
      */
-    public Set getGroupsAsSet();
+    public <T extends Group> Set<T> getGroupsAsSet();
 }

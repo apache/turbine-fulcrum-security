@@ -19,13 +19,8 @@ package org.apache.fulcrum.security.model.turbine.entity.impl;
  * under the License.
  */
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
-import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
 
 /**
  * Represents the "turbine" model where permissions are in a many to many
@@ -35,32 +30,14 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id: TurbineUser.java 437451 2006-08-27 20:20:44Z tv $
  */
-public class TurbineUserImpl extends SecurityEntityImpl implements TurbineUser
+public class TurbineUserImpl extends AbstractTurbineSecurityEntityImpl implements TurbineUser
 {
     /**
      * Serial number
      */
     private static final long serialVersionUID = -7309619325167081811L;
 
-    private Set userGroupRoleSet = new HashSet();
-
     private String password;
-
-    /**
-     * @return
-     */
-    public Set getUserGroupRoleSet()
-    {
-        return userGroupRoleSet;
-    }
-
-    /**
-     * @param userGroupRoleSet
-     */
-    public void setUserGroupRoleSet(Set userGroupRoleSet)
-    {
-        this.userGroupRoleSet = userGroupRoleSet;
-    }
 
     /**
      * @return
@@ -76,16 +53,6 @@ public class TurbineUserImpl extends SecurityEntityImpl implements TurbineUser
     public void setPassword(String password)
     {
         this.password = password;
-    }
-
-    public void addUserGroupRole(TurbineUserGroupRole userGroupRole)
-    {
-        getUserGroupRoleSet().add(userGroupRole);
-    }
-
-    public void removeUserGroupRole(TurbineUserGroupRole userGroupRole)
-    {
-        getUserGroupRoleSet().remove(userGroupRole);
     }
 
     /**

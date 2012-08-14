@@ -19,7 +19,6 @@ package org.apache.fulcrum.security.util;
  * under the License.
  */
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.apache.fulcrum.security.entity.Permission;
 
@@ -37,7 +36,7 @@ import org.apache.fulcrum.security.entity.Permission;
  * @version $Id$
  */
 public class PermissionSet
-    extends SecuritySet
+    extends SecuritySet<Permission>
 {
     /**
      * Serial number
@@ -60,113 +59,11 @@ public class PermissionSet
      *
      * @param permissions A collection of permissions to be contained in the set.
      */
-    public PermissionSet(Collection permissions)
+    public PermissionSet(Collection<? extends Permission> permissions)
     {
-        super();
-        add(permissions);
+        this();
+        addAll(permissions);
     }
-
-    /**
-     * Adds a Permission to this PermissionSet.
-     *
-     * @param permission A Permission.
-     * @return True if Permission was added; false if PermissionSet
-     * already contained the Permission.
-     */
-    public boolean add(Permission permission)
-    {
-        if (contains(permission)){
-            return false;
-        }
-        else {
-            idMap.put(permission.getId(), permission);
-            return true;
-        }
-    }
-
-    /**
-     * Adds a Permission to this PermissionSet.
-     *
-     * @param obj A Permission.
-     * @return True if Permission was added; false if PermissionSet already
-     * contained the Permission.
-     */
-    public boolean add(Object obj) {
-        if(obj instanceof Permission){
-            return add((Permission)obj);
-        }
-        else {
-            throw new ClassCastException("Object passed to add to PermissionSet is not of type Permission");
-        }
-    }
-
-    /**
-     * Adds the Permissions in a Collection to this PermissionSet.
-     *
-     * @param permissions A Collection of Permissions.
-     * @return True if this PermissionSet changed as a result; false
-     * if no change to this PermissionSet occurred (this PermissionSet
-     * already contained all members of the added PermissionSet).
-     */
-    public boolean add(Collection permissions)
-    {
-        boolean res = false;
-        for (Iterator it = permissions.iterator(); it.hasNext();)
-        {
-            Permission p = (Permission) it.next();
-            res |= add(p);
-        }
-        return res;
-    }
-
-    /**
-     * Adds the Permissions in another PermissionSet to this
-     * PermissionSet.
-     *
-     * @param permissionSet A PermissionSet.
-     * @return True if this PermissionSet changed as a result; false
-     * if no change to this PermissionSet occurred (this PermissionSet
-     * already contained all members of the added PermissionSet).
-     */
-    public boolean add(PermissionSet permissionSet)
-    {
-        boolean res = false;
-        for( Iterator it = permissionSet.iterator(); it.hasNext();)
-        {
-            Permission p = (Permission) it.next();
-            res |= add(p);
-        }
-        return res;
-    }
-
-    /**
-     * Removes a Permission from this PermissionSet.
-     *
-     * @param permission A Permission.
-     * @return True if this PermissionSet contained the Permission
-     * before it was removed.
-     */
-    public boolean remove(Permission permission)
-    {
-        boolean res = contains(permission);
-        //nameMap.remove(permission.getName());
-        idMap.remove(permission.getId());
-        return res;
-    }
-
-    /**
-     * Checks whether this PermissionSet contains a Permission.
-     *
-     * @param permission A Permission.
-     * @return True if this PermissionSet contains the Permission,
-     * false otherwise.
-     */
-    public boolean contains(Permission permission)
-    {
-		return super.contains(permission);
-    }
-
-
 
     /**
      * Returns a Permission with the given name, if it is contained in
@@ -175,13 +72,11 @@ public class PermissionSet
      * @param permissionName Name of Permission.
      * @return Permission if argument matched a Permission in this
      * PermissionSet; null if no match.
+     * @deprecated use getByName()
      */
     public Permission getPermissionByName(String permissionName)
     {
-		return (Permission)getByName(permissionName);
-		//permissionName=permissionName.toLowerCase();
-        //return (StringUtils.isNotEmpty(permissionName))
-         //       ? (Permission) nameMap.get(permissionName) : null;
+		return getByName(permissionName);
     }
 
     /**
@@ -191,21 +86,11 @@ public class PermissionSet
      * @param permissionId Id of the Permission.
      * @return Permission if argument matched a Permission in this
      * PermissionSet; null if no match.
+     * @deprecated Use getById()
      */
     public Permission getPermissionById(Object permissionId)
     {
-        return (permissionId != null)
-                ? (Permission) idMap.get(permissionId) : null;
-    }
-
-    /**
-     * Returns an Array of Permissions in this PermissionSet.
-     *
-     * @return An Array of Permission Objects.
-     */
-    public Permission[] getPermissionsArray()
-    {
-        return (Permission[]) getSet().toArray(new Permission[0]);
+    	return getById(permissionId);
     }
 
     /**
@@ -218,20 +103,7 @@ public class PermissionSet
     {
         StringBuffer sb = new StringBuffer();
         sb.append("PermissionSet: ");
-
-        for(Iterator it = iterator(); it.hasNext();)
-        {
-            Permission p = (Permission) it.next();
-            sb.append('[');
-            sb.append(p.getName());
-            sb.append(" -> ");
-            sb.append(p.getId());
-            sb.append(']');
-            if (it.hasNext())
-            {
-                sb.append(", ");
-            }
-        }
+        sb.append(super.toString());
 
         return sb.toString();
     }

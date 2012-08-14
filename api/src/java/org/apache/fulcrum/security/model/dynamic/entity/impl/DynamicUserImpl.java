@@ -22,6 +22,7 @@ package org.apache.fulcrum.security.model.dynamic.entity.impl;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.basic.entity.impl.BasicUserImpl;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 
@@ -44,41 +45,49 @@ public class DynamicUserImpl extends BasicUserImpl implements DynamicUser
      */
     private static final long serialVersionUID = 2841311062371647853L;
 
-    private Set delegators = new HashSet();
+    private Set<? extends User> delegators = new HashSet<User>();
 
-    private Set delegatees = new HashSet();
+    private Set<? extends User> delegatees = new HashSet<User>();
 
     /**
+     * Get the set of delegatees for this user
+     *
      * @return Returns the delegatees.
      */
-    public Set getDelegatees()
+    @SuppressWarnings("unchecked")
+	public <T extends User> Set<T> getDelegatees()
     {
-        return delegatees;
+        return (Set<T>)delegatees;
     }
 
     /**
-     * @param delegatees
-     *            The delegatees to set.
+     * Set the delegatees for this user
+     *
+     * @param delegatees The delegatees to set.
      */
-    public void setDelegatees(Set delegatees)
+    public <T extends User> void setDelegatees(Set<T> delegatees)
     {
         this.delegatees = delegatees;
     }
 
     /**
+     * Get the set of delegators for this user
+     *
      * @return Returns the delegators.
      */
-    public Set getDelegators()
+    @SuppressWarnings("unchecked")
+	public <T extends User> Set<T> getDelegators()
     {
-        return delegators;
+        return (Set<T>)delegators;
     }
 
     /**
-     * @param delegates
-     *            The delegators to set.
+     * Set the delegators for this user
+     *
+     * @param delegators The delegators to set.
      */
-    public void setDelegators(Set delegates)
+    public <T extends User> void setDelegators(Set<T> delegators)
     {
-        this.delegators = delegates;
+        this.delegators = delegators;
     }
 }

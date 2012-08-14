@@ -52,14 +52,14 @@ public interface BasicGroup extends Group
      *
      * @return a set of users
      */
-	public Set getUsersAsSet();
+	public <T extends User> Set<T> getUsersAsSet();
 
     /**
      * Set the users that are part of this group as a Set
      *
      * @param userSet a set of users
      */
-	public void setUsersAsSet(Set users);
+	public <T extends User> void setUsersAsSet(Set<T> users);
 
     /**
      * Add a user to this group
