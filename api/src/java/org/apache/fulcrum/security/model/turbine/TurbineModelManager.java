@@ -34,18 +34,17 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public interface TurbineModelManager extends ModelManager
 {
-
     /**
-    	* The name of the <a href="#global">global group</a>
-    	*/
+     * The name of the <a href="#global">global group</a>
+     */
     String GLOBAL_GROUP_NAME = "global";
 
     /**
-    	* Provides a reference to the Group object that represents the
-    	* <a href="#global">global group</a>.
-    	*
-    	* @return A Group object that represents the global group.
-    	*/
+     * Provides a reference to the Group object that represents the
+     * <a href="#global">global group</a>.
+     *
+     * @return A Group object that represents the global group.
+     */
     Group getGlobalGroup() throws DataBackendException;
 
     /**
@@ -59,6 +58,7 @@ public interface TurbineModelManager extends ModelManager
      */
     void grant(Role role, Permission permission)
         throws DataBackendException, UnknownEntityException;
+
     /**
      * Removes a permission from a role
      *
@@ -79,6 +79,7 @@ public interface TurbineModelManager extends ModelManager
      * @throws UnknownEntityException if the account is not present.
      */
     void revokeAll(User user) throws DataBackendException, UnknownEntityException;
+
     /**
      * Revokes all permissions from a Role.
      *
@@ -89,7 +90,6 @@ public interface TurbineModelManager extends ModelManager
      * @throws UnknownEntityException if the Role is not present.
      */
     void revokeAll(Role role) throws DataBackendException, UnknownEntityException;
-
 
     /**
      * Grant an User a Role in a Group.
@@ -102,6 +102,7 @@ public interface TurbineModelManager extends ModelManager
      */
     void grant(User user, Group group, Role role)
         throws DataBackendException, UnknownEntityException;
+
     /**
      * Revoke a Role in a Group from an User.
      *
@@ -113,5 +114,4 @@ public interface TurbineModelManager extends ModelManager
      */
     void revoke(User user, Group group, Role role)
         throws DataBackendException, UnknownEntityException;
-
 }

@@ -67,14 +67,12 @@ public class SecurityEntityImpl implements SecurityEntity
      */
     public void setName(String name)
     {
-        if (name != null)
+        if (name == null)
         {
-            // throw new InvalidParameterException("Must provide a valid name
-            // for all SecurityEntities.");
-            name = name.toLowerCase();
+            throw new IllegalArgumentException("Must provide a valid name for all SecurityEntities.");
         }
-        this.name = name;
-        // this.name = name.toLowerCase();
+
+        this.name = name.toLowerCase();
     }
 
     public String toString()

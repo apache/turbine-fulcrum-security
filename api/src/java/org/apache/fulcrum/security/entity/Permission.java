@@ -32,5 +32,5 @@ package org.apache.fulcrum.security.entity;
  */
 public interface Permission extends SecurityEntity
 {
-
+    // empty
 }

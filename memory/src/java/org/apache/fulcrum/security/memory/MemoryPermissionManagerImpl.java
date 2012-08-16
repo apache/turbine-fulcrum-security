@@ -52,6 +52,7 @@ public class MemoryPermissionManagerImpl extends AbstractPermissionManager
     {
         return new PermissionSet(permissions);
     }
+
     /**
      * Renames an existing Permission.
      *
@@ -77,15 +78,13 @@ public class MemoryPermissionManagerImpl extends AbstractPermissionManager
                 return;
             }
         }
-        catch (Exception e)
+        catch (DataBackendException e)
         {
             throw new DataBackendException(
                 "renamePermission(Permission,name)",
                 e);
         }
-        finally
-        {
-        }
+
         throw new UnknownEntityException(
             "Unknown permission '" + permission + "'");
     }
@@ -121,21 +120,18 @@ public class MemoryPermissionManagerImpl extends AbstractPermissionManager
             if (permissionExists)
             {
                 permissions.remove(permission);
-            }
-            else
-            {
-                throw new UnknownEntityException(
-                    "Unknown permission '" + permission + "'");
+                return;
             }
         }
-        catch (Exception e)
+        catch (DataBackendException e)
         {
             throw new DataBackendException("removePermission(Permission)", e);
         }
-        finally
-        {
-        }
+
+        throw new UnknownEntityException(
+                "Unknown permission '" + permission + "'");
     }
+
     /**
      * Creates a new permission with specified attributes.
      *
@@ -147,11 +143,8 @@ public class MemoryPermissionManagerImpl extends AbstractPermissionManager
     protected synchronized Permission persistNewPermission(Permission permission)
         throws DataBackendException
     {
-
         permission.setId(MemoryHelper.getUniqueId());
         permissions.add(permission);
         return permission;
-
     }
-
 }

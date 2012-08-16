@@ -151,5 +151,5 @@ public interface DynamicModelManager extends ModelManager
      * @param delegate A
      * @param delegatee B
      */
-    void removeDelegate(User delegator, User delegatee) throws DataBackendException, UnknownEntityException;;
+    void removeDelegate(User delegator, User delegatee) throws DataBackendException, UnknownEntityException;
 }

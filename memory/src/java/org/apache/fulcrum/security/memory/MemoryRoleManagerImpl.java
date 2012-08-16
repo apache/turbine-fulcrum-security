@@ -67,13 +67,11 @@ public class MemoryRoleManagerImpl extends AbstractRoleManager
                 return;
             }
         }
-        catch (Exception e)
+        catch (DataBackendException e)
         {
             throw new DataBackendException("renameRole(Role,String)", e);
         }
-        finally
-        {
-        }
+
         throw new UnknownEntityException("Unknown role '" + role + "'");
     }
 
@@ -89,38 +87,37 @@ public class MemoryRoleManagerImpl extends AbstractRoleManager
     {
         return MemoryHelper.checkExists(roles,roleName);
     }
+
     /**
-    		 * Retrieves all roles defined in the system.
-    		 *
-    		 * @return the names of all roles defined in the system.
-    		 * @throws DataBackendException if there was an error accessing the
-    		 *         data backend.
-    		 */
+	 * Retrieves all roles defined in the system.
+	 *
+	 * @return the names of all roles defined in the system.
+	 * @throws DataBackendException if there was an error accessing the
+	 *         data backend.
+	 */
     public RoleSet getAllRoles() throws DataBackendException
     {
         return new RoleSet(roles);
     }
 
     /**
-    	* Creates a new role with specified attributes.
-    	*
-    	* @param role the object describing the role to be created.
-    	* @return a new Role object that has id set up properly.
-    	* @throws DataBackendException if there was an error accessing the data
-    	*         backend.
-    	* @throws EntityExistsException if the role already exists.
-    	*/
+     * Creates a new role with specified attributes.
+     *
+     * @param role the object describing the role to be created.
+     * @return a new Role object that has id set up properly.
+     * @throws DataBackendException if there was an error accessing the data
+     *         backend.
+     * @throws EntityExistsException if the role already exists.
+     */
     protected synchronized Role persistNewRole(Role role)
         throws DataBackendException
     {
-
         role.setId(MemoryHelper.getUniqueId());
         roles.add(role);
         // add the role to system-wide cache
         getAllRoles().add(role);
         // return the object with correct id
         return role;
-
     }
 
     /**
@@ -145,14 +142,11 @@ public class MemoryRoleManagerImpl extends AbstractRoleManager
                 return;
             }
         }
-        catch (Exception e)
+        catch (DataBackendException e)
         {
             throw new DataBackendException("removeRole(Role)", e);
         }
-        finally
-        {
-        }
+
         throw new UnknownEntityException("Unknown role '" + role + "'");
     }
-
 }

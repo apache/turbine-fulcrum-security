@@ -32,7 +32,5 @@ import java.io.Serializable;
 public interface AccessControlList
   extends Serializable
 {
-
-
-
+    // marker interface
 }

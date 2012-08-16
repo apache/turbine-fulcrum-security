@@ -62,11 +62,7 @@ public class UserSetTest extends TestCase
         user3.setId(new Integer(1));
         user3.setName("Eric");
         assertTrue(userSet.contains(user));
-        assertTrue(userSet.contains((Object) user));
         assertTrue(userSet.contains(user2));
         assertTrue(userSet.contains(user3));
-		assertTrue(userSet.contains(user));
-
     }
-
 }

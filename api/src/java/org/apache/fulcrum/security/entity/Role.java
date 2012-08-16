@@ -33,8 +33,5 @@ package org.apache.fulcrum.security.entity;
  */
 public interface Role extends SecurityEntity
 {
-
-
-
-
+    // empty
 }

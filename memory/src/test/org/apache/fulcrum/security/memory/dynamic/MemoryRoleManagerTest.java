@@ -18,7 +18,6 @@ package org.apache.fulcrum.security.memory.dynamic;
  * under the License.
  */
 
-import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractRoleManagerTest;
 /**
@@ -36,7 +35,7 @@ public class MemoryRoleManagerTest extends AbstractRoleManagerTest
             this.setRoleFileName("src/test/DynamicMemoryRoleConfig.xml");
             this.setConfigurationFileName("src/test/DynamicMemoryComponentConfig.xml");
 			securityService = (SecurityService) lookup(SecurityService.ROLE);
-            roleManager = (RoleManager) securityService.getRoleManager();
+            roleManager = securityService.getRoleManager();
         }
         catch (Exception e)
         {

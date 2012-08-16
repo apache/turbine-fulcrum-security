@@ -20,17 +20,18 @@ package org.apache.fulcrum.security.authenticator;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 import org.apache.fulcrum.crypto.CryptoAlgorithm;
 import org.apache.fulcrum.crypto.CryptoService;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
  * This class authenticates using the Fulcrum Crypto service a user and
  * their password
@@ -47,13 +48,13 @@ public class CryptoAuthenticator extends AbstractLogEnabled
     protected CryptoService cryptoService = null;
     private String algorithm;
     private String cipher;
+
     /**
-     * Authenticate an username with the specified password. If authentication
+     * Authenticate a user with the specified password. If authentication
      * is successful the method returns true. If it fails, it returns false
      * If there are any problems, an exception is thrown.
      *
-     *
-     * @param usernameAndDomain an string in the format [domain]/[username].
+     * @param user a User object.
      * @param password the user supplied password.
      * @exception UnknownEntityException if the user's account does not
      *            exist in the database.
@@ -62,7 +63,6 @@ public class CryptoAuthenticator extends AbstractLogEnabled
      */
     public boolean authenticate(User user, String password) throws  DataBackendException
     {
-
         try
         {
             CryptoAlgorithm ca = cryptoService.getCryptoAlgorithm(algorithm);

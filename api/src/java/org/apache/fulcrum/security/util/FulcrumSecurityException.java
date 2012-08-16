@@ -55,4 +55,4 @@ public class FulcrumSecurityException
     {
         super(msg, nested);
     }
-};
+}

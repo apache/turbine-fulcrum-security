@@ -68,10 +68,8 @@ public class RoleSetTest extends TestCase
         role3.setName("Eric");
         roleSet.add(role3);
         assertTrue(roleSet.contains(role));
-        assertTrue(roleSet.contains((Object) role));
         assertTrue(roleSet.contains(role2));
         assertTrue(roleSet.contains(role3));
-        assertTrue(roleSet.contains(role));
     }
 
     public void testRoleSetWithSubclass() throws Exception

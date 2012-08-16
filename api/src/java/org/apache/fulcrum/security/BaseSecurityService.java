@@ -19,9 +19,6 @@ package org.apache.fulcrum.security;
  */
 
 import org.apache.avalon.framework.activity.Initializable;
-import org.apache.avalon.framework.configuration.Configurable;
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
@@ -41,7 +38,7 @@ import org.apache.avalon.framework.thread.ThreadSafe;
  */
 public class BaseSecurityService
     extends AbstractLogEnabled
-    implements SecurityService, Configurable, Initializable, Serviceable, ThreadSafe
+    implements SecurityService, Initializable, Serviceable, ThreadSafe
 {
     private ServiceManager manager = null;
     // management of Groups/Role/Permissions
@@ -62,6 +59,7 @@ public class BaseSecurityService
     protected PermissionManager permissionManager = null;
     /** The instance of ModelManager the SecurityService uses */
     protected ModelManager modelManager = null;
+
     /**
 	 * Returns the configured UserManager.
 	 *
@@ -74,7 +72,6 @@ public class BaseSecurityService
             try
             {
                 userManager = (UserManager) manager.lookup(UserManager.ROLE);
-
             }
             catch (ServiceException ce)
             {
@@ -95,7 +92,6 @@ public class BaseSecurityService
             try
             {
                 groupManager = (GroupManager) manager.lookup(GroupManager.ROLE);
-
             }
             catch (ServiceException ce)
             {
@@ -116,7 +112,6 @@ public class BaseSecurityService
             try
             {
                 roleManager = (RoleManager) manager.lookup(RoleManager.ROLE);
-
             }
             catch (ServiceException ce)
             {
@@ -125,6 +120,7 @@ public class BaseSecurityService
         }
         return roleManager;
     }
+
     /**
 	 * Returns the configured PermissionManager.
 	 *
@@ -137,7 +133,6 @@ public class BaseSecurityService
             try
             {
                 permissionManager = (PermissionManager) manager.lookup(PermissionManager.ROLE);
-
             }
             catch (ServiceException ce)
             {
@@ -146,6 +141,7 @@ public class BaseSecurityService
         }
         return permissionManager;
     }
+
     /**
 	 * Returns the configured ModelManager.
 	 *
@@ -158,7 +154,6 @@ public class BaseSecurityService
             try
             {
                 modelManager = (ModelManager) manager.lookup(ModelManager.ROLE);
-
             }
             catch (ServiceException ce)
             {
@@ -167,49 +162,42 @@ public class BaseSecurityService
         }
         return modelManager;
     }
+
     /**
 	 * Configure a new role Manager.
 	 *
-	 * @param -ermissionManager An PermissionManager object
+	 * @param permissionManager An PermissionManager object
 	 */
     // void setPermissionManager(PermissionManager permissionManager);
-    /**
-	 * Avalon Service lifecycle method
-	 */
-    public void configure(Configuration conf) throws ConfigurationException
-    {
 
-    }
     /**
 	 * Avalon Service lifecycle method
 	 */
     public void service(ServiceManager manager) throws ServiceException
     {
         this.manager = manager;
-
-
     }
+
     /**
-	 * Avalon Service lifecycle method Initializes the SecurityService, locating the apropriate
+	 * Avalon Service lifecycle method Initializes the SecurityService, locating the appropriate
 	 * UserManager
 	 *
-	 * @throws Exception A Problem occured while initializing the User Manager.
+	 * @throws Exception A Problem occurred while initializing the User Manager.
 	 */
     public void initialize() throws Exception
     {
-
         userClassName = null;
         groupClassName = null;
         permissionClassName = null;
         roleClassName = null;
         aclClassName = null;
     }
+
     /**
 	 * Avalon Service lifecycle method
 	 */
     public void dispose()
     {
-
         manager.release(userManager);
         manager.release(roleManager);
         manager.release(groupManager);

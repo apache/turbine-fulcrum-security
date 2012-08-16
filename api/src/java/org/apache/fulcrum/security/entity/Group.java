@@ -31,7 +31,5 @@ package org.apache.fulcrum.security.entity;
  */
 public interface Group extends SecurityEntity
 {
-
-
-
+    // empty
 }

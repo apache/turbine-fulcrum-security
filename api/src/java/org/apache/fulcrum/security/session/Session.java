@@ -28,4 +28,5 @@ package org.apache.fulcrum.security.session;
  */
 public interface Session
 {
+    // empty
 }

@@ -159,12 +159,11 @@ public abstract class AbstractManager
 
     protected void release(Object obj)
     {
-        if(obj!=null){
+        if(obj!=null)
+        {
             manager.release(obj);
-            obj = null;
         }
     }
-
 
     /**
      * @return A resolved object
