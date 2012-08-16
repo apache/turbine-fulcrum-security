@@ -50,13 +50,12 @@ public class HibernateUserManagerImpl extends AbstractUserManager
     public boolean checkExists(String userName) throws DataBackendException
     {
         List<User> users = null;
-        userName = userName.toLowerCase();
         try
         {
             users = getPersistenceHelper()
             	.retrieveSession()
             	.createQuery("from " + User.class.getName() + " su where su.name=:name")
-            	.setString("name", userName)
+            	.setString("name", userName.toLowerCase())
             	.list();
         }
         catch (HibernateException e)
@@ -69,6 +68,7 @@ public class HibernateUserManagerImpl extends AbstractUserManager
         }
         return (users.size() == 1);
     }
+
     /**
      * Retrieve a user from persistent storage using username as the
      * key.
@@ -189,7 +189,7 @@ public class HibernateUserManagerImpl extends AbstractUserManager
 	/**
 	 * @return Returns the persistenceHelper.
 	 */
-	public PersistenceHelper getPersistenceHelper() throws DataBackendException
+	public PersistenceHelper getPersistenceHelper()
 	{
 		if (persistenceHelper == null)
 		{

@@ -26,8 +26,9 @@ import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 import org.apache.fulcrum.security.spi.AbstractManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.classic.Session;
+
 /**
  * This implementation persists to a database via Hibernate.
  *
@@ -51,21 +52,22 @@ public class HibernateModelManagerImpl extends AbstractManager implements BasicM
     {
         boolean groupExists = false;
         boolean userExists = false;
+        Transaction transaction = null;
+
         try
         {
             groupExists = getGroupManager().checkExists(group);
             userExists = getUserManager().checkExists(user);
             if (groupExists && userExists)
             {
-
                 Session session = getPersistenceHelper().retrieveSession();
-                Transaction transaction = session.beginTransaction();
+                transaction = session.beginTransaction();
 				((BasicUser) user).addGroup(group);
 				((BasicGroup) group).addUser(user);
                 session.update(user);
                 session.update(group);
                 transaction.commit();
-                return;
+                transaction = null;
             }
         }
         catch (Exception e)
@@ -74,6 +76,10 @@ public class HibernateModelManagerImpl extends AbstractManager implements BasicM
         }
         finally
         {
+            if (transaction != null)
+            {
+                transaction.rollback();
+            }
         }
         if (!groupExists)
         {
@@ -97,21 +103,22 @@ public class HibernateModelManagerImpl extends AbstractManager implements BasicM
     {
         boolean groupExists = false;
         boolean userExists = false;
+        Transaction transaction = null;
+
         try
         {
             groupExists = getGroupManager().checkExists(group);
             userExists = getUserManager().checkExists(user);
             if (groupExists && userExists)
             {
-
 				Session session = getPersistenceHelper().retrieveSession();
-                Transaction transaction = session.beginTransaction();
+                transaction = session.beginTransaction();
 				((BasicUser) user).removeGroup(group);
 				((BasicGroup) group).removeUser(user);
                 session.update(user);
                 session.update(group);
                 transaction.commit();
-                return;
+                transaction = null;
             }
         }
         catch (Exception e)
@@ -120,6 +127,10 @@ public class HibernateModelManagerImpl extends AbstractManager implements BasicM
         }
         finally
         {
+            if (transaction != null)
+            {
+                transaction.rollback();
+            }
         }
         if (!groupExists)
         {
@@ -166,7 +177,7 @@ public class HibernateModelManagerImpl extends AbstractManager implements BasicM
 	/**
 	 * @return Returns the persistenceHelper.
 	 */
-	public PersistenceHelper getPersistenceHelper() throws DataBackendException
+	public PersistenceHelper getPersistenceHelper()
 	{
 		if (persistenceHelper == null)
 		{

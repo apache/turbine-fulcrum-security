@@ -21,8 +21,8 @@ package org.apache.fulcrum.security.hibernate;
 import org.apache.fulcrum.security.entity.SecurityEntity;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.classic.Session;
 
 /**
  * @author Eric Pugh

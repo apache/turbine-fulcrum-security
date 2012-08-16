@@ -30,8 +30,9 @@ import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.classic.Session;
+
 /**
  * This implementation persists to a database via Hibernate.
  *
@@ -64,15 +65,11 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
                 ((DynamicRole) role).removeGroup(group);
                 getPersistenceHelper().updateEntity(group);
                 //updateEntity(role);
-                return;
             }
         }
         catch (Exception e)
         {
             throw new DataBackendException("revoke(Group,Role) failed", e);
-        }
-        finally
-        {
         }
         if (!groupExists)
         {
@@ -107,10 +104,9 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
                 ((DynamicPermission) permission).addRole(role);
                 getPersistenceHelper().updateEntity(permission);
                 getPersistenceHelper().updateEntity(role);
-                return;
             }
         }
-        catch (Exception e)
+        catch (DataBackendException e)
         {
             throw new DataBackendException("grant(Role,Permission) failed", e);
         }
@@ -123,6 +119,7 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
             throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
         }
     }
+
     /**
 	 * Revokes a Permission from a Role.
 	 *
@@ -146,15 +143,11 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
                 ((DynamicPermission) permission).removeRole(role);
                 getPersistenceHelper().updateEntity(role);
                 getPersistenceHelper().updateEntity(permission);
-                return;
             }
         }
-        catch (Exception e)
+        catch (DataBackendException e)
         {
             throw new DataBackendException("revoke(Role,Permission) failed", e);
-        }
-        finally
-        {
         }
         if (!roleExists)
         {
@@ -189,15 +182,11 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
                 ((DynamicGroup) group).addUser(user);
                 getPersistenceHelper().updateEntity(group);
                 getPersistenceHelper().updateEntity(user);
-                return;
             }
         }
-        catch (Exception e)
+        catch (DataBackendException e)
         {
             throw new DataBackendException("grant(Role,Permission) failed", e);
-        }
-        finally
-        {
         }
         if (!groupExists)
         {
@@ -208,6 +197,7 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
             throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
         }
     }
+
     /**
 	 * Removes a user in a group.
 	 *
@@ -221,29 +211,34 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
     {
         boolean groupExists = false;
         boolean userExists = false;
+        Transaction transaction = null;
+
         try
         {
             groupExists = getGroupManager().checkExists(group);
             userExists = getUserManager().checkExists(user);
             if (groupExists && userExists)
             {
-
                 Session session = getPersistenceHelper().retrieveSession();
-                Transaction transaction = session.beginTransaction();
+                transaction = session.beginTransaction();
 				((DynamicUser) user).removeGroup(group);
 				((DynamicGroup) group).removeUser(user);
                 session.update(user);
                 session.update(group);
                 transaction.commit();
-                return;
+                transaction = null;
             }
         }
-        catch (Exception e)
+        catch (DataBackendException e)
         {
             throw new DataBackendException("grant(Role,Permission) failed", e);
         }
         finally
         {
+            if (transaction != null)
+            {
+                transaction.rollback();
+            }
         }
         if (!groupExists)
         {
@@ -254,7 +249,6 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
             throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
         }
     }
-
 
     /**
 	 * Grants a Group a Role
@@ -299,7 +293,7 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
 	/**
 	 * @return Returns the persistenceHelper.
 	 */
-	public PersistenceHelper getPersistenceHelper() throws DataBackendException
+	public PersistenceHelper getPersistenceHelper()
 	{
 		if (persistenceHelper == null)
 		{
@@ -308,7 +302,7 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
 		return persistenceHelper;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see org.apache.fulcrum.security.model.dynamic.DynamicModelManager#addDelegate(org.apache.fulcrum.security.entity.User, org.apache.fulcrum.security.entity.User)
 	 */
 	public void addDelegate(User delegator, User delegatee)
@@ -319,7 +313,7 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
 		getPersistenceHelper().updateEntity(delegatee);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see org.apache.fulcrum.security.model.dynamic.DynamicModelManager#removeDelegate(org.apache.fulcrum.security.entity.User, org.apache.fulcrum.security.entity.User)
 	 */
 	public void removeDelegate(User delegator, User delegatee)

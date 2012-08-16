@@ -156,7 +156,7 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager
 	/**
 	 * @return Returns the persistenceHelper.
 	 */
-	public PersistenceHelper getPersistenceHelper() throws DataBackendException
+	public PersistenceHelper getPersistenceHelper()
 	{
 		if (persistenceHelper == null)
 		{

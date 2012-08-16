@@ -26,10 +26,11 @@ import org.apache.fulcrum.security.spi.AbstractManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.classic.Session;
+
 /**
  *
  * This persistenceHelper expects you to either pass in a SessionFactory to use,
@@ -63,22 +64,23 @@ public class PersistenceHelperDefaultImpl
             transaction = session.beginTransaction();
             session.delete(entity);
             transaction.commit();
+            transaction = null;
         }
         catch (HibernateException he)
         {
-            try
-            {
-                transaction.rollback();
-            }
-            catch (HibernateException hex)
-            {
-                // ignore
-            }
             throw new DataBackendException(
                 "Problem removing entity:" + he.getMessage(),
                 he);
         }
+        finally
+        {
+            if (transaction != null)
+            {
+                transaction.rollback();
+            }
+        }
     }
+
     /**
      * Stores changes made to an object
      *
@@ -96,38 +98,34 @@ public class PersistenceHelperDefaultImpl
             transaction = session.beginTransaction();
             session.update(entity);
             transaction.commit();
+            transaction = null;
         }
         catch (HibernateException he)
         {
-            try
+            if (he
+                .getMessage()
+                .indexOf("Another object was associated with this id")
+                > -1)
             {
-                if (transaction != null)
-                {
-                    transaction.rollback();
-                }
-                if (he
-                    .getMessage()
-                    .indexOf("Another object was associated with this id")
-                    > -1)
-                {
-                    session.close();
-                    updateEntity(entity);
-                }
-                else
-                {
-                    throw new DataBackendException(
-                        "updateEntity(" + entity + ")",
-                        he);
-                }
+                session.close();
+                updateEntity(entity);
             }
-            catch (HibernateException hex)
+            else
             {
-                // ignore
+                throw new DataBackendException(
+                    "updateEntity(" + entity + ")",
+                    he);
             }
-
         }
-        return;
+        finally
+        {
+            if (transaction != null)
+            {
+                transaction.rollback();
+            }
+        }
     }
+
     /**
      * adds an entity
      *
@@ -145,20 +143,19 @@ public class PersistenceHelperDefaultImpl
             transaction = session.beginTransaction();
             session.save(entity);
             transaction.commit();
+            transaction = null;
         }
         catch (HibernateException he)
         {
-            try
+            throw new DataBackendException("addEntity(entity)", he);
+        }
+        finally
+        {
+            if (transaction != null)
             {
                 transaction.rollback();
             }
-            catch (HibernateException hex)
-            {
-                // ignore
-            }
-            throw new DataBackendException("addEntity(s,name)", he);
         }
-        return;
     }
 
     /**

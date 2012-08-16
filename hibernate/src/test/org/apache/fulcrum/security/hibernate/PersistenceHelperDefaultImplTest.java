@@ -20,24 +20,24 @@ package org.apache.fulcrum.security.hibernate;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
-import org.hibernate.classic.Session;
+import org.hibernate.Session;
+
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public class PersistenceHelperDefaultImplTest extends BaseUnitTest
 {
-
-
     /**
-    	   * Constructor for HibernatePermissionManagerTest.
-    	   * @param arg0
-    	   */
+     * Constructor for PersistenceHelperDefaultImplTest.
+     * @param arg0
+     */
     public PersistenceHelperDefaultImplTest(String arg0)
     {
         super(arg0);
     }
 
+    @SuppressWarnings("unused")
     public void testPassingInExternalHibernateService() throws Exception
     {
         this.setRoleFileName("src/test/PersistenceHelperDefaultImplRoleConfig.xml");
@@ -49,8 +49,5 @@ public class PersistenceHelperDefaultImplTest extends BaseUnitTest
         assertTrue(persistenceHelper instanceof PersistenceHelperDefaultImpl);
         PersistenceHelperDefaultImpl persistenceHelperFromGroupManager = (PersistenceHelperDefaultImpl)persistenceHelper;
         Session s = persistenceHelper.retrieveSession();
-
     }
-
-
 }

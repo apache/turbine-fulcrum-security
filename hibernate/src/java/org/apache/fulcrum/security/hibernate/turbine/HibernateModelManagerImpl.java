@@ -80,6 +80,7 @@ public class HibernateModelManagerImpl extends AbstractTurbineModelManager imple
             throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
         }
     }
+
     /**
 	 * Revokes a Permission from a Role.
 	 *
@@ -103,15 +104,11 @@ public class HibernateModelManagerImpl extends AbstractTurbineModelManager imple
                 ((TurbinePermission) permission).removeRole(role);
                 getPersistenceHelper().updateEntity(role);
                 getPersistenceHelper().updateEntity(permission);
-                return;
             }
         }
-        catch (Exception e)
+        catch (DataBackendException e)
         {
             throw new DataBackendException("revoke(Role,Permission) failed", e);
-        }
-        finally
-        {
         }
         if (!roleExists)
         {
@@ -126,7 +123,7 @@ public class HibernateModelManagerImpl extends AbstractTurbineModelManager imple
     /**
 	 * @return Returns the persistenceHelper.
 	 */
-	public PersistenceHelper getPersistenceHelper() throws DataBackendException
+	public PersistenceHelper getPersistenceHelper()
 	{
 		if (persistenceHelper == null)
 		{
@@ -135,89 +132,109 @@ public class HibernateModelManagerImpl extends AbstractTurbineModelManager imple
 		return persistenceHelper;
 	}
 
-     public void grant(User user, Group group, Role role) throws DataBackendException, UnknownEntityException {
-            boolean roleExists = false;
-            boolean userExists = false;
-            boolean groupExists = false;
-            try {
-                roleExists = getRoleManager().checkExists(role);
-                userExists = getUserManager().checkExists(user);
-                groupExists = getGroupManager().checkExists(group);
-                if (roleExists && groupExists && userExists) {
-                    TurbineUserGroupRole ugr = new TurbineUserGroupRole();
-                    ugr.setGroup(group);
-                    ugr.setRole(role);
-                    ugr.setUser(user);
-                    ((TurbineUser) user).addUserGroupRole(ugr);
-                    ((TurbineGroup) group).addUserGroupRole(ugr);
-                    ((TurbineRole) role).addUserGroupRole(ugr);
-                    getPersistenceHelper().updateEntity(user);
-                    getPersistenceHelper().updateEntity(group);
-                    getPersistenceHelper().updateEntity(role);
-                    return;
-                }
-            } catch (Exception e) {
-                throw new DataBackendException("grant(Role,Permission) failed", e);
+    /**
+     * Grant an User a Role in a Group.
+     *
+     * @param user the user.
+     * @param group the group.
+     * @param role the role.
+     * @throws DataBackendException if there was an error accessing the data backend.
+     * @throws UnknownEntityException if user account, group or role is not present.
+     */
+    public void grant(User user, Group group, Role role) throws DataBackendException, UnknownEntityException
+    {
+        boolean roleExists = false;
+        boolean userExists = false;
+        boolean groupExists = false;
+        try
+        {
+            roleExists = getRoleManager().checkExists(role);
+            userExists = getUserManager().checkExists(user);
+            groupExists = getGroupManager().checkExists(group);
+            if (roleExists && groupExists && userExists)
+            {
+                TurbineUserGroupRole ugr = new TurbineUserGroupRole();
+                ugr.setGroup(group);
+                ugr.setRole(role);
+                ugr.setUser(user);
+                ((TurbineUser) user).addUserGroupRole(ugr);
+                ((TurbineGroup) group).addUserGroupRole(ugr);
+                ((TurbineRole) role).addUserGroupRole(ugr);
+                getPersistenceHelper().updateEntity(user);
+                getPersistenceHelper().updateEntity(group);
+                getPersistenceHelper().updateEntity(role);
             }
-
-            if (!roleExists) {
-                throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
-            }
-            if (!groupExists) {
-                throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
-            }
-            if (!userExists) {
-                throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
-            }
-
         }
+        catch (DataBackendException e)
+        {
+            throw new DataBackendException("grant(User,Group,Role) failed", e);
+        }
+        if (!roleExists) {
+            throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
+        }
+        if (!groupExists) {
+            throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
+        }
+        if (!userExists) {
+            throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
+        }
+    }
 
-        public void revoke(User user, Group group, Role role) throws DataBackendException, UnknownEntityException {
-            boolean roleExists = false;
-            boolean userExists = false;
-            boolean groupExists = false;
-            try {
-                roleExists = getRoleManager().checkExists(role);
-                userExists = getUserManager().checkExists(user);
-                groupExists = getGroupManager().checkExists(group);
-                if (roleExists && groupExists && userExists) {
-                    boolean ugrFound = false;
-                    for(TurbineUserGroupRole ugr : ((TurbineUser) user).getUserGroupRoleSet())
+    /**
+     * Revoke a Role in a Group from an User.
+     *
+     * @param user the user.
+     * @param group the group.
+     * @param role the role.
+     * @throws DataBackendException if there was an error accessing the data backend.
+     * @throws UnknownEntityException if user account, group or role is not present.
+     */
+    public void revoke(User user, Group group, Role role) throws DataBackendException, UnknownEntityException {
+        boolean roleExists = false;
+        boolean userExists = false;
+        boolean groupExists = false;
+        try {
+            roleExists = getRoleManager().checkExists(role);
+            userExists = getUserManager().checkExists(user);
+            groupExists = getGroupManager().checkExists(group);
+            if (roleExists && groupExists && userExists) {
+                boolean ugrFound = false;
+                for(TurbineUserGroupRole ugr : ((TurbineUser) user).getUserGroupRoleSet())
+                {
+                    if(ugr.getUser().equals(user)&& ugr.getGroup().equals(group) && ugr.getRole().equals(role))
                     {
-                        if(ugr.getUser().equals(user)&& ugr.getGroup().equals(group) && ugr.getRole().equals(role))
-                        {
-                            ugrFound=true;
+                        ugrFound=true;
 
-                            ((TurbineUser) user).removeUserGroupRole(ugr);
-                            ((TurbineGroup) group).removeUserGroupRole(ugr);
-                            ((TurbineRole) role).removeUserGroupRole(ugr);
+                        ((TurbineUser) user).removeUserGroupRole(ugr);
+                        ((TurbineGroup) group).removeUserGroupRole(ugr);
+                        ((TurbineRole) role).removeUserGroupRole(ugr);
 
-                            getPersistenceHelper().updateEntity(user);
-                            getPersistenceHelper().updateEntity(group);
-                            getPersistenceHelper().updateEntity(role);
+                        getPersistenceHelper().updateEntity(user);
+                        getPersistenceHelper().updateEntity(group);
+                        getPersistenceHelper().updateEntity(role);
 
-                            break;
-                        }
+                        break;
                     }
-                    if(!ugrFound){
-                        throw new UnknownEntityException("Could not find User/Group/Role");
-                    }
-
-                    return;
                 }
-            } catch (Exception e) {
-                throw new DataBackendException("grant(Role,Permission) failed", e);
-            }
+                if(!ugrFound){
+                    throw new UnknownEntityException("Could not find User/Group/Role");
+                }
 
-            if (!roleExists) {
-                throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
+                return;
             }
-            if (!groupExists) {
-                throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
-            }
-            if (!userExists) {
-                throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
-            }
-
         }
+        catch (DataBackendException e)
+        {
+            throw new DataBackendException("revoke(User,Group,Role) failed", e);
+        }
+        if (!roleExists) {
+            throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
+        }
+        if (!groupExists) {
+            throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
+        }
+        if (!userExists) {
+            throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
+        }
+    }
 }

@@ -21,7 +21,7 @@ package org.apache.fulcrum.security.hibernate.dynamic.entity;
 import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
 
 /**
- * User to test subclassing an existing class and then persiting with
+ * User to test subclassing an existing class and then persisting with
  * Hibernate.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
@@ -29,10 +29,12 @@ import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
  */
 public class ExtendedUser extends DynamicUserImpl
 {
+    /** Serial version */
+    private static final long serialVersionUID = 2806989534919229034L;
+
     private String NTDomain;
     private String NTName;
     private String Email;
-
 
     /**
      * @return Returns the email.
@@ -81,7 +83,6 @@ public class ExtendedUser extends DynamicUserImpl
     {
         NTName = name;
     }
-
 }
 
 
