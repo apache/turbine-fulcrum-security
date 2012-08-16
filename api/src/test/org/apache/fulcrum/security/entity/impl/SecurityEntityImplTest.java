@@ -30,9 +30,9 @@ public class SecurityEntityImplTest extends TestCase
 {
 
     /**
-    	* Constructor for SecurityEntityImplTest.
-    	* @param arg0
-    	*/
+     * Constructor for SecurityEntityImplTest.
+     * @param arg0
+     */
     public SecurityEntityImplTest(String arg0)
     {
         super(arg0);
@@ -49,14 +49,14 @@ public class SecurityEntityImplTest extends TestCase
         assertEquals("hello",se.getName());
         se.setName("HelLo");
 		assertEquals("hello",se.getName());
-		//try {
+		try
+		{
 		    se.setName(null);
-		    assertNull(se.getName());
-	/*	    fail("Should throw an InvalidParameterException");
+		    fail("Should throw an InvalidParameterException");
 		}
-		catch(InvalidParameterException ipe){
+		catch(IllegalArgumentException ipe)
+		{
 		    //good
 		}
-	*/
     }
 }
