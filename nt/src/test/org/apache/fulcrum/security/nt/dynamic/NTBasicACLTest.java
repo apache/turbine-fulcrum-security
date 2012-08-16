@@ -25,7 +25,6 @@ import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.basic.BasicAccessControlList;
-import org.apache.fulcrum.security.model.basic.BasicModelManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
@@ -40,13 +39,8 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
 public class NTBasicACLTest extends BaseUnitTest implements TestConstants
 {
     private static Log log = LogFactory.getLog(NTBasicACLTest.class);
-    private static final String ERROR_MSG = "Not supported by NT User Manager";
-    private static final String USERNAME = "Eric Pugh";
     private static final String DOMAIN = "IQUITOS";
-    private static final String PASSWORD = "";
 	private static final String GUESTUSER = DOMAIN + "/" + "Guest";
-	private static final String TESTUSER = DOMAIN + "/" + USERNAME;
-    private BasicModelManager modelManager;
 	private SecurityService securityService;
 	private UserManager userManager;
 	private User user;
@@ -57,16 +51,17 @@ public class NTBasicACLTest extends BaseUnitTest implements TestConstants
         this.setConfigurationFileName("src/test/BasicNTComponentConfig.xml");
         securityService = (SecurityService) lookup(SecurityService.ROLE);
         userManager = securityService.getUserManager();
-        modelManager = (BasicModelManager) securityService.getModelManager();
     }
+
     public void tearDown()
     {
         user = null;
         userManager = null;
         securityService = null;
     }
+
     /**
-     * Constructor for MemoryPermissionManagerTest.
+     * Constructor for NTBasicACLTest.
      *
      * @param arg0
      */
@@ -74,6 +69,7 @@ public class NTBasicACLTest extends BaseUnitTest implements TestConstants
     {
         super(arg0);
     }
+
     public void testLoadingUpGroupsForBasicModelACL() throws Exception
     {
         try
@@ -86,7 +82,6 @@ public class NTBasicACLTest extends BaseUnitTest implements TestConstants
             assertEquals(4,bacl.getGroups().size());
 			assertTrue(bacl.hasGroup("Guests"));
 			assertTrue(bacl.hasGroup("gUEsts"));
-
         }
         catch(DataBackendException dbe){
             assertTrue(dbe.getMessage().indexOf(SCB_INVALID)>-1);
@@ -100,7 +95,4 @@ public class NTBasicACLTest extends BaseUnitTest implements TestConstants
             log.info("Unit test not being run due to missing NT DLL");
         }
     }
-
-
-
 }

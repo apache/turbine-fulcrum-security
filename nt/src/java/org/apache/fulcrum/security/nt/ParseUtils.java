@@ -31,25 +31,26 @@ public class ParseUtils
     public static String parseForUsername(String usernameAndDomain) throws LoginException
     {
         // fix up angles in case user puts in wrong one!
-        usernameAndDomain = usernameAndDomain.replace('/', '\\');
+        String _usernameAndDomain = usernameAndDomain.replace('/', '\\');
         // parse the domain and username values out of the username
-        int separator = usernameAndDomain.indexOf("\\");
+        int separator = _usernameAndDomain.indexOf("\\");
         if (separator == -1)
         {
-            throw new LoginException("Error: no separator (\\) found in the username pased in to distingush between domain and username");
+            throw new LoginException("Error: no separator (\\) found in the username pased in to distinguish between domain and username");
         }
-        return usernameAndDomain.substring(separator + 1);
+        return _usernameAndDomain.substring(separator + 1);
     }
+
     public static String parseForDomain(String usernameAndDomain) throws LoginException
     {
         // fix up angles in case user puts in wrong one!
-        usernameAndDomain = usernameAndDomain.replace('/', '\\');
+        String _usernameAndDomain = usernameAndDomain.replace('/', '\\');
         // parse the domain and username values out of the username
-        int separator = usernameAndDomain.indexOf("\\");
+        int separator = _usernameAndDomain.indexOf("\\");
         if (separator == -1)
         {
-            throw new LoginException("Error: no separator (\\) found in the username pased in to distingush between domain and username");
+            throw new LoginException("Error: no separator (\\) found in the username pased in to distinguish between domain and username");
         }
-        return usernameAndDomain.substring(0, separator);
+        return _usernameAndDomain.substring(0, separator);
     }
 }

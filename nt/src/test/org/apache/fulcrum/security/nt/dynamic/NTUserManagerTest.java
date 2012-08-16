@@ -44,7 +44,6 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     private static final String DOMAIN = "IQUITOS";
     private static final String PASSWORD = "";
     private static final String GUESTUSER = DOMAIN + "/" + "Guest";
-    private static final String TESTUSER = DOMAIN + "/" + USERNAME;
 
     public void setUp() throws Exception
     {
@@ -53,14 +52,16 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         securityService = (SecurityService) lookup(SecurityService.ROLE);
         userManager = securityService.getUserManager();
     }
+
     public void tearDown()
     {
         user = null;
         userManager = null;
         securityService = null;
     }
+
     /**
-     * Constructor for MemoryPermissionManagerTest.
+     * Constructor for NTUserManagerTest.
      *
      * @param arg0
      */
@@ -68,6 +69,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     {
         super(arg0);
     }
+
     public void testCheckExists() throws Exception
     {
         try
@@ -84,6 +86,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             log.info("Unit test not being run due to missing NT DLL");
         }
     }
+
     public void testCheckExistsFails() throws Exception
     {
         try
@@ -98,6 +101,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             log.info("Unit test not being run due to missing NT DLL");
         }
     }
+
     /**
      * tests getting an NT username
      */
@@ -115,6 +119,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             log.info("Unit test not being run due to missing NT DLL");
         }
     }
+
     /**
      * tests getting an NT Domain
      */
@@ -132,6 +137,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             log.info("Unit test not being run due to missing NT DLL");
         }
     }
+
     /**
      * tests logging on a different user
      */
@@ -163,8 +169,9 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             log.info("Unit test not being run due to missing NT DLL");
         }
     }
+
     /*
-     * Class to test for User retrieve(String, String)
+     * test for User retrieve(String, String)
      */
     public void testGetUserStringString() throws Exception
     {
@@ -179,6 +186,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             log.info("Unit test not being run due to missing NT DLL");
         }
     }
+
     public void testAuthenticate() throws Exception
     {
         try
@@ -191,6 +199,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             log.info("Unit test not being run due to missing NT DLL");
         }
     }
+
     public void testGetACL() throws Exception
     {
         try
@@ -205,9 +214,10 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             log.info("Unit test not being run due to missing NT DLL");
         }
     }
+
     /** ******* ALL BELOW HERE THROW RUNTIME EXCEPTIONS ******** */
     /*
-     * Class to test for User retrieve(String, String)
+     * test for User retrieve(String, String)
      */
     public void testGetAllUsers() throws Exception
     {
@@ -221,6 +231,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
            assertTrue(re.getMessage().equals(ERROR_MSG));
        }
     }
+
     /*
      * Class to test for User retrieve(String)
      */
@@ -249,6 +260,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             assertTrue(re.getMessage().equals(ERROR_MSG));
         }
     }
+
     public void testChangePassword() throws Exception
     {
         try
@@ -263,12 +275,12 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         {
             log.info("Unit test not being run due to missing NT DLL");
         }
-
         catch (RuntimeException re)
         {
             assertTrue(re.getMessage().equals(ERROR_MSG));
         }
     }
+
     public void testForcePassword() throws Exception
     {
         try
@@ -314,6 +326,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             assertTrue(re.getMessage().equals(ERROR_MSG));
         }
     }
+
     public void testAddUser() throws Exception
     {
         try
@@ -326,6 +339,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             assertTrue(re.getMessage().equals(ERROR_MSG));
         }
     }
+
     public void testRetrieveingUsersByGroup() throws Exception
     {
         try
@@ -344,7 +358,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
      */
     public void testCheckExistsWithString() throws Exception
     {
-
+        // empty
     }
 
     /*
@@ -352,14 +366,14 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
      */
     public void testAddUserTwiceFails() throws Exception
     {
-
+        // empty
     }
+
     /*
      * Override parent class, doesn't make sense..
      */
     public void testCheckUserCaseSensitiveExists() throws Exception
     {
-
+        // empty
     }
-
 }

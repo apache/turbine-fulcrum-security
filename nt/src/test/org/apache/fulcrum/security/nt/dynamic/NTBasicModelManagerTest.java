@@ -39,12 +39,6 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
 public class NTBasicModelManagerTest extends BaseUnitTest implements TestConstants
 {
     private static Log log = LogFactory.getLog(NTBasicModelManagerTest.class);
-    private static final String ERROR_MSG = "Not supported by NT User Manager";
-    private static final String USERNAME = "Eric Pugh";
-    private static final String DOMAIN = "IQUITOS";
-    private static final String PASSWORD = "";
-    private static final String GUESTUSER = DOMAIN + "/" + "Guest";
-    private static final String TESTUSER = DOMAIN + "/" + USERNAME;
     private BasicModelManager modelManager;
     private SecurityService securityService;
     private UserManager userManager;
@@ -58,14 +52,16 @@ public class NTBasicModelManagerTest extends BaseUnitTest implements TestConstan
         userManager = securityService.getUserManager();
         modelManager = (BasicModelManager) securityService.getModelManager();
     }
+
     public void tearDown()
     {
         user = null;
         userManager = null;
         securityService = null;
     }
+
     /**
-     * Constructor for MemoryPermissionManagerTest.
+     * Constructor for NTBasicModelManagerTest.
      *
      * @param arg0
      */
@@ -73,6 +69,7 @@ public class NTBasicModelManagerTest extends BaseUnitTest implements TestConstan
     {
         super(arg0);
     }
+
     public void testRevokeAll() throws Exception
     {
         try
@@ -119,6 +116,7 @@ public class NTBasicModelManagerTest extends BaseUnitTest implements TestConstan
             log.info("Unit test not being run due to missing NT DLL");
         }
     }
+
     public void testRevokeUserGroup() throws Exception
     {
         try
@@ -143,5 +141,4 @@ public class NTBasicModelManagerTest extends BaseUnitTest implements TestConstan
             log.info("Unit test not being run due to missing NT DLL");
         }
     }
-
 }
