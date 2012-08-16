@@ -32,6 +32,15 @@
     <packaging>pom</packaging>
     <name>Fulcrum Security Master Build</name>
     <url>http://turbine.apache.org/fucrum/fulcrum-security-site</url>
+
+    <distributionManagement>
+        <site>
+            <id>apache.website</id>
+            <name>Fulcrum Website</name>
+            <url>${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/fulcrum/fulcrum-security-site/</url>
+        </site>
+    </distributionManagement>
+    
     <contributors>
         <contributor>
             <name>Ben Gidley</name>

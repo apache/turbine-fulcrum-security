@@ -25,6 +25,12 @@
 
   <body>
     <release version="1.1.0" date="">
+      <action type="update" dev="tv">
+        Updated to Hibernate 3.6.7
+      </action>
+      <action type="update" dev="tv">
+        Moved to JDK 1.5
+      </action>
       <action type="update" dev="tv" issue="TRB-78" due-to="Ludwig Magnusson">
         Move API build to Maven-2.
       </action>

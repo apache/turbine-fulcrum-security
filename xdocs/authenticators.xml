@@ -74,10 +74,8 @@
 	<p>
 	<!--The last thing is to put the file jaas.jar in your tomcat server/lib/ directory so the JAAS realm can function.-->
 	</p>
-
     </subsection>
-
-  <subsection name="CryptoAuthenticator">
+    <subsection name="CryptoAuthenticator">
       <p>
       Uses the fulcrum crypto service to check the password
 	  against the encrypted one.  You can specify the algorithm and cipher to use.
@@ -95,23 +93,20 @@
       <cipher>SHA1</cipher>
   </component>
 
-   <component
+  <component
     role="org.apache.fulcrum.crypto.CryptoService"
     class="org.apache.fulcrum.crypto.DefaultCryptoService">
  	<algorithm>
-      	<unix>org.apache.fulcrum.crypto.provider.UnixCrypt</unix>
-        <clear>org.apache.fulcrum.crypto.provider.ClearCrypt</clear>
-        <java>org.apache.fulcrum.crypto.provider.JavaCrypt</java>
-        <oldjava>org.apache.fulcrum.crypto.provider.OldJavaCrypt</oldjava>
-      </algorithm>
+      <unix>org.apache.fulcrum.crypto.provider.UnixCrypt</unix>
+      <clear>org.apache.fulcrum.crypto.provider.ClearCrypt</clear>
+      <java>org.apache.fulcrum.crypto.provider.JavaCrypt</java>
+      <oldjava>org.apache.fulcrum.crypto.provider.OldJavaCrypt</oldjava>
+    </algorithm>
   </component>
 ]]>
 </source>
     </subsection>
 
   </section>
-
-
-
 </body>
 </document>
