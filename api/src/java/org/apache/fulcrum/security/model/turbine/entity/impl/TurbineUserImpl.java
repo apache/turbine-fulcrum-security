@@ -26,7 +26,7 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
  * Represents the "turbine" model where permissions are in a many to many
  * relationship to roles, roles are related to groups are related to users, all
  * in many to many relationships.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id: TurbineUser.java 437451 2006-08-27 20:20:44Z tv $
  */
@@ -57,14 +57,12 @@ public class TurbineUserImpl extends AbstractTurbineSecurityEntityImpl implement
 
     /**
      * Calculate a hash code for this object
-     *
+     * 
      * @see org.apache.fulcrum.security.entity.impl.SecurityEntityImpl#hashCode()
      */
+    @Override
     public int hashCode()
     {
-        return new HashCodeBuilder(41, 15)
-                    .append(getPassword())
-                    .appendSuper(super.hashCode())
-                    .toHashCode();
+        return new HashCodeBuilder(41, 15).append(getPassword()).appendSuper(super.hashCode()).toHashCode();
     }
 }

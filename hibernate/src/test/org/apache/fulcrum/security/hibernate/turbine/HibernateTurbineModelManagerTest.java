@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.hibernate.turbine;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -25,13 +26,13 @@ import org.apache.fulcrum.security.model.turbine.test.AbstractTurbineModelManage
 
 /**
  * @author Eric Pugh
- *
- * Test the memory implementation of the turbine model..
+ * 
+ *         Test the memory implementation of the turbine model..
  */
-public class HibernateTurbineModelManagerTest
-    extends AbstractTurbineModelManagerTest
+public class HibernateTurbineModelManagerTest extends AbstractTurbineModelManagerTest
 {
 
+    @Override
     public void setUp() throws Exception
     {
 
@@ -49,16 +50,20 @@ public class HibernateTurbineModelManagerTest
             fail(e.toString());
         }
     }
+
+    @Override
     public void tearDown()
     {
         super.tearDown();
-		modelManager = null;
+        modelManager = null;
         securityService = null;
     }
+
     /**
-    	* Constructor for MemoryPermissionManagerTest.
-    	* @param arg0
-    	*/
+     * Constructor for MemoryPermissionManagerTest.
+     * 
+     * @param arg0
+     */
     public HibernateTurbineModelManagerTest(String arg0)
     {
         super(arg0);

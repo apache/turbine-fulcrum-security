@@ -30,7 +30,7 @@ import org.apache.fulcrum.security.util.RoleSet;
  * Represents the "turbine" model where permissions are in a many to many
  * relationship to roles, roles are related to groups are related to users, all
  * in many to many relationships.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @version $Id: TurbinePermission.java 223081 2004-10-07 15:11:58Z epugh $
  */
@@ -40,14 +40,17 @@ public class TurbinePermissionImpl extends SecurityEntityImpl implements Turbine
 
     /**
      * Get the roles that this permission belongs to
-     *
+     * 
      * @return a set of roles
      */
     public RoleSet getRoles()
     {
-        if (roleSet instanceof RoleSet) {
-			return (RoleSet) roleSet;
-		} else {
+        if (roleSet instanceof RoleSet)
+        {
+            return (RoleSet) roleSet;
+        }
+        else
+        {
             roleSet = new RoleSet(roleSet);
             return (RoleSet) roleSet;
         }
@@ -55,22 +58,27 @@ public class TurbinePermissionImpl extends SecurityEntityImpl implements Turbine
 
     /**
      * Set the roles that this permission belongs to
-     *
-     * @param roleSet a set of roles
+     * 
+     * @param roleSet
+     *            a set of roles
      */
     public void setRoles(RoleSet roleSet)
     {
-        if (roleSet != null) {
-			this.roleSet = roleSet;
-		} else {
-			this.roleSet = new RoleSet();
-		}
+        if (roleSet != null)
+        {
+            this.roleSet = roleSet;
+        }
+        else
+        {
+            this.roleSet = new RoleSet();
+        }
     }
 
     /**
      * Add a role to this permission
-     *
-     * @param role the role to add
+     * 
+     * @param role
+     *            the role to add
      */
     public void addRole(Role role)
     {
@@ -79,8 +87,9 @@ public class TurbinePermissionImpl extends SecurityEntityImpl implements Turbine
 
     /**
      * Remove a role from this permission
-     *
-     * @param role the role to remove
+     * 
+     * @param role
+     *            the role to remove
      */
     public void removeRole(Role role)
     {
@@ -89,8 +98,9 @@ public class TurbinePermissionImpl extends SecurityEntityImpl implements Turbine
 
     /**
      * Set the roles that this permission belongs to as Set
-     *
-     * @param roles a set of roles
+     * 
+     * @param roles
+     *            a set of roles
      */
     public <T extends Role> void setRolesAsSet(Set<T> roles)
     {
@@ -99,12 +109,12 @@ public class TurbinePermissionImpl extends SecurityEntityImpl implements Turbine
 
     /**
      * Get the roles that this permission belongs to as Set
-     *
+     * 
      * @return a set of roles
      */
     @SuppressWarnings("unchecked")
-	public <T extends Role> Set<T> getRolesAsSet()
+    public <T extends Role> Set<T> getRolesAsSet()
     {
-        return (Set<T>)roleSet;
+        return (Set<T>) roleSet;
     }
 }

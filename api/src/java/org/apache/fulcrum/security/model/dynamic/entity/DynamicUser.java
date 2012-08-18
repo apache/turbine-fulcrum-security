@@ -28,11 +28,11 @@ import org.apache.fulcrum.security.model.basic.entity.BasicUser;
  * Represents the "simple" model where permissions are related to roles, roles
  * are related to groups and groups are related to users, all in many to many
  * relationships.
- *
+ * 
  * Users have a set of delegates and delegatee's. If user A has B in their
  * delegates - B assumes A's groups,roles and permissions If user C has D in
  * their delegatees - C assumes D's groups,roles and permissions
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -40,29 +40,31 @@ public interface DynamicUser extends BasicUser
 {
     /**
      * Get the set of delegatees for this user
-     *
+     * 
      * @return Returns the delegatees.
      */
     public <T extends User> Set<T> getDelegatees();
 
     /**
      * Set the delegatees for this user
-     *
-     * @param delegatees The delegatees to set.
+     * 
+     * @param delegatees
+     *            The delegatees to set.
      */
     public <T extends User> void setDelegatees(Set<T> delegatees);
 
     /**
      * Get the set of delegators for this user
-     *
+     * 
      * @return Returns the delegators.
      */
     public <T extends User> Set<T> getDelegators();
 
     /**
      * Set the delegators for this user
-     *
-     * @param delegators The delegators to set.
+     * 
+     * @param delegators
+     *            The delegators to set.
      */
     public <T extends User> void setDelegators(Set<T> delegators);
 }

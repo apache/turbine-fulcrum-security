@@ -30,11 +30,11 @@ import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
  * Represents the "simple" model where permissions are related to roles, roles
  * are related to groups and groups are related to users, all in many to many
  * relationships.
- *
+ * 
  * Users have a set of delegates and delegatee's. If user A has B in their
  * delegates - B assumes A's groups,roles and permissions If user C has D in
  * their delegatees - C assumes D's groups,roles and permissions
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id: DynamicUser.java 437451 2006-08-27 20:20:44Z tv $
  */
@@ -51,19 +51,20 @@ public class DynamicUserImpl extends BasicUserImpl implements DynamicUser
 
     /**
      * Get the set of delegatees for this user
-     *
+     * 
      * @return Returns the delegatees.
      */
     @SuppressWarnings("unchecked")
-	public <T extends User> Set<T> getDelegatees()
+    public <T extends User> Set<T> getDelegatees()
     {
-        return (Set<T>)delegatees;
+        return (Set<T>) delegatees;
     }
 
     /**
      * Set the delegatees for this user
-     *
-     * @param delegatees The delegatees to set.
+     * 
+     * @param delegatees
+     *            The delegatees to set.
      */
     public <T extends User> void setDelegatees(Set<T> delegatees)
     {
@@ -72,19 +73,20 @@ public class DynamicUserImpl extends BasicUserImpl implements DynamicUser
 
     /**
      * Get the set of delegators for this user
-     *
+     * 
      * @return Returns the delegators.
      */
     @SuppressWarnings("unchecked")
-	public <T extends User> Set<T> getDelegators()
+    public <T extends User> Set<T> getDelegators()
     {
-        return (Set<T>)delegators;
+        return (Set<T>) delegators;
     }
 
     /**
      * Set the delegators for this user
-     *
-     * @param delegators The delegators to set.
+     * 
+     * @param delegators
+     *            The delegators to set.
      */
     public <T extends User> void setDelegators(Set<T> delegators)
     {

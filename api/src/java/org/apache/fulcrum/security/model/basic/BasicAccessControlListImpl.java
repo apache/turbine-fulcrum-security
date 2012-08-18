@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.model.basic;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,15 +20,16 @@ package org.apache.fulcrum.security.model.basic;
  */
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.util.GroupSet;
+
 /**
- * This is a control class that makes it easy to find out if a
- * particular User has a given Permission.  It also determines if a
- * User has a a particular Role.
- *
- * @todo Need to rethink the two maps..  Why not just a single list of groups?  That would
- * then cascade down to all the other roles and so on..
+ * This is a control class that makes it easy to find out if a particular User
+ * has a given Permission. It also determines if a User has a a particular Role.
+ * 
+ * @todo Need to rethink the two maps.. Why not just a single list of groups?
+ *       That would then cascade down to all the other roles and so on..
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id$
+ * @version $Id: BasicAccessControlListImpl.java 535465 2007-05-05 06:58:06Z tv
+ *          $
  */
 public class BasicAccessControlListImpl implements BasicAccessControlList
 {
@@ -41,18 +43,22 @@ public class BasicAccessControlListImpl implements BasicAccessControlList
 
     /**
      * Constructs a new AccessControlList.
-     *
+     * 
      * This class follows 'immutable' pattern - it's objects can't be modified
      * once they are created. This means that the permissions the users have are
      * in effect form the moment they log in to the moment they log out, and
-     * changes made to the security settings in that time are not reflected
-     * in the state of this object. If you need to reset an user's permissions
-     * you need to invalidate his session. <br>
+     * changes made to the security settings in that time are not reflected in
+     * the state of this object. If you need to reset an user's permissions you
+     * need to invalidate his session. <br>
      * The objects that constructs an AccessControlList must supply hashtables
      * of role/permission sets keyed with group objects. <br>
-     *
-     * @param roleSets a hashtable containing RoleSet objects keyed with Group objects
-     * @param permissionSets a hashtable containing PermissionSet objects keyed with Roles objects
+     * 
+     * @param roleSets
+     *            a hashtable containing RoleSet objects keyed with Group
+     *            objects
+     * @param permissionSets
+     *            a hashtable containing PermissionSet objects keyed with Roles
+     *            objects
      * @todo need to check this method over...
      */
     public BasicAccessControlListImpl(GroupSet groupSet)
@@ -62,7 +68,7 @@ public class BasicAccessControlListImpl implements BasicAccessControlList
 
     /**
      * Retrieves a set of Groups an user is assigned
-     *
+     * 
      * @return the set of Groups
      */
     public GroupSet getGroups()
@@ -72,8 +78,9 @@ public class BasicAccessControlListImpl implements BasicAccessControlList
 
     /**
      * Checks if the user is assigned a specific Group
-     *
-     * @param role the Group
+     * 
+     * @param role
+     *            the Group
      * @return <code>true</code> if the user is assigned the Group
      */
     public boolean hasGroup(Group group)
@@ -83,8 +90,9 @@ public class BasicAccessControlListImpl implements BasicAccessControlList
 
     /**
      * Checks if the user is assigned a specific Group
-     *
-     * @param role the Group name
+     * 
+     * @param role
+     *            the Group name
      * @return <code>true</code> if the user is assigned the Group
      */
     public boolean hasGroup(String group)

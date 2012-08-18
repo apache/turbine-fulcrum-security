@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.util;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -22,8 +23,9 @@ import junit.framework.TestCase;
 
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
+
 /**
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -31,14 +33,16 @@ public class UserSetTest extends TestCase
 {
 
     /**
-	 * Defines the testcase name for JUnit.
-	 *
-	 * @param name the testcase's name.
-	 */
+     * Defines the testcase name for JUnit.
+     * 
+     * @param name
+     *            the testcase's name.
+     */
     public UserSetTest(String name)
     {
         super(name);
     }
+
     public static void main(String[] args)
     {
         junit.textui.TestRunner.run(UserSetTest.class);

@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.hibernate;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -26,21 +27,21 @@ import org.hibernate.cfg.Configuration;
 
 /**
  * @author Eric Pugh
- *
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
+ * 
+ *         To change the template for this generated type comment go to Window -
+ *         Preferences - Java - Code Generation - Code and Comments
  */
 public interface PersistenceHelper
 {
-	String ROLE = PersistenceHelper.class.getName();
+    String ROLE = PersistenceHelper.class.getName();
 
-	void removeEntity(SecurityEntity entity)throws DataBackendException;
+    void removeEntity(SecurityEntity entity) throws DataBackendException;
 
-	void updateEntity(SecurityEntity entity) throws DataBackendException;
+    void updateEntity(SecurityEntity entity) throws DataBackendException;
 
-	void addEntity(SecurityEntity entity) throws DataBackendException;
+    void addEntity(SecurityEntity entity) throws DataBackendException;
 
-	Configuration getConfiguration();
+    Configuration getConfiguration();
 
-	Session retrieveSession() throws HibernateException;
+    Session retrieveSession() throws HibernateException;
 }

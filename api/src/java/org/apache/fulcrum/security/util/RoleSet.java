@@ -24,19 +24,17 @@ import java.util.Collection;
 import org.apache.fulcrum.security.entity.Role;
 
 /**
- * This class represents a set of Roles.  It makes it easy to build a
- * UI that would allow someone to add a group of Roles to a User.
- * It enforces that only Role objects are
- * allowed in the set and only relevant methods are available.
- *
+ * This class represents a set of Roles. It makes it easy to build a UI that
+ * would allow someone to add a group of Roles to a User. It enforces that only
+ * Role objects are allowed in the set and only relevant methods are available.
+ * 
  * @author <a href="mailto:john.mcnally@clearink.com">John D. McNally</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
-public class RoleSet
-        extends SecuritySet<Role>
+public class RoleSet extends SecuritySet<Role>
 {
     /**
      * Serial number
@@ -53,11 +51,12 @@ public class RoleSet
 
     /**
      * Constructs a new RoleSet with specified contents.
-     *
-     * If the given collection contains multiple objects that are
-     * identical WRT equals() method, some objects will be overwritten.
-     *
-     * @param roles A collection of roles to be contained in the set.
+     * 
+     * If the given collection contains multiple objects that are identical WRT
+     * equals() method, some objects will be overwritten.
+     * 
+     * @param roles
+     *            A collection of roles to be contained in the set.
      */
     public RoleSet(Collection<? extends Role> roles)
     {
@@ -66,39 +65,42 @@ public class RoleSet
     }
 
     /**
-     * Returns a Role with the given name, if it is contained in
-     * this RoleSet.
-     *
-     * @param roleName Name of Role.
-     * @return Role if argument matched a Role in this
-     * RoleSet; null if no match.
+     * Returns a Role with the given name, if it is contained in this RoleSet.
+     * 
+     * @param roleName
+     *            Name of Role.
+     * @return Role if argument matched a Role in this RoleSet; null if no
+     *         match.
      * @deprecated use getByName()
      */
+    @Deprecated
     public Role getRoleByName(String roleName)
     {
-		return getByName(roleName);
+        return getByName(roleName);
     }
 
     /**
-     * Returns a Role with the given id, if it is contained in this
-     * RoleSet.
-     *
-     * @param roleId id of the Role.
-     * @return Role if argument matched a Role in this RoleSet; null
-     * if no match.
+     * Returns a Role with the given id, if it is contained in this RoleSet.
+     * 
+     * @param roleId
+     *            id of the Role.
+     * @return Role if argument matched a Role in this RoleSet; null if no
+     *         match.
      * @deprecated Use getById()
      */
+    @Deprecated
     public Role getRoleById(Object roleId)
     {
-    	return getById(roleId);
+        return getById(roleId);
     }
 
     /**
      * Print out a RoleSet as a String
-     *
+     * 
      * @returns The Role Set as String
-     *
+     * 
      */
+    @Override
     public String toString()
     {
         StringBuffer sb = new StringBuffer();

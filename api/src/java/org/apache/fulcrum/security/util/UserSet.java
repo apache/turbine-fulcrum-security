@@ -24,15 +24,14 @@ import java.util.Collection;
 import org.apache.fulcrum.security.entity.User;
 
 /**
- * This class represents a set of Users.  It is based on UserSet.
- * Hibernate doesn't return the right kind of set, so this is used to
- * force the type of set.
- *
+ * This class represents a set of Users. It is based on UserSet. Hibernate
+ * doesn't return the right kind of set, so this is used to force the type of
+ * set.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class UserSet
-        extends SecuritySet<User>
+public class UserSet extends SecuritySet<User>
 {
     /**
      * Serial number
@@ -49,11 +48,12 @@ public class UserSet
 
     /**
      * Constructs a new UserSet with specified contents.
-     *
-     * If the given collection contains multiple objects that are
-     * identical WRT equals() method, some objects will be overwritten.
-     *
-     * @param users A collection of users to be contained in the set.
+     * 
+     * If the given collection contains multiple objects that are identical WRT
+     * equals() method, some objects will be overwritten.
+     * 
+     * @param users
+     *            A collection of users to be contained in the set.
      */
     public UserSet(Collection<? extends User> users)
     {
@@ -62,39 +62,42 @@ public class UserSet
     }
 
     /**
-     * Returns a User with the given name, if it is contained in
-     * this UserSet.
-     *
-     * @param userName Name of User.
-     * @return User if argument matched a User in this
-     * UserSet; null if no match.
+     * Returns a User with the given name, if it is contained in this UserSet.
+     * 
+     * @param userName
+     *            Name of User.
+     * @return User if argument matched a User in this UserSet; null if no
+     *         match.
      * @deprecated use getByName()
      */
+    @Deprecated
     public User getUserByName(String userName)
     {
         return getByName(userName);
     }
 
     /**
-     * Returns a User with the given id, if it is contained in this
-     * UserSet.
-     *
-     * @param userId id of the User.
-     * @return User if argument matched a User in this UserSet; null
-     * if no match.
+     * Returns a User with the given id, if it is contained in this UserSet.
+     * 
+     * @param userId
+     *            id of the User.
+     * @return User if argument matched a User in this UserSet; null if no
+     *         match.
      * @deprecated use getById()
      */
+    @Deprecated
     public User getUserById(Object userId)
     {
-    	return getById(userId);
+        return getById(userId);
     }
 
     /**
      * Print out a UserSet as a String
-     *
+     * 
      * @returns The User Set as String
-     *
+     * 
      */
+    @Override
     public String toString()
     {
         StringBuffer sb = new StringBuffer();

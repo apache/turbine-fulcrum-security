@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.model.test;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -31,9 +32,9 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
  * @author Eric Pugh
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * 
+ *         To change the template for this generated type comment go to
+ *         Window>Preferences>Java>Code Generation>Code and Comments
  */
 public abstract class AbstractPermissionManagerTest extends BaseUnitTest
 {
@@ -41,9 +42,9 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
     protected PermissionManager permissionManager;
     protected SecurityService securityService;
 
-
     /**
      * Constructor for PermissionManagerTest.
+     * 
      * @param arg0
      */
     public AbstractPermissionManagerTest(String arg0)
@@ -61,6 +62,7 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
         assertNotNull(permission);
         assertTrue(permission.getName() == null);
     }
+
     /*
      * Class to test for Permission getPermissionInstance(String)
      */
@@ -69,6 +71,7 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
         permission = permissionManager.getPermissionInstance("CAN_TREAT_ANIMALS");
         assertEquals("can_treat_animals", permission.getName());
     }
+
     public void testGetPermissionByName() throws Exception
     {
         permission = permissionManager.getPermissionInstance("CLEAN_KENNEL");
@@ -76,6 +79,7 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
         Permission permission2 = permissionManager.getPermissionByName("CLEAN_KENNEL");
         assertEquals(permission.getName(), permission2.getName());
     }
+
     public void testGetPermissionById() throws Exception
     {
         permission = permissionManager.getPermissionInstance("ADMINSTER_DRUGS");
@@ -83,6 +87,7 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
         Permission permission2 = permissionManager.getPermissionById(permission.getId());
         assertEquals(permission.getName(), permission2.getName());
     }
+
     public void testGetAllPermissions() throws Exception
     {
         int size = permissionManager.getAllPermissions().size();
@@ -91,6 +96,7 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
         PermissionSet permissionSet = permissionManager.getAllPermissions();
         assertEquals(size + 1, permissionSet.size());
     }
+
     public void testRenamePermission() throws Exception
     {
         permission = permissionManager.getPermissionInstance("CLEAN_FRONT_OFFICE");
@@ -101,6 +107,7 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
         assertEquals("CLEAN_GROOMING_ROOM".toLowerCase(), permission2.getName());
         assertEquals(size, permissionManager.getAllPermissions().size());
     }
+
     public void testRemovePermission() throws Exception
     {
         permission = permissionManager.getPermissionInstance("CLEAN_CAT_HOUSE");
@@ -113,18 +120,20 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
         }
         catch (UnknownEntityException uee)
         {
-            //good
+            // good
         }
     }
+
     public void testAddPermission() throws Exception
     {
         permission = permissionManager.getPermissionInstance("CLEAN_BIG_KENNEL");
-		assertNull(permission.getId());
+        assertNull(permission.getId());
         permissionManager.addPermission(permission);
         assertNotNull(permission.getId());
         permission = permissionManager.getPermissionById(permission.getId());
         assertNotNull(permission);
     }
+
     /*
      * Class to test for PermissionSet getPermissions(Role)
      */
@@ -137,11 +146,12 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
         Role role = securityService.getRoleManager().getRoleInstance("VET_TECH");
         securityService.getRoleManager().addRole(role);
         ((DynamicModelManager) securityService.getModelManager()).grant(role, permission);
-		PermissionSet permissions = ((DynamicRole)role).getPermissions();
+        PermissionSet permissions = ((DynamicRole) role).getPermissions();
         assertEquals(1, permissions.size());
         assertTrue(permissions.contains(permission));
         assertFalse(permissions.contains(permission2));
     }
+
     /*
      * Class to test for boolean checkExists(permission)
      */
@@ -153,6 +163,7 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
         Permission permission2 = permissionManager.getPermissionInstance("CLOSE_OFFICE");
         assertFalse(permissionManager.checkExists(permission2));
     }
+
     /*
      * Class to test for boolean checkExists(string)
      */
@@ -174,11 +185,13 @@ public abstract class AbstractPermissionManagerTest extends BaseUnitTest
         permissionManager.addPermission(permission);
         assertTrue(permissionManager.checkExists(permission.getName()));
         Permission permission2 = permissionManager.getPermissionInstance("EATLUNCH");
-        try {
+        try
+        {
             permissionManager.addPermission(permission2);
         }
-        catch (EntityExistsException uee){
-            //good
+        catch (EntityExistsException uee)
+        {
+            // good
         }
     }
 }

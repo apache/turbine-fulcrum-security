@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.nt;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -31,14 +32,16 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.UserSet;
 
 import com.tagish.auth.win32.NTSystem;
+
 /**
  * This implementation attempts to manager users against NT.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public class NTUserManagerImpl extends AbstractUserManager
 {
+    @Override
     protected User persistNewUser(User user) throws DataBackendException
     {
         throw new RuntimeException("This method is not supported.");
@@ -48,19 +51,21 @@ public class NTUserManagerImpl extends AbstractUserManager
      * Retrieve a user from persistent storage using username as the key, and
      * authenticate the user. The implementation may chose to authenticate to
      * the server as the user whose data is being retrieved.
-     *
-     * @param userName the name of the user.
-     * @param password the user supplied password.
+     * 
+     * @param userName
+     *            the name of the user.
+     * @param password
+     *            the user supplied password.
      * @return an User object.
-     * @exception PasswordMismatchException if the supplied password was
-     *                incorrect.
-     * @exception UnknownEntityException if the user's account does not exist
-     *                in the database.
-     * @exception DataBackendException if there is a problem accessing the
-     *                storage.
+     * @exception PasswordMismatchException
+     *                if the supplied password was incorrect.
+     * @exception UnknownEntityException
+     *                if the user's account does not exist in the database.
+     * @exception DataBackendException
+     *                if there is a problem accessing the storage.
      */
-    public User getUser(String userName, String password)
-        throws PasswordMismatchException, UnknownEntityException, DataBackendException
+    @Override
+    public User getUser(String userName, String password) throws PasswordMismatchException, UnknownEntityException, DataBackendException
     {
         User user = getUserInstance(userName);
         authenticate(user, password);
@@ -69,14 +74,16 @@ public class NTUserManagerImpl extends AbstractUserManager
 
     /**
      * Check whether a specified user's account exists.
-     *
+     * 
      * The login name is used for looking up the account.
-     *
-     * @param user The user to be checked.
+     * 
+     * @param user
+     *            The user to be checked.
      * @return true if the specified account exists
-     * @throws DataBackendException if there was an error accessing the data
-     *             backend.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
      */
+    @Override
     public boolean checkExists(User user) throws DataBackendException
     {
         boolean exists = false;
@@ -95,15 +102,17 @@ public class NTUserManagerImpl extends AbstractUserManager
         }
         return exists;
     }
+
     /**
      * Check whether a specified user's account exists.
-     *
+     * 
      * The login name is used for looking up the account.
-     *
-     * @param userName The name of the user to be checked.
+     * 
+     * @param userName
+     *            The name of the user to be checked.
      * @return true if the specified account exists
-     * @throws DataBackendException if there was an error accessing the data
-     *             backend.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
      */
     public boolean checkExists(String userName) throws DataBackendException
     {
@@ -113,16 +122,17 @@ public class NTUserManagerImpl extends AbstractUserManager
     /**
      * Retrieve a user from persistent storage using username as the key. Not
      * supported currently.
-     *
-     * @param userName the name of the user.
+     * 
+     * @param userName
+     *            the name of the user.
      * @return an User object.
-     * @exception UnknownEntityException if the user's account does not exist
-     *                in the database.
-     * @exception DataBackendException if there is a problem accessing the
-     *                storage.
+     * @exception UnknownEntityException
+     *                if the user's account does not exist in the database.
+     * @exception DataBackendException
+     *                if there is a problem accessing the storage.
      */
-    public User getUser(String userName)
-        throws UnknownEntityException, DataBackendException
+    @Override
+    public User getUser(String userName) throws UnknownEntityException, DataBackendException
     {
         throw new RuntimeException("Not supported by NT User Manager");
     }
@@ -130,20 +140,23 @@ public class NTUserManagerImpl extends AbstractUserManager
     /**
      * Authenticate an User with the specified password. If authentication is
      * successful the method returns nothing. If there are any problems,
-     * exception was thrown.  Additionally, if the User object is of type BasicUser
-     * or DynamicUser, then it will populate all the group information as well!
-     *
-     * @param user an User object to authenticate.
-     * @param password the user supplied password.
-     * @exception PasswordMismatchException if the supplied password was
-     *                incorrect.
-     * @exception UnknownEntityException if the user's account does not exist
-     *                in the database.
-     * @exception DataBackendException if there is a problem accessing the
-     *                storage.
+     * exception was thrown. Additionally, if the User object is of type
+     * BasicUser or DynamicUser, then it will populate all the group information
+     * as well!
+     * 
+     * @param user
+     *            an User object to authenticate.
+     * @param password
+     *            the user supplied password.
+     * @exception PasswordMismatchException
+     *                if the supplied password was incorrect.
+     * @exception UnknownEntityException
+     *                if the user's account does not exist in the database.
+     * @exception DataBackendException
+     *                if there is a problem accessing the storage.
      */
-    public void authenticate(User user, String password)
-        throws PasswordMismatchException, UnknownEntityException, DataBackendException
+    @Override
+    public void authenticate(User user, String password) throws PasswordMismatchException, UnknownEntityException, DataBackendException
     {
         NTSystem ntSystem = new NTSystem();
         char passwordArray[] = password.toCharArray();
@@ -154,22 +167,18 @@ public class NTUserManagerImpl extends AbstractUserManager
             ntSystem.logon(username, passwordArray, domain);
             if (!ntSystem.getName().equalsIgnoreCase(username))
             {
-                throw new PasswordMismatchException(
-                    "Could not authenticate user "
-                        + username
-                        + " against domain "
-                        + domain);
+                throw new PasswordMismatchException("Could not authenticate user " + username + " against domain " + domain);
             }
             String groups[] = ntSystem.getGroupNames(false);
-            for (int i = 0; i < groups.length; i++)
+            for (String group2 : groups)
             {
                 // Note how it populates groups? This
                 // should maybe delegate a call to the
                 // group manager to look for groups it
                 // knows about instead.
                 Group group = getGroupManager().getGroupInstance();
-                group.setName(groups[i]);
-                group.setId(groups[i]);
+                group.setName(group2);
+                group.setId(group2);
                 if (user instanceof DynamicUser)
                 {
                     ((DynamicUser) user).addGroup(group);
@@ -190,57 +199,65 @@ public class NTUserManagerImpl extends AbstractUserManager
 
     /**
      * Removes an user account from the system. Not supported currently.
-     *
-     * @param user the object describing the account to be removed.
-     * @throws DataBackendException if there was an error accessing the data
-     *             backend.
-     * @throws UnknownEntityException if the user account is not present.
+     * 
+     * @param user
+     *            the object describing the account to be removed.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the user account is not present.
      */
-    public void removeUser(User user)
-        throws DataBackendException, UnknownEntityException
-    {
-        throw new RuntimeException("Not supported by NT User Manager");
-    }
-    /**
-     * Creates new user account with specified attributes. Not supported
-     * currently.
-     *
-     * @param user the object describing account to be created.
-     * @param password The password to use for the account.
-     *
-     * @throws DataBackendException if there was an error accessing the data
-     *             backend.
-     * @throws EntityExistsException if the user account already exists.
-     */
-    public User addUser(User user, String password)
-        throws DataBackendException, EntityExistsException
-    {
-        throw new RuntimeException("Not supported by NT User Manager");
-    }
-    /**
-     * Stores User attributes. The User is required to exist in the system. Not
-     * supported currently.
-     *
-     * @param role The User to be stored.
-     * @throws DataBackendException if there was an error accessing the data
-     *             backend.
-     * @throws UnknownEntityException if the role does not exist.
-     */
-    public void saveUser(User user)
-        throws DataBackendException, UnknownEntityException
+    public void removeUser(User user) throws DataBackendException, UnknownEntityException
     {
         throw new RuntimeException("Not supported by NT User Manager");
     }
 
-	/**
-	 * Retrieves all users defined in the system.
-	 *
-	 * @return the names of all users defined in the system.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 */
-	public UserSet getAllUsers() throws DataBackendException
-	{
-		throw new RuntimeException("Not supported by NT User Manager");
-	}
+    /**
+     * Creates new user account with specified attributes. Not supported
+     * currently.
+     * 
+     * @param user
+     *            the object describing account to be created.
+     * @param password
+     *            The password to use for the account.
+     * 
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws EntityExistsException
+     *             if the user account already exists.
+     */
+    @Override
+    public User addUser(User user, String password) throws DataBackendException, EntityExistsException
+    {
+        throw new RuntimeException("Not supported by NT User Manager");
+    }
+
+    /**
+     * Stores User attributes. The User is required to exist in the system. Not
+     * supported currently.
+     * 
+     * @param role
+     *            The User to be stored.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the role does not exist.
+     */
+    public void saveUser(User user) throws DataBackendException, UnknownEntityException
+    {
+        throw new RuntimeException("Not supported by NT User Manager");
+    }
+
+    /**
+     * Retrieves all users defined in the system.
+     * 
+     * @return the names of all users defined in the system.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     */
+    public UserSet getAllUsers() throws DataBackendException
+    {
+        throw new RuntimeException("Not supported by NT User Manager");
+    }
 
 }

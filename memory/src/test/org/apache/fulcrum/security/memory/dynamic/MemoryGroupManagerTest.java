@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.memory.dynamic;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,10 +21,11 @@ package org.apache.fulcrum.security.memory.dynamic;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractGroupManagerTest;
+
 /**
  * @author Eric Pugh
- *
- * Test the memory implementation of the Simple model..
+ * 
+ *         Test the memory implementation of the Simple model..
  */
 public class MemoryGroupManagerTest extends AbstractGroupManagerTest
 {
@@ -31,30 +33,36 @@ public class MemoryGroupManagerTest extends AbstractGroupManagerTest
     {
         junit.textui.TestRunner.run(MemoryGroupManagerTest.class);
     }
-	public void setUp()
-   {
-	   try
-	   {
-           this.setRoleFileName("src/test/DynamicMemoryRoleConfig.xml");
-           this.setConfigurationFileName("src/test/DynamicMemoryComponentConfig.xml");
-		   securityService = (SecurityService) lookup(SecurityService.ROLE);
-		   groupManager = securityService.getGroupManager();
-	   }
-	   catch (Exception e)
-	   {
-		   fail(e.toString());
-	   }
-   }
-   public void tearDown()
-   {
-	   group = null;
-	   groupManager = null;
-	   securityService = null;
-   }
+
+    @Override
+    public void setUp()
+    {
+        try
+        {
+            this.setRoleFileName("src/test/DynamicMemoryRoleConfig.xml");
+            this.setConfigurationFileName("src/test/DynamicMemoryComponentConfig.xml");
+            securityService = (SecurityService) lookup(SecurityService.ROLE);
+            groupManager = securityService.getGroupManager();
+        }
+        catch (Exception e)
+        {
+            fail(e.toString());
+        }
+    }
+
+    @Override
+    public void tearDown()
+    {
+        group = null;
+        groupManager = null;
+        securityService = null;
+    }
+
     /**
-    	* Constructor for MemoryPermissionManagerTest.
-    	* @param arg0
-    	*/
+     * Constructor for MemoryPermissionManagerTest.
+     * 
+     * @param arg0
+     */
     public MemoryGroupManagerTest(String arg0)
     {
         super(arg0);

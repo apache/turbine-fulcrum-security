@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.spi;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -30,16 +31,14 @@ import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 
 /**
- *
- * This abstract implementation provides most of the functionality that
- * a manager will need.
- *
+ * 
+ * This abstract implementation provides most of the functionality that a
+ * manager will need.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public abstract class AbstractManager
-    extends AbstractLogEnabled
-    implements Serviceable, Disposable, ThreadSafe
+public abstract class AbstractManager extends AbstractLogEnabled implements Serviceable, Disposable, ThreadSafe
 {
     boolean composed = false;
 
@@ -80,15 +79,13 @@ public abstract class AbstractManager
     /**
      * @return
      */
-    protected PermissionManager getPermissionManager()
-        throws DataBackendException
+    protected PermissionManager getPermissionManager() throws DataBackendException
     {
         if (permissionManager == null)
         {
             try
             {
-                permissionManager =
-                    (PermissionManager) manager.lookup(PermissionManager.ROLE);
+                permissionManager = (PermissionManager) manager.lookup(PermissionManager.ROLE);
 
             }
             catch (ServiceException ce)
@@ -140,8 +137,8 @@ public abstract class AbstractManager
     }
 
     /**
-    * Avalon Service lifecycle method
-    */
+     * Avalon Service lifecycle method
+     */
     public void service(ServiceManager manager) throws ServiceException
     {
         this.manager = manager;
@@ -150,16 +147,16 @@ public abstract class AbstractManager
 
     public void dispose()
     {
-		release(roleManager);
-		release(permissionManager);
-		release(groupManager);
-		release(userManager);
+        release(roleManager);
+        release(permissionManager);
+        release(groupManager);
+        release(userManager);
         manager = null;
     }
 
     protected void release(Object obj)
     {
-        if(obj!=null)
+        if (obj != null)
         {
             manager.release(obj);
         }
@@ -167,7 +164,8 @@ public abstract class AbstractManager
 
     /**
      * @return A resolved object
-     * @throws DataBackendException if the backend failed for some reason.
+     * @throws DataBackendException
+     *             if the backend failed for some reason.
      */
     protected Object resolve(String lookup)
     {

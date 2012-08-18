@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.util;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,10 +22,10 @@ import junit.framework.TestCase;
 
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicGroupImpl;
+
 /**
- * Test using a SecuritySet.  Useing various subclasses since it is
- * Abstract.
- *
+ * Test using a SecuritySet. Useing various subclasses since it is Abstract.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -33,13 +34,15 @@ public class SecuritySetTest extends TestCase
 
     /**
      * Defines the testcase name for JUnit.
-     *
-     * @param name the testcase's name.
+     * 
+     * @param name
+     *            the testcase's name.
      */
     public SecuritySetTest(String name)
     {
         super(name);
     }
+
     public static void main(String[] args)
     {
         junit.textui.TestRunner.run(SecuritySetTest.class);
@@ -91,14 +94,14 @@ public class SecuritySetTest extends TestCase
         Object array[] = securitySet.toArray();
         assertEquals(2, array.length);
         Object array2[] = new Object[2];
-        array2[0]="hi";
-        Object array3[]= securitySet.toArray(array2);
-		assertEquals(2, array3.length);
+        array2[0] = "hi";
+        Object array3[] = securitySet.toArray(array2);
+        assertEquals(2, array3.length);
     }
 
     public void testAdd() throws Exception
     {
-        GroupSet securitySet = (GroupSet)getTestData();
+        GroupSet securitySet = (GroupSet) getTestData();
         Group g = new DynamicGroupImpl();
         g.setName("Michael");
         g.setId("Michael");
@@ -117,11 +120,10 @@ public class SecuritySetTest extends TestCase
         g2.setName("RICK");
         g2.setId("RICK");
 
-		((GroupSet) securitySet).add(g);
-		((GroupSet) securitySet).add(g2);
+        ((GroupSet) securitySet).add(g);
+        ((GroupSet) securitySet).add(g2);
 
         return securitySet;
     }
-
 
 }

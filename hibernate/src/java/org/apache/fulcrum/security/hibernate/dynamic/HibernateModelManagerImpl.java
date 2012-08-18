@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.hibernate.dynamic;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -35,23 +36,28 @@ import org.hibernate.Transaction;
 
 /**
  * This implementation persists to a database via Hibernate.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id$
+ * @version $Id: HibernateModelManagerImpl.java 1374014 2012-08-16 19:47:27Z tv
+ *          $
  */
 public class HibernateModelManagerImpl extends AbstractDynamicModelManager implements DynamicModelManager
 {
     private PersistenceHelper persistenceHelper;
+
     /**
-	 * Revokes a Role from a Group.
-	 *
-	 * @param group the Group.
-	 * @param role the Role.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if group or role is not present.
-	 */
-    public synchronized void revoke(Group group, Role role)
-        throws DataBackendException, UnknownEntityException
+     * Revokes a Role from a Group.
+     * 
+     * @param group
+     *            the Group.
+     * @param role
+     *            the Role.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if group or role is not present.
+     */
+    public synchronized void revoke(Group group, Role role) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
         boolean roleExists = false;
@@ -64,7 +70,7 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
                 ((DynamicGroup) group).removeRole(role);
                 ((DynamicRole) role).removeGroup(group);
                 getPersistenceHelper().updateEntity(group);
-                //updateEntity(role);
+                // updateEntity(role);
             }
         }
         catch (Exception e)
@@ -80,16 +86,20 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
             throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
         }
     }
+
     /**
-	 * Grants a Role a Permission
-	 *
-	 * @param role the Role.
-	 * @param permission the Permission.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if role or permission is not present.
-	 */
-    public synchronized void grant(Role role, Permission permission)
-        throws DataBackendException, UnknownEntityException
+     * Grants a Role a Permission
+     * 
+     * @param role
+     *            the Role.
+     * @param permission
+     *            the Permission.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if role or permission is not present.
+     */
+    public synchronized void grant(Role role, Permission permission) throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
         boolean permissionExists = false;
@@ -121,15 +131,18 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
     }
 
     /**
-	 * Revokes a Permission from a Role.
-	 *
-	 * @param role the Role.
-	 * @param permission the Permission.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if role or permission is not present.
-	 */
-    public synchronized void revoke(Role role, Permission permission)
-        throws DataBackendException, UnknownEntityException
+     * Revokes a Permission from a Role.
+     * 
+     * @param role
+     *            the Role.
+     * @param permission
+     *            the Permission.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if role or permission is not present.
+     */
+    public synchronized void revoke(Role role, Permission permission) throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
         boolean permissionExists = false;
@@ -160,14 +173,17 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
     }
 
     /**
-	 * Puts a user in a group.
-	 *
-	 * This method is used when adding a user to a group
-	 *
-	 * @param user the User.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the account is not present.
-	 */
+     * Puts a user in a group.
+     * 
+     * This method is used when adding a user to a group
+     * 
+     * @param user
+     *            the User.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the account is not present.
+     */
     public synchronized void grant(User user, Group group) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
@@ -199,14 +215,17 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
     }
 
     /**
-	 * Removes a user in a group.
-	 *
-	 * This method is used when removing a user to a group
-	 *
-	 * @param user the User.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the user or group is not present.
-	 */
+     * Removes a user in a group.
+     * 
+     * This method is used when removing a user to a group
+     * 
+     * @param user
+     *            the User.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the user or group is not present.
+     */
     public synchronized void revoke(User user, Group group) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
@@ -221,8 +240,8 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
             {
                 Session session = getPersistenceHelper().retrieveSession();
                 transaction = session.beginTransaction();
-				((DynamicUser) user).removeGroup(group);
-				((DynamicGroup) group).removeUser(user);
+                ((DynamicUser) user).removeGroup(group);
+                ((DynamicGroup) group).removeUser(user);
                 session.update(user);
                 session.update(group);
                 transaction.commit();
@@ -251,15 +270,18 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
     }
 
     /**
-	 * Grants a Group a Role
-	 *
-	 * @param group the Group.
-	 * @param role the Role.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if group or role is not present.
-	 */
-    public synchronized void grant(Group group, Role role)
-        throws DataBackendException, UnknownEntityException
+     * Grants a Group a Role
+     * 
+     * @param group
+     *            the Group.
+     * @param role
+     *            the Role.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if group or role is not present.
+     */
+    public synchronized void grant(Group group, Role role) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
         boolean roleExists = false;
@@ -290,38 +312,42 @@ public class HibernateModelManagerImpl extends AbstractDynamicModelManager imple
         }
     }
 
-	/**
-	 * @return Returns the persistenceHelper.
-	 */
-	public PersistenceHelper getPersistenceHelper()
-	{
-		if (persistenceHelper == null)
-		{
-			persistenceHelper = (PersistenceHelper)resolve(PersistenceHelper.ROLE);
-		}
-		return persistenceHelper;
-	}
+    /**
+     * @return Returns the persistenceHelper.
+     */
+    public PersistenceHelper getPersistenceHelper()
+    {
+        if (persistenceHelper == null)
+        {
+            persistenceHelper = (PersistenceHelper) resolve(PersistenceHelper.ROLE);
+        }
+        return persistenceHelper;
+    }
 
-	/**
-	 * @see org.apache.fulcrum.security.model.dynamic.DynamicModelManager#addDelegate(org.apache.fulcrum.security.entity.User, org.apache.fulcrum.security.entity.User)
-	 */
-	public void addDelegate(User delegator, User delegatee)
-			throws DataBackendException, UnknownEntityException {
+    /**
+     * @see org.apache.fulcrum.security.model.dynamic.DynamicModelManager#addDelegate(org.apache.fulcrum.security.entity.User,
+     *      org.apache.fulcrum.security.entity.User)
+     */
+    @Override
+    public void addDelegate(User delegator, User delegatee) throws DataBackendException, UnknownEntityException
+    {
 
-		super.addDelegate(delegator, delegatee);
-		getPersistenceHelper().updateEntity(delegator);
-		getPersistenceHelper().updateEntity(delegatee);
-	}
+        super.addDelegate(delegator, delegatee);
+        getPersistenceHelper().updateEntity(delegator);
+        getPersistenceHelper().updateEntity(delegatee);
+    }
 
-	/**
-	 * @see org.apache.fulcrum.security.model.dynamic.DynamicModelManager#removeDelegate(org.apache.fulcrum.security.entity.User, org.apache.fulcrum.security.entity.User)
-	 */
-	public void removeDelegate(User delegator, User delegatee)
-			throws DataBackendException, UnknownEntityException {
+    /**
+     * @see org.apache.fulcrum.security.model.dynamic.DynamicModelManager#removeDelegate(org.apache.fulcrum.security.entity.User,
+     *      org.apache.fulcrum.security.entity.User)
+     */
+    @Override
+    public void removeDelegate(User delegator, User delegatee) throws DataBackendException, UnknownEntityException
+    {
 
-		super.removeDelegate(delegator, delegatee);
+        super.removeDelegate(delegator, delegatee);
 
-		getPersistenceHelper().updateEntity(delegator);
-		getPersistenceHelper().updateEntity(delegatee);
-	}
+        getPersistenceHelper().updateEntity(delegator);
+        getPersistenceHelper().updateEntity(delegatee);
+    }
 }

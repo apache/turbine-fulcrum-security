@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.nt.dynamic;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -28,11 +29,12 @@ import org.apache.fulcrum.security.model.test.AbstractUserManagerTest;
 import org.apache.fulcrum.security.util.DataBackendException;
 
 import com.tagish.auth.win32.NTSystem;
+
 /**
- *
- * Test the NT implementation of the user manager. This test traps some exceptions that can be
- * thrown if there is NO nt dll.
- *
+ * 
+ * Test the NT implementation of the user manager. This test traps some
+ * exceptions that can be thrown if there is NO nt dll.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -45,6 +47,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     private static final String PASSWORD = "";
     private static final String GUESTUSER = DOMAIN + "/" + "Guest";
 
+    @Override
     public void setUp() throws Exception
     {
         this.setRoleFileName("src/test/DynamicNTRoleConfig.xml");
@@ -53,6 +56,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         userManager = securityService.getUserManager();
     }
 
+    @Override
     public void tearDown()
     {
         user = null;
@@ -62,7 +66,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
 
     /**
      * Constructor for NTUserManagerTest.
-     *
+     * 
      * @param arg0
      */
     public NTUserManagerTest(String arg0)
@@ -70,6 +74,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         super(arg0);
     }
 
+    @Override
     public void testCheckExists() throws Exception
     {
         try
@@ -78,8 +83,9 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             user.setPassword("");
             assertTrue(userManager.checkExists(user));
         }
-        catch(DataBackendException dbe){
-            assertTrue(dbe.getMessage().indexOf(SCB_INVALID)>-1);
+        catch (DataBackendException dbe)
+        {
+            assertTrue(dbe.getMessage().indexOf(SCB_INVALID) > -1);
         }
         catch (UnsatisfiedLinkError ule)
         {
@@ -110,9 +116,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         try
         {
             NTSystem ntSystem = new NTSystem();
-            assertTrue(
-                "Name is eric:" + ntSystem.getName(),
-                USERNAME.equals(ntSystem.getName()));
+            assertTrue("Name is eric:" + ntSystem.getName(), USERNAME.equals(ntSystem.getName()));
         }
         catch (NoClassDefFoundError ule)
         {
@@ -128,9 +132,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         try
         {
             NTSystem ntSystem = new NTSystem();
-            assertTrue(
-                "Domain is:" + ntSystem.getDomain(),
-                DOMAIN.equals(ntSystem.getDomain()));
+            assertTrue("Domain is:" + ntSystem.getDomain(), DOMAIN.equals(ntSystem.getDomain()));
         }
         catch (NoClassDefFoundError ule)
         {
@@ -149,20 +151,14 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             char password[] = "editor!".toCharArray();
             ntSystem.logon(USERNAME, password, DOMAIN);
             String groups[] = ntSystem.getGroupNames(false);
-            for (int i = 0; i < groups.length; i++)
+            for (String group : groups)
             {
-                System.out.println("Groups :" + groups[i]);
+                System.out.println("Groups :" + group);
             }
             ntSystem.logoff();
-            assertTrue(
-                "User is:" + ntSystem.getName(),
-                USERNAME.equals(ntSystem.getName()));
-            assertTrue(
-                "Domain is:" + ntSystem.getName(),
-                "IQUITOS".equals(ntSystem.getDomain()));
-            assertTrue(
-                "Primary Group is:" + ntSystem.getPrimaryGroupName(),
-                "None".equals(ntSystem.getPrimaryGroupName()));
+            assertTrue("User is:" + ntSystem.getName(), USERNAME.equals(ntSystem.getName()));
+            assertTrue("Domain is:" + ntSystem.getName(), "IQUITOS".equals(ntSystem.getDomain()));
+            assertTrue("Primary Group is:" + ntSystem.getPrimaryGroupName(), "None".equals(ntSystem.getPrimaryGroupName()));
         }
         catch (NoClassDefFoundError ule)
         {
@@ -173,6 +169,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     /*
      * test for User retrieve(String, String)
      */
+    @Override
     public void testGetUserStringString() throws Exception
     {
         try
@@ -187,6 +184,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         }
     }
 
+    @Override
     public void testAuthenticate() throws Exception
     {
         try
@@ -200,6 +198,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         }
     }
 
+    @Override
     public void testGetACL() throws Exception
     {
         try
@@ -219,22 +218,24 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     /*
      * test for User retrieve(String, String)
      */
+    @Override
     public void testGetAllUsers() throws Exception
     {
         try
-       {
-           userManager.getAllUsers();
-           fail("Should throw runtime exception");
-       }
-       catch (RuntimeException re)
-       {
-           assertTrue(re.getMessage().equals(ERROR_MSG));
-       }
+        {
+            userManager.getAllUsers();
+            fail("Should throw runtime exception");
+        }
+        catch (RuntimeException re)
+        {
+            assertTrue(re.getMessage().equals(ERROR_MSG));
+        }
     }
 
     /*
      * Class to test for User retrieve(String)
      */
+    @Override
     public void testGetUserString() throws Exception
     {
         try
@@ -248,6 +249,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         }
     }
 
+    @Override
     public void testGetUserById() throws Exception
     {
         try
@@ -261,6 +263,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         }
     }
 
+    @Override
     public void testChangePassword() throws Exception
     {
         try
@@ -281,6 +284,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         }
     }
 
+    @Override
     public void testForcePassword() throws Exception
     {
         try
@@ -301,6 +305,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         }
     }
 
+    @Override
     public void testSaveUser() throws Exception
     {
         try
@@ -314,6 +319,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         }
     }
 
+    @Override
     public void testRemoveUser() throws Exception
     {
         try
@@ -327,6 +333,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         }
     }
 
+    @Override
     public void testAddUser() throws Exception
     {
         try
@@ -356,6 +363,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     /*
      * Override parent class, doesn't make sense..
      */
+    @Override
     public void testCheckExistsWithString() throws Exception
     {
         // empty
@@ -364,6 +372,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     /*
      * Override parent class, doesn't make sense..
      */
+    @Override
     public void testAddUserTwiceFails() throws Exception
     {
         // empty
@@ -372,6 +381,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     /*
      * Override parent class, doesn't make sense..
      */
+    @Override
     public void testCheckUserCaseSensitiveExists() throws Exception
     {
         // empty

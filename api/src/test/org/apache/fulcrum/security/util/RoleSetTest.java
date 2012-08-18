@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.util;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -31,20 +32,23 @@ public class RoleSetTest extends TestCase
 {
 
     /**
-	 * Defines the testcase name for JUnit.
-	 *
-	 * @param name the testcase's name.
-	 */
+     * Defines the testcase name for JUnit.
+     * 
+     * @param name
+     *            the testcase's name.
+     */
     public RoleSetTest(String name)
     {
         super(name);
     }
+
     public static void main(String[] args)
     {
         junit.textui.TestRunner.run(RoleSetTest.class);
     }
 
-    public void testNullRole() throws Exception {
+    public void testNullRole() throws Exception
+    {
         RoleSet roleSet = new RoleSet();
         assertFalse(roleSet.contains(null));
     }
@@ -76,8 +80,8 @@ public class RoleSetTest extends TestCase
     {
         RoleSet roleSet = new RoleSet();
         Role role = new RoleSubClass();
-		role.setId(new Integer(1));
-		role.setName("Eric");
+        role.setId(new Integer(1));
+        role.setName("Eric");
 
         roleSet.add(role);
         assertTrue(roleSet.contains(role));
@@ -94,16 +98,17 @@ public class RoleSetTest extends TestCase
         private String extraRoleData;
 
         /**
-		 * @return Returns the extraRoleData.
-		 */
+         * @return Returns the extraRoleData.
+         */
         public String getExtraRoleData()
         {
             return extraRoleData;
         }
 
         /**
-		 * @param extraRoleData The extraRoleData to set.
-		 */
+         * @param extraRoleData
+         *            The extraRoleData to set.
+         */
         public void setExtraRoleData(String extraRoleData)
         {
             this.extraRoleData = extraRoleData;

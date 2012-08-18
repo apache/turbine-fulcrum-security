@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.memory.dynamic;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -23,36 +24,41 @@ import org.apache.fulcrum.security.model.dynamic.test.AbstractDynamicModelManage
 
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id$
+ * @version $Id: MemoryDynamicModelManagerTest.java 535465 2007-05-05 06:58:06Z
+ *          tv $
  */
 public class MemoryDynamicModelManagerTest extends AbstractDynamicModelManagerTest
 {
-	/**
+    /**
      * @param arg0
      */
     public MemoryDynamicModelManagerTest(String arg0)
     {
         super(arg0);
     }
-    public void setUp()
-	 {
-		 try
-		 {
-             this.setRoleFileName("src/test/DynamicMemoryRoleConfig.xml");
-             this.setConfigurationFileName("src/test/DynamicMemoryComponentConfig.xml");
-			 securityService = (SecurityService) lookup(SecurityService.ROLE);
-			 super.setUp();
 
-		 }
-		 catch (Exception e)
-		 {
-			 fail(e.toString());
-		 }
-	 }
-	 public void tearDown()
-	 {
-	     super.tearDown();
-	     groupManager=null;
-		 securityService = null;
-	 }
+    @Override
+    public void setUp()
+    {
+        try
+        {
+            this.setRoleFileName("src/test/DynamicMemoryRoleConfig.xml");
+            this.setConfigurationFileName("src/test/DynamicMemoryComponentConfig.xml");
+            securityService = (SecurityService) lookup(SecurityService.ROLE);
+            super.setUp();
+
+        }
+        catch (Exception e)
+        {
+            fail(e.toString());
+        }
+    }
+
+    @Override
+    public void tearDown()
+    {
+        super.tearDown();
+        groupManager = null;
+        securityService = null;
+    }
 }

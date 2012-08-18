@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.model.dynamic.entity.impl;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -28,10 +29,10 @@ import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PermissionSet;
 
 /**
- * Represents the "simple" model where permissions are related to roles,
- * roles are related to groups and groups are related to users,
- * all in many to many relationships.
- *
+ * Represents the "simple" model where permissions are related to roles, roles
+ * are related to groups and groups are related to users, all in many to many
+ * relationships.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id: DynamicRole.java 437451 2006-08-27 20:20:44Z tv $
  */
@@ -43,48 +44,56 @@ public class DynamicRoleImpl extends SecurityEntityImpl implements DynamicRole
 
     /**
      * Get the permission that are part of this role
-     *
+     * 
      * @return a set of permissions
      */
     public PermissionSet getPermissions()
     {
-    	if( permissionSet instanceof PermissionSet ) {
-			return (PermissionSet) permissionSet;
-		} else {
-    		permissionSet = new PermissionSet(permissionSet);
-    		return (PermissionSet)permissionSet;
-    	}
+        if (permissionSet instanceof PermissionSet)
+        {
+            return (PermissionSet) permissionSet;
+        }
+        else
+        {
+            permissionSet = new PermissionSet(permissionSet);
+            return (PermissionSet) permissionSet;
+        }
     }
 
     /**
      * Get the permission that are part of this role as Set
-     *
+     * 
      * @return a set of permissions
      */
     @SuppressWarnings("unchecked")
-	public <T extends Permission> Set<T> getPermissionsAsSet()
+    public <T extends Permission> Set<T> getPermissionsAsSet()
     {
-        return (Set<T>)permissionSet;
+        return (Set<T>) permissionSet;
     }
 
     /**
      * Set the permission that are part of this role
-     *
-     * @param permissionSet a set of permissions
+     * 
+     * @param permissionSet
+     *            a set of permissions
      */
     public void setPermissions(PermissionSet permissionSet)
     {
-    	if( permissionSet != null ) {
-			this.permissionSet = permissionSet;
-		} else {
-			this.permissionSet = new PermissionSet();
-		}
+        if (permissionSet != null)
+        {
+            this.permissionSet = permissionSet;
+        }
+        else
+        {
+            this.permissionSet = new PermissionSet();
+        }
     }
 
     /**
      * Set the permission that are part of this role as Set
-     *
-     * @param permissions a set of permissions
+     * 
+     * @param permissions
+     *            a set of permissions
      */
     public <T extends Permission> void setPermissionsAsSet(Set<T> permissions)
     {
@@ -92,16 +101,18 @@ public class DynamicRoleImpl extends SecurityEntityImpl implements DynamicRole
     }
 
     /**
-    * This method should only be used by a RoleManager.  Not directly.
-    * @param permission
-    */
+     * This method should only be used by a RoleManager. Not directly.
+     * 
+     * @param permission
+     */
     public void addPermission(Permission permission)
     {
         getPermissions().add(permission);
     }
 
     /**
-     * This method should only be used by a RoleManager.  Not directly.
+     * This method should only be used by a RoleManager. Not directly.
+     * 
      * @param permission
      */
     public void removePermission(Permission permission)
@@ -111,35 +122,43 @@ public class DynamicRoleImpl extends SecurityEntityImpl implements DynamicRole
 
     /**
      * Get the groups this role belongs to
-     *
+     * 
      * @return a set of groups
      */
     public GroupSet getGroups()
     {
-    	if( groupSet instanceof GroupSet ) {
-			return (GroupSet) groupSet;
-		} else {
-    		groupSet = new GroupSet(groupSet);
-    		return (GroupSet)groupSet;
-    	}
+        if (groupSet instanceof GroupSet)
+        {
+            return (GroupSet) groupSet;
+        }
+        else
+        {
+            groupSet = new GroupSet(groupSet);
+            return (GroupSet) groupSet;
+        }
     }
 
     /**
      * Set the groups this role belongs to
-     *
-     * @param groups the set of groups
+     * 
+     * @param groups
+     *            the set of groups
      */
     public void setGroups(GroupSet groupSet)
     {
-    	if( groupSet != null ) {
-			this.groupSet = groupSet;
-		} else {
-			this.groupSet = new GroupSet();
-		}
+        if (groupSet != null)
+        {
+            this.groupSet = groupSet;
+        }
+        else
+        {
+            this.groupSet = new GroupSet();
+        }
     }
 
     /**
-     * This method should only be used by a RoleManager.  Not directly.
+     * This method should only be used by a RoleManager. Not directly.
+     * 
      * @param group
      */
     public void removeGroup(Group group)
@@ -148,7 +167,8 @@ public class DynamicRoleImpl extends SecurityEntityImpl implements DynamicRole
     }
 
     /**
-     * This method should only be used by a RoleManager.  Not directly.
+     * This method should only be used by a RoleManager. Not directly.
+     * 
      * @param group
      */
     public void addGroup(Group group)
@@ -158,8 +178,9 @@ public class DynamicRoleImpl extends SecurityEntityImpl implements DynamicRole
 
     /**
      * Set the groups this role belongs to as a Set
-     *
-     * @param groups the set of groups
+     * 
+     * @param groups
+     *            the set of groups
      */
     public <T extends Group> void setGroupsAsSet(Set<T> groups)
     {
@@ -168,12 +189,12 @@ public class DynamicRoleImpl extends SecurityEntityImpl implements DynamicRole
 
     /**
      * Get the groups this role belongs to as a Set
-     *
+     * 
      * @return a set of groups
      */
     @SuppressWarnings("unchecked")
-	public <T extends Group> Set<T> getGroupsAsSet()
+    public <T extends Group> Set<T> getGroupsAsSet()
     {
-        return (Set<T>)groupSet;
+        return (Set<T>) groupSet;
     }
 }

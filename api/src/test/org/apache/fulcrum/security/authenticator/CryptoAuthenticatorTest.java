@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.authenticator;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -23,7 +24,7 @@ import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -31,14 +32,18 @@ public class CryptoAuthenticatorTest extends BaseUnitTest
 {
     private static final String preDefinedInput = "Oeltanks";
     private static final String preDefinedResult = "uVDiJHaavRYX8oWt5ctkaa7j1cw=";
+
     /**
-    	* Constructor for CryptoAuthenticatorTest.
-    	* @param arg0
-    	*/
+     * Constructor for CryptoAuthenticatorTest.
+     * 
+     * @param arg0
+     */
     public CryptoAuthenticatorTest(String arg0)
     {
         super(arg0);
     }
+
+    @Override
     public void setUp()
     {
         try
@@ -51,12 +56,13 @@ public class CryptoAuthenticatorTest extends BaseUnitTest
             fail(e.toString());
         }
     }
+
     public void testAuthenticate() throws Exception
     {
         User user = new DynamicUserImpl();
         user.setName("Bob");
         user.setPassword(preDefinedResult);
-        Authenticator authenticator = (Authenticator)lookup(Authenticator.ROLE);
+        Authenticator authenticator = (Authenticator) lookup(Authenticator.ROLE);
         assertTrue(authenticator.authenticate(user, preDefinedInput));
         assertFalse(authenticator.authenticate(user, "mypassword"));
     }

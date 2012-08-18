@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.memory;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -29,15 +30,13 @@ import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
- * This implementation keeps all objects in memory.  This is mostly meant to help
+ * This implementation keeps all objects in memory. This is mostly meant to help
  * with testing and prototyping of ideas.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class MemoryGroupManagerImpl
-    extends AbstractGroupManager
-    implements GroupManager
+public class MemoryGroupManagerImpl extends AbstractGroupManager implements GroupManager
 {
     private static List<Group> groups = new ArrayList<Group>();
 
@@ -45,26 +44,28 @@ public class MemoryGroupManagerImpl
     // private static int uniqueId = 0;
 
     /**
-    	 * Retrieves all groups defined in the system.
-    	 *
-    	 * @return the names of all groups defined in the system.
-    	 * @throws DataBackendException if there was an error accessing the
-    	 *         data backend.
-    	 */
+     * Retrieves all groups defined in the system.
+     * 
+     * @return the names of all groups defined in the system.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     */
     public GroupSet getAllGroups() throws DataBackendException
     {
         return new GroupSet(groups);
     }
+
     /**
-    	* Removes a Group from the system.
-    	*
-    	* @param group The object describing the group to be removed.
-    	* @throws DataBackendException if there was an error accessing the data
-    	*         backend.
-    	* @throws UnknownEntityException if the group does not exist.
-    	*/
-    public synchronized void removeGroup(Group group)
-        throws DataBackendException, UnknownEntityException
+     * Removes a Group from the system.
+     * 
+     * @param group
+     *            The object describing the group to be removed.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the group does not exist.
+     */
+    public synchronized void removeGroup(Group group) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
         try
@@ -77,8 +78,7 @@ public class MemoryGroupManagerImpl
             }
             else
             {
-                throw new UnknownEntityException(
-                    "Unknown group '" + group + "'");
+                throw new UnknownEntityException("Unknown group '" + group + "'");
             }
         }
         catch (Exception e)
@@ -87,17 +87,20 @@ public class MemoryGroupManagerImpl
             throw new DataBackendException("removeGroup(Group) failed", e);
         }
     }
+
     /**
-    	* Renames an existing Group.
-    	*
-    	* @param group The object describing the group to be renamed.
-    	* @param name the new name for the group.
-    	* @throws DataBackendException if there was an error accessing the data
-    	*         backend.
-    	* @throws UnknownEntityException if the group does not exist.
-    	*/
-    public synchronized void renameGroup(Group group, String name)
-        throws DataBackendException, UnknownEntityException
+     * Renames an existing Group.
+     * 
+     * @param group
+     *            The object describing the group to be renamed.
+     * @param name
+     *            the new name for the group.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the group does not exist.
+     */
+    public synchronized void renameGroup(Group group, String name) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
         try
@@ -111,8 +114,7 @@ public class MemoryGroupManagerImpl
             }
             else
             {
-                throw new UnknownEntityException(
-                    "Unknown group '" + group + "'");
+                throw new UnknownEntityException("Unknown group '" + group + "'");
             }
         }
         catch (Exception e)
@@ -123,34 +125,39 @@ public class MemoryGroupManagerImpl
 
     /**
      * Determines if the <code>Group</code> exists in the security system.
-     *
-     * @param group a <code>Group</code> value
+     * 
+     * @param group
+     *            a <code>Group</code> value
      * @return true if the group exists in the system, false otherwise
-     * @throws DataBackendException when more than one Group with
-     *         the same name exists.
-     * @throws Exception A generic exception.
+     * @throws DataBackendException
+     *             when more than one Group with the same name exists.
+     * @throws Exception
+     *             A generic exception.
      */
     public boolean checkExists(String groupName) throws DataBackendException
     {
-        return MemoryHelper.checkExists(groups,groupName);
+        return MemoryHelper.checkExists(groups, groupName);
     }
+
     /**
-    	* Creates a new group with specified attributes.
-    	*
-    	* @param group the object describing the group to be created.
-    	* @return a new Group object that has id set up properly.
-    	* @throws DataBackendException if there was an error accessing the data
-    	*         backend.
-    	* @throws EntityExistsException if the group already exists.
-    	*/
-    public synchronized Group persistNewGroup(Group group)
-        throws DataBackendException
+     * Creates a new group with specified attributes.
+     * 
+     * @param group
+     *            the object describing the group to be created.
+     * @return a new Group object that has id set up properly.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws EntityExistsException
+     *             if the group already exists.
+     */
+    @Override
+    public synchronized Group persistNewGroup(Group group) throws DataBackendException
     {
 
-            group.setId(MemoryHelper.getUniqueId());
-            groups.add(group);
-            // return the object with correct id
-            return group;
+        group.setId(MemoryHelper.getUniqueId());
+        groups.add(group);
+        // return the object with correct id
+        return group;
 
     }
 

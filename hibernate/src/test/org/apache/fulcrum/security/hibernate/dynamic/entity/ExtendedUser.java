@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.hibernate.dynamic.entity;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -23,7 +24,7 @@ import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
 /**
  * User to test subclassing an existing class and then persisting with
  * Hibernate.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -45,7 +46,8 @@ public class ExtendedUser extends DynamicUserImpl
     }
 
     /**
-     * @param email The email to set.
+     * @param email
+     *            The email to set.
      */
     public void setEmail(String email)
     {
@@ -61,7 +63,8 @@ public class ExtendedUser extends DynamicUserImpl
     }
 
     /**
-     * @param domain The nTDomain to set.
+     * @param domain
+     *            The nTDomain to set.
      */
     public void setNTDomain(String domain)
     {
@@ -77,12 +80,11 @@ public class ExtendedUser extends DynamicUserImpl
     }
 
     /**
-     * @param name The nTName to set.
+     * @param name
+     *            The nTName to set.
      */
     public void setNTName(String name)
     {
         NTName = name;
     }
 }
-
-

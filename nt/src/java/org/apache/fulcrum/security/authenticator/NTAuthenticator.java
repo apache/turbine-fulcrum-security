@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.authenticator;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -24,12 +25,13 @@ import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.nt.ParseUtils;
 import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
 
 import com.tagish.auth.win32.NTSystem;
+
 /**
- * This class authenticates a user against NT.  Requires some
- * extra libraries.
- *
+ * This class authenticates a user against NT. Requires some extra libraries.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -37,19 +39,20 @@ public class NTAuthenticator extends AbstractLogEnabled implements Authenticator
 {
     /**
      * Authenticate an username with the specified password. If authentication
-     * is successful the method returns true. If it fails, it returns false
-     * If there are any problems, an exception is thrown.
-     *
-     *
-     * @param usernameAndDomain an string in the format [domain]/[username].
-     * @param password the user supplied password.
-     * @exception UnknownEntityException if the user's account does not
-     *            exist in the database.
-     * @exception DataBackendException if there is a problem accessing the
-     *            storage.
+     * is successful the method returns true. If it fails, it returns false If
+     * there are any problems, an exception is thrown.
+     * 
+     * 
+     * @param usernameAndDomain
+     *            an string in the format [domain]/[username].
+     * @param password
+     *            the user supplied password.
+     * @exception UnknownEntityException
+     *                if the user's account does not exist in the database.
+     * @exception DataBackendException
+     *                if there is a problem accessing the storage.
      */
-    public boolean authenticate(User user, String password)
-        throws  DataBackendException
+    public boolean authenticate(User user, String password) throws DataBackendException
     {
         // check NT...
         boolean authenticated = false;

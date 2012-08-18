@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,16 +22,14 @@ import org.apache.avalon.framework.component.Component;
 
 /**
  * Right now is just a marker interface, and provides the Role name.
- *
- *
+ * 
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public interface ModelManager extends Component
 {
-	/** Avalon role - used to id the component within the manager */
-	   String ROLE = ModelManager.class.getName();
-
-
+    /** Avalon role - used to id the component within the manager */
+    String ROLE = ModelManager.class.getName();
 
 }

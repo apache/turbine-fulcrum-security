@@ -29,7 +29,7 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
  * Represents the "turbine" model where permissions are in a many to many
  * relationship to roles, roles are related to groups are related to users, all
  * in many to many relationships.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @version $Id: TurbineGroup.java 223081 2004-10-07 15:11:58Z epugh $
  */
@@ -39,19 +39,20 @@ public abstract class AbstractTurbineSecurityEntityImpl extends SecurityEntityIm
 
     /**
      * Get the User/Group/Role set associated with this entity
-     *
+     * 
      * @return a set of User/Group/Role relations
      */
     @SuppressWarnings("unchecked")
-	public <T extends TurbineUserGroupRole> Set<T> getUserGroupRoleSet()
+    public <T extends TurbineUserGroupRole> Set<T> getUserGroupRoleSet()
     {
-        return (Set<T>)userGroupRoleSet;
+        return (Set<T>) userGroupRoleSet;
     }
 
     /**
      * Get the User/Group/Role set associated with this entity
-     *
-     * @param userGroupRoleSet a set of User/Group/Role relations
+     * 
+     * @param userGroupRoleSet
+     *            a set of User/Group/Role relations
      */
     public <T extends TurbineUserGroupRole> void setUserGroupRoleSet(Set<T> userGroupRoleSet)
     {
@@ -60,8 +61,9 @@ public abstract class AbstractTurbineSecurityEntityImpl extends SecurityEntityIm
 
     /**
      * Add a User/Group/Role relation to this entity
-     *
-     * @param userGroupRole a User/Group/Role relation to add
+     * 
+     * @param userGroupRole
+     *            a User/Group/Role relation to add
      */
     public void addUserGroupRole(TurbineUserGroupRole userGroupRole)
     {
@@ -70,8 +72,9 @@ public abstract class AbstractTurbineSecurityEntityImpl extends SecurityEntityIm
 
     /**
      * Remove a User/Group/Role relation from this entity
-     *
-     * @param userGroupRole a User/Group/Role relation to remove
+     * 
+     * @param userGroupRole
+     *            a User/Group/Role relation to remove
      */
     public void removeUserGroupRole(TurbineUserGroupRole userGroupRole)
     {

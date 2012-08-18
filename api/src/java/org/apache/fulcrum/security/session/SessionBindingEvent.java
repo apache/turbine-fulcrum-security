@@ -22,24 +22,23 @@ package org.apache.fulcrum.security.session;
 /**
  * This interface is modelled after
  * {@link javax.servlet.http.HttpSessionBindingEvent}.
- *
+ * 
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$
  */
 public interface SessionBindingEvent
 {
     /**
-     * Returns the name with which the object is bound to or unbound
-     * from the session.
-     *
+     * Returns the name with which the object is bound to or unbound from the
+     * session.
+     * 
      * @return The name used for binding.
      */
     String getName();
 
     /**
-     * Returns the session to or from which the object is bound or
-     * unbound.
-     *
+     * Returns the session to or from which the object is bound or unbound.
+     * 
      * @return A session object.
      */
     Session getSession();

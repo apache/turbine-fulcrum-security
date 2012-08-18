@@ -19,12 +19,11 @@ package org.apache.fulcrum.security.entity;
  * under the License.
  */
 
-
 /**
- * This class represents the a permissions..  The class implements
- * Comparable so that when Permissions are added to a Set, they will
- * be in alphabetical order by name.
- *
+ * This class represents the a permissions.. The class implements Comparable so
+ * that when Permissions are added to a Set, they will be in alphabetical order
+ * by name.
+ * 
  * @author <a href="mailto:frank.kim@clearink.com">Frank Y. Kim</a>
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>

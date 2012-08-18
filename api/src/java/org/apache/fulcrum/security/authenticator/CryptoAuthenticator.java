@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.authenticator;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -32,17 +33,18 @@ import org.apache.fulcrum.crypto.CryptoService;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+
 /**
- * This class authenticates using the Fulcrum Crypto service a user and
- * their password
- *
+ * This class authenticates using the Fulcrum Crypto service a user and their
+ * password
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  * @avalon.component name="crypto-authenticator"
- * @avalon.service type="org.apache.fulcrum.security.authenticator.Authenticator"
+ * @avalon.service 
+ *                 type="org.apache.fulcrum.security.authenticator.Authenticator"
  */
-public class CryptoAuthenticator extends AbstractLogEnabled
-    implements Authenticator, Serviceable, Disposable, Configurable
+public class CryptoAuthenticator extends AbstractLogEnabled implements Authenticator, Serviceable, Disposable, Configurable
 {
     boolean composed = false;
     protected CryptoService cryptoService = null;
@@ -50,18 +52,20 @@ public class CryptoAuthenticator extends AbstractLogEnabled
     private String cipher;
 
     /**
-     * Authenticate a user with the specified password. If authentication
-     * is successful the method returns true. If it fails, it returns false
-     * If there are any problems, an exception is thrown.
-     *
-     * @param user a User object.
-     * @param password the user supplied password.
-     * @exception UnknownEntityException if the user's account does not
-     *            exist in the database.
-     * @exception DataBackendException if there is a problem accessing the
-     *            storage.
+     * Authenticate a user with the specified password. If authentication is
+     * successful the method returns true. If it fails, it returns false If
+     * there are any problems, an exception is thrown.
+     * 
+     * @param user
+     *            a User object.
+     * @param password
+     *            the user supplied password.
+     * @exception UnknownEntityException
+     *                if the user's account does not exist in the database.
+     * @exception DataBackendException
+     *                if there is a problem accessing the storage.
      */
-    public boolean authenticate(User user, String password) throws  DataBackendException
+    public boolean authenticate(User user, String password) throws DataBackendException
     {
         try
         {
@@ -80,14 +84,14 @@ public class CryptoAuthenticator extends AbstractLogEnabled
         }
     }
 
-	// ---------------- Avalon Lifecycle Methods ---------------------
+    // ---------------- Avalon Lifecycle Methods ---------------------
     /**
- 	 * Avalon component lifecycle method
-	 */
+     * Avalon component lifecycle method
+     */
     public void configure(Configuration conf) throws ConfigurationException
     {
-    	algorithm = conf.getChild("algorithm").getValue();
-    	cipher = conf.getChild("cipher").getValue();
+        algorithm = conf.getChild("algorithm").getValue();
+        cipher = conf.getChild("cipher").getValue();
     }
 
     /**
@@ -95,7 +99,7 @@ public class CryptoAuthenticator extends AbstractLogEnabled
      */
     public void service(ServiceManager manager) throws ServiceException
     {
-        this.cryptoService = (CryptoService)manager.lookup(CryptoService.ROLE);
+        this.cryptoService = (CryptoService) manager.lookup(CryptoService.ROLE);
     }
 
     /**

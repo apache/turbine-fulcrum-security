@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.memory.dynamic;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -31,25 +32,26 @@ import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
- * This implementation keeps all objects in memory. This is mostly meant to help with testing and
- * prototyping of ideas.
- *
+ * This implementation keeps all objects in memory. This is mostly meant to help
+ * with testing and prototyping of ideas.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class MemoryModelManagerImpl
-    extends AbstractDynamicModelManager
-    implements DynamicModelManager
+public class MemoryModelManagerImpl extends AbstractDynamicModelManager implements DynamicModelManager
 {
     /**
-	 * Puts a user in a group.
-	 *
-	 * This method is used when adding a user to a group
-	 *
-	 * @param user the User.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the account is not present.
-	 */
+     * Puts a user in a group.
+     * 
+     * This method is used when adding a user to a group
+     * 
+     * @param user
+     *            the User.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the account is not present.
+     */
     public void grant(User user, Group group) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
@@ -79,15 +81,19 @@ public class MemoryModelManagerImpl
             throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
         }
     }
+
     /**
-	 * Removes a user in a group.
-	 *
-	 * This method is used when removing a user to a group
-	 *
-	 * @param user the User.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the user or group is not present.
-	 */
+     * Removes a user in a group.
+     * 
+     * This method is used when removing a user to a group
+     * 
+     * @param user
+     *            the User.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the user or group is not present.
+     */
     public void revoke(User user, Group group) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
@@ -119,15 +125,18 @@ public class MemoryModelManagerImpl
     }
 
     /**
-	 * Grants a Group a Role
-	 *
-	 * @param group the Group.
-	 * @param role the Role.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if group or role is not present.
-	 */
-    public synchronized void grant(Group group, Role role)
-        throws DataBackendException, UnknownEntityException
+     * Grants a Group a Role
+     * 
+     * @param group
+     *            the Group.
+     * @param role
+     *            the Role.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if group or role is not present.
+     */
+    public synchronized void grant(Group group, Role role) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
         boolean roleExists = false;
@@ -155,16 +164,20 @@ public class MemoryModelManagerImpl
             throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
         }
     }
+
     /**
-	 * Revokes a Role from a Group.
-	 *
-	 * @param group the Group.
-	 * @param role the Role.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if group or role is not present.
-	 */
-    public synchronized void revoke(Group group, Role role)
-        throws DataBackendException, UnknownEntityException
+     * Revokes a Role from a Group.
+     * 
+     * @param group
+     *            the Group.
+     * @param role
+     *            the Role.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if group or role is not present.
+     */
+    public synchronized void revoke(Group group, Role role) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
         boolean roleExists = false;
@@ -193,16 +206,20 @@ public class MemoryModelManagerImpl
             throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
         }
     }
+
     /**
-	 * Grants a Role a Permission
-	 *
-	 * @param role the Role.
-	 * @param permission the Permission.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if role or permission is not present.
-	 */
-    public synchronized void grant(Role role, Permission permission)
-        throws DataBackendException, UnknownEntityException
+     * Grants a Role a Permission
+     * 
+     * @param role
+     *            the Role.
+     * @param permission
+     *            the Permission.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if role or permission is not present.
+     */
+    public synchronized void grant(Role role, Permission permission) throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
         boolean permissionExists = false;
@@ -213,7 +230,7 @@ public class MemoryModelManagerImpl
             if (roleExists && permissionExists)
             {
                 ((DynamicRole) role).addPermission(permission);
-                ((DynamicPermission)permission).addRole(role);
+                ((DynamicPermission) permission).addRole(role);
                 return;
             }
         }
@@ -231,16 +248,20 @@ public class MemoryModelManagerImpl
             throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
         }
     }
+
     /**
-	 * Revokes a Permission from a Role.
-	 *
-	 * @param role the Role.
-	 * @param permission the Permission.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if role or permission is not present.
-	 */
-    public synchronized void revoke(Role role, Permission permission)
-        throws DataBackendException, UnknownEntityException
+     * Revokes a Permission from a Role.
+     * 
+     * @param role
+     *            the Role.
+     * @param permission
+     *            the Permission.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if role or permission is not present.
+     */
+    public synchronized void revoke(Role role, Permission permission) throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
         boolean permissionExists = false;

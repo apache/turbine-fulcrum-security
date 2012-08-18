@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.hibernate.basic;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -31,23 +32,27 @@ import org.hibernate.Transaction;
 
 /**
  * This implementation persists to a database via Hibernate.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id$
+ * @version $Id: HibernateModelManagerImpl.java 1374014 2012-08-16 19:47:27Z tv
+ *          $
  */
 public class HibernateModelManagerImpl extends AbstractManager implements BasicModelManager
 {
     private PersistenceHelper persistenceHelper;
 
     /**
-	 * Puts a user in a group.
-	 *
-	 * This method is used when adding a user to a group
-	 *
-	 * @param user the User.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the account is not present.
-	 */
+     * Puts a user in a group.
+     * 
+     * This method is used when adding a user to a group
+     * 
+     * @param user
+     *            the User.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the account is not present.
+     */
     public synchronized void grant(User user, Group group) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
@@ -62,8 +67,8 @@ public class HibernateModelManagerImpl extends AbstractManager implements BasicM
             {
                 Session session = getPersistenceHelper().retrieveSession();
                 transaction = session.beginTransaction();
-				((BasicUser) user).addGroup(group);
-				((BasicGroup) group).addUser(user);
+                ((BasicUser) user).addGroup(group);
+                ((BasicGroup) group).addUser(user);
                 session.update(user);
                 session.update(group);
                 transaction.commit();
@@ -90,15 +95,19 @@ public class HibernateModelManagerImpl extends AbstractManager implements BasicM
             throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
         }
     }
+
     /**
-	 * Removes a user in a group.
-	 *
-	 * This method is used when removing a user to a group
-	 *
-	 * @param user the User.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the user or group is not present.
-	 */
+     * Removes a user in a group.
+     * 
+     * This method is used when removing a user to a group
+     * 
+     * @param user
+     *            the User.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the user or group is not present.
+     */
     public synchronized void revoke(User user, Group group) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
@@ -111,10 +120,10 @@ public class HibernateModelManagerImpl extends AbstractManager implements BasicM
             userExists = getUserManager().checkExists(user);
             if (groupExists && userExists)
             {
-				Session session = getPersistenceHelper().retrieveSession();
+                Session session = getPersistenceHelper().retrieveSession();
                 transaction = session.beginTransaction();
-				((BasicUser) user).removeGroup(group);
-				((BasicGroup) group).removeUser(user);
+                ((BasicUser) user).removeGroup(group);
+                ((BasicGroup) group).removeUser(user);
                 session.update(user);
                 session.update(group);
                 transaction.commit();
@@ -143,16 +152,18 @@ public class HibernateModelManagerImpl extends AbstractManager implements BasicM
     }
 
     /**
-	 * Revokes all groups from a user
-	 *
-	 * This method is used when deleting an account.
-	 *
-	 * @param user the User.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the account is not present.
-	 */
-    public synchronized void revokeAll(User user)
-        throws DataBackendException, UnknownEntityException
+     * Revokes all groups from a user
+     * 
+     * This method is used when deleting an account.
+     * 
+     * @param user
+     *            the User.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the account is not present.
+     */
+    public synchronized void revokeAll(User user) throws DataBackendException, UnknownEntityException
     {
         boolean userExists = false;
         userExists = getUserManager().checkExists(user);
@@ -160,9 +171,9 @@ public class HibernateModelManagerImpl extends AbstractManager implements BasicM
         {
             Object groups[] = ((BasicUser) user).getGroups().toArray();
 
-            for (int i = 0; i < groups.length; i++)
+            for (Object group2 : groups)
             {
-                Group group = (Group) groups[i];
+                Group group = (Group) group2;
                 revoke(user, group);
             }
 
@@ -174,16 +185,16 @@ public class HibernateModelManagerImpl extends AbstractManager implements BasicM
         }
     }
 
-	/**
-	 * @return Returns the persistenceHelper.
-	 */
-	public PersistenceHelper getPersistenceHelper()
-	{
-		if (persistenceHelper == null)
-		{
-			persistenceHelper = (PersistenceHelper)resolve(PersistenceHelper.ROLE);
-		}
-		return persistenceHelper;
-	}
+    /**
+     * @return Returns the persistenceHelper.
+     */
+    public PersistenceHelper getPersistenceHelper()
+    {
+        if (persistenceHelper == null)
+        {
+            persistenceHelper = (PersistenceHelper) resolve(PersistenceHelper.ROLE);
+        }
+        return persistenceHelper;
+    }
 
 }

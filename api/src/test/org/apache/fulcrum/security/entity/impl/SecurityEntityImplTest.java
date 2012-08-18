@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.entity.impl;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,9 +21,10 @@ package org.apache.fulcrum.security.entity.impl;
 import junit.framework.TestCase;
 
 import org.apache.fulcrum.security.entity.SecurityEntity;
+
 /**
  * Test the SecurityEntityImple
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -31,6 +33,7 @@ public class SecurityEntityImplTest extends TestCase
 
     /**
      * Constructor for SecurityEntityImplTest.
+     * 
      * @param arg0
      */
     public SecurityEntityImplTest(String arg0)
@@ -40,23 +43,24 @@ public class SecurityEntityImplTest extends TestCase
 
     /**
      * Make sure lowercasing logic works properly.
+     * 
      * @throws Exception
      */
     public void testSettingGettingName() throws Exception
     {
         SecurityEntity se = new SecurityEntityImpl();
         se.setName("hello");
-        assertEquals("hello",se.getName());
+        assertEquals("hello", se.getName());
         se.setName("HelLo");
-		assertEquals("hello",se.getName());
-		try
-		{
-		    se.setName(null);
-		    fail("Should throw an InvalidParameterException");
-		}
-		catch(IllegalArgumentException ipe)
-		{
-		    //good
-		}
+        assertEquals("hello", se.getName());
+        try
+        {
+            se.setName(null);
+            fail("Should throw an InvalidParameterException");
+        }
+        catch (IllegalArgumentException ipe)
+        {
+            // good
+        }
     }
 }

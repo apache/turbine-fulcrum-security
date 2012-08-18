@@ -20,9 +20,9 @@ package org.apache.fulcrum.security.session;
  */
 
 /**
- * This interface provides access to the {@link
- * javax.servlet.HttpSession} interface.
- *
+ * This interface provides access to the {@link javax.servlet.HttpSession}
+ * interface.
+ * 
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$
  */

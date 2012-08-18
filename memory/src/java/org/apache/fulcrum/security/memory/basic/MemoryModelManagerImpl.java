@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.memory.basic;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -28,25 +29,26 @@ import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
- * This implementation keeps all objects in memory. This is mostly meant to help with testing and
- * prototyping of ideas.
- *
+ * This implementation keeps all objects in memory. This is mostly meant to help
+ * with testing and prototyping of ideas.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class MemoryModelManagerImpl
-    extends AbstractManager
-    implements BasicModelManager
+public class MemoryModelManagerImpl extends AbstractManager implements BasicModelManager
 {
     /**
-	 * Puts a user in a group.
-	 *
-	 * This method is used when adding a user to a group
-	 *
-	 * @param user the User.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the account is not present.
-	 */
+     * Puts a user in a group.
+     * 
+     * This method is used when adding a user to a group
+     * 
+     * @param user
+     *            the User.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the account is not present.
+     */
     public void grant(User user, Group group) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
@@ -76,15 +78,19 @@ public class MemoryModelManagerImpl
             throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
         }
     }
+
     /**
-	 * Removes a user in a group.
-	 *
-	 * This method is used when removing a user to a group
-	 *
-	 * @param user the User.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the user or group is not present.
-	 */
+     * Removes a user in a group.
+     * 
+     * This method is used when removing a user to a group
+     * 
+     * @param user
+     *            the User.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the user or group is not present.
+     */
     public void revoke(User user, Group group) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
@@ -114,17 +120,20 @@ public class MemoryModelManagerImpl
             throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
         }
     }
+
     /**
-	 * Revokes all groups from a user
-	 *
-	 * This method is used when deleting an account.
-	 *
-	 * @param user the User.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the account is not present.
-	 */
-    public synchronized void revokeAll(User user)
-        throws DataBackendException, UnknownEntityException
+     * Revokes all groups from a user
+     * 
+     * This method is used when deleting an account.
+     * 
+     * @param user
+     *            the User.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the account is not present.
+     */
+    public synchronized void revokeAll(User user) throws DataBackendException, UnknownEntityException
     {
         boolean userExists = false;
         try
@@ -134,7 +143,7 @@ public class MemoryModelManagerImpl
             {
                 for (Group group : ((BasicUser) user).getGroups())
                 {
-                    ((BasicGroup)group).removeUser(user);
+                    ((BasicGroup) group).removeUser(user);
                 }
                 ((BasicUser) user).setGroups(new GroupSet());
                 return;

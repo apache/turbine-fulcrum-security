@@ -35,7 +35,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
  * This implementation keeps all objects in memory. This is mostly meant to help
  * with testing and prototyping of ideas.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @version $Id: MemoryTurbineModelManagerImpl.java,v 1.2 2004/07/07 16:51:27
  *          epugh Exp $
@@ -44,7 +44,7 @@ public class MemoryTurbineModelManagerImpl extends AbstractTurbineModelManager i
 {
     /**
      * Grants a Role a Permission
-     *
+     * 
      * @param role
      *            the Role.
      * @param permission
@@ -54,33 +54,39 @@ public class MemoryTurbineModelManagerImpl extends AbstractTurbineModelManager i
      * @throws UnknownEntityException
      *             if role or permission is not present.
      */
-    public synchronized void grant(Role role, Permission permission) throws DataBackendException,
-            UnknownEntityException {
+    public synchronized void grant(Role role, Permission permission) throws DataBackendException, UnknownEntityException
+    {
         boolean roleExists = false;
         boolean permissionExists = false;
-        try {
+        try
+        {
             roleExists = getRoleManager().checkExists(role);
             permissionExists = getPermissionManager().checkExists(permission);
-            if (roleExists && permissionExists) {
+            if (roleExists && permissionExists)
+            {
                 ((TurbineRole) role).addPermission(permission);
                 ((TurbinePermission) permission).addRole(role);
                 return;
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             throw new DataBackendException("grant(Role,Permission) failed", e);
         }
 
-        if (!roleExists) {
+        if (!roleExists)
+        {
             throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
         }
-        if (!permissionExists) {
+        if (!permissionExists)
+        {
             throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
         }
     }
 
     /**
      * Revokes a Permission from a Role.
-     *
+     * 
      * @param role
      *            the Role.
      * @param permission
@@ -90,39 +96,48 @@ public class MemoryTurbineModelManagerImpl extends AbstractTurbineModelManager i
      * @throws UnknownEntityException
      *             if role or permission is not present.
      */
-    public synchronized void revoke(Role role, Permission permission) throws DataBackendException,
-            UnknownEntityException {
+    public synchronized void revoke(Role role, Permission permission) throws DataBackendException, UnknownEntityException
+    {
         boolean roleExists = false;
         boolean permissionExists = false;
-        try {
+        try
+        {
             roleExists = getRoleManager().checkExists(role);
             permissionExists = getPermissionManager().checkExists(permission);
-            if (roleExists && permissionExists) {
+            if (roleExists && permissionExists)
+            {
                 ((TurbineRole) role).removePermission(permission);
                 ((TurbinePermission) permission).removeRole(role);
                 return;
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             throw new DataBackendException("revoke(Role,Permission) failed", e);
         }
 
-        if (!roleExists) {
+        if (!roleExists)
+        {
             throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
         }
-        if (!permissionExists) {
+        if (!permissionExists)
+        {
             throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
         }
     }
 
-    public void grant(User user, Group group, Role role) throws DataBackendException, UnknownEntityException {
+    public void grant(User user, Group group, Role role) throws DataBackendException, UnknownEntityException
+    {
         boolean roleExists = false;
         boolean userExists = false;
         boolean groupExists = false;
-        try {
+        try
+        {
             roleExists = getRoleManager().checkExists(role);
             userExists = getUserManager().checkExists(user);
             groupExists = getGroupManager().checkExists(group);
-            if (roleExists && groupExists && userExists) {
+            if (roleExists && groupExists && userExists)
+            {
                 TurbineUserGroupRole ugr = new TurbineUserGroupRole();
                 ugr.setGroup(group);
                 ugr.setRole(role);
@@ -132,38 +147,45 @@ public class MemoryTurbineModelManagerImpl extends AbstractTurbineModelManager i
                 ((TurbineRole) role).addUserGroupRole(ugr);
                 return;
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             throw new DataBackendException("grant(Role,Permission) failed", e);
         }
 
-        if (!roleExists) {
+        if (!roleExists)
+        {
             throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
         }
-        if (!groupExists) {
+        if (!groupExists)
+        {
             throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
         }
-        if (!userExists) {
+        if (!userExists)
+        {
             throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
         }
 
     }
 
-    public void revoke(User user, Group group, Role role) throws DataBackendException, UnknownEntityException {
+    public void revoke(User user, Group group, Role role) throws DataBackendException, UnknownEntityException
+    {
         boolean roleExists = false;
         boolean userExists = false;
         boolean groupExists = false;
-        try {
+        try
+        {
             roleExists = getRoleManager().checkExists(role);
             userExists = getUserManager().checkExists(user);
             groupExists = getGroupManager().checkExists(group);
             if (roleExists && groupExists && userExists)
             {
                 boolean ugrFound = false;
-                for(TurbineUserGroupRole ugr : ((TurbineUser) user).getUserGroupRoleSet())
+                for (TurbineUserGroupRole ugr : ((TurbineUser) user).getUserGroupRoleSet())
                 {
-                    if(ugr.getUser().equals(user)&& ugr.getGroup().equals(group) && ugr.getRole().equals(role))
+                    if (ugr.getUser().equals(user) && ugr.getGroup().equals(group) && ugr.getRole().equals(role))
                     {
-                        ugrFound=true;
+                        ugrFound = true;
 
                         ((TurbineUser) user).removeUserGroupRole(ugr);
                         ((TurbineGroup) group).removeUserGroupRole(ugr);
@@ -172,26 +194,31 @@ public class MemoryTurbineModelManagerImpl extends AbstractTurbineModelManager i
                         break;
                     }
                 }
-                if(!ugrFound){
+                if (!ugrFound)
+                {
                     throw new UnknownEntityException("Could not find User/Group/Role");
                 }
 
                 return;
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             throw new DataBackendException("grant(Role,Permission) failed", e);
         }
 
-        if (!roleExists) {
+        if (!roleExists)
+        {
             throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
         }
-        if (!groupExists) {
+        if (!groupExists)
+        {
             throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
         }
-        if (!userExists) {
+        if (!userExists)
+        {
             throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
         }
 
     }
 }
-

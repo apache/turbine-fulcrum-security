@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.nt;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -22,7 +23,7 @@ import javax.security.auth.login.LoginException;
 
 /**
  * Utility class for parsing username and domain out of a single string.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */

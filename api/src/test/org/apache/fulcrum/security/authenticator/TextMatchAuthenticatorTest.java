@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.authenticator;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -23,21 +24,21 @@ import junit.framework.TestCase;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
 
-
 /**
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id$
+ * @version $Id: TextMatchAuthenticatorTest.java 535465 2007-05-05 06:58:06Z tv
+ *          $
  */
 public class TextMatchAuthenticatorTest extends TestCase
 {
     public void testAuthenticate() throws Exception
     {
-    	User user = new DynamicUserImpl();
-    	user.setName("Bob");
-    	user.setPassword("myPassword");
-    	Authenticator authenticator = new TextMatchAuthenticator();
-		assertTrue(authenticator.authenticate(user,"myPassword"));
-		assertFalse(authenticator.authenticate(user,"mypassword"));
+        User user = new DynamicUserImpl();
+        user.setName("Bob");
+        user.setPassword("myPassword");
+        Authenticator authenticator = new TextMatchAuthenticator();
+        assertTrue(authenticator.authenticate(user, "myPassword"));
+        assertFalse(authenticator.authenticate(user, "mypassword"));
     }
 }

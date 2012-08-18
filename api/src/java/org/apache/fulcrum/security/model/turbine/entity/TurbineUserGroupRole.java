@@ -30,12 +30,11 @@ import org.apache.fulcrum.security.entity.User;
  * Represents the "turbine" model where permissions are in a many to many
  * relationship to roles, roles are related to groups are related to users, all
  * in many to many relationships.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @version $Id$
  */
-public class TurbineUserGroupRole
-    implements Serializable
+public class TurbineUserGroupRole implements Serializable
 {
     /**
      * Serial number
@@ -50,7 +49,7 @@ public class TurbineUserGroupRole
 
     /**
      * Get the group
-     *
+     * 
      * @return Returns the group.
      */
     public Group getGroup()
@@ -60,7 +59,7 @@ public class TurbineUserGroupRole
 
     /**
      * Get the role
-     *
+     * 
      * @return Returns the role.
      */
     public Role getRole()
@@ -70,7 +69,7 @@ public class TurbineUserGroupRole
 
     /**
      * Get the user
-     *
+     * 
      * @return Returns the user.
      */
     public User getUser()
@@ -80,7 +79,7 @@ public class TurbineUserGroupRole
 
     /**
      * Set the group
-     *
+     * 
      * @param group
      *            The group to set.
      */
@@ -91,7 +90,7 @@ public class TurbineUserGroupRole
 
     /**
      * Set the role
-     *
+     * 
      * @param role
      *            The role to set.
      */
@@ -102,7 +101,7 @@ public class TurbineUserGroupRole
 
     /**
      * Set the user
-     *
+     * 
      * @param user
      *            The user to set.
      */
@@ -111,6 +110,7 @@ public class TurbineUserGroupRole
         this.user = user;
     }
 
+    @Override
     public boolean equals(Object obj)
     {
         if (null == obj)
@@ -161,6 +161,7 @@ public class TurbineUserGroupRole
         }
     }
 
+    @Override
     public int hashCode()
     {
         HashCodeBuilder hcBuilder = new HashCodeBuilder(39, 17);
@@ -186,6 +187,7 @@ public class TurbineUserGroupRole
         return hcBuilder.toHashCode();
     }
 
+    @Override
     public String toString()
     {
         StringBuffer sb = new StringBuffer();

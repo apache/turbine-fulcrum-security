@@ -29,14 +29,15 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.fulcrum.security.entity.SecurityEntity;
+
 /**
- * This class represents a set of Security Entities. It makes it easy to build
- * a UI. It wraps a TreeSet object to enforce that only relevant methods are
+ * This class represents a set of Security Entities. It makes it easy to build a
+ * UI. It wraps a TreeSet object to enforce that only relevant methods are
  * available. TreeSet's contain only unique Objects (no duplicates) based on the
- * ID.  They may or may not have a name, that depends on the implementation.
- * Want to get away frm requiring an ID and a name... Nothing should force
- * Name to be unique in the basic architecture of Fulcrum Security.
- *
+ * ID. They may or may not have a name, that depends on the implementation. Want
+ * to get away frm requiring an ID and a name... Nothing should force Name to be
+ * unique in the basic architecture of Fulcrum Security.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
@@ -44,20 +45,19 @@ import org.apache.fulcrum.security.entity.SecurityEntity;
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
-public abstract class SecuritySet<T extends SecurityEntity>
-	implements Serializable, Set<T>, Iterable<T>
+public abstract class SecuritySet<T extends SecurityEntity> implements Serializable, Set<T>, Iterable<T>
 {
     /** Serial version */
-	private static final long serialVersionUID = 2251987059226422569L;
+    private static final long serialVersionUID = 2251987059226422569L;
 
-	/** Map for "name" -> "security object" */
+    /** Map for "name" -> "security object" */
     protected Map<String, T> nameMap = null;
     /** Map for "id" -> "security object" */
     protected Map<Object, T> idMap = null;
 
     /**
-	 * Constructs an empty Set
-	 */
+     * Constructs an empty Set
+     */
     public SecuritySet()
     {
         nameMap = new TreeMap<String, T>();
@@ -65,39 +65,39 @@ public abstract class SecuritySet<T extends SecurityEntity>
     }
 
     /**
-	 * Returns a set of security objects in this object.
-	 *
-	 * @return A Set Object
-	 *
-	 */
+     * Returns a set of security objects in this object.
+     * 
+     * @return A Set Object
+     * 
+     */
     public Set<T> getSet()
     {
         return new HashSet<T>(idMap.values());
     }
 
     /**
-	 * Returns a set of Names in this Object.
-	 *
-	 * @return The Set of Names in this Object, backed by the actual data.
-	 */
+     * Returns a set of Names in this Object.
+     * 
+     * @return The Set of Names in this Object, backed by the actual data.
+     */
     public Set<String> getNames()
     {
         return nameMap.keySet();
     }
 
     /**
-	 * Returns a set of Id values in this Object.
-	 *
-	 * @return The Set of Ids in this Object, backed by the actual data.
-	 */
+     * Returns a set of Id values in this Object.
+     * 
+     * @return The Set of Ids in this Object, backed by the actual data.
+     */
     public Set<Object> getIds()
     {
         return idMap.keySet();
     }
 
     /**
-	 * Removes all Objects from this Set.
-	 */
+     * Removes all Objects from this Set.
+     */
     public void clear()
     {
         nameMap.clear();
@@ -105,61 +105,62 @@ public abstract class SecuritySet<T extends SecurityEntity>
     }
 
     /**
-	 * Searches if an Object with a given name is in the Set
-	 *
-	 * @param roleName Name of the Security Object.
-	 * @return True if argument matched an Object in this Set; false if no
-	 *         match.
-	 */
+     * Searches if an Object with a given name is in the Set
+     * 
+     * @param roleName
+     *            Name of the Security Object.
+     * @return True if argument matched an Object in this Set; false if no
+     *         match.
+     */
     public boolean containsName(String name)
     {
-		return (StringUtils.isNotEmpty(name))
-		    ? nameMap.containsKey(name.toLowerCase())
-		    : false;
+        return (StringUtils.isNotEmpty(name)) ? nameMap.containsKey(name.toLowerCase()) : false;
     }
 
     /**
-	 * Searches if an Object with a given Id is in the Set
-	 *
-	 * @param id Id of the Security Object.
-	 * @return True if argument matched an Object in this Set; false if no
-	 *         match.
-	 */
+     * Searches if an Object with a given Id is in the Set
+     * 
+     * @param id
+     *            Id of the Security Object.
+     * @return True if argument matched an Object in this Set; false if no
+     *         match.
+     */
     public boolean containsId(Object id)
     {
         return (id == null) ? false : idMap.containsKey(id);
     }
 
     /**
-	 * Returns an Iterator for Objects in this Set.
-	 *
-	 * @return An iterator for the Set
-	 */
+     * Returns an Iterator for Objects in this Set.
+     * 
+     * @return An iterator for the Set
+     */
     public Iterator<T> iterator()
     {
         return idMap.values().iterator();
     }
 
     /**
-	 * Returns size (cardinality) of this set.
-	 *
-	 * @return The cardinality of this Set.
-	 */
+     * Returns size (cardinality) of this set.
+     * 
+     * @return The cardinality of this Set.
+     */
     public int size()
     {
         return idMap.size();
     }
 
     /**
-	 * list of role names in this set
-	 *
-	 * @return The string representation of this Set.
-	 */
+     * list of role names in this set
+     * 
+     * @return The string representation of this Set.
+     */
+    @Override
     public String toString()
     {
         StringBuffer sbuf = new StringBuffer(12 * size());
 
-        for(Iterator<T> it = iterator(); it.hasNext();)
+        for (Iterator<T> it = iterator(); it.hasNext();)
         {
             T se = it.next();
             sbuf.append('[');
@@ -189,37 +190,38 @@ public abstract class SecuritySet<T extends SecurityEntity>
 
         if (o.getId() != null)
         {
-        	idMap.put(o.getId(), o);
+            idMap.put(o.getId(), o);
         }
         if (o.getName() != null)
         {
-        	nameMap.put(o.getName(), o);
+            nameMap.put(o.getName(), o);
         }
 
-    	return true;
+        return true;
     }
 
     /**
      * Adds the entities in a Collection to this SecuritySet.
-     *
-     * @param collection A Collection of entities.
-     * @return True if this Set changed as a result; false
-     * if no change to this Set occurred (this Set
-     * already contained all members of the added Set).
+     * 
+     * @param collection
+     *            A Collection of entities.
+     * @return True if this Set changed as a result; false if no change to this
+     *         Set occurred (this Set already contained all members of the added
+     *         Set).
      */
     public boolean add(Collection<? extends T> collection)
     {
-    	return addAll(collection);
+        return addAll(collection);
     }
 
     public boolean addAll(Collection<? extends T> collection)
     {
-    	boolean res = false;
+        boolean res = false;
 
-    	for (T o : collection)
-    	{
-    		res |= add(o);
-    	}
+        for (T o : collection)
+        {
+            res |= add(o);
+        }
 
         return res;
     }
@@ -231,9 +233,8 @@ public abstract class SecuritySet<T extends SecurityEntity>
 
     public boolean containsAll(Collection<?> collection)
     {
-        for (Iterator<?> i = collection.iterator(); i.hasNext();)
+        for (Object object : collection)
         {
-            Object object = i.next();
             if (!contains(object))
             {
                 return false;
@@ -245,9 +246,8 @@ public abstract class SecuritySet<T extends SecurityEntity>
     public boolean removeAll(Collection<?> collection)
     {
         boolean changed = false;
-        for (Iterator<?> i = collection.iterator(); i.hasNext();)
+        for (Object object : collection)
         {
-            Object object = i.next();
             boolean result = remove(object);
             if (result)
             {
@@ -265,7 +265,7 @@ public abstract class SecuritySet<T extends SecurityEntity>
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see java.util.Collection#toArray()
      */
     public Object[] toArray()
@@ -275,10 +275,10 @@ public abstract class SecuritySet<T extends SecurityEntity>
 
     /**
      * Checks whether this SecuritySet contains an entity.
-     *
-     * @param o An entity.
-     * @return True if this Set contains the entity,
-     * false otherwise.
+     * 
+     * @param o
+     *            An entity.
+     * @return True if this Set contains the entity, false otherwise.
      */
     public boolean contains(Object o)
     {
@@ -288,61 +288,65 @@ public abstract class SecuritySet<T extends SecurityEntity>
         }
         else
         {
-            return containsName(((SecurityEntity)o).getName());
+            return containsName(((SecurityEntity) o).getName());
         }
     }
 
     /**
      * Removes an entity from this SecuritySet.
-     *
-     * @param o An entity.
-     * @return True if this Set contained the entity
-     * before it was removed.
+     * 
+     * @param o
+     *            An entity.
+     * @return True if this Set contained the entity before it was removed.
      */
     public boolean remove(Object o)
     {
-    	if (o instanceof SecurityEntity)
-    	{
-			boolean res = contains(o);
-			idMap.remove(((SecurityEntity)o).getId());
-			nameMap.remove(((SecurityEntity)o).getName());
-			return res;
-    	}
+        if (o instanceof SecurityEntity)
+        {
+            boolean res = contains(o);
+            idMap.remove(((SecurityEntity) o).getId());
+            nameMap.remove(((SecurityEntity) o).getName());
+            return res;
+        }
 
-    	return false;
+        return false;
     }
 
-    /* (non-Javadoc)
-	 * @see java.util.Set#toArray(T[])
-	 */
-	public <A> A[] toArray(A[] a)
-	{
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.util.Set#toArray(T[])
+     */
+    public <A> A[] toArray(A[] a)
+    {
         return getSet().toArray(a);
     }
 
     /**
-     * Returns an entity with the given name, if it is contained in
-     * this SecuritySet.
-     *
-     * @param name Name of entity.
-     * @return entity if argument matched an entity in this
-     * Set; null if no match.
+     * Returns an entity with the given name, if it is contained in this
+     * SecuritySet.
+     * 
+     * @param name
+     *            Name of entity.
+     * @return entity if argument matched an entity in this Set; null if no
+     *         match.
      */
     public T getByName(String name)
     {
-    	return nameMap.get(name);
+        return nameMap.get(name);
     }
 
     /**
-     * Returns an entity with the given id, if it is contained in
-     * this SecuritySet.
-     *
-     * @param id ID of entity.
-     * @return entity if argument matched an entity in this
-     * Set; null if no match.
+     * Returns an entity with the given id, if it is contained in this
+     * SecuritySet.
+     * 
+     * @param id
+     *            ID of entity.
+     * @return entity if argument matched an entity in this Set; null if no
+     *         match.
      */
     public T getById(Object id)
     {
-    	return idMap.get(id);
+        return idMap.get(id);
     }
 }

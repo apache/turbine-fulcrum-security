@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.spi;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -25,27 +26,26 @@ import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
- * This implementation keeps all objects in memory.  This is mostly meant to help
+ * This implementation keeps all objects in memory. This is mostly meant to help
  * with testing and prototyping of ideas.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public abstract class AbstractGroupManager
-    extends AbstractEntityManager
-    implements GroupManager
+public abstract class AbstractGroupManager extends AbstractEntityManager implements GroupManager
 {
     protected abstract Group persistNewGroup(Group group) throws DataBackendException;
 
     /**
-    * Construct a blank Group object.
-    *
-    * This method calls getGroupClass, and then creates a new object using
-    * the default constructor.
-    *
-    * @return an object implementing Group interface.
-    * @throws DataBackendException if the object could not be instantiated.
-    */
+     * Construct a blank Group object.
+     * 
+     * This method calls getGroupClass, and then creates a new object using the
+     * default constructor.
+     * 
+     * @return an object implementing Group interface.
+     * @throws DataBackendException
+     *             if the object could not be instantiated.
+     */
     public Group getGroupInstance() throws DataBackendException
     {
         Group group;
@@ -55,26 +55,26 @@ public abstract class AbstractGroupManager
         }
         catch (Exception e)
         {
-            throw new DataBackendException(
-                "Problem creating instance of class " + getClassName(),
-                e);
+            throw new DataBackendException("Problem creating instance of class " + getClassName(), e);
         }
 
         return group;
     }
 
     /**
-	* Construct a blank Group object.
-	*
-	* This method calls getGroupClass, and then creates a new object using
-	* the default constructor.
-	*
-	* @param groupName The name of the Group
-	*
-	* @return an object implementing Group interface.
-	*
-	* @throws DataBackendException if the object could not be instantiated.
-	*/
+     * Construct a blank Group object.
+     * 
+     * This method calls getGroupClass, and then creates a new object using the
+     * default constructor.
+     * 
+     * @param groupName
+     *            The name of the Group
+     * 
+     * @return an object implementing Group interface.
+     * 
+     * @throws DataBackendException
+     *             if the object could not be instantiated.
+     */
     public Group getGroupInstance(String groupName) throws DataBackendException
     {
         Group group = getGroupInstance();
@@ -84,15 +84,16 @@ public abstract class AbstractGroupManager
 
     /**
      * Retrieve a Group object with specified name.
-     *
-     * @param name the name of the Group.
+     * 
+     * @param name
+     *            the name of the Group.
      * @return an object representing the Group with specified name.
-     * @throws DataBackendException if there was an error accessing the
-     *         data backend.
-     * @throws UnknownEntityException if the group does not exist.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the group does not exist.
      */
-    public Group getGroupByName(String name)
-        throws DataBackendException, UnknownEntityException
+    public Group getGroupByName(String name) throws DataBackendException, UnknownEntityException
     {
         Group group = getAllGroups().getByName(name);
         if (group == null)
@@ -104,18 +105,18 @@ public abstract class AbstractGroupManager
 
     /**
      * Retrieve a Group object with specified Id.
-     *
-     * @param name the name of the Group.
-     *
+     * 
+     * @param name
+     *            the name of the Group.
+     * 
      * @return an object representing the Group with specified name.
-     *
-     * @throws UnknownEntityException if the permission does not
-     *            exist in the database.
-     * @throws DataBackendException if there is a problem accessing the
-     *            storage.
+     * 
+     * @throws UnknownEntityException
+     *             if the permission does not exist in the database.
+     * @throws DataBackendException
+     *             if there is a problem accessing the storage.
      */
-    public Group getGroupById(Object id)
-        throws DataBackendException, UnknownEntityException
+    public Group getGroupById(Object id) throws DataBackendException, UnknownEntityException
     {
         Group group = getAllGroups().getById(id);
         if (group == null)
@@ -126,16 +127,17 @@ public abstract class AbstractGroupManager
     }
 
     /**
-    	* Creates a new group with specified attributes.
-    	*
-    	* @param group the object describing the group to be created.
-    	* @return a new Group object that has id set up properly.
-    	* @throws DataBackendException if there was an error accessing the data
-    	*         backend.
-    	* @throws EntityExistsException if the group already exists.
-    	*/
-    public synchronized Group addGroup(Group group)
-        throws DataBackendException, EntityExistsException
+     * Creates a new group with specified attributes.
+     * 
+     * @param group
+     *            the object describing the group to be created.
+     * @return a new Group object that has id set up properly.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws EntityExistsException
+     *             if the group already exists.
+     */
+    public synchronized Group addGroup(Group group) throws DataBackendException, EntityExistsException
     {
         boolean groupExists = false;
         if (StringUtils.isEmpty(group.getName()))
@@ -155,24 +157,24 @@ public abstract class AbstractGroupManager
         }
         else
         {
-            throw new EntityExistsException(
-                "Group '" + group + "' already exists");
+            throw new EntityExistsException("Group '" + group + "' already exists");
         }
     }
 
     /**
-	* Check whether a specified group exists.
-	*
-	* The name is used for looking up the group
-	*
-	* @param role The group to be checked.
-	* @return true if the specified group exists
-	* @throws DataBackendException if there was an error accessing
-	*         the data backend.
-	*/
-	public boolean checkExists(Group group) throws DataBackendException
-	{
-	    return checkExists(group.getName());
-	}
+     * Check whether a specified group exists.
+     * 
+     * The name is used for looking up the group
+     * 
+     * @param role
+     *            The group to be checked.
+     * @return true if the specified group exists
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     */
+    public boolean checkExists(Group group) throws DataBackendException
+    {
+        return checkExists(group.getName());
+    }
 
 }

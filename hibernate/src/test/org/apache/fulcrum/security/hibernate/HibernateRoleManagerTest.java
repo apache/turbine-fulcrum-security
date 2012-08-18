@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.hibernate;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,12 +21,14 @@ package org.apache.fulcrum.security.hibernate;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractRoleManagerTest;
+
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public class HibernateRoleManagerTest extends AbstractRoleManagerTest
 {
+    @Override
     public void setUp()
     {
         try
@@ -43,11 +46,13 @@ public class HibernateRoleManagerTest extends AbstractRoleManagerTest
         }
     }
 
+    @Override
     public void tearDown()
     {
         try
         {
-           // ((BaseHibernateManager) roleManager).getHibernateSession().close();
+            // ((BaseHibernateManager)
+            // roleManager).getHibernateSession().close();
         }
         catch (Exception e)
         {
@@ -57,10 +62,12 @@ public class HibernateRoleManagerTest extends AbstractRoleManagerTest
         roleManager = null;
         securityService = null;
     }
+
     /**
-    	   * Constructor for HibernatePermissionManagerTest.
-    	   * @param arg0
-    	   */
+     * Constructor for HibernatePermissionManagerTest.
+     * 
+     * @param arg0
+     */
     public HibernateRoleManagerTest(String arg0)
     {
         super(arg0);

@@ -25,11 +25,11 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbineGroup;
  * Represents the "turbine" model where permissions are in a many to many
  * relationship to roles, roles are related to groups are related to users, all
  * in many to many relationships.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @version $Id: TurbineGroup.java 223081 2004-10-07 15:11:58Z epugh $
  */
 public class TurbineGroupImpl extends AbstractTurbineSecurityEntityImpl implements TurbineGroup
 {
-	// empty
+    // empty
 }

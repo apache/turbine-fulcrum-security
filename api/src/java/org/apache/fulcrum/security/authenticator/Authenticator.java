@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.authenticator;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,10 +21,11 @@ package org.apache.fulcrum.security.authenticator;
 
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.DataBackendException;
+
 /**
- * Interface for an Authenticator.  Authenticator's are pluggable
- * objects that allow different SPI's to have different authentication.
- *
+ * Interface for an Authenticator. Authenticator's are pluggable objects that
+ * allow different SPI's to have different authentication.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -32,6 +34,5 @@ public interface Authenticator
 
     public static final String ROLE = Authenticator.class.getName();
 
-    public boolean authenticate(User user, String password)
-        throws  DataBackendException;
+    public boolean authenticate(User user, String password) throws DataBackendException;
 }

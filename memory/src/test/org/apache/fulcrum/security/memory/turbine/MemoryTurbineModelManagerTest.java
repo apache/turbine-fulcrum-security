@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.memory.turbine;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,24 +20,17 @@ package org.apache.fulcrum.security.memory.turbine;
  */
 
 import org.apache.fulcrum.security.SecurityService;
-import org
-    .apache
-    .fulcrum
-    .security
-    .model
-    .turbine
-    .test
-    .AbstractTurbineModelManagerTest;
+import org.apache.fulcrum.security.model.turbine.test.AbstractTurbineModelManagerTest;
 
 /**
  * @author Eric Pugh
- *
- * Test the memory implementation of the turbine model..
+ * 
+ *         Test the memory implementation of the turbine model..
  */
-public class MemoryTurbineModelManagerTest
-    extends AbstractTurbineModelManagerTest
+public class MemoryTurbineModelManagerTest extends AbstractTurbineModelManagerTest
 {
 
+    @Override
     public void setUp() throws Exception
     {
 
@@ -46,16 +40,20 @@ public class MemoryTurbineModelManagerTest
         super.setUp();
 
     }
+
+    @Override
     public void tearDown()
     {
         super.tearDown();
-		modelManager = null;
+        modelManager = null;
         securityService = null;
     }
+
     /**
-    	* Constructor for MemoryPermissionManagerTest.
-    	* @param arg0
-    	*/
+     * Constructor for MemoryPermissionManagerTest.
+     * 
+     * @param arg0
+     */
     public MemoryTurbineModelManagerTest(String arg0)
     {
         super(arg0);

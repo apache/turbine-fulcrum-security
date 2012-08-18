@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.acl;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,17 +21,15 @@ package org.apache.fulcrum.security.acl;
 
 import java.io.Serializable;
 
-
 /**
- * This interface is a marker interface for AccessControlList.  Basically
- * allows us at somepoint to swap different ACL's under the covers with
- * Avalon.  Actual ACL's are dependent on their model being used.
- *
+ * This interface is a marker interface for AccessControlList. Basically allows
+ * us at somepoint to swap different ACL's under the covers with Avalon. Actual
+ * ACL's are dependent on their model being used.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public interface AccessControlList
-  extends Serializable
+public interface AccessControlList extends Serializable
 {
     // marker interface
 }

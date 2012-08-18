@@ -23,20 +23,18 @@ import java.util.Collection;
 import org.apache.fulcrum.security.entity.Permission;
 
 /**
- * This class represents a set of Permissions.  It makes it easy to
- * build a UI that would allow someone to add a group of Permissions
- * to a Role.  It enforces that only
- * Permission objects are allowed in the set and only relevant methods
+ * This class represents a set of Permissions. It makes it easy to build a UI
+ * that would allow someone to add a group of Permissions to a Role. It enforces
+ * that only Permission objects are allowed in the set and only relevant methods
  * are available.
- *
+ * 
  * @author <a href="mailto:john.mcnally@clearink.com">John D. McNally</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
-public class PermissionSet
-    extends SecuritySet<Permission>
+public class PermissionSet extends SecuritySet<Permission>
 {
     /**
      * Serial number
@@ -53,11 +51,12 @@ public class PermissionSet
 
     /**
      * Constructs a new PermissionSet with specified contents.
-     *
-     * If the given collection contains multiple objects that are
-     * identical WRT equals() method, some objects will be overwritten.
-     *
-     * @param permissions A collection of permissions to be contained in the set.
+     * 
+     * If the given collection contains multiple objects that are identical WRT
+     * equals() method, some objects will be overwritten.
+     * 
+     * @param permissions
+     *            A collection of permissions to be contained in the set.
      */
     public PermissionSet(Collection<? extends Permission> permissions)
     {
@@ -66,39 +65,44 @@ public class PermissionSet
     }
 
     /**
-     * Returns a Permission with the given name, if it is contained in
-     * this PermissionSet.
-     *
-     * @param permissionName Name of Permission.
+     * Returns a Permission with the given name, if it is contained in this
+     * PermissionSet.
+     * 
+     * @param permissionName
+     *            Name of Permission.
      * @return Permission if argument matched a Permission in this
-     * PermissionSet; null if no match.
+     *         PermissionSet; null if no match.
      * @deprecated use getByName()
      */
+    @Deprecated
     public Permission getPermissionByName(String permissionName)
     {
-		return getByName(permissionName);
+        return getByName(permissionName);
     }
 
     /**
-     * Returns a Permission with the given id, if it is contained in
-     * this PermissionSet.
-     *
-     * @param permissionId Id of the Permission.
+     * Returns a Permission with the given id, if it is contained in this
+     * PermissionSet.
+     * 
+     * @param permissionId
+     *            Id of the Permission.
      * @return Permission if argument matched a Permission in this
-     * PermissionSet; null if no match.
+     *         PermissionSet; null if no match.
      * @deprecated Use getById()
      */
+    @Deprecated
     public Permission getPermissionById(Object permissionId)
     {
-    	return getById(permissionId);
+        return getById(permissionId);
     }
 
     /**
      * Print out a PermissionSet as a String
-     *
+     * 
      * @returns The Permission Set as String
-     *
+     * 
      */
+    @Override
     public String toString()
     {
         StringBuffer sb = new StringBuffer();

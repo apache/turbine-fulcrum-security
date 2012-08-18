@@ -40,7 +40,7 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
  * @author Eric Pugh
- *
+ * 
  */
 public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
 {
@@ -58,6 +58,7 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
 
     protected SecurityService securityService;
 
+    @Override
     public void setUp() throws Exception
     {
         super.setUp();
@@ -70,7 +71,7 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
 
     /**
      * Constructor for AbstractTurbineModelManagerTest.
-     *
+     * 
      * @param arg0
      */
     public AbstractTurbineModelManagerTest(String arg0)
@@ -101,8 +102,7 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
 
     public void testRevokeRolePermission() throws Exception
     {
-        Permission permission = securityService.getPermissionManager()
-                .getPermissionInstance();
+        Permission permission = securityService.getPermissionManager().getPermissionInstance();
         permission.setName("ANSWER_FAX");
         securityService.getPermissionManager().addPermission(permission);
         role = roleManager.getRoleInstance("SECRETARY");
@@ -120,10 +120,8 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
 
     public void testRevokeAllRole() throws Exception
     {
-        Permission permission = securityService.getPermissionManager()
-                .getPermissionInstance();
-        Permission permission2 = securityService.getPermissionManager()
-                .getPermissionInstance();
+        Permission permission = securityService.getPermissionManager().getPermissionInstance();
+        Permission permission2 = securityService.getPermissionManager().getPermissionInstance();
         permission.setName("SEND_SPAM");
         permission2.setName("ANSWER_EMAIL");
         securityService.getPermissionManager().addPermission(permission);
@@ -163,8 +161,7 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
         modelManager.revokeAll(user);
         group = groupManager.getGroupById(group.getId());
         assertEquals(0, ((TurbineGroup) group).getUserGroupRoleSet().size());
-        role = securityService.getRoleManager().getRoleByName(
-                "TEST_REVOKEALLUSER_ROLE");
+        role = securityService.getRoleManager().getRoleByName("TEST_REVOKEALLUSER_ROLE");
 
         // assertFalse(((TurbineRole) role).getGroups().contains(group));
 
@@ -185,8 +182,7 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
         TurbineUserGroupRole ugrTest = null;
         for (TurbineUserGroupRole ugr : ((TurbineUser) user).getUserGroupRoleSet())
         {
-            if (ugr.getUser().equals(user) && ugr.getGroup().equals(group)
-                    && ugr.getRole().equals(role))
+            if (ugr.getUser().equals(user) && ugr.getGroup().equals(group) && ugr.getRole().equals(role))
             {
                 ugrFound = true;
                 ugrTest = ugr;
@@ -214,8 +210,7 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
         boolean ugrFound = false;
         for (TurbineUserGroupRole ugr : ((TurbineUser) user).getUserGroupRoleSet())
         {
-            if (ugr.getUser().equals(user) && ugr.getGroup().equals(group)
-                    && ugr.getRole().equals(role))
+            if (ugr.getUser().equals(user) && ugr.getGroup().equals(group) && ugr.getRole().equals(role))
             {
                 ugrFound = true;
                 break;

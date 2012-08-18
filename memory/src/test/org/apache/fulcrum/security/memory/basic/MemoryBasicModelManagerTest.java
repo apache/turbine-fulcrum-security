@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.memory.basic;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,43 +19,46 @@ package org.apache.fulcrum.security.memory.basic;
  * under the License.
  */
 
-
-
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.basic.test.AbstractModelManagerTest;
 
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id$
+ * @version $Id: MemoryBasicModelManagerTest.java 535465 2007-05-05 06:58:06Z tv
+ *          $
  */
 public class MemoryBasicModelManagerTest extends AbstractModelManagerTest
 {
-	/**
+    /**
      * @param arg0
      */
     public MemoryBasicModelManagerTest(String arg0)
     {
         super(arg0);
     }
-    public void setUp()
-	 {
-		 try
-		 {
-             this.setRoleFileName("src/test/BasicMemoryRoleConfig.xml");
-                this.setConfigurationFileName("src/test/BasicMemoryComponentConfig.xml");
-			 securityService = (SecurityService) lookup(SecurityService.ROLE);
-			 super.setUp();
 
-		 }
-		 catch (Exception e)
-		 {
-			 fail(e.toString());
-		 }
-	 }
-	 public void tearDown()
-	 {
-	     super.tearDown();
-	     groupManager=null;
-		 securityService = null;
-	 }
+    @Override
+    public void setUp()
+    {
+        try
+        {
+            this.setRoleFileName("src/test/BasicMemoryRoleConfig.xml");
+            this.setConfigurationFileName("src/test/BasicMemoryComponentConfig.xml");
+            securityService = (SecurityService) lookup(SecurityService.ROLE);
+            super.setUp();
+
+        }
+        catch (Exception e)
+        {
+            fail(e.toString());
+        }
+    }
+
+    @Override
+    public void tearDown()
+    {
+        super.tearDown();
+        groupManager = null;
+        securityService = null;
+    }
 }

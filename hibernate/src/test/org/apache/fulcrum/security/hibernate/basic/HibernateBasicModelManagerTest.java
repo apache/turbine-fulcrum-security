@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.hibernate.basic;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -26,12 +27,15 @@ import org.apache.fulcrum.security.hibernate.PersistenceHelper;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 import org.apache.fulcrum.security.model.basic.test.AbstractModelManagerTest;
 import org.hibernate.Transaction;
+
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id$
+ * @version $Id: HibernateBasicModelManagerTest.java 1169862 2011-09-12
+ *          18:41:35Z tv $
  */
 public class HibernateBasicModelManagerTest extends AbstractModelManagerTest
 {
+    @Override
     public void setUp() throws Exception
     {
         this.setRoleFileName("src/test/BasicHibernateRoleConfig.xml");
@@ -42,22 +46,25 @@ public class HibernateBasicModelManagerTest extends AbstractModelManagerTest
         super.setUp();
     }
 
-	public void testRevokeAllUser() throws Exception
-	{
-	    super.testRevokeAllUser();
-	    // FIXME: Why is this here?
-	    // ((HibernateUserManagerImpl)userManager).getPersistenceHelper().retrieveSession().close();
-	    Transaction tx = ((HibernateUserManagerImpl)userManager).getPersistenceHelper().retrieveSession().beginTransaction();
-		User user = userManager.getUserInstance("Clint2");
-		assertEquals(0, ((BasicUser) user).getGroups().size());
-		tx.commit();
-	}
+    @Override
+    public void testRevokeAllUser() throws Exception
+    {
+        super.testRevokeAllUser();
+        // FIXME: Why is this here?
+        // ((HibernateUserManagerImpl)userManager).getPersistenceHelper().retrieveSession().close();
+        Transaction tx = ((HibernateUserManagerImpl) userManager).getPersistenceHelper().retrieveSession().beginTransaction();
+        User user = userManager.getUserInstance("Clint2");
+        assertEquals(0, ((BasicUser) user).getGroups().size());
+        tx.commit();
+    }
 
+    @Override
     public void tearDown()
     {
         try
         {
-            //((BaseHibernateManager) permissionManager).getHibernateSession().close();
+            // ((BaseHibernateManager)
+            // permissionManager).getHibernateSession().close();
         }
         catch (Exception e)
         {
@@ -66,11 +73,12 @@ public class HibernateBasicModelManagerTest extends AbstractModelManagerTest
 
         securityService = null;
     }
+
     /**
-    * Constructor for HibernatePermissionManagerTest.
-    *
-    * @param arg0
-    */
+     * Constructor for HibernatePermissionManagerTest.
+     * 
+     * @param arg0
+     */
     public HibernateBasicModelManagerTest(String arg0)
     {
         super(arg0);

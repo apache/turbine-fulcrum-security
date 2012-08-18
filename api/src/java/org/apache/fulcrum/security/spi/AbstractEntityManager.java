@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.spi;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -22,16 +23,14 @@ import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 
 /**
- *
- * This abstract implementation provides most of the functionality that
- * a manager will need.
- *
+ * 
+ * This abstract implementation provides most of the functionality that a
+ * manager will need.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public abstract class AbstractEntityManager
-    extends AbstractManager
-    implements Configurable
+public abstract class AbstractEntityManager extends AbstractManager implements Configurable
 {
     private String className;
     private static final String CLASS_NAME_KEY = "className";
@@ -53,7 +52,8 @@ public abstract class AbstractEntityManager
     }
 
     /**
-     * @param className The className to set.
+     * @param className
+     *            The className to set.
      */
     public void setClassName(String className)
     {

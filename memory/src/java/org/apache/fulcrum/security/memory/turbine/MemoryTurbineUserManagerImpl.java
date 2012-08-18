@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.memory.turbine;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -25,25 +26,25 @@ import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
- * This implementation keeps all objects in memory.  This is mostly meant to help
+ * This implementation keeps all objects in memory. This is mostly meant to help
  * with testing and prototyping of ideas.
- *
+ * 
  * @todo Need to load up Crypto component and actually encrypt passwords!
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id$
+ * @version $Id: MemoryTurbineUserManagerImpl.java 535465 2007-05-05 06:58:06Z
+ *          tv $
  */
-public class MemoryTurbineUserManagerImpl
-    extends MemoryUserManagerImpl
-    implements TurbineUserManager
+public class MemoryTurbineUserManagerImpl extends MemoryUserManagerImpl implements TurbineUserManager
 {
     /**
-    	   * Constructs an User object to represent an anonymous user of the
-    	   * application.
-    	   *
-    	   * @return An anonymous Turbine User.
-    	   * @throws UnknownEntityException if the implementation of User interface
-    	   *         could not be determined, or does not exist.
-    	   */
+     * Constructs an User object to represent an anonymous user of the
+     * application.
+     * 
+     * @return An anonymous Turbine User.
+     * @throws UnknownEntityException
+     *             if the implementation of User interface could not be
+     *             determined, or does not exist.
+     */
     public User getAnonymousUser() throws UnknownEntityException
     {
         User user;
@@ -53,9 +54,7 @@ public class MemoryTurbineUserManagerImpl
         }
         catch (DataBackendException dbe)
         {
-            throw new UnknownEntityException(
-                "Coudl not create an anonymous user.",
-                dbe);
+            throw new UnknownEntityException("Coudl not create an anonymous user.", dbe);
         }
         user.setName("");
         return user;
@@ -64,11 +63,12 @@ public class MemoryTurbineUserManagerImpl
     /**
      * Checks whether a passed user object matches the anonymous user pattern
      * according to the configured user manager
-     *
-     * @param user An user object
-     *
+     * 
+     * @param user
+     *            An user object
+     * 
      * @return True if this is an anonymous user
-     *
+     * 
      */
     public boolean isAnonymousUser(User user)
     {

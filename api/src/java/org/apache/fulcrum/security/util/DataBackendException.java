@@ -20,14 +20,13 @@ package org.apache.fulcrum.security.util;
  */
 
 /**
- * Thrown to indicate that there was an error accessing the data
- * backend of the SecurityService.
- *
+ * Thrown to indicate that there was an error accessing the data backend of the
+ * SecurityService.
+ * 
  * @author <a href="mailto:krzewski@e-point.pl">Rafal Krzewski</a>
  * @version $Id$
  */
-public class DataBackendException
-    extends FulcrumSecurityException
+public class DataBackendException extends FulcrumSecurityException
 {
     /**
      * Serial number
@@ -36,8 +35,9 @@ public class DataBackendException
 
     /**
      * Construct an DataBackendException with specified detail message.
-     *
-     * @param msg The detail message.
+     * 
+     * @param msg
+     *            The detail message.
      */
     public DataBackendException(String msg)
     {
@@ -45,12 +45,14 @@ public class DataBackendException
     }
 
     /**
-     * Construct an DataBackendException with specified detail message
-     * and nested <code>Throwable</code>.
-     *
-     * @param msg The detail message.
-     * @param nested the exception or error that caused this exception
-     *               to be thrown.
+     * Construct an DataBackendException with specified detail message and
+     * nested <code>Throwable</code>.
+     * 
+     * @param msg
+     *            The detail message.
+     * @param nested
+     *            the exception or error that caused this exception to be
+     *            thrown.
      */
     public DataBackendException(String msg, Throwable nested)
     {

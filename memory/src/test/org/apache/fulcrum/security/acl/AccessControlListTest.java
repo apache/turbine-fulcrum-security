@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.acl;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -41,7 +42,7 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
  * Test that we can generate AccessControlLists from the Factory
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -56,19 +57,24 @@ public class AccessControlListTest extends BaseUnitTest
     private DynamicAccessControlList acl;
     private static int counter = 1;
     private User user;
+
     /**
      * Defines the testcase name for JUnit.
-     *
-     * @param name the testcase's name.
+     * 
+     * @param name
+     *            the testcase's name.
      */
     public AccessControlListTest(String name)
     {
         super(name);
     }
+
     public static void main(String[] args)
     {
         junit.textui.TestRunner.run(AccessControlListTest.class);
     }
+
+    @Override
     public void setUp() throws Exception
     {
         super.setUp();
@@ -76,8 +82,7 @@ public class AccessControlListTest extends BaseUnitTest
         this.setRoleFileName("src/test/DynamicMemoryRoleConfig.xml");
         this.setConfigurationFileName("src/test/DynamicMemoryComponentConfig.xml");
 
-        SecurityService securityService =
-            (SecurityService) lookup(SecurityService.ROLE);
+        SecurityService securityService = (SecurityService) lookup(SecurityService.ROLE);
         userManager = securityService.getUserManager();
         groupManager = securityService.getGroupManager();
         roleManager = securityService.getRoleManager();
@@ -86,8 +91,7 @@ public class AccessControlListTest extends BaseUnitTest
 
     }
 
-    public void testCreatingDefaultAccessControlListViaFactory()
-        throws Exception
+    public void testCreatingDefaultAccessControlListViaFactory() throws Exception
     {
         Group group = getGroup();
         Role role = getRole();
@@ -112,6 +116,7 @@ public class AccessControlListTest extends BaseUnitTest
         assertTrue(dacl.hasPermission(permission));
 
     }
+
     public void testGetRolesGroup() throws Exception
     {
         Group group = getGroup();
@@ -129,6 +134,7 @@ public class AccessControlListTest extends BaseUnitTest
         assertTrue(resultRoleSet.contains(role2));
         assertFalse(resultRoleSet.contains(role3));
     }
+
     /*
      * Class to test for RoleSet getRoles()
      */
@@ -154,6 +160,7 @@ public class AccessControlListTest extends BaseUnitTest
         assertTrue(resultRoleSet.contains(role3));
         assertEquals(3, resultRoleSet.size());
     }
+
     /*
      * Class to test for PermissionSet getPermissions(Group)
      */
@@ -188,6 +195,7 @@ public class AccessControlListTest extends BaseUnitTest
         resultPermissionSet = acl.getPermissions(group2);
         assertEquals(0, resultPermissionSet.size());
     }
+
     /*
      * Class to test for PermissionSet getPermissions()
      */
@@ -220,6 +228,7 @@ public class AccessControlListTest extends BaseUnitTest
         PermissionSet resultPermissionSet = acl.getPermissions();
         assertEquals(3, resultPermissionSet.size());
     }
+
     /*
      * Class to test for boolean hasRole(Role, Group)
      */
@@ -247,6 +256,7 @@ public class AccessControlListTest extends BaseUnitTest
         assertFalse(acl.hasRole(role2, group2));
         assertTrue(acl.hasRole(role3, group2));
     }
+
     /*
      * Class to test for boolean hasRole(Role, GroupSet)
      */
@@ -277,6 +287,7 @@ public class AccessControlListTest extends BaseUnitTest
         assertTrue(acl.hasRole(role3, groupSet));
         groupSet.add(group2);
     }
+
     /*
      * Class to test for boolean hasRole(String, String)
      */
@@ -304,6 +315,7 @@ public class AccessControlListTest extends BaseUnitTest
         assertFalse(acl.hasRole(role2.getName(), group2.getName()));
         assertTrue(acl.hasRole(role3.getName(), group2.getName()));
     }
+
     /*
      * Class to test for boolean hasPermission(Permission, Group)
      */
@@ -342,6 +354,7 @@ public class AccessControlListTest extends BaseUnitTest
         assertTrue(acl.hasPermission(permission4, group2));
         assertFalse(acl.hasPermission(permission, group2));
     }
+
     /*
      * Class to test for boolean hasPermission(Permission, GroupSet)
      */
@@ -388,6 +401,7 @@ public class AccessControlListTest extends BaseUnitTest
         groupSet.add(group3);
         assertTrue(acl.hasPermission(permission5, groupSet));
     }
+
     /*
      * Class to test for boolean hasPermission(Permission)
      */
@@ -437,22 +451,24 @@ public class AccessControlListTest extends BaseUnitTest
     {
         return ++counter;
     }
+
     private Role getRole() throws Exception
     {
         Role role = roleManager.getRoleInstance("Role " + getId());
         roleManager.addRole(role);
         return role;
     }
+
     private Group getGroup() throws Exception
     {
         Group group = groupManager.getGroupInstance("Group " + getId());
         groupManager.addGroup(group);
         return group;
     }
+
     private Permission getPermission() throws Exception
     {
-        Permission permission =
-            permissionManager.getPermissionInstance("Permission " + getId());
+        Permission permission = permissionManager.getPermissionInstance("Permission " + getId());
         permissionManager.addPermission(permission);
         return permission;
     }

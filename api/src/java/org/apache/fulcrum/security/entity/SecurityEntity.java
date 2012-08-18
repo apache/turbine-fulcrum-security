@@ -20,10 +20,10 @@ package org.apache.fulcrum.security.entity;
  */
 
 /**
- * This classes is the base class for any security entity including
- * groups, users, roles and permissions (and potentially others depending
- * on the model chosen)
- *
+ * This classes is the base class for any security entity including groups,
+ * users, roles and permissions (and potentially others depending on the model
+ * chosen)
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
@@ -35,29 +35,31 @@ public interface SecurityEntity
 {
     /**
      * Get the Name of the SecurityEntity.
-     *
+     * 
      * @return The Name of the SecurityEntity.
      */
     String getName();
 
     /**
      * Sets the Name of the SecurityEntity.
-     *
-     * @param name Name of the SecurityEntity.
+     * 
+     * @param name
+     *            Name of the SecurityEntity.
      */
     void setName(String name);
 
     /**
      * Get the Id of the SecurityEntity.
-     *
+     * 
      * @return The Id of the SecurityEntity.
      */
     Object getId();
 
     /**
      * Sets the Id of the SecurityEntity.
-     *
-     * @param id The new Id of the SecurityEntity
+     * 
+     * @param id
+     *            The new Id of the SecurityEntity
      */
     void setId(Object id);
 }

@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.memory;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -28,11 +29,12 @@ import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
- * This implementation keeps all objects in memory. This is mostly meant to help with testing and
- * prototyping of ideas.
- *
+ * This implementation keeps all objects in memory. This is mostly meant to help
+ * with testing and prototyping of ideas.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id$
+ * @version $Id: MemoryPermissionManagerImpl.java 1374008 2012-08-16 19:42:18Z
+ *          tv $
  */
 public class MemoryPermissionManagerImpl extends AbstractPermissionManager
 {
@@ -41,12 +43,12 @@ public class MemoryPermissionManagerImpl extends AbstractPermissionManager
     /** Our Unique ID counter */
     // private static int uniqueId = 0;
 
-
     /**
      * Retrieves all permissions defined in the system.
-     *
+     * 
      * @return the names of all permissions defined in the system.
-     * @throws DataBackendException if there was an error accessing the data backend.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
      */
     public PermissionSet getAllPermissions() throws DataBackendException
     {
@@ -55,16 +57,17 @@ public class MemoryPermissionManagerImpl extends AbstractPermissionManager
 
     /**
      * Renames an existing Permission.
-     *
-     * @param permission The object describing the permission to be renamed.
-     * @param name the new name for the permission.
-     * @throws DataBackendException if there was an error accessing the data backend.
-     * @throws UnknownEntityException if the permission does not exist.
+     * 
+     * @param permission
+     *            The object describing the permission to be renamed.
+     * @param name
+     *            the new name for the permission.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the permission does not exist.
      */
-    public synchronized void renamePermission(
-        Permission permission,
-        String name)
-        throws DataBackendException, UnknownEntityException
+    public synchronized void renamePermission(Permission permission, String name) throws DataBackendException, UnknownEntityException
     {
         boolean permissionExists = false;
         try
@@ -80,38 +83,39 @@ public class MemoryPermissionManagerImpl extends AbstractPermissionManager
         }
         catch (DataBackendException e)
         {
-            throw new DataBackendException(
-                "renamePermission(Permission,name)",
-                e);
+            throw new DataBackendException("renamePermission(Permission,name)", e);
         }
 
-        throw new UnknownEntityException(
-            "Unknown permission '" + permission + "'");
+        throw new UnknownEntityException("Unknown permission '" + permission + "'");
     }
 
     /**
      * Determines if the <code>Permission</code> exists in the security system.
-     *
-     * @param permission a <code>String</code> value
+     * 
+     * @param permission
+     *            a <code>String</code> value
      * @return true if the permission exists in the system, false otherwise
-     * @throws DataBackendException when more than one Permission with the same name exists.
-     * @throws Exception A generic exception.
+     * @throws DataBackendException
+     *             when more than one Permission with the same name exists.
+     * @throws Exception
+     *             A generic exception.
      */
-    public boolean checkExists(String permissionName)
-        throws DataBackendException
+    public boolean checkExists(String permissionName) throws DataBackendException
     {
-       return MemoryHelper.checkExists(permissions,permissionName);
+        return MemoryHelper.checkExists(permissions, permissionName);
     }
 
     /**
      * Removes a Permission from the system.
-     *
-     * @param permission The object describing the permission to be removed.
-     * @throws DataBackendException if there was an error accessing the data backend.
-     * @throws UnknownEntityException if the permission does not exist.
+     * 
+     * @param permission
+     *            The object describing the permission to be removed.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the permission does not exist.
      */
-    public synchronized void removePermission(Permission permission)
-        throws DataBackendException, UnknownEntityException
+    public synchronized void removePermission(Permission permission) throws DataBackendException, UnknownEntityException
     {
         boolean permissionExists = false;
         try
@@ -128,20 +132,22 @@ public class MemoryPermissionManagerImpl extends AbstractPermissionManager
             throw new DataBackendException("removePermission(Permission)", e);
         }
 
-        throw new UnknownEntityException(
-                "Unknown permission '" + permission + "'");
+        throw new UnknownEntityException("Unknown permission '" + permission + "'");
     }
 
     /**
      * Creates a new permission with specified attributes.
-     *
-     * @param permission the object describing the permission to be created.
+     * 
+     * @param permission
+     *            the object describing the permission to be created.
      * @return a new Permission object that has id set up properly.
-     * @throws DataBackendException if there was an error accessing the data backend.
-     * @throws EntityExistsException if the permission already exists.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws EntityExistsException
+     *             if the permission already exists.
      */
-    protected synchronized Permission persistNewPermission(Permission permission)
-        throws DataBackendException
+    @Override
+    protected synchronized Permission persistNewPermission(Permission permission) throws DataBackendException
     {
         permission.setId(MemoryHelper.getUniqueId());
         permissions.add(permission);

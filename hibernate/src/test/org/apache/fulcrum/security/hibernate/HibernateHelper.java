@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.hibernate;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,10 +21,12 @@ package org.apache.fulcrum.security.hibernate;
 
 import org.hibernate.cfg.Configuration;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
+
 /**
  * @author Eric Pugh
- *
- * This class allows us to dynamically populate the hsql database with our schema.
+ * 
+ *         This class allows us to dynamically populate the hsql database with
+ *         our schema.
  */
 public class HibernateHelper
 {

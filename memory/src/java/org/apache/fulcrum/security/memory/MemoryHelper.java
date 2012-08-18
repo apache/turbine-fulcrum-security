@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.memory;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -22,12 +23,11 @@ import java.util.List;
 
 import org.apache.fulcrum.security.entity.SecurityEntity;
 
-
 /**
- *
- * This implementation keeps all objects in memory.  This is mostly meant to help
+ * 
+ * This implementation keeps all objects in memory. This is mostly meant to help
  * with testing and prototyping of ideas.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */

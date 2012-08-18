@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.hibernate;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,12 +21,15 @@ package org.apache.fulcrum.security.hibernate;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractGroupManagerTest;
+
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id$
+ * @version $Id: HibernateGroupManagerTest.java 1169862 2011-09-12 18:41:35Z tv
+ *          $
  */
 public class HibernateGroupManagerTest extends AbstractGroupManagerTest
 {
+    @Override
     public void setUp()
     {
         try
@@ -42,24 +46,29 @@ public class HibernateGroupManagerTest extends AbstractGroupManagerTest
             fail(e.toString());
         }
     }
+
+    @Override
     public void tearDown()
     {
-		try
-		  {
-			  //((BaseHibernateManager) groupManager).getHibernateSession().close();
-		  }
-		  catch (Exception e)
-		  {
-			  fail(e.getMessage());
-		  }
+        try
+        {
+            // ((BaseHibernateManager)
+            // groupManager).getHibernateSession().close();
+        }
+        catch (Exception e)
+        {
+            fail(e.getMessage());
+        }
         group = null;
         groupManager = null;
         securityService = null;
     }
+
     /**
-    	   * Constructor for HibernatePermissionManagerTest.
-    	   * @param arg0
-    	   */
+     * Constructor for HibernatePermissionManagerTest.
+     * 
+     * @param arg0
+     */
     public HibernateGroupManagerTest(String arg0)
     {
         super(arg0);

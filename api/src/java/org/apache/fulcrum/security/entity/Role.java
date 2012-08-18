@@ -1,6 +1,5 @@
 package org.apache.fulcrum.security.entity;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,12 +19,10 @@ package org.apache.fulcrum.security.entity;
  * under the License.
  */
 
-
-
 /**
- * This class represents a role played by the User associated with the
- * current Session.
- *
+ * This class represents a role played by the User associated with the current
+ * Session.
+ * 
  * @author <a href="mailto:frank.kim@clearink.com">Frank Y. Kim</a>
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>

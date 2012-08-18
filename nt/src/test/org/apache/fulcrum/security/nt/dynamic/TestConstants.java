@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.nt.dynamic;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,11 +21,11 @@ package org.apache.fulcrum.security.nt.dynamic;
 
 /**
  * Test constants
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public interface TestConstants
 {
-    public static final String SCB_INVALID="The storage control block address is invalid.";
+    public static final String SCB_INVALID = "The storage control block address is invalid.";
 }

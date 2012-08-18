@@ -29,7 +29,7 @@ import org.apache.fulcrum.security.util.PermissionSet;
  * Represents the "turbine" model where permissions are in a many to many
  * relationship to roles, roles are related to groups are related to users, all
  * in many to many relationships.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @version $Id: TurbineRole.java 437451 2006-08-27 20:20:44Z tv $
  */
@@ -39,14 +39,16 @@ public class TurbineRoleImpl extends AbstractTurbineSecurityEntityImpl implement
 
     /**
      * Get the permission that are part of this role
-     *
+     * 
      * @return a set of permissions
      */
     public PermissionSet getPermissions()
     {
-        if (permissionSet instanceof PermissionSet) {
-			return (PermissionSet) permissionSet;
-		} else
+        if (permissionSet instanceof PermissionSet)
+        {
+            return (PermissionSet) permissionSet;
+        }
+        else
         {
             permissionSet = new PermissionSet(permissionSet);
             return (PermissionSet) permissionSet;
@@ -55,33 +57,38 @@ public class TurbineRoleImpl extends AbstractTurbineSecurityEntityImpl implement
 
     /**
      * Get the permission that are part of this role as Set
-     *
+     * 
      * @return a set of permissions
      */
     @SuppressWarnings("unchecked")
-	public <T extends Permission> Set<T> getPermissionsAsSet()
+    public <T extends Permission> Set<T> getPermissionsAsSet()
     {
-        return (Set<T>)permissionSet;
+        return (Set<T>) permissionSet;
     }
 
     /**
      * Set the permission that are part of this role
-     *
-     * @param permissionSet a set of permissions
+     * 
+     * @param permissionSet
+     *            a set of permissions
      */
     public void setPermissions(PermissionSet permissionSet)
     {
-        if (permissionSet != null) {
-			this.permissionSet = permissionSet;
-		} else {
-			this.permissionSet = new PermissionSet();
-		}
+        if (permissionSet != null)
+        {
+            this.permissionSet = permissionSet;
+        }
+        else
+        {
+            this.permissionSet = new PermissionSet();
+        }
     }
 
     /**
      * Set the permission that are part of this role as Set
-     *
-     * @param permissions a set of permissions
+     * 
+     * @param permissions
+     *            a set of permissions
      */
     public <T extends Permission> void setPermissionsAsSet(Set<T> permissions)
     {
@@ -89,16 +96,18 @@ public class TurbineRoleImpl extends AbstractTurbineSecurityEntityImpl implement
     }
 
     /**
-    * This method should only be used by a RoleManager.  Not directly.
-    * @param permission
-    */
+     * This method should only be used by a RoleManager. Not directly.
+     * 
+     * @param permission
+     */
     public void addPermission(Permission permission)
     {
         getPermissions().add(permission);
     }
 
     /**
-     * This method should only be used by a RoleManager.  Not directly.
+     * This method should only be used by a RoleManager. Not directly.
+     * 
      * @param permission
      */
     public void removePermission(Permission permission)

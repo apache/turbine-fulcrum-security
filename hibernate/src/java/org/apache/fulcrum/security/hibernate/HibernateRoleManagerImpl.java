@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.hibernate;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -26,27 +27,31 @@ import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.hibernate.HibernateException;
+
 /**
- *
+ * 
  * This implementation persists to a database via Hibernate.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 @SuppressWarnings("unchecked")
 public class HibernateRoleManagerImpl extends AbstractRoleManager
 {
-	private PersistenceHelper persistenceHelper;
+    private PersistenceHelper persistenceHelper;
 
     /**
-    * Renames an existing Role.
-    *
-    * @param role The object describing the role to be renamed.
-    * @param name the new name for the role.
-    * @throws DataBackendException if there was an error accessing the data
-    *         backend.
-    * @throws UnknownEntityException if the role does not exist.
-    */
+     * Renames an existing Role.
+     * 
+     * @param role
+     *            The object describing the role to be renamed.
+     * @param name
+     *            the new name for the role.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the role does not exist.
+     */
     public synchronized void renameRole(Role role, String name) throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
@@ -62,24 +67,23 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
             throw new UnknownEntityException("Unknown role '" + role + "'");
         }
     }
+
     /**
-      * Determines if the <code>Role</code> exists in the security system.
-      *
-      * @param roleName a <code>Role</code> value
-      * @return true if the role name exists in the system, false otherwise
-      * @throws DataBackendException when more than one Role with
-      *         the same name exists.
-      */
+     * Determines if the <code>Role</code> exists in the security system.
+     * 
+     * @param roleName
+     *            a <code>Role</code> value
+     * @return true if the role name exists in the system, false otherwise
+     * @throws DataBackendException
+     *             when more than one Role with the same name exists.
+     */
     public boolean checkExists(String roleName) throws DataBackendException
     {
         List<Role> roles;
         try
         {
-            roles = getPersistenceHelper()
-            	.retrieveSession()
-            	.createQuery("from " + Role.class.getName() + " sr where sr.name=:name")
-            	.setString("name", roleName)
-            	.list();
+            roles = getPersistenceHelper().retrieveSession().createQuery("from " + Role.class.getName() + " sr where sr.name=:name")
+                    .setString("name", roleName).list();
         }
         catch (HibernateException e)
         {
@@ -91,22 +95,20 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
         }
         return (roles.size() == 1);
     }
+
     /**
      * Retrieves all roles defined in the system.
-     *
+     * 
      * @return the names of all roles defined in the system.
-     * @throws DataBackendException if there was an error accessing the
-     *         data backend.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
      */
     public RoleSet getAllRoles() throws DataBackendException
     {
         RoleSet roleSet = new RoleSet();
         try
         {
-            List<Role> roles = getPersistenceHelper()
-            	.retrieveSession()
-            	.createQuery("from " + Role.class.getName())
-            	.list();
+            List<Role> roles = getPersistenceHelper().retrieveSession().createQuery("from " + Role.class.getName()).list();
             roleSet.add(roles);
         }
         catch (HibernateException e)
@@ -116,29 +118,34 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
         return roleSet;
     }
 
-
     /**
-    * Creates a new role with specified attributes.
-    *
-    * @param role the object describing the role to be created.
-    * @return a new Role object that has id set up properly.
-    * @throws DataBackendException if there was an error accessing the data
-    *         backend.
-    * @throws EntityExistsException if the role already exists.
-    */
+     * Creates a new role with specified attributes.
+     * 
+     * @param role
+     *            the object describing the role to be created.
+     * @return a new Role object that has id set up properly.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws EntityExistsException
+     *             if the role already exists.
+     */
+    @Override
     protected synchronized Role persistNewRole(Role role) throws DataBackendException
     {
-		getPersistenceHelper().addEntity(role);
+        getPersistenceHelper().addEntity(role);
         return role;
     }
+
     /**
-    * Removes a Role from the system.
-    *
-    * @param role The object describing the role to be removed.
-    * @throws DataBackendException if there was an error accessing the data
-    *         backend.
-    * @throws UnknownEntityException if the role does not exist.
-    */
+     * Removes a Role from the system.
+     * 
+     * @param role
+     *            The object describing the role to be removed.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the role does not exist.
+     */
     public synchronized void removeRole(Role role) throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
@@ -147,7 +154,7 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
             roleExists = checkExists(role);
             if (roleExists)
             {
-				getPersistenceHelper().removeEntity(role);
+                getPersistenceHelper().removeEntity(role);
             }
             else
             {
@@ -160,56 +167,54 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
         }
     }
 
-	/**
-	 * @return Returns the persistenceHelper.
-	 */
-	public PersistenceHelper getPersistenceHelper()
-	{
-		if (persistenceHelper == null)
-		{
-			persistenceHelper = (PersistenceHelper)resolve(PersistenceHelper.ROLE);
-		}
-		return persistenceHelper;
-	}
+    /**
+     * @return Returns the persistenceHelper.
+     */
+    public PersistenceHelper getPersistenceHelper()
+    {
+        if (persistenceHelper == null)
+        {
+            persistenceHelper = (PersistenceHelper) resolve(PersistenceHelper.ROLE);
+        }
+        return persistenceHelper;
+    }
 
-	/**
-	 * Retrieve a Role object with specified id.
-	 *
-	 * @param id
-	 *            the id of the Role.
-	 * @return an object representing the Role with specified id.
-	 * @throws DataBackendException
-	 *             if there was an error accessing the data backend.
-	 * @throws UnknownEntityException
-	 *             if the role does not exist.
-	 */
-	public Role getRoleById(Object id)
-	throws DataBackendException, UnknownEntityException {
+    /**
+     * Retrieve a Role object with specified id.
+     * 
+     * @param id
+     *            the id of the Role.
+     * @return an object representing the Role with specified id.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the role does not exist.
+     */
+    @Override
+    public Role getRoleById(Object id) throws DataBackendException, UnknownEntityException
+    {
 
-		Role role = null;
+        Role role = null;
 
-		if (id != null) {
-			try {
-				List<Role> roles =
-					getPersistenceHelper()
-						.retrieveSession()
-						.createQuery(
-							"from " + Role.class.getName() + " sr where sr.id=:id")
-						.setLong("id", ((Long)id).longValue())
-						.list();
-				if (roles.size() == 0) {
-					throw new UnknownEntityException(
-							"Could not find role by id " + id);
-				}
-				role = roles.get(0);
+        if (id != null)
+        {
+            try
+            {
+                List<Role> roles = getPersistenceHelper().retrieveSession()
+                        .createQuery("from " + Role.class.getName() + " sr where sr.id=:id").setLong("id", ((Long) id).longValue()).list();
+                if (roles.size() == 0)
+                {
+                    throw new UnknownEntityException("Could not find role by id " + id);
+                }
+                role = roles.get(0);
 
-			} catch (HibernateException e) {
-				throw new DataBackendException(
-						"Error retrieving role information",
-						e);
-			}
-		}
+            }
+            catch (HibernateException e)
+            {
+                throw new DataBackendException("Error retrieving role information", e);
+            }
+        }
 
-		return role;
-	}
+        return role;
+    }
 }

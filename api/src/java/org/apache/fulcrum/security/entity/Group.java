@@ -19,13 +19,12 @@ package org.apache.fulcrum.security.entity;
  * under the License.
  */
 
-
 /**
- * This class represents a Group of Users in the system that are associated
- * with specific entity or resource. The users belonging to the Group may have
- * various Roles. The Permissions to perform actions upon the resource depend
- * on the Roles in the Group that they are assigned.
- *
+ * This class represents a Group of Users in the system that are associated with
+ * specific entity or resource. The users belonging to the Group may have
+ * various Roles. The Permissions to perform actions upon the resource depend on
+ * the Roles in the Group that they are assigned.
+ * 
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @version $Id$
  */

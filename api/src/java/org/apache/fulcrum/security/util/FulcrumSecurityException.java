@@ -21,12 +21,11 @@ package org.apache.fulcrum.security.util;
 
 /**
  * Thrown by SecurityService methods to indicate various problems.
- *
+ * 
  * @author <a href="mailto:krzewski@e-point.pl">Rafal Krzewski</a>
  * @version $Id$
  */
-public class FulcrumSecurityException
-    extends Exception
+public class FulcrumSecurityException extends Exception
 {
     /**
      * Serial number
@@ -35,8 +34,9 @@ public class FulcrumSecurityException
 
     /**
      * Construct an SecurityException with specified detail message.
-     *
-     * @param msg The detail message.
+     * 
+     * @param msg
+     *            The detail message.
      */
     public FulcrumSecurityException(String msg)
     {
@@ -44,12 +44,14 @@ public class FulcrumSecurityException
     }
 
     /**
-     * Construct an SecurityException with specified detail message
-     * and nested <code>Throwable</code>.
-     *
-     * @param msg The detail message.
-     * @param nested the exception or error that caused this exception
-     *               to be thrown.
+     * Construct an SecurityException with specified detail message and nested
+     * <code>Throwable</code>.
+     * 
+     * @param msg
+     *            The detail message.
+     * @param nested
+     *            the exception or error that caused this exception to be
+     *            thrown.
      */
     public FulcrumSecurityException(String msg, Throwable nested)
     {

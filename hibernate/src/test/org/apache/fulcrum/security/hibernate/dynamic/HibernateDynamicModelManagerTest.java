@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.hibernate.dynamic;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -25,11 +26,12 @@ import org.apache.fulcrum.security.model.dynamic.test.AbstractDynamicModelManage
 
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id$
+ * @version $Id: HibernateDynamicModelManagerTest.java 1169862 2011-09-12
+ *          18:41:35Z tv $
  */
-public class HibernateDynamicModelManagerTest
-    extends AbstractDynamicModelManagerTest
+public class HibernateDynamicModelManagerTest extends AbstractDynamicModelManagerTest
 {
+    @Override
     public void setUp()
     {
         try
@@ -47,11 +49,13 @@ public class HibernateDynamicModelManagerTest
         }
     }
 
+    @Override
     public void tearDown()
     {
         try
         {
-            //((BaseHibernateManager) permissionManager).getHibernateSession().close();
+            // ((BaseHibernateManager)
+            // permissionManager).getHibernateSession().close();
         }
         catch (Exception e)
         {
@@ -62,10 +66,10 @@ public class HibernateDynamicModelManagerTest
     }
 
     /**
-    * Constructor for HibernatePermissionManagerTest.
-    *
-    * @param arg0
-    */
+     * Constructor for HibernatePermissionManagerTest.
+     * 
+     * @param arg0
+     */
     public HibernateDynamicModelManagerTest(String arg0)
     {
         super(arg0);

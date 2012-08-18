@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.model.turbine;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -22,32 +23,33 @@ import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
- * This interface describes the methods that glue the "turbine"
- * model together.
- *
+ * This interface describes the methods that glue the "turbine" model together.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public interface TurbineUserManager extends UserManager
 {
     /**
-	* Constructs an User object to represent an anonymous user of the
-	* application.
-	*
-	* @return An anonymous Turbine User.
-	* @throws UnknownEntityException if the anonymous User object couldn't be
-	*         constructed.
-	*/
+     * Constructs an User object to represent an anonymous user of the
+     * application.
+     * 
+     * @return An anonymous Turbine User.
+     * @throws UnknownEntityException
+     *             if the anonymous User object couldn't be constructed.
+     */
     User getAnonymousUser() throws UnknownEntityException;
+
     /**
-	* Checks whether a passed user object matches the anonymous user pattern
-	* according to the configured user manager
-	*
-	* @param An user object
-	*
-	* @return True if this is an anonymous user
-	*
-	*/
+     * Checks whether a passed user object matches the anonymous user pattern
+     * according to the configured user manager
+     * 
+     * @param An
+     *            user object
+     * 
+     * @return True if this is an anonymous user
+     * 
+     */
     boolean isAnonymousUser(User u);
 
 }

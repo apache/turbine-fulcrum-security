@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.nt.dynamic;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -28,13 +29,15 @@ import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
+
 /**
- *
- * Test the NT implementation of the user manager. This test traps some exceptions that can be
- * thrown if there is NO nt dll.
- *
+ * 
+ * Test the NT implementation of the user manager. This test traps some
+ * exceptions that can be thrown if there is NO nt dll.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id$
+ * @version $Id: NTDynamicModelManagerTest.java 1374015 2012-08-16 19:48:54Z tv
+ *          $
  */
 public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConstants
 {
@@ -44,6 +47,7 @@ public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConst
     private UserManager userManager;
     private User user;
 
+    @Override
     public void setUp() throws Exception
     {
         this.setRoleFileName("src/test/DynamicNTRoleConfig.xml");
@@ -53,6 +57,7 @@ public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConst
         modelManager = (DynamicModelManager) securityService.getModelManager();
     }
 
+    @Override
     public void tearDown()
     {
         user = null;
@@ -62,7 +67,7 @@ public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConst
 
     /**
      * Constructor for NTDynamicModelManagerTest.
-     *
+     * 
      * @param arg0
      */
     public NTDynamicModelManagerTest(String arg0)
@@ -79,8 +84,9 @@ public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConst
             modelManager.revokeAll(user);
             fail("Should throw runtime exception");
         }
-        catch(DataBackendException dbe){
-            assertTrue(dbe.getMessage().indexOf(SCB_INVALID)>-1);
+        catch (DataBackendException dbe)
+        {
+            assertTrue(dbe.getMessage().indexOf(SCB_INVALID) > -1);
         }
         catch (UnknownEntityException re)
         {
@@ -112,7 +118,8 @@ public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConst
         {
             log.info("Unit test not being run due to missing NT DLL");
         }
-        catch (java.lang.NoClassDefFoundError ncdfe){
+        catch (java.lang.NoClassDefFoundError ncdfe)
+        {
             log.info("Unit test not being run due to missing NT DLL");
         }
     }
@@ -137,7 +144,8 @@ public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConst
         {
             log.info("Unit test not being run due to missing NT DLL");
         }
-        catch (java.lang.NoClassDefFoundError ncdfe){
+        catch (java.lang.NoClassDefFoundError ncdfe)
+        {
             log.info("Unit test not being run due to missing NT DLL");
         }
     }

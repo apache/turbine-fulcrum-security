@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.model.basic;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -25,41 +26,52 @@ import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
- * Describes all the relationships between entities in the "Basic" model.
- * This model pretty much allows a user to be in multiple groups.  There
- * is no concept of Permissions, Roles, Groups in Groups etc..
- *
+ * Describes all the relationships between entities in the "Basic" model. This
+ * model pretty much allows a user to be in multiple groups. There is no concept
+ * of Permissions, Roles, Groups in Groups etc..
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public interface BasicModelManager extends ModelManager
 {
-     /**
-	 * Puts a user in a group.
-	 *
-	 * This method is used when adding a user to a group
-	 *
-	 * @param user the User.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the account is not present.
-	 */
+    /**
+     * Puts a user in a group.
+     * 
+     * This method is used when adding a user to a group
+     * 
+     * @param user
+     *            the User.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the account is not present.
+     */
     void grant(User user, Group group) throws DataBackendException, UnknownEntityException;
+
     /**
-	 * Removes a user from a group
-	 *
-	 * @param user the User.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the user or group is not present.
-	 */
+     * Removes a user from a group
+     * 
+     * @param user
+     *            the User.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the user or group is not present.
+     */
     void revoke(User user, Group group) throws DataBackendException, UnknownEntityException;
+
     /**
-	 * Revokes all groups from an User.
-	 *
-	 * This method is used when deleting an account.
-	 *
-	 * @param user the User.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if the account is not present.
-	 */
+     * Revokes all groups from an User.
+     * 
+     * This method is used when deleting an account.
+     * 
+     * @param user
+     *            the User.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the account is not present.
+     */
     void revokeAll(User user) throws DataBackendException, UnknownEntityException;
 }

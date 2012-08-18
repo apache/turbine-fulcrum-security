@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.model.basic.test;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -28,11 +29,12 @@ import org.apache.fulcrum.security.model.basic.BasicModelManager;
 import org.apache.fulcrum.security.model.basic.entity.BasicGroup;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
+
 /**
  * @author Eric Pugh
- *
- * To change the template for this generated type comment go to Window>Preferences>Java>Code
- * Generation>Code and Comments
+ * 
+ *         To change the template for this generated type comment go to
+ *         Window>Preferences>Java>Code Generation>Code and Comments
  */
 public abstract class AbstractModelManagerTest extends BaseUnitTest
 {
@@ -42,18 +44,20 @@ public abstract class AbstractModelManagerTest extends BaseUnitTest
     protected UserManager userManager;
     protected SecurityService securityService;
 
+    @Override
     public void setUp() throws Exception
     {
         super.setUp();
         userManager = securityService.getUserManager();
         groupManager = securityService.getGroupManager();
-        modelManager=(BasicModelManager)securityService.getModelManager();
+        modelManager = (BasicModelManager) securityService.getModelManager();
     }
+
     /**
-	 * Constructor for AbstractRoleManagerTest.
-	 *
-	 * @param arg0
-	 */
+     * Constructor for AbstractRoleManagerTest.
+     * 
+     * @param arg0
+     */
     public AbstractModelManagerTest(String arg0)
     {
         super(arg0);
@@ -79,6 +83,7 @@ public abstract class AbstractModelManagerTest extends BaseUnitTest
         assertFalse(((BasicGroup) group).getUsersAsSet().contains(user));
         assertFalse(((BasicGroup) group2).getUsers().contains(user));
     }
+
     public void testGrantUserGroup() throws Exception
     {
         Group group = securityService.getGroupManager().getGroupInstance();
@@ -90,6 +95,7 @@ public abstract class AbstractModelManagerTest extends BaseUnitTest
         assertTrue(((BasicUser) user).getGroups().contains(group));
         assertTrue(((BasicGroup) group).getUsers().contains(user));
     }
+
     public void testRevokeUserGroup() throws Exception
     {
         Group group = securityService.getGroupManager().getGroupInstance();

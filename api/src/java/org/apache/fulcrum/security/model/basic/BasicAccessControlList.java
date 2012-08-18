@@ -25,37 +25,37 @@ import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.util.GroupSet;
 
-
 /**
- * This interface describes a control class that makes it
- * easy to find out if a particular User has a given Permission.
- * It also determines if a User has a a particular Role.
- *
+ * This interface describes a control class that makes it easy to find out if a
+ * particular User has a given Permission. It also determines if a User has a a
+ * particular Role.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public interface BasicAccessControlList
-  extends Serializable, AccessControlList
+public interface BasicAccessControlList extends Serializable, AccessControlList
 {
     /**
      * Retrieves all groups for a user
-     *
+     * 
      * @return the set of Groups this user has
      */
     GroupSet getGroups();
 
     /**
      * Checks if the user is assigned a specific Group
-     *
-     * @param role the Group
+     * 
+     * @param role
+     *            the Group
      * @return <code>true</code> if the user is assigned to the Group
      */
     boolean hasGroup(Group group);
 
     /**
      * Checks if the user is assigned a specific Group
-     *
-     * @param role the group name
+     * 
+     * @param role
+     *            the group name
      * @return <code>true</code>if the user is assigned the Group.
      */
     boolean hasGroup(String group);

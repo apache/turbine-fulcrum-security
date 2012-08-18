@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.model.test;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -28,9 +29,9 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
  * @author Eric Pugh
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * 
+ *         To change the template for this generated type comment go to
+ *         Window>Preferences>Java>Code Generation>Code and Comments
  */
 public abstract class AbstractRoleManagerTest extends BaseUnitTest
 {
@@ -40,6 +41,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
 
     /**
      * Constructor for AbstractRoleManagerTest.
+     * 
      * @param arg0
      */
     public AbstractRoleManagerTest(String arg0)
@@ -57,6 +59,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         assertNotNull(role);
         assertTrue(role.getName() == null);
     }
+
     /*
      * Class to test for Role getRoleInstance(String)
      */
@@ -65,6 +68,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         role = roleManager.getRoleInstance("DOG_CATCHER");
         assertEquals("dog_catcher", role.getName());
     }
+
     public void testGetRoleByName() throws Exception
     {
         role = roleManager.getRoleInstance("DOG_CATCHERd");
@@ -72,6 +76,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         Role role2 = roleManager.getRoleByName("DOG_CATCHERd");
         assertEquals(role.getName(), role2.getName());
     }
+
     public void testGetRoleById() throws Exception
     {
         role = roleManager.getRoleInstance("CLEAN_KENNEL_A");
@@ -90,6 +95,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         assertEquals("clean_grooming_room", role2.getName());
         assertEquals(size, roleManager.getAllRoles().size());
     }
+
     public void testGetAllRoles() throws Exception
     {
         int size = roleManager.getAllRoles().size();
@@ -99,7 +105,6 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         assertEquals(size + 1, roleSet.size());
     }
 
-
     public void testAddRole() throws Exception
     {
         role = roleManager.getRoleInstance("DOG_NAPPER");
@@ -108,6 +113,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         assertNotNull(role.getId());
         assertNotNull(roleManager.getRoleById(role.getId()));
     }
+
     public void testRemoveRole() throws Exception
     {
         role = roleManager.getRoleInstance("CLEAN_KENNEL_K");
@@ -121,10 +127,11 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         }
         catch (UnknownEntityException uee)
         {
-            //good
+            // good
         }
         assertEquals(size - 1, roleManager.getAllRoles().size());
     }
+
     public void testCheckExists() throws Exception
     {
         role = roleManager.getRoleInstance("GREET_PEOPLE");
@@ -133,6 +140,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         Role role2 = roleManager.getRoleInstance("WALK_DOGS");
         assertFalse(roleManager.checkExists(role2));
     }
+
     public void testCheckExistsWithString() throws Exception
     {
         role = roleManager.getRoleInstance("GREET_PEOPLE2");
@@ -141,6 +149,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         Role role2 = roleManager.getRoleInstance("WALK_DOGS2");
         assertFalse(roleManager.checkExists(role2.getName()));
     }
+
     /*
      * Class to test for boolean checkExists(string)
      */
@@ -150,11 +159,13 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         roleManager.addRole(role);
         assertTrue(roleManager.checkExists(role.getName()));
         Role role2 = roleManager.getRoleInstance("EATLUNCH");
-        try {
+        try
+        {
             roleManager.addRole(role2);
         }
-        catch (EntityExistsException uee){
-            //good
+        catch (EntityExistsException uee)
+        {
+            // good
         }
     }
 }

@@ -20,14 +20,13 @@ package org.apache.fulcrum.security.util;
  */
 
 /**
- * Thrown to indicate that the User,Role,Group or Permission that
- * was requested does not exist.
- *
+ * Thrown to indicate that the User,Role,Group or Permission that was requested
+ * does not exist.
+ * 
  * @author <a href="mailto:krzewski@e-point.pl">Rafal Krzewski</a>
  * @version $Id$
  */
-public class UnknownEntityException
-    extends FulcrumSecurityException
+public class UnknownEntityException extends FulcrumSecurityException
 {
     /**
      * Serial number
@@ -36,8 +35,9 @@ public class UnknownEntityException
 
     /**
      * Construct an UnknownEntityException with specified detail message.
-     *
-     * @param msg The detail message.
+     * 
+     * @param msg
+     *            The detail message.
      */
     public UnknownEntityException(String msg)
     {
@@ -45,12 +45,14 @@ public class UnknownEntityException
     }
 
     /**
-     * Construct an UnknownEntityException with specified detail message
-     * and nested <code>Throwable</code>.
-     *
-     * @param msg The detail message.
-     * @param nested the exception or error that caused this exception
-     *               to be thrown.
+     * Construct an UnknownEntityException with specified detail message and
+     * nested <code>Throwable</code>.
+     * 
+     * @param msg
+     *            The detail message.
+     * @param nested
+     *            the exception or error that caused this exception to be
+     *            thrown.
      */
     public UnknownEntityException(String msg, Throwable nested)
     {

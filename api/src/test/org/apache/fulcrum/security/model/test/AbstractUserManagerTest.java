@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.model.test;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -27,25 +28,29 @@ import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.UserSet;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
+
 /**
  * @author Eric Pugh
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * 
+ *         To change the template for this generated type comment go to
+ *         Window>Preferences>Java>Code Generation>Code and Comments
  */
-public abstract class AbstractUserManagerTest extends BaseUnitTest   {
+public abstract class AbstractUserManagerTest extends BaseUnitTest
+{
     protected User user;
     protected UserManager userManager;
     protected SecurityService securityService;
 
     /**
      * Constructor for AbstractUserManagerTest.
+     * 
      * @param arg0
      */
     public AbstractUserManagerTest(String arg0)
     {
         super(arg0);
     }
+
     public void testCheckExists() throws Exception
     {
         user = userManager.getUserInstance("Philip");
@@ -67,6 +72,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
         user = userManager.getUserInstance("ImaginaryFriend2");
         assertFalse(userManager.checkExists(user.getName()));
     }
+
     /*
      * Class to test for User retrieve(String)
      */
@@ -80,12 +86,13 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
 
     public void testGetUserById() throws Exception
     {
-    	user = userManager.getUserInstance("QuietMike2");
-    	userManager.addUser(user, "bobo");
+        user = userManager.getUserInstance("QuietMike2");
+        userManager.addUser(user, "bobo");
         User user2 = userManager.getUserById(user.getId());
         assertEquals(user.getName(), user2.getName());
         assertEquals(user.getId(), user2.getId());
     }
+
     /*
      * Class to test for User retrieve(String, String)
      */
@@ -104,17 +111,18 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
         }
         catch (PasswordMismatchException pme)
         {
-            //good
+            // good
         }
     }
-	public void testGetAllUsers() throws Exception
-	{
-		int size = userManager.getAllUsers().size();
-		user = userManager.getUserInstance("Bob");
-		userManager.addUser(user,"");
-		UserSet userSet = userManager.getAllUsers();
-		assertEquals(size + 1, userSet.size());
-	}
+
+    public void testGetAllUsers() throws Exception
+    {
+        int size = userManager.getAllUsers().size();
+        user = userManager.getUserInstance("Bob");
+        userManager.addUser(user, "");
+        UserSet userSet = userManager.getAllUsers();
+        assertEquals(size + 1, userSet.size());
+    }
 
     public void testAuthenticate() throws Exception
     {
@@ -128,9 +136,10 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
         }
         catch (PasswordMismatchException pme)
         {
-            //good
+            // good
         }
     }
+
     public void testChangePassword() throws Exception
     {
         user = userManager.getUserInstance("Jonathan");
@@ -142,11 +151,12 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
         }
         catch (PasswordMismatchException pme)
         {
-            //good
+            // good
         }
         userManager.changePassword(user, "jc", "JC");
         userManager.authenticate(user, "JC");
     }
+
     public void testForcePassword() throws Exception
     {
         user = userManager.getUserInstance("Connor");
@@ -154,6 +164,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
         userManager.forcePassword(user, "JC_SUBSET");
         userManager.authenticate(user, "JC_SUBSET");
     }
+
     /*
      * Class to test for User getUserInstance()
      */
@@ -163,6 +174,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
         assertNotNull(user);
         assertTrue(user.getName() == null);
     }
+
     /*
      * Class to test for User getUserInstance(String)
      */
@@ -173,8 +185,9 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
     }
 
     /**
-     * Need to figure out if save is something we want..
-     * right now it just bloes up if you actually cahnge anything.
+     * Need to figure out if save is something we want.. right now it just bloes
+     * up if you actually cahnge anything.
+     * 
      * @todo figur out what to do here...
      * @throws Exception
      */
@@ -195,6 +208,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
         AccessControlList acl = userManager.getACL(user);
         assertNotNull(acl);
     }
+
     public void testRemoveUser() throws Exception
     {
         user = userManager.getUserInstance("Rick");
@@ -207,16 +221,17 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
         }
         catch (UnknownEntityException uee)
         {
-            //good
+            // good
         }
     }
+
     public void testAddUser() throws Exception
     {
         user = userManager.getUserInstance("Joe1");
-		assertNull(user.getId());
+        assertNull(user.getId());
         userManager.addUser(user, "mc");
         user = userManager.getUserInstance("Joe2");
-		assertNull(user.getId());
+        assertNull(user.getId());
         userManager.addUser(user, "mc");
         assertNotNull(user.getId());
         assertNotNull(userManager.getUser(user.getName()));
@@ -228,26 +243,31 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest   {
     public void testAddUserTwiceFails() throws Exception
     {
         user = userManager.getUserInstance("EATLUNCH");
-        userManager.addUser(user,"bob");
+        userManager.addUser(user, "bob");
         assertTrue(userManager.checkExists(user.getName()));
         User user2 = userManager.getUserInstance("EATLUNCH");
-        try {
-            userManager.addUser(user2,"bob");
+        try
+        {
+            userManager.addUser(user2, "bob");
         }
-        catch (EntityExistsException uee){
-            //good
+        catch (EntityExistsException uee)
+        {
+            // good
         }
-        try {
-            userManager.addUser(user2,"differentpassword");
+        try
+        {
+            userManager.addUser(user2, "differentpassword");
         }
-        catch (EntityExistsException uee){
-            //good
+        catch (EntityExistsException uee)
+        {
+            // good
         }
     }
 
-    public void testCheckUserCaseSensitiveExists() throws Exception {
+    public void testCheckUserCaseSensitiveExists() throws Exception
+    {
         user = userManager.getUserInstance("borrisJohnson");
-        userManager.addUser(user,"bob");
+        userManager.addUser(user, "bob");
 
         assertTrue(userManager.checkExists("borrisJohnson"));
     }

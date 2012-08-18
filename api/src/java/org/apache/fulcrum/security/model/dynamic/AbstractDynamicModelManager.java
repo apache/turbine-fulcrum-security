@@ -34,175 +34,190 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
  * Holds shared functionality between different implementations of
  * DyanamicModelManager's.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @author <a href="mailto:ben@gidley.co.uk">Ben Gidley</a>
  * @version $Id: AbstractDynamicModelManager.java,v 1.2 2004/07/07 18:18:09
  *          epugh Exp $
  */
-public abstract class AbstractDynamicModelManager extends AbstractManager
-		implements DynamicModelManager {
-	/**
-	 * Revokes all roles from a permission
-	 *
-	 * This method is used when deleting a permission.
-	 *
-	 * @param permission
-	 *            the permission.
-	 * @throws DataBackendException
-	 *             if there was an error accessing the data backend.
-	 * @throws UnknownEntityException
-	 *             if the account is not present.
-	 */
-	public synchronized void revokeAll(Permission permission)
-			throws DataBackendException, UnknownEntityException {
-		boolean permissionExists = false;
-		permissionExists = getPermissionManager().checkExists(permission);
-		if (permissionExists) {
-			Object roles[] = ((DynamicPermission) permission).getRoles()
-					.toArray();
-			for (int i = 0; i < roles.length; i++) {
-				revoke((Role) roles[i], permission);
-			}
+public abstract class AbstractDynamicModelManager extends AbstractManager implements DynamicModelManager
+{
+    /**
+     * Revokes all roles from a permission
+     * 
+     * This method is used when deleting a permission.
+     * 
+     * @param permission
+     *            the permission.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the account is not present.
+     */
+    public synchronized void revokeAll(Permission permission) throws DataBackendException, UnknownEntityException
+    {
+        boolean permissionExists = false;
+        permissionExists = getPermissionManager().checkExists(permission);
+        if (permissionExists)
+        {
+            Object roles[] = ((DynamicPermission) permission).getRoles().toArray();
+            for (Object role2 : roles)
+            {
+                revoke((Role) role2, permission);
+            }
 
-			return;
-		} else {
-			throw new UnknownEntityException("Unknown permission '"
-					+ permission.getName() + "'");
-		}
-	}
+            return;
+        }
+        else
+        {
+            throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
+        }
+    }
 
-	/**
-	 * Revokes all users and roles from a group
-	 *
-	 * This method is used when deleting a group.
-	 *
-	 * @param group
-	 *            the Group.
-	 * @throws DataBackendException
-	 *             if there was an error accessing the data backend.
-	 * @throws UnknownEntityException
-	 *             if the account is not present.
-	 */
-	public synchronized void revokeAll(Group group)
-			throws DataBackendException, UnknownEntityException {
-		boolean groupExists = false;
-		groupExists = getGroupManager().checkExists(group);
-		if (groupExists) {
-			Object users[] = ((DynamicGroup) group).getUsers().toArray();
-			for (int i = 0; i < users.length; i++) {
-				revoke((User) users[i], group);
-			}
+    /**
+     * Revokes all users and roles from a group
+     * 
+     * This method is used when deleting a group.
+     * 
+     * @param group
+     *            the Group.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the account is not present.
+     */
+    public synchronized void revokeAll(Group group) throws DataBackendException, UnknownEntityException
+    {
+        boolean groupExists = false;
+        groupExists = getGroupManager().checkExists(group);
+        if (groupExists)
+        {
+            Object users[] = ((DynamicGroup) group).getUsers().toArray();
+            for (Object user : users)
+            {
+                revoke((User) user, group);
+            }
 
-			Object roles[] = ((DynamicGroup) group).getRoles().toArray();
-			for (int i = 0; i < roles.length; i++) {
-				revoke(group, (Role) roles[i]);
-			}
+            Object roles[] = ((DynamicGroup) group).getRoles().toArray();
+            for (Object role2 : roles)
+            {
+                revoke(group, (Role) role2);
+            }
 
-			return;
-		} else {
-			throw new UnknownEntityException("Unknown group '"
-					+ group.getName() + "'");
-		}
-	}
+            return;
+        }
+        else
+        {
+            throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
+        }
+    }
 
-	/**
-	 * Revokes all groups from a user
-	 *
-	 * This method is used when deleting an account.
-	 *
-	 * @param user
-	 *            the User.
-	 * @throws DataBackendException
-	 *             if there was an error accessing the data backend.
-	 * @throws UnknownEntityException
-	 *             if the account is not present.
-	 */
-	public synchronized void revokeAll(User user) throws DataBackendException,
-			UnknownEntityException {
-		boolean userExists = false;
-		userExists = getUserManager().checkExists(user);
-		if (userExists) {
-			Object groups[] = ((DynamicUser) user).getGroups().toArray();
-			for (int i = 0; i < groups.length; i++) {
-				revoke(user, (Group) groups[i]);
-			}
+    /**
+     * Revokes all groups from a user
+     * 
+     * This method is used when deleting an account.
+     * 
+     * @param user
+     *            the User.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the account is not present.
+     */
+    public synchronized void revokeAll(User user) throws DataBackendException, UnknownEntityException
+    {
+        boolean userExists = false;
+        userExists = getUserManager().checkExists(user);
+        if (userExists)
+        {
+            Object groups[] = ((DynamicUser) user).getGroups().toArray();
+            for (Object group : groups)
+            {
+                revoke(user, (Group) group);
+            }
 
-			return;
-		} else {
-			throw new UnknownEntityException("Unknown user '" + user.getName()
-					+ "'");
-		}
-	}
+            return;
+        }
+        else
+        {
+            throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
+        }
+    }
 
-	/**
-	 * Revokes all permissions and groups from a Role.
-	 *
-	 * This method is used when deleting a Role.
-	 *
-	 * @param role
-	 *            the Role
-	 * @throws DataBackendException
-	 *             if there was an error accessing the data backend.
-	 * @throws UnknownEntityException
-	 *             if the Role is not present.
-	 */
-	public synchronized void revokeAll(Role role) throws DataBackendException,
-			UnknownEntityException {
-		boolean roleExists = false;
-		roleExists = getRoleManager().checkExists(role);
-		if (roleExists) {
-			Object groups[] = ((DynamicRole) role).getGroups().toArray();
-			for (int i = 0; i < groups.length; i++) {
-				revoke((Group) groups[i], role);
-			}
+    /**
+     * Revokes all permissions and groups from a Role.
+     * 
+     * This method is used when deleting a Role.
+     * 
+     * @param role
+     *            the Role
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the Role is not present.
+     */
+    public synchronized void revokeAll(Role role) throws DataBackendException, UnknownEntityException
+    {
+        boolean roleExists = false;
+        roleExists = getRoleManager().checkExists(role);
+        if (roleExists)
+        {
+            Object groups[] = ((DynamicRole) role).getGroups().toArray();
+            for (Object group : groups)
+            {
+                revoke((Group) group, role);
+            }
 
-			Object permissions[] = ((DynamicRole) role).getPermissions()
-					.toArray();
-			for (int i = 0; i < permissions.length; i++) {
-				revoke(role, (Permission) permissions[i]);
-			}
-		} else {
-			throw new UnknownEntityException("Unknown role '" + role.getName()
-					+ "'");
-		}
+            Object permissions[] = ((DynamicRole) role).getPermissions().toArray();
+            for (Object permission : permissions)
+            {
+                revoke(role, (Permission) permission);
+            }
+        }
+        else
+        {
+            throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
+        }
 
-	}
+    }
 
-	/**
-	 * It is expected the real implementation will overide this and save either
-	 * side of the function. It is not abstract as a in memory implementation
-	 * would not need to do anything.
-	 */
-	public void addDelegate(User delegator, User delegatee)
-			throws DataBackendException, UnknownEntityException {
-		DynamicUser dynamicDelegator = (DynamicUser) delegator;
-		DynamicUser dynamicDelegatee = (DynamicUser) delegatee;
+    /**
+     * It is expected the real implementation will overide this and save either
+     * side of the function. It is not abstract as a in memory implementation
+     * would not need to do anything.
+     */
+    public void addDelegate(User delegator, User delegatee) throws DataBackendException, UnknownEntityException
+    {
+        DynamicUser dynamicDelegator = (DynamicUser) delegator;
+        DynamicUser dynamicDelegatee = (DynamicUser) delegatee;
 
-		// check it hasn't already been done
-		// It is NOT an error to call this twice
-		if (!(dynamicDelegator.getDelegatees().contains(delegatee) || dynamicDelegatee
-				.getDelegators().contains(delegator))) {
-			dynamicDelegator.getDelegatees().add(dynamicDelegatee);
-			dynamicDelegatee.getDelegators().add(dynamicDelegator);
-		}
-	}
+        // check it hasn't already been done
+        // It is NOT an error to call this twice
+        if (!(dynamicDelegator.getDelegatees().contains(delegatee) || dynamicDelegatee.getDelegators().contains(delegator)))
+        {
+            dynamicDelegator.getDelegatees().add(dynamicDelegatee);
+            dynamicDelegatee.getDelegators().add(dynamicDelegator);
+        }
+    }
 
-	/**
-	 * Implementors should overide this to save and call super if
-	 * they want the base class to do the work
-	 */
-	public void removeDelegate(User delegator, User delegatee)
-			throws DataBackendException, UnknownEntityException {
-		DynamicUser dynamicDelegator = (DynamicUser) delegator;
-		DynamicUser dynamicDelegatee = (DynamicUser) delegatee;
+    /**
+     * Implementors should overide this to save and call super if they want the
+     * base class to do the work
+     */
+    public void removeDelegate(User delegator, User delegatee) throws DataBackendException, UnknownEntityException
+    {
+        DynamicUser dynamicDelegator = (DynamicUser) delegator;
+        DynamicUser dynamicDelegatee = (DynamicUser) delegatee;
 
-		if (dynamicDelegator.getDelegatees().contains(dynamicDelegatee)){
-			dynamicDelegator.getDelegatees().remove(dynamicDelegatee);
-			dynamicDelegatee.getDelegators().remove(dynamicDelegator);
-		}else {
-			throw new UnknownEntityException("Tried to remove a delegate that does not exist");
-		}
+        if (dynamicDelegator.getDelegatees().contains(dynamicDelegatee))
+        {
+            dynamicDelegator.getDelegatees().remove(dynamicDelegatee);
+            dynamicDelegatee.getDelegators().remove(dynamicDelegator);
+        }
+        else
+        {
+            throw new UnknownEntityException("Tried to remove a delegate that does not exist");
+        }
 
-	}
+    }
 }

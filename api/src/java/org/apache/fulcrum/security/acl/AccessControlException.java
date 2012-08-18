@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.acl;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,14 +21,13 @@ package org.apache.fulcrum.security.acl;
 import org.apache.fulcrum.security.util.FulcrumSecurityException;
 
 /**
- * Thrown to indicate that the User attempted to perform an operation that
- * was not permitted by the security settings.
- *
+ * Thrown to indicate that the User attempted to perform an operation that was
+ * not permitted by the security settings.
+ * 
  * @author <a href="mailto:krzewski@e-point.pl">Rafal Krzewski</a>
  * @version $Id$
  */
-public class AccessControlException
-    extends FulcrumSecurityException
+public class AccessControlException extends FulcrumSecurityException
 {
     /**
      * Serial number
@@ -36,8 +36,9 @@ public class AccessControlException
 
     /**
      * Construct an AccessControlException with specified detail message.
-     *
-     * @param msg The detail message.
+     * 
+     * @param msg
+     *            The detail message.
      */
     public AccessControlException(String msg)
     {

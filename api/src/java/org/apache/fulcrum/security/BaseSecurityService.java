@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -24,21 +25,20 @@ import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 import org.apache.avalon.framework.thread.ThreadSafe;
+
 /**
  * This a basis implementation of the Fulcrum security service.
- *
+ * 
  * Provided functionality includes:
  * <ul>
  * <li>methods for retrieving different types of managers.
  * <li>avalon lifecyle managers.
  * </ul>
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric PUgh</a>
  * @version $Id$
  */
-public class BaseSecurityService
-    extends AbstractLogEnabled
-    implements SecurityService, Initializable, Serviceable, ThreadSafe
+public class BaseSecurityService extends AbstractLogEnabled implements SecurityService, Initializable, Serviceable, ThreadSafe
 {
     private ServiceManager manager = null;
     // management of Groups/Role/Permissions
@@ -61,10 +61,10 @@ public class BaseSecurityService
     protected ModelManager modelManager = null;
 
     /**
-	 * Returns the configured UserManager.
-	 *
-	 * @return An UserManager object
-	 */
+     * Returns the configured UserManager.
+     * 
+     * @return An UserManager object
+     */
     public UserManager getUserManager()
     {
         if (userManager == null)
@@ -80,11 +80,12 @@ public class BaseSecurityService
         }
         return userManager;
     }
+
     /**
-	 * Returns the configured GroupManager.
-	 *
-	 * @return An UserManager object
-	 */
+     * Returns the configured GroupManager.
+     * 
+     * @return An UserManager object
+     */
     public GroupManager getGroupManager()
     {
         if (groupManager == null)
@@ -100,11 +101,12 @@ public class BaseSecurityService
         }
         return groupManager;
     }
+
     /**
-	 * Returns the configured RoleManager.
-	 *
-	 * @return An RoleManager object
-	 */
+     * Returns the configured RoleManager.
+     * 
+     * @return An RoleManager object
+     */
     public RoleManager getRoleManager()
     {
         if (roleManager == null)
@@ -122,10 +124,10 @@ public class BaseSecurityService
     }
 
     /**
-	 * Returns the configured PermissionManager.
-	 *
-	 * @return An PermissionManager object
-	 */
+     * Returns the configured PermissionManager.
+     * 
+     * @return An PermissionManager object
+     */
     public PermissionManager getPermissionManager()
     {
         if (permissionManager == null)
@@ -143,10 +145,10 @@ public class BaseSecurityService
     }
 
     /**
-	 * Returns the configured ModelManager.
-	 *
-	 * @return An ModelManager object
-	 */
+     * Returns the configured ModelManager.
+     * 
+     * @return An ModelManager object
+     */
     public ModelManager getModelManager()
     {
         if (modelManager == null)
@@ -164,26 +166,28 @@ public class BaseSecurityService
     }
 
     /**
-	 * Configure a new role Manager.
-	 *
-	 * @param permissionManager An PermissionManager object
-	 */
+     * Configure a new role Manager.
+     * 
+     * @param permissionManager
+     *            An PermissionManager object
+     */
     // void setPermissionManager(PermissionManager permissionManager);
 
     /**
-	 * Avalon Service lifecycle method
-	 */
+     * Avalon Service lifecycle method
+     */
     public void service(ServiceManager manager) throws ServiceException
     {
         this.manager = manager;
     }
 
     /**
-	 * Avalon Service lifecycle method Initializes the SecurityService, locating the appropriate
-	 * UserManager
-	 *
-	 * @throws Exception A Problem occurred while initializing the User Manager.
-	 */
+     * Avalon Service lifecycle method Initializes the SecurityService, locating
+     * the appropriate UserManager
+     * 
+     * @throws Exception
+     *             A Problem occurred while initializing the User Manager.
+     */
     public void initialize() throws Exception
     {
         userClassName = null;
@@ -194,8 +198,8 @@ public class BaseSecurityService
     }
 
     /**
-	 * Avalon Service lifecycle method
-	 */
+     * Avalon Service lifecycle method
+     */
     public void dispose()
     {
         manager.release(userManager);

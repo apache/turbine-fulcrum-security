@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.model.basic.entity;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -27,7 +28,7 @@ import org.apache.fulcrum.security.util.UserSet;
 /**
  * Represents the "basic" model where users are part of groups, but nothing
  * else.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -35,43 +36,47 @@ public interface BasicGroup extends Group
 {
     /**
      * Get the users that are part of this group
-     *
+     * 
      * @return a set of users
      */
-	public UserSet getUsers();
+    public UserSet getUsers();
 
     /**
      * Set the users that are part of this group
-     *
-	 * @param userSet a set of users
-	 */
-	public void setUsers(UserSet userSet);
+     * 
+     * @param userSet
+     *            a set of users
+     */
+    public void setUsers(UserSet userSet);
 
     /**
      * Get the users that are part of this group as a Set
-     *
+     * 
      * @return a set of users
      */
-	public <T extends User> Set<T> getUsersAsSet();
+    public <T extends User> Set<T> getUsersAsSet();
 
     /**
      * Set the users that are part of this group as a Set
-     *
-     * @param userSet a set of users
+     * 
+     * @param userSet
+     *            a set of users
      */
-	public <T extends User> void setUsersAsSet(Set<T> users);
+    public <T extends User> void setUsersAsSet(Set<T> users);
 
     /**
      * Add a user to this group
-     *
-     * @param user the user to add
+     * 
+     * @param user
+     *            the user to add
      */
-	public void addUser(User user);
+    public void addUser(User user);
 
     /**
      * Remove a user from this group
-     *
-     * @param user the user to remove
+     * 
+     * @param user
+     *            the user to remove
      */
-	public void removeUser(User user);
+    public void removeUser(User user);
 }

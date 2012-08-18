@@ -19,34 +19,38 @@ package org.apache.fulcrum.security.entity;
  * under the License.
  */
 import java.io.Serializable;
+
 /**
  * This interface represents the basic functionality of a user.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public interface User extends Serializable, SecurityEntity
 {
     /**
-    * Returns the user's password. This method should not be used by
-    * the application directly, because it's meaning depends upon
-    * the implementation of UserManager that manages this particular
-    * user object. Some implementations will use this attribute for
-    * storing a password encrypted in some way, other will not use
-    * it at all, when user entered password is presented to some external
-    * authority (like NT domain controller) to validate it.
-    * See also {@link org.apache.fulcrum.security.UserManager#authenticate(User,String)}.
-    *
-    * @return A String with the password for the user.
-    */
+     * Returns the user's password. This method should not be used by the
+     * application directly, because it's meaning depends upon the
+     * implementation of UserManager that manages this particular user object.
+     * Some implementations will use this attribute for storing a password
+     * encrypted in some way, other will not use it at all, when user entered
+     * password is presented to some external authority (like NT domain
+     * controller) to validate it. See also
+     * {@link org.apache.fulcrum.security.UserManager#authenticate(User,String)}
+     * .
+     * 
+     * @return A String with the password for the user.
+     */
     String getPassword();
 
     /**
-     * Set password. Application should not use this method
-     * directly, see {@link #getPassword()}.
-     * See also {@link org.apache.fulcrum.security.UserManager#changePassword(User,String,String)}.
-     *
-     * @param password The new password.
+     * Set password. Application should not use this method directly, see
+     * {@link #getPassword()}. See also
+     * {@link org.apache.fulcrum.security.UserManager#changePassword(User,String,String)}
+     * .
+     * 
+     * @param password
+     *            The new password.
      */
     void setPassword(String password);
 

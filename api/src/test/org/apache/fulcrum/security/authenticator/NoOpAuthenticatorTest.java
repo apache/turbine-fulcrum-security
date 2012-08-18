@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.authenticator;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -24,7 +25,7 @@ import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
 
 /**
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -32,12 +33,12 @@ public class NoOpAuthenticatorTest extends TestCase
 {
     public void testAuthenticate() throws Exception
     {
-    	User user = new DynamicUserImpl();
-    	user.setName("Bob");
-    	user.setPassword("myPassword");
-    	Authenticator authenticator = new NoOpAuthenticator();
-		assertTrue(authenticator.authenticate(user,"myPassword"));
-		assertTrue(authenticator.authenticate(user,"mypassword"));
-		assertTrue(authenticator.authenticate(null,null));
+        User user = new DynamicUserImpl();
+        user.setName("Bob");
+        user.setPassword("myPassword");
+        Authenticator authenticator = new NoOpAuthenticator();
+        assertTrue(authenticator.authenticate(user, "myPassword"));
+        assertTrue(authenticator.authenticate(user, "mypassword"));
+        assertTrue(authenticator.authenticate(null, null));
     }
 }

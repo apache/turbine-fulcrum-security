@@ -26,11 +26,12 @@ import org.apache.fulcrum.security.entity.Role;
  * Represents the "turbine" model where permissions are in a many to many
  * relationship to roles, roles are related to groups are related to users, all
  * in many to many relationships.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @version $Id$
  */
-public class TurbineRolePermissionoff {
+public class TurbineRolePermissionoff
+{
     private Role role;
 
     private Permission permission;
@@ -38,14 +39,16 @@ public class TurbineRolePermissionoff {
     /**
      * @return Returns the permission.
      */
-    public Permission getPermission() {
+    public Permission getPermission()
+    {
         return permission;
     }
 
     /**
      * @return Returns the role.
      */
-    public Role getRole() {
+    public Role getRole()
+    {
         return role;
     }
 
@@ -53,7 +56,8 @@ public class TurbineRolePermissionoff {
      * @param permission
      *            The permission to set.
      */
-    public void setPermission(Permission permission) {
+    public void setPermission(Permission permission)
+    {
         this.permission = permission;
     }
 
@@ -61,7 +65,8 @@ public class TurbineRolePermissionoff {
      * @param role
      *            The role to set.
      */
-    public void setRole(Role role) {
+    public void setRole(Role role)
+    {
         this.role = role;
     }
 }

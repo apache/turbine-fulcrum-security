@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.hibernate.turbine;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -31,25 +32,31 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
+
 /**
  * This implementation persists to a database via Hibernate.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id$
+ * @version $Id: HibernateModelManagerImpl.java 1374014 2012-08-16 19:47:27Z tv
+ *          $
  */
 public class HibernateModelManagerImpl extends AbstractTurbineModelManager implements TurbineModelManager
 {
     private PersistenceHelper persistenceHelper;
+
     /**
-	 * Grants a Role a Permission
-	 *
-	 * @param role the Role.
-	 * @param permission the Permission.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if role or permission is not present.
-	 */
-    public synchronized void grant(Role role, Permission permission)
-        throws DataBackendException, UnknownEntityException
+     * Grants a Role a Permission
+     * 
+     * @param role
+     *            the Role.
+     * @param permission
+     *            the Permission.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if role or permission is not present.
+     */
+    public synchronized void grant(Role role, Permission permission) throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
         boolean permissionExists = false;
@@ -82,15 +89,18 @@ public class HibernateModelManagerImpl extends AbstractTurbineModelManager imple
     }
 
     /**
-	 * Revokes a Permission from a Role.
-	 *
-	 * @param role the Role.
-	 * @param permission the Permission.
-	 * @throws DataBackendException if there was an error accessing the data backend.
-	 * @throws UnknownEntityException if role or permission is not present.
-	 */
-    public synchronized void revoke(Role role, Permission permission)
-        throws DataBackendException, UnknownEntityException
+     * Revokes a Permission from a Role.
+     * 
+     * @param role
+     *            the Role.
+     * @param permission
+     *            the Permission.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if role or permission is not present.
+     */
+    public synchronized void revoke(Role role, Permission permission) throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
         boolean permissionExists = false;
@@ -121,25 +131,30 @@ public class HibernateModelManagerImpl extends AbstractTurbineModelManager imple
     }
 
     /**
-	 * @return Returns the persistenceHelper.
-	 */
-	public PersistenceHelper getPersistenceHelper()
-	{
-		if (persistenceHelper == null)
-		{
-			persistenceHelper = (PersistenceHelper)resolve(PersistenceHelper.ROLE);
-		}
-		return persistenceHelper;
-	}
+     * @return Returns the persistenceHelper.
+     */
+    public PersistenceHelper getPersistenceHelper()
+    {
+        if (persistenceHelper == null)
+        {
+            persistenceHelper = (PersistenceHelper) resolve(PersistenceHelper.ROLE);
+        }
+        return persistenceHelper;
+    }
 
     /**
      * Grant an User a Role in a Group.
-     *
-     * @param user the user.
-     * @param group the group.
-     * @param role the role.
-     * @throws DataBackendException if there was an error accessing the data backend.
-     * @throws UnknownEntityException if user account, group or role is not present.
+     * 
+     * @param user
+     *            the user.
+     * @param group
+     *            the group.
+     * @param role
+     *            the role.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if user account, group or role is not present.
      */
     public void grant(User user, Group group, Role role) throws DataBackendException, UnknownEntityException
     {
@@ -169,41 +184,52 @@ public class HibernateModelManagerImpl extends AbstractTurbineModelManager imple
         {
             throw new DataBackendException("grant(User,Group,Role) failed", e);
         }
-        if (!roleExists) {
+        if (!roleExists)
+        {
             throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
         }
-        if (!groupExists) {
+        if (!groupExists)
+        {
             throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
         }
-        if (!userExists) {
+        if (!userExists)
+        {
             throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
         }
     }
 
     /**
      * Revoke a Role in a Group from an User.
-     *
-     * @param user the user.
-     * @param group the group.
-     * @param role the role.
-     * @throws DataBackendException if there was an error accessing the data backend.
-     * @throws UnknownEntityException if user account, group or role is not present.
+     * 
+     * @param user
+     *            the user.
+     * @param group
+     *            the group.
+     * @param role
+     *            the role.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if user account, group or role is not present.
      */
-    public void revoke(User user, Group group, Role role) throws DataBackendException, UnknownEntityException {
+    public void revoke(User user, Group group, Role role) throws DataBackendException, UnknownEntityException
+    {
         boolean roleExists = false;
         boolean userExists = false;
         boolean groupExists = false;
-        try {
+        try
+        {
             roleExists = getRoleManager().checkExists(role);
             userExists = getUserManager().checkExists(user);
             groupExists = getGroupManager().checkExists(group);
-            if (roleExists && groupExists && userExists) {
+            if (roleExists && groupExists && userExists)
+            {
                 boolean ugrFound = false;
-                for(TurbineUserGroupRole ugr : ((TurbineUser) user).getUserGroupRoleSet())
+                for (TurbineUserGroupRole ugr : ((TurbineUser) user).getUserGroupRoleSet())
                 {
-                    if(ugr.getUser().equals(user)&& ugr.getGroup().equals(group) && ugr.getRole().equals(role))
+                    if (ugr.getUser().equals(user) && ugr.getGroup().equals(group) && ugr.getRole().equals(role))
                     {
-                        ugrFound=true;
+                        ugrFound = true;
 
                         ((TurbineUser) user).removeUserGroupRole(ugr);
                         ((TurbineGroup) group).removeUserGroupRole(ugr);
@@ -216,7 +242,8 @@ public class HibernateModelManagerImpl extends AbstractTurbineModelManager imple
                         break;
                     }
                 }
-                if(!ugrFound){
+                if (!ugrFound)
+                {
                     throw new UnknownEntityException("Could not find User/Group/Role");
                 }
 
@@ -227,13 +254,16 @@ public class HibernateModelManagerImpl extends AbstractTurbineModelManager imple
         {
             throw new DataBackendException("revoke(User,Group,Role) failed", e);
         }
-        if (!roleExists) {
+        if (!roleExists)
+        {
             throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
         }
-        if (!groupExists) {
+        if (!groupExists)
+        {
             throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
         }
-        if (!userExists) {
+        if (!userExists)
+        {
             throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
         }
     }

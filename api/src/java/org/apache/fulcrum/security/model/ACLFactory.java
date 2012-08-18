@@ -22,11 +22,9 @@ package org.apache.fulcrum.security.model;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.User;
 
-
 /**
- * This interface describes a factory for creating AccessControlList
- * objects.
- *
+ * This interface describes a factory for creating AccessControlList objects.
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:greg@shwoop.com">Greg Ritter</a>

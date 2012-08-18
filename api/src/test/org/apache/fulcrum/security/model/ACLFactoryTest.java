@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.model;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -36,7 +37,7 @@ import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -47,7 +48,6 @@ public class ACLFactoryTest extends BaseUnitTest
     {
         super(arg0);
     }
-
 
     public void testCreatingDynamicACL() throws Exception
     {
@@ -92,7 +92,7 @@ public class ACLFactoryTest extends BaseUnitTest
         user.addGroup(group);
         AccessControlList acl = factory.getAccessControlList(user);
         assertTrue(acl instanceof BasicAccessControlList);
-		BasicAccessControlList bacl = (BasicAccessControlList) acl;
+        BasicAccessControlList bacl = (BasicAccessControlList) acl;
         assertTrue(bacl.hasGroup(group));
 
     }

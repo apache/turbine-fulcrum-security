@@ -34,69 +34,79 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
  * Holds shared functionality between different implementations of
  * TurbineModelManager's.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @version $Id: AbstractDynamicModelManager.java,v 1.2 2004/07/07 18:18:09
  *          epugh Exp $
  */
-public abstract class AbstractTurbineModelManager extends AbstractManager
-		implements TurbineModelManager {
+public abstract class AbstractTurbineModelManager extends AbstractManager implements TurbineModelManager
+{
     /**
      * Provides a reference to the Group object that represents the <a
      * href="#global">global group </a>.
-     *
+     * 
      * @return A Group object that represents the global group.
      */
-    public Group getGlobalGroup() throws DataBackendException {
+    public Group getGlobalGroup() throws DataBackendException
+    {
         Group g = null;
-        try {
+        try
+        {
             g = getGroupManager().getGroupByName(GLOBAL_GROUP_NAME);
-        } catch (UnknownEntityException uee) {
+        }
+        catch (UnknownEntityException uee)
+        {
             g = getGroupManager().getGroupInstance(GLOBAL_GROUP_NAME);
-            try {
+            try
+            {
                 getGroupManager().addGroup(g);
-            } catch (EntityExistsException eee) {
+            }
+            catch (EntityExistsException eee)
+            {
                 throw new DataBackendException(eee.getMessage(), eee);
             }
 
         }
         return g;
     }
-	/**
-	 * Revokes all permissions and groups from a Role.
-	 *
-	 * This method is used when deleting a Role.
-	 *
-	 * @param role
-	 *            the Role
-	 * @throws DataBackendException
-	 *             if there was an error accessing the data backend.
-	 * @throws UnknownEntityException
-	 *             if the Role is not present.
-	 */
-	public synchronized void revokeAll(Role role) throws DataBackendException,
-			UnknownEntityException {
-		boolean roleExists = false;
-		roleExists = getRoleManager().checkExists(role);
-		if (roleExists) {
 
-			Object permissions[] = ((TurbineRole) role).getPermissions()
-					.toArray();
-			for (int i = 0; i < permissions.length; i++) {
-				revoke(role, (Permission) permissions[i]);
-			}
-		} else {
-			throw new UnknownEntityException("Unknown role '" + role.getName()
-					+ "'");
-		}
+    /**
+     * Revokes all permissions and groups from a Role.
+     * 
+     * This method is used when deleting a Role.
+     * 
+     * @param role
+     *            the Role
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the Role is not present.
+     */
+    public synchronized void revokeAll(Role role) throws DataBackendException, UnknownEntityException
+    {
+        boolean roleExists = false;
+        roleExists = getRoleManager().checkExists(role);
+        if (roleExists)
+        {
 
-	}
+            Object permissions[] = ((TurbineRole) role).getPermissions().toArray();
+            for (Object permission : permissions)
+            {
+                revoke(role, (Permission) permission);
+            }
+        }
+        else
+        {
+            throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
+        }
+
+    }
 
     /**
      * Revokes all roles and groups from a User.
-     *
+     * 
      * This method is used when deleting a User.
-     *
+     * 
      * @param user
      *            the User
      * @throws DataBackendException
@@ -104,21 +114,23 @@ public abstract class AbstractTurbineModelManager extends AbstractManager
      * @throws UnknownEntityException
      *             if the Role is not present.
      */
-    public synchronized void revokeAll(User user) throws DataBackendException,
-            UnknownEntityException {
+    public synchronized void revokeAll(User user) throws DataBackendException, UnknownEntityException
+    {
         boolean userExists = false;
         userExists = getUserManager().checkExists(user);
-        if (userExists) {
+        if (userExists)
+        {
 
-            Object userGroupRoles[] = ((TurbineUser) user).getUserGroupRoleSet()
-                    .toArray();
-            for (int i = 0; i < userGroupRoles.length; i++) {
-                TurbineUserGroupRole ugr =(TurbineUserGroupRole)userGroupRoles[i];
-                revoke(user, ugr.getGroup(),ugr.getRole());
+            Object userGroupRoles[] = ((TurbineUser) user).getUserGroupRoleSet().toArray();
+            for (Object userGroupRole : userGroupRoles)
+            {
+                TurbineUserGroupRole ugr = (TurbineUserGroupRole) userGroupRole;
+                revoke(user, ugr.getGroup(), ugr.getRole());
             }
-        } else {
-            throw new UnknownEntityException("Unknown user '" + user.getName()
-                    + "'");
+        }
+        else
+        {
+            throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
         }
 
     }

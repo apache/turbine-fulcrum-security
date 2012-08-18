@@ -21,12 +21,12 @@ package org.apache.fulcrum.security.util;
 
 /**
  * Thrown to indicate that the password supplied by user was incorrect.
- *
+ * 
  * @author <a href="mailto:krzewski@e-point.pl">Rafal Krzewski</a>
- * @version $Id$
+ * @version $Id: PasswordMismatchException.java 1374008 2012-08-16 19:42:18Z tv
+ *          $
  */
-public class PasswordMismatchException
-    extends FulcrumSecurityException
+public class PasswordMismatchException extends FulcrumSecurityException
 {
     /**
      * Serial number
@@ -35,8 +35,9 @@ public class PasswordMismatchException
 
     /**
      * Construct an PasswordMismatchException with specified detail message.
-     *
-     * @param msg The detail message.
+     * 
+     * @param msg
+     *            The detail message.
      */
     public PasswordMismatchException(String msg)
     {

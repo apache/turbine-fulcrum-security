@@ -25,18 +25,16 @@ import org.apache.fulcrum.security.entity.Group;
 
 /**
  * This class represents a set of Groups. It's useful for building
- * administration UI.  It enforces that only
- * Group objects are allowed in the set and only relevant methods
- * are available.
- *
+ * administration UI. It enforces that only Group objects are allowed in the set
+ * and only relevant methods are available.
+ * 
  * @author <a href="mailto:john.mcnally@clearink.com">John D. McNally</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
-public class GroupSet
-        extends SecuritySet<Group>
+public class GroupSet extends SecuritySet<Group>
 {
     /**
      * Serial number
@@ -53,11 +51,12 @@ public class GroupSet
 
     /**
      * Constructs a new GroupSet with specified contents.
-     *
-     * If the given collection contains multiple objects that are
-     * identical WRT equals() method, some objects will be overwritten.
-     *
-     * @param groups A collection of groups to be contained in the set.
+     * 
+     * If the given collection contains multiple objects that are identical WRT
+     * equals() method, some objects will be overwritten.
+     * 
+     * @param groups
+     *            A collection of groups to be contained in the set.
      */
     public GroupSet(Collection<? extends Group> groups)
     {
@@ -66,39 +65,42 @@ public class GroupSet
     }
 
     /**
-     * Returns a Group with the given name, if it is contained in
-     * this GroupSet.
-     *
-     * @param groupName Name of Group.
-     * @return Group if argument matched a Group in this
-     * GroupSet; null if no match.
+     * Returns a Group with the given name, if it is contained in this GroupSet.
+     * 
+     * @param groupName
+     *            Name of Group.
+     * @return Group if argument matched a Group in this GroupSet; null if no
+     *         match.
      * @deprecated Use getByName()
      */
+    @Deprecated
     public Group getGroupByName(String groupName)
     {
-		return getByName(groupName);
+        return getByName(groupName);
     }
 
     /**
-     * Returns a Group with the given id, if it is contained in
-     * this GroupSet.
-     *
-     * @param groupId Id of the group
-     * @return Group if argument matched a Group in this
-     * GroupSet; null if no match.
+     * Returns a Group with the given id, if it is contained in this GroupSet.
+     * 
+     * @param groupId
+     *            Id of the group
+     * @return Group if argument matched a Group in this GroupSet; null if no
+     *         match.
      * @deprecated Use getById()
      */
+    @Deprecated
     public Group getGroupById(Object groupId)
     {
-    	return getById(groupId);
+        return getById(groupId);
     }
 
     /**
      * Print out a GroupSet as a String
-     *
+     * 
      * @returns The Group Set as String
-     *
+     * 
      */
+    @Override
     public String toString()
     {
         StringBuffer sb = new StringBuffer();

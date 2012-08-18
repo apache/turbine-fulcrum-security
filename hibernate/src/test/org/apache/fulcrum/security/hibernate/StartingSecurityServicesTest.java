@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.hibernate;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -24,17 +25,18 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
- * @version $Id$
+ * @version $Id: StartingSecurityServicesTest.java 535465 2007-05-05 06:58:06Z
+ *          tv $
  */
 
 public class StartingSecurityServicesTest extends BaseUnitTest
 {
     private SecurityService securityService = null;
+
     public StartingSecurityServicesTest(String name)
     {
         super(name);
     }
-
 
     public void testStartingHibernateSecurity() throws Exception
     {
@@ -43,12 +45,9 @@ public class StartingSecurityServicesTest extends BaseUnitTest
         securityService = (SecurityService) lookup(SecurityService.ROLE);
         assertTrue(securityService.getUserManager() instanceof HibernateUserManagerImpl);
         assertTrue(securityService.getRoleManager() instanceof HibernateRoleManagerImpl);
-        assertTrue(
-            securityService.getPermissionManager() instanceof HibernatePermissionManagerImpl);
+        assertTrue(securityService.getPermissionManager() instanceof HibernatePermissionManagerImpl);
         assertTrue(securityService.getGroupManager() instanceof HibernateGroupManagerImpl);
         assertTrue(securityService.getModelManager() instanceof DynamicModelManager);
     }
-
-
 
 }

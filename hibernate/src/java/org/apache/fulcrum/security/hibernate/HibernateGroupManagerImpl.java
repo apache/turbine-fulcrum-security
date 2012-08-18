@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.hibernate;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -26,11 +27,13 @@ import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.hibernate.HibernateException;
+
 /**
  * This implementation persists to a database via Hibernate.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id$
+ * @version $Id: HibernateGroupManagerImpl.java 1374014 2012-08-16 19:47:27Z tv
+ *          $
  */
 @SuppressWarnings("unchecked")
 public class HibernateGroupManagerImpl extends AbstractGroupManager
@@ -39,28 +42,23 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager
 
     /**
      * Retrieve a Group object with specified name.
-     *
-     * @param name the name of the Group.
+     * 
+     * @param name
+     *            the name of the Group.
      * @return an object representing the Group with specified name.
-     * @throws DataBackendException if there was an error accessing the
-     *         data backend.
-     * @throws UnknownEntityException if the group does not exist.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the group does not exist.
      */
-    public Group getGroupByName(String name)
-        throws DataBackendException, UnknownEntityException
+    @Override
+    public Group getGroupByName(String name) throws DataBackendException, UnknownEntityException
     {
         Group group = null;
         try
         {
-			List<Group> groups =
-				getPersistenceHelper()
-					.retrieveSession()
-					.createQuery(
-	                    "from "
-	                        + Group.class.getName()
-	                        + " g where g.name=:name")
-	                .setString("name", name.toLowerCase())
-	                .list();
+            List<Group> groups = getPersistenceHelper().retrieveSession()
+                    .createQuery("from " + Group.class.getName() + " g where g.name=:name").setString("name", name.toLowerCase()).list();
             if (groups.size() == 0)
             {
                 throw new UnknownEntityException("Could not find group" + name);
@@ -69,19 +67,17 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager
         }
         catch (HibernateException e)
         {
-            throw new DataBackendException(
-                "Error retrieving group information",
-                e);
+            throw new DataBackendException("Error retrieving group information", e);
         }
         return group;
     }
 
     /**
      * Retrieves all groups defined in the system.
-     *
+     * 
      * @return the names of all groups defined in the system.
-     * @throws DataBackendException if there was an error accessing the
-     *         data backend.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
      */
     public GroupSet getAllGroups() throws DataBackendException
     {
@@ -89,53 +85,51 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager
         try
         {
 
-            List<Group> groups =
-				getPersistenceHelper()
-					.retrieveSession()
-					.createQuery(
-		                    "from " + Group.class.getName())
-	                .list();
+            List<Group> groups = getPersistenceHelper().retrieveSession().createQuery("from " + Group.class.getName()).list();
             groupSet.add(groups);
         }
         catch (HibernateException e)
         {
-            throw new DataBackendException(
-                "Error retrieving group information",
-                e);
+            throw new DataBackendException("Error retrieving group information", e);
         }
         return groupSet;
     }
+
     /**
-    	* Removes a Group from the system.
-    	*
-    	* @param group The object describing the group to be removed.
-    	* @throws DataBackendException if there was an error accessing the data
-    	*         backend.
-    	* @throws UnknownEntityException if the group does not exist.
-    	*/
-    public synchronized void removeGroup(Group group)
-        throws DataBackendException, UnknownEntityException
+     * Removes a Group from the system.
+     * 
+     * @param group
+     *            The object describing the group to be removed.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the group does not exist.
+     */
+    public synchronized void removeGroup(Group group) throws DataBackendException, UnknownEntityException
     {
-		getPersistenceHelper().removeEntity(group);
+        getPersistenceHelper().removeEntity(group);
     }
+
     /**
-    	* Renames an existing Group.
-    	*
-    	* @param group The object describing the group to be renamed.
-    	* @param name the new name for the group.
-    	* @throws DataBackendException if there was an error accessing the data
-    	*         backend.
-    	* @throws UnknownEntityException if the group does not exist.
-    	*/
-    public synchronized void renameGroup(Group group, String name)
-        throws DataBackendException, UnknownEntityException
+     * Renames an existing Group.
+     * 
+     * @param group
+     *            The object describing the group to be renamed.
+     * @param name
+     *            the new name for the group.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the group does not exist.
+     */
+    public synchronized void renameGroup(Group group, String name) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = false;
         groupExists = checkExists(group);
         if (groupExists)
         {
             group.setName(name);
-			getPersistenceHelper().updateEntity(group);
+            getPersistenceHelper().updateEntity(group);
         }
         else
         {
@@ -145,53 +139,47 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager
 
     /**
      * Determines if the <code>Group</code> exists in the security system.
-     *
-     * @param groupName a <code>Group</code> value
+     * 
+     * @param groupName
+     *            a <code>Group</code> value
      * @return true if the group name exists in the system, false otherwise
-     * @throws DataBackendException when more than one Group with
-     *         the same name exists.
+     * @throws DataBackendException
+     *             when more than one Group with the same name exists.
      */
     public boolean checkExists(String groupName) throws DataBackendException
-	{
-    	List<Group> groups;
-    	try
-		{
-    		groups =
-    			getPersistenceHelper()
-    				.retrieveSession()
-    				.createQuery(
-    					"from "
-    					+ Group.class.getName()
-						+ " sg where sg.name=:name")
-					.setString("name", groupName)
-					.list();
-    	}
-    	catch (HibernateException e)
-		{
-    		throw new DataBackendException(
-    				"Error retrieving user information",
-					e);
-    	}
-    	if (groups.size() > 1)
-    	{
-    		throw new DataBackendException(
-    				"Multiple groups with same name '" + groupName + "'");
-    	}
-    	return (groups.size() == 1);
-    }
-    /**
-    * Creates a new group with specified attributes.
-    *
-    * @param group the object describing the group to be created.
-    * @return a new Group object that has id set up properly.
-    * @throws DataBackendException if there was an error accessing the data
-    *         backend.
-    * @throws EntityExistsException if the group already exists.
-    */
-    protected synchronized Group persistNewGroup(Group group)
-        throws DataBackendException
     {
-		getPersistenceHelper().addEntity(group);
+        List<Group> groups;
+        try
+        {
+            groups = getPersistenceHelper().retrieveSession().createQuery("from " + Group.class.getName() + " sg where sg.name=:name")
+                    .setString("name", groupName).list();
+        }
+        catch (HibernateException e)
+        {
+            throw new DataBackendException("Error retrieving user information", e);
+        }
+        if (groups.size() > 1)
+        {
+            throw new DataBackendException("Multiple groups with same name '" + groupName + "'");
+        }
+        return (groups.size() == 1);
+    }
+
+    /**
+     * Creates a new group with specified attributes.
+     * 
+     * @param group
+     *            the object describing the group to be created.
+     * @return a new Group object that has id set up properly.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws EntityExistsException
+     *             if the group already exists.
+     */
+    @Override
+    protected synchronized Group persistNewGroup(Group group) throws DataBackendException
+    {
+        getPersistenceHelper().addEntity(group);
         return group;
     }
 
@@ -202,14 +190,14 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager
     {
         if (persistenceHelper == null)
         {
-            persistenceHelper = (PersistenceHelper)resolve(PersistenceHelper.ROLE);
+            persistenceHelper = (PersistenceHelper) resolve(PersistenceHelper.ROLE);
         }
         return persistenceHelper;
     }
 
     /**
      * Retrieve a Group object with specified id.
-     *
+     * 
      * @param id
      *            the id of the Group.
      * @return an object representing the Group with specified id.
@@ -218,33 +206,31 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager
      * @throws UnknownEntityException
      *             if the group does not exist.
      */
-    public Group getGroupById(Object id)
-	throws DataBackendException, UnknownEntityException {
+    @Override
+    public Group getGroupById(Object id) throws DataBackendException, UnknownEntityException
+    {
 
-    	Group group = null;
+        Group group = null;
 
-    	if (id != null) {
-			try {
-    			List<Group> groups =
-    				getPersistenceHelper()
-    					.retrieveSession()
-    					.createQuery(
-    						"from " + Group.class.getName() + " sr where sr.id=:id")
-    					.setLong("id", ((Long)id).longValue())
-    					.list();
-    			if (groups.size() == 0) {
-    				throw new UnknownEntityException(
-    						"Could not find group by id " + id);
-    			}
-    			group = groups.get(0);
+        if (id != null)
+        {
+            try
+            {
+                List<Group> groups = getPersistenceHelper().retrieveSession()
+                        .createQuery("from " + Group.class.getName() + " sr where sr.id=:id").setLong("id", ((Long) id).longValue()).list();
+                if (groups.size() == 0)
+                {
+                    throw new UnknownEntityException("Could not find group by id " + id);
+                }
+                group = groups.get(0);
 
-    		} catch (HibernateException e) {
-    			throw new DataBackendException(
-    					"Error retrieving group information",
-						e);
-    		}
-		}
+            }
+            catch (HibernateException e)
+            {
+                throw new DataBackendException("Error retrieving group information", e);
+            }
+        }
 
-		return group;
+        return group;
     }
 }

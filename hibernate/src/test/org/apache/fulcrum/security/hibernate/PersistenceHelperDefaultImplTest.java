@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.hibernate;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -24,12 +25,14 @@ import org.hibernate.Session;
 
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id$
+ * @version $Id: PersistenceHelperDefaultImplTest.java 1374014 2012-08-16
+ *          19:47:27Z tv $
  */
 public class PersistenceHelperDefaultImplTest extends BaseUnitTest
 {
     /**
      * Constructor for PersistenceHelperDefaultImplTest.
+     * 
      * @param arg0
      */
     public PersistenceHelperDefaultImplTest(String arg0)
@@ -43,11 +46,11 @@ public class PersistenceHelperDefaultImplTest extends BaseUnitTest
         this.setRoleFileName("src/test/PersistenceHelperDefaultImplRoleConfig.xml");
         this.setConfigurationFileName("src/test/PersistenceHelperDefaultImplComponentConfig.xml");
 
-		SecurityService securityService = (SecurityService) lookup(SecurityService.ROLE);
-		HibernateGroupManagerImpl groupManager = (HibernateGroupManagerImpl)securityService.getGroupManager();
+        SecurityService securityService = (SecurityService) lookup(SecurityService.ROLE);
+        HibernateGroupManagerImpl groupManager = (HibernateGroupManagerImpl) securityService.getGroupManager();
         PersistenceHelper persistenceHelper = groupManager.getPersistenceHelper();
         assertTrue(persistenceHelper instanceof PersistenceHelperDefaultImpl);
-        PersistenceHelperDefaultImpl persistenceHelperFromGroupManager = (PersistenceHelperDefaultImpl)persistenceHelper;
+        PersistenceHelperDefaultImpl persistenceHelperFromGroupManager = (PersistenceHelperDefaultImpl) persistenceHelper;
         Session s = persistenceHelper.retrieveSession();
     }
 }

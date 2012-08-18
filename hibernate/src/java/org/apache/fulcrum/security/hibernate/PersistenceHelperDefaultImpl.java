@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.hibernate;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -32,16 +33,15 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 /**
- *
+ * 
  * This persistenceHelper expects you to either pass in a SessionFactory to use,
  * or it will create one from a hibernate.cfg.xml in the root of the classpath.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id$
+ * @version $Id: PersistenceHelperDefaultImpl.java 1374014 2012-08-16 19:47:27Z
+ *          tv $
  */
-public class PersistenceHelperDefaultImpl
-    extends AbstractManager
-    implements PersistenceHelper, Configurable, Initializable, Disposable
+public class PersistenceHelperDefaultImpl extends AbstractManager implements PersistenceHelper, Configurable, Initializable, Disposable
 {
     private Configuration configuration;
     private SessionFactory sessionFactory;
@@ -49,10 +49,13 @@ public class PersistenceHelperDefaultImpl
 
     /**
      * Deletes an entity object
-     *
-     * @param role The object to be removed
-     * @throws DataBackendException if there was an error accessing the data backend.
-     * @throws UnknownEntityException if the object does not exist.
+     * 
+     * @param role
+     *            The object to be removed
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the object does not exist.
      */
     public void removeEntity(SecurityEntity entity) throws DataBackendException
     {
@@ -68,9 +71,7 @@ public class PersistenceHelperDefaultImpl
         }
         catch (HibernateException he)
         {
-            throw new DataBackendException(
-                "Problem removing entity:" + he.getMessage(),
-                he);
+            throw new DataBackendException("Problem removing entity:" + he.getMessage(), he);
         }
         finally
         {
@@ -83,10 +84,13 @@ public class PersistenceHelperDefaultImpl
 
     /**
      * Stores changes made to an object
-     *
-     * @param role The object to be saved
-     * @throws DataBackendException if there was an error accessing the data backend.
-     * @throws UnknownEntityException if the role does not exist.
+     * 
+     * @param role
+     *            The object to be saved
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the role does not exist.
      */
     public void updateEntity(SecurityEntity entity) throws DataBackendException
     {
@@ -102,19 +106,14 @@ public class PersistenceHelperDefaultImpl
         }
         catch (HibernateException he)
         {
-            if (he
-                .getMessage()
-                .indexOf("Another object was associated with this id")
-                > -1)
+            if (he.getMessage().indexOf("Another object was associated with this id") > -1)
             {
                 session.close();
                 updateEntity(entity);
             }
             else
             {
-                throw new DataBackendException(
-                    "updateEntity(" + entity + ")",
-                    he);
+                throw new DataBackendException("updateEntity(" + entity + ")", he);
             }
         }
         finally
@@ -128,10 +127,13 @@ public class PersistenceHelperDefaultImpl
 
     /**
      * adds an entity
-     *
-     * @param role The object to be saved
-     * @throws DataBackendException if there was an error accessing the data backend.
-     * @throws UnknownEntityException if the role does not exist.
+     * 
+     * @param role
+     *            The object to be saved
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the role does not exist.
      */
     public void addEntity(SecurityEntity entity) throws DataBackendException
     {
@@ -160,12 +162,13 @@ public class PersistenceHelperDefaultImpl
 
     /**
      * Returns a hibernate session, or if is null, opens one.
+     * 
      * @return An Open hibernate session.
      * @throws HibernateException
      */
     public Session retrieveSession() throws HibernateException
     {
-        if (session == null )
+        if (session == null)
         {
             session = getSessionFactory().openSession();
         }
@@ -181,10 +184,10 @@ public class PersistenceHelperDefaultImpl
     }
 
     /**
-     * In some environments we will load the session factory up
-     * and pass it in.
-     *
-     * @param hibernateService The hibernateService to set.
+     * In some environments we will load the session factory up and pass it in.
+     * 
+     * @param hibernateService
+     *            The hibernateService to set.
      */
     public void setSessionFactory(SessionFactory sessionFactory)
     {
@@ -193,6 +196,7 @@ public class PersistenceHelperDefaultImpl
 
     /**
      * Lazy loads the sessionFactory if it hasn't been requested yet.
+     * 
      * @return the hibernate service
      */
     public SessionFactory getSessionFactory() throws HibernateException
@@ -200,7 +204,9 @@ public class PersistenceHelperDefaultImpl
         return sessionFactory;
     }
 
-    /** Avalon lifecycle method
+    /**
+     * Avalon lifecycle method
+     * 
      * @see org.apache.avalon.framework.activity.Initializable#initialize()
      */
     public void initialize() throws Exception
@@ -208,16 +214,21 @@ public class PersistenceHelperDefaultImpl
         sessionFactory = configuration.buildSessionFactory();
     }
 
-    /** Avalon lifecycle method
+    /**
+     * Avalon lifecycle method
+     * 
      * @see org.apache.fulcrum.security.spi.AbstractManager#dispose()
      */
+    @Override
     public void dispose()
     {
         sessionFactory.close();
         super.dispose();
     }
 
-    /** Avalon lifecycle method
+    /**
+     * Avalon lifecycle method
+     * 
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
     public void configure(org.apache.avalon.framework.configuration.Configuration conf) throws ConfigurationException
@@ -225,13 +236,12 @@ public class PersistenceHelperDefaultImpl
         configuration = new Configuration();
 
         // read properties
-        org.apache.avalon.framework.configuration.Configuration[] props =
-            conf.getChild("session-factory").getChildren("property");
+        org.apache.avalon.framework.configuration.Configuration[] props = conf.getChild("session-factory").getChildren("property");
 
-        for (int i = 0; i < props.length; i++)
+        for (org.apache.avalon.framework.configuration.Configuration prop : props)
         {
-            String value = props[i].getValue(null);
-            String key = props[i].getAttribute("name", null);
+            String value = prop.getValue(null);
+            String key = prop.getAttribute("name", null);
 
             if (key != null && value != null)
             {
@@ -239,17 +249,16 @@ public class PersistenceHelperDefaultImpl
             }
             else
             {
-                throw new ConfigurationException("Invalid configuration", props[i]);
+                throw new ConfigurationException("Invalid configuration", prop);
             }
         }
 
         // read mappings
-        org.apache.avalon.framework.configuration.Configuration[] maps =
-            conf.getChild("mappings").getChildren("resource");
+        org.apache.avalon.framework.configuration.Configuration[] maps = conf.getChild("mappings").getChildren("resource");
 
-        for (int i = 0; i < maps.length; i++)
+        for (org.apache.avalon.framework.configuration.Configuration map : maps)
         {
-            String value = maps[i].getValue(null);
+            String value = map.getValue(null);
 
             if (value != null)
             {
@@ -257,7 +266,7 @@ public class PersistenceHelperDefaultImpl
             }
             else
             {
-                throw new ConfigurationException("Invalid configuration", maps[i]);
+                throw new ConfigurationException("Invalid configuration", map);
             }
         }
     }

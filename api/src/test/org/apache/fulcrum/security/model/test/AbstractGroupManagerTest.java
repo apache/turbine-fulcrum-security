@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.model.test;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -29,9 +30,9 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
  * @author Eric Pugh
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * 
+ *         To change the template for this generated type comment go to
+ *         Window>Preferences>Java>Code Generation>Code and Comments
  */
 public abstract class AbstractGroupManagerTest extends BaseUnitTest
 {
@@ -41,12 +42,14 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
 
     /**
      * Constructor for AbstractTurbineModelManagerTest.
+     * 
      * @param arg0
      */
     public AbstractGroupManagerTest(String arg0)
     {
         super(arg0);
     }
+
     /*
      * Class to test for Group getGroupInstance()
      */
@@ -56,6 +59,7 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         assertNotNull(group);
         assertTrue(group.getName() == null);
     }
+
     /*
      * Class to test for Group getGroupInstance(String)
      */
@@ -64,6 +68,7 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         group = groupManager.getGroupInstance("DOG_CATCHER");
         assertEquals("DOG_CATCHER".toLowerCase(), group.getName());
     }
+
     public void testGetGroup() throws Exception
     {
         group = groupManager.getGroupInstance("DOG_CATCHER2");
@@ -71,6 +76,7 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         Group group2 = groupManager.getGroupByName("DOG_CATCHER2");
         assertEquals(group.getName(), group2.getName());
     }
+
     public void testGetGroupByName() throws Exception
     {
         group = groupManager.getGroupInstance("CLEAN_KENNEL");
@@ -80,6 +86,7 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         group2 = groupManager.getGroupByName("Clean_KeNNel");
         assertEquals(group.getName(), group2.getName());
     }
+
     public void testGetGroupById() throws Exception
     {
         group = groupManager.getGroupInstance("CLEAN_KENNEL_A");
@@ -87,6 +94,7 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         Group group2 = groupManager.getGroupById(group.getId());
         assertEquals(group.getName(), group2.getName());
     }
+
     public void testGetAllGroups() throws Exception
     {
         int size = groupManager.getAllGroups().size();
@@ -95,6 +103,7 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         GroupSet groupSet = groupManager.getAllGroups();
         assertEquals(size + 1, groupSet.size());
     }
+
     public void testRemoveGroup() throws Exception
     {
         group = groupManager.getGroupInstance("CLEAN_KENNEL_K");
@@ -113,10 +122,11 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         }
         catch (UnknownEntityException uee)
         {
-            //good
+            // good
         }
         assertEquals(size - 1, groupManager.getAllGroups().size());
     }
+
     public void testRenameGroup() throws Exception
     {
         group = groupManager.getGroupInstance("CLEAN_KENNEL_X");
@@ -127,6 +137,7 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         assertEquals("CLEAN_GROOMING_ROOM".toLowerCase(), group2.getName());
         assertEquals(size, groupManager.getAllGroups().size());
     }
+
     public void testCheckExists() throws Exception
     {
         group = groupManager.getGroupInstance("GREET_PEOPLE");
@@ -154,13 +165,16 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         groupManager.addGroup(group);
         assertTrue(groupManager.checkExists(group.getName()));
         Group group2 = groupManager.getGroupInstance("EATLUNCH");
-        try {
+        try
+        {
             groupManager.addGroup(group2);
         }
-        catch (EntityExistsException uee){
-            //good
+        catch (EntityExistsException uee)
+        {
+            // good
         }
     }
+
     public void testAddGroup() throws Exception
     {
         group = groupManager.getGroupInstance("CLEAN_RABBIT_HUTCHES");

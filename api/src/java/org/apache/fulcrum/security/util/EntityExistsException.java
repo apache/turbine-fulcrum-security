@@ -22,12 +22,11 @@ package org.apache.fulcrum.security.util;
 /**
  * Thrown upon an attempt to create an User,Role,Group or Permission that
  * already exists.
- *
+ * 
  * @author <a href="mailto:krzewski@e-point.pl">Rafal Krzewski</a>
  * @version $Id$
  */
-public class EntityExistsException
-    extends FulcrumSecurityException
+public class EntityExistsException extends FulcrumSecurityException
 {
     /**
      * Serial number
@@ -36,8 +35,9 @@ public class EntityExistsException
 
     /**
      * Construct an EntityExistsException with specified detail message.
-     *
-     * @param msg The detail message.
+     * 
+     * @param msg
+     *            The detail message.
      */
     public EntityExistsException(String msg)
     {

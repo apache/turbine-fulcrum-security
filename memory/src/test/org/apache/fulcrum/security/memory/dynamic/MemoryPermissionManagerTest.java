@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.memory.dynamic;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,14 +20,16 @@ package org.apache.fulcrum.security.memory.dynamic;
  */
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractPermissionManagerTest;
+
 /**
  * @author Eric Pugh
- *
- * Test the memory implementation of the Simple model..
+ * 
+ *         Test the memory implementation of the Simple model..
  */
 public class MemoryPermissionManagerTest extends AbstractPermissionManagerTest
 {
 
+    @Override
     public void setUp()
     {
         try
@@ -41,16 +44,20 @@ public class MemoryPermissionManagerTest extends AbstractPermissionManagerTest
             fail(e.toString());
         }
     }
+
+    @Override
     public void tearDown()
     {
         permission = null;
         permissionManager = null;
         securityService = null;
     }
+
     /**
-    	* Constructor for MemoryPermissionManagerTest.
-    	* @param arg0
-    	*/
+     * Constructor for MemoryPermissionManagerTest.
+     * 
+     * @param arg0
+     */
     public MemoryPermissionManagerTest(String arg0)
     {
         super(arg0);

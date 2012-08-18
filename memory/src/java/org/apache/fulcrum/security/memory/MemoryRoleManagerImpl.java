@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.memory;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -28,10 +29,10 @@ import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
- *
- * This implementation keeps all objects in memory.  This is mostly meant to help
+ * 
+ * This implementation keeps all objects in memory. This is mostly meant to help
  * with testing and prototyping of ideas.
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -44,16 +45,18 @@ public class MemoryRoleManagerImpl extends AbstractRoleManager
     // private static int uniqueId = 0;
 
     /**
-    	* Renames an existing Role.
-    	*
-    	* @param role The object describing the role to be renamed.
-    	* @param name the new name for the role.
-    	* @throws DataBackendException if there was an error accessing the data
-    	*         backend.
-    	* @throws UnknownEntityException if the role does not exist.
-    	*/
-    public synchronized void renameRole(Role role, String name)
-        throws DataBackendException, UnknownEntityException
+     * Renames an existing Role.
+     * 
+     * @param role
+     *            The object describing the role to be renamed.
+     * @param name
+     *            the new name for the role.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the role does not exist.
+     */
+    public synchronized void renameRole(Role role, String name) throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
         try
@@ -77,24 +80,27 @@ public class MemoryRoleManagerImpl extends AbstractRoleManager
 
     /**
      * Determines if the <code>Role</code> exists in the security system.
-     *
-     * @param permission a <code>String</code> value
+     * 
+     * @param permission
+     *            a <code>String</code> value
      * @return true if the role exists in the system, false otherwise
-     * @throws DataBackendException when more than one Role with the same name exists.
-     * @throws Exception A generic exception.
+     * @throws DataBackendException
+     *             when more than one Role with the same name exists.
+     * @throws Exception
+     *             A generic exception.
      */
     public boolean checkExists(String roleName)
     {
-        return MemoryHelper.checkExists(roles,roleName);
+        return MemoryHelper.checkExists(roles, roleName);
     }
 
     /**
-	 * Retrieves all roles defined in the system.
-	 *
-	 * @return the names of all roles defined in the system.
-	 * @throws DataBackendException if there was an error accessing the
-	 *         data backend.
-	 */
+     * Retrieves all roles defined in the system.
+     * 
+     * @return the names of all roles defined in the system.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     */
     public RoleSet getAllRoles() throws DataBackendException
     {
         return new RoleSet(roles);
@@ -102,15 +108,17 @@ public class MemoryRoleManagerImpl extends AbstractRoleManager
 
     /**
      * Creates a new role with specified attributes.
-     *
-     * @param role the object describing the role to be created.
+     * 
+     * @param role
+     *            the object describing the role to be created.
      * @return a new Role object that has id set up properly.
-     * @throws DataBackendException if there was an error accessing the data
-     *         backend.
-     * @throws EntityExistsException if the role already exists.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws EntityExistsException
+     *             if the role already exists.
      */
-    protected synchronized Role persistNewRole(Role role)
-        throws DataBackendException
+    @Override
+    protected synchronized Role persistNewRole(Role role) throws DataBackendException
     {
         role.setId(MemoryHelper.getUniqueId());
         roles.add(role);
@@ -121,15 +129,16 @@ public class MemoryRoleManagerImpl extends AbstractRoleManager
     }
 
     /**
-    * Removes a Role from the system.
-    *
-    * @param role The object describing the role to be removed.
-    * @throws DataBackendException if there was an error accessing the data
-    *         backend.
-    * @throws UnknownEntityException if the role does not exist.
-    */
-    public synchronized void removeRole(Role role)
-        throws DataBackendException, UnknownEntityException
+     * Removes a Role from the system.
+     * 
+     * @param role
+     *            The object describing the role to be removed.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the role does not exist.
+     */
+    public synchronized void removeRole(Role role) throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
         try

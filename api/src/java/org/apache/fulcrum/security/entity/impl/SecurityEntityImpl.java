@@ -26,7 +26,7 @@ import org.apache.fulcrum.security.entity.SecurityEntity;
  * Base class for all objects implementing SecurityEnitity. This class
  * automatically lowercases the name. So the permission "EDIT" will equal "eDit"
  * and "edit";
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -62,7 +62,7 @@ public class SecurityEntityImpl implements SecurityEntity
 
     /**
      * Pass in the name for this entity. Also lowercases it.
-     *
+     * 
      * @param name
      */
     public void setName(String name)
@@ -75,21 +75,22 @@ public class SecurityEntityImpl implements SecurityEntity
         this.name = name.toLowerCase();
     }
 
+    @Override
     public String toString()
     {
-        return getClass().getName() + " (id:" + getId() + " name:" + getName()
-                + ")";
+        return getClass().getName() + " (id:" + getId() + " name:" + getName() + ")";
     }
 
     /**
      * Check if this object is equal to another
-     *
+     * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @Override
     public boolean equals(Object o)
     {
         boolean equals = true;
-        Object id  = getId();
+        Object id = getId();
 
         if (o == null || id == null)
         {
@@ -108,9 +109,10 @@ public class SecurityEntityImpl implements SecurityEntity
 
     /**
      * Calculate a hash code for this object
-     *
+     * 
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode()
     {
         return new HashCodeBuilder(47, 11).append(getId()).append(getName()).toHashCode();

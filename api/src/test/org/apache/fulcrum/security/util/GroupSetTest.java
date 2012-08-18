@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.util;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -31,20 +32,23 @@ public class GroupSetTest extends TestCase
 {
 
     /**
-	 * Defines the testcase name for JUnit.
-	 *
-	 * @param name the testcase's name.
-	 */
+     * Defines the testcase name for JUnit.
+     * 
+     * @param name
+     *            the testcase's name.
+     */
     public GroupSetTest(String name)
     {
         super(name);
     }
+
     public static void main(String[] args)
     {
         junit.textui.TestRunner.run(GroupSetTest.class);
     }
 
-    public void testNullGroup() throws Exception {
+    public void testNullGroup() throws Exception
+    {
         GroupSet groupSet = new GroupSet();
         assertFalse(groupSet.contains(null));
     }
@@ -79,8 +83,8 @@ public class GroupSetTest extends TestCase
     {
         GroupSet groupSet = new GroupSet();
         Group group = new GroupSubClass();
-		group.setId(new Integer(1));
-		group.setName("Eric");
+        group.setId(new Integer(1));
+        group.setName("Eric");
 
         groupSet.add(group);
         assertTrue(groupSet.contains(group));
@@ -97,16 +101,17 @@ public class GroupSetTest extends TestCase
         private String extraGroupData;
 
         /**
-		 * @return Returns the extraGroupData.
-		 */
+         * @return Returns the extraGroupData.
+         */
         public String getExtraGroupData()
         {
             return extraGroupData;
         }
 
         /**
-		 * @param extraGroupData The extraGroupData to set.
-		 */
+         * @param extraGroupData
+         *            The extraGroupData to set.
+         */
         public void setExtraGroupData(String extraGroupData)
         {
             this.extraGroupData = extraGroupData;

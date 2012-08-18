@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.authenticator;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,33 +21,40 @@ package org.apache.fulcrum.security.authenticator;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+
 /**
  * This class authenticates by doing a plain text match of the user's passwords.
  * Very insecure!
- *
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  * @avalon.component name="textmatch-authenticator"
- * @avalon.service type="org.apache.fulcrum.security.authenticator.Authenticator"
+ * @avalon.service 
+ *                 type="org.apache.fulcrum.security.authenticator.Authenticator"
  */
 public class TextMatchAuthenticator extends AbstractLogEnabled implements Authenticator
 {
     /**
-     * Authenticate an username with the specified password.  Returns true
-     * if the user password plain text matches the passed in password.
-     *
-     *
-     * @param user object
-     * @param password the user supplied password.
-     * @exception UnknownEntityException if the user's account does not
-     *            exist in the database.
-     * @exception DataBackendException if there is a problem accessing the
-     *            storage.
+     * Authenticate an username with the specified password. Returns true if the
+     * user password plain text matches the passed in password.
+     * 
+     * 
+     * @param user
+     *            object
+     * @param password
+     *            the user supplied password.
+     * @exception UnknownEntityException
+     *                if the user's account does not exist in the database.
+     * @exception DataBackendException
+     *                if there is a problem accessing the storage.
      */
-    public boolean authenticate(User user, String password) throws  DataBackendException
+    public boolean authenticate(User user, String password) throws DataBackendException
     {
-        if( user == null )
+        if (user == null)
+        {
             return false;
+        }
 
         String referenced = user.getPassword() == null ? "" : user.getPassword().trim();
         String tested = password == null ? "" : password.trim();

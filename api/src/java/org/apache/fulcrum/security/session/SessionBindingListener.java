@@ -22,25 +22,27 @@ package org.apache.fulcrum.security.session;
 /**
  * This interface is modelled after
  * {@link javax.servlet.http.HttpSessionBindingListener}.
- *
+ * 
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
-* @version $Id$
+ * @version $Id$
  */
 public interface SessionBindingListener
 {
     /**
-     * Notifies the object that it is being bound to a session and
-     * identifies the session.
-     *
-     * @param event A SessionBindingEvent object.
+     * Notifies the object that it is being bound to a session and identifies
+     * the session.
+     * 
+     * @param event
+     *            A SessionBindingEvent object.
      */
     void valueBound(SessionBindingEvent event);
 
     /**
      * Notifies the object that it is being unbound from a session and
      * identifies the session.
-     *
-     * @param event A SessionBindingEvent object.
+     * 
+     * @param event
+     *            A SessionBindingEvent object.
      */
     void valueUnbound(SessionBindingEvent event);
 }
