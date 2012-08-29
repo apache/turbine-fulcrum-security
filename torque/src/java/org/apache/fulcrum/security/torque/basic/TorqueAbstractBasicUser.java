@@ -18,14 +18,12 @@ package org.apache.fulcrum.security.torque.basic;
  * under the License.
  */
 import java.sql.Connection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 import org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity;
-import org.apache.fulcrum.security.torque.om.TorqueBasicGroup;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroup;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserPeer;
@@ -42,8 +40,10 @@ import org.apache.torque.util.Criteria;
 public abstract class TorqueAbstractBasicUser extends TorqueAbstractSecurityEntity
     implements BasicUser
 {
-    /** a cache of group objects */
-    private Set groupSet = null;
+    /** Serial version */
+	private static final long serialVersionUID = 7669398253522416329L;
+	/** a cache of group objects */
+    private Set<Group> groupSet = null;
 
     /**
      * Forward reference to generated code
@@ -56,7 +56,7 @@ public abstract class TorqueAbstractBasicUser extends TorqueAbstractSecurityEnti
      *
      * @return a list of User/Group relations
      */
-    protected abstract List getTorqueBasicUserGroupsJoinTorqueBasicGroup(Criteria criteria)
+    protected abstract List<TorqueBasicUserGroup> getTorqueBasicUserGroupsJoinTorqueBasicGroup(Criteria criteria)
         throws TorqueException;
 
     /**
@@ -87,9 +87,10 @@ public abstract class TorqueAbstractBasicUser extends TorqueAbstractSecurityEnti
     /**
      * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#getGroupsAsSet()
      */
-    public Set getGroupsAsSet()
+    @SuppressWarnings("unchecked")
+	public <T extends Group> Set<T> getGroupsAsSet()
     {
-        return groupSet;
+        return (Set<T>)groupSet;
     }
 
     /**
@@ -118,7 +119,7 @@ public abstract class TorqueAbstractBasicUser extends TorqueAbstractSecurityEnti
     /**
      * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#setGroupsAsSet(java.util.Set)
      */
-    public void setGroupsAsSet(Set groups)
+    public <T extends Group> void setGroupsAsSet(Set<T> groups)
     {
         setGroups(new GroupSet(groups));
     }
@@ -130,17 +131,16 @@ public abstract class TorqueAbstractBasicUser extends TorqueAbstractSecurityEnti
     {
         this.groupSet = new GroupSet();
 
-        List usergroups = getTorqueBasicUserGroupsJoinTorqueBasicGroup(new Criteria());
+        List<TorqueBasicUserGroup> usergroups = getTorqueBasicUserGroupsJoinTorqueBasicGroup(new Criteria());
 
-        for (Iterator i = usergroups.iterator(); i.hasNext();)
+        for (TorqueBasicUserGroup tbug : usergroups)
         {
-            TorqueBasicUserGroup tbug = (TorqueBasicUserGroup)i.next();
             groupSet.add(tbug.getTorqueBasicGroup());
         }
     }
 
     /**
-     * Update this instance to the database with all dependend objects
+     * Update this instance to the database with all dependent objects
      *
      * @param con A database connection
      */
@@ -154,13 +154,11 @@ public abstract class TorqueAbstractBasicUser extends TorqueAbstractSecurityEnti
             criteria.add(TorqueBasicUserGroupPeer.USER_ID, getEntityId());
             TorqueBasicUserGroupPeer.doDelete(criteria, con);
 
-            for (Iterator i = groupSet.iterator(); i.hasNext();)
+            for (Group g : groupSet)
             {
-                TorqueBasicGroup group = (TorqueBasicGroup)i.next();
-
                 TorqueBasicUserGroup ug = new TorqueBasicUserGroup();
                 ug.setUserId(getEntityId());
-                ug.setGroupId(group.getEntityId());
+                ug.setGroupId((Integer)g.getId());
                 ug.save(con);
             }
         }

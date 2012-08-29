@@ -18,22 +18,20 @@ package org.apache.fulcrum.security.torque.dynamic;
  * under the License.
  */
 import java.sql.Connection;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 import org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicGroup;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicUser;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUserDelegates;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUserDelegatesPeer;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUserGroup;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUserGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUserPeer;
 import org.apache.fulcrum.security.util.GroupSet;
+import org.apache.fulcrum.security.util.UserSet;
 import org.apache.torque.TorqueException;
 import org.apache.torque.om.SimpleKey;
 import org.apache.torque.util.Criteria;
@@ -46,14 +44,17 @@ import org.apache.torque.util.Criteria;
 public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEntity
     implements DynamicUser
 {
-    /** a cache of group objects */
-    private Set groupSet = null;
+    /** Serial version */
+	private static final long serialVersionUID = -7307211992287876455L;
+
+	/** a cache of group objects */
+    private Set<Group> groupSet = null;
 
     /** a cache of delegator (user) objects */
-    private Set delegators = null;
+    private Set<User> delegators = null;
 
     /** a cache of delegatee(user) objects */
-    private Set delegatees = null;
+    private Set<User> delegatees = null;
 
     /**
      * Forward reference to generated code
@@ -66,7 +67,7 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
      *
      * @return a list of User/Group relations
      */
-    protected abstract List getTorqueDynamicUserGroupsJoinTorqueDynamicGroup(Criteria criteria)
+    protected abstract List<TorqueDynamicUserGroup> getTorqueDynamicUserGroupsJoinTorqueDynamicGroup(Criteria criteria)
         throws TorqueException;
 
     /**
@@ -80,7 +81,7 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
      *
      * @return a list of User/Delegator relations
      */
-    protected abstract List getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(Criteria criteria)
+    protected abstract List<TorqueDynamicUserDelegates> getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(Criteria criteria)
         throws TorqueException;
 
     /**
@@ -94,7 +95,7 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
      *
      * @return a list of User/Delegator relations
      */
-    protected abstract List getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(Criteria criteria)
+    protected abstract List<TorqueDynamicUserDelegates> getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(Criteria criteria)
         throws TorqueException;
 
     /**
@@ -125,9 +126,10 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
     /**
      * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#getGroupsAsSet()
      */
-    public Set getGroupsAsSet()
+    @SuppressWarnings("unchecked")
+	public <T extends Group> Set<T> getGroupsAsSet()
     {
-        return groupSet;
+        return (Set<T>)groupSet;
     }
 
     /**
@@ -156,7 +158,7 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
     /**
      * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#setGroupsAsSet(java.util.Set)
      */
-    public void setGroupsAsSet(Set groups)
+    public <T extends Group> void setGroupsAsSet(Set<T> groups)
     {
         setGroups(new GroupSet(groups));
     }
@@ -164,56 +166,58 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
     /**
      * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicUser#getDelegatees()
      */
-    public Set getDelegatees()
+    @SuppressWarnings("unchecked")
+	public <T extends User> Set<T> getDelegatees()
     {
         if (delegatees == null)
         {
-            delegatees = new HashSet();
+            delegatees = new UserSet();
         }
 
-        return delegatees;
+        return (Set<T>)delegatees;
     }
 
     /**
      * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicUser#getDelegators()
      */
-    public Set getDelegators()
+    @SuppressWarnings("unchecked")
+	public <T extends User> Set<T> getDelegators()
     {
         if (delegators == null)
         {
-            delegators = new HashSet();
+            delegators = new UserSet();
         }
 
-        return delegators;
+        return (Set<T>)delegators;
     }
 
     /**
      * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicUser#setDelegatees(java.util.Set)
      */
-    public void setDelegatees(Set delegatees)
+    public <T extends User> void setDelegatees(Set<T> delegatees)
     {
         if (delegatees != null)
         {
-            this.delegatees = delegatees;
+            this.delegatees = new UserSet(delegatees);
         }
         else
         {
-            this.delegatees = new HashSet();
+            this.delegatees = new UserSet();
         }
     }
 
     /**
      * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicUser#setDelegators(java.util.Set)
      */
-    public void setDelegators(Set delegates)
+    public <T extends User> void setDelegators(Set<T> delegates)
     {
         if (delegators != null)
         {
-            this.delegators = delegates;
+            this.delegators = new UserSet(delegates);
         }
         else
         {
-            this.delegators = new HashSet();
+            this.delegators = new UserSet();
         }
     }
 
@@ -232,31 +236,28 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
     {
         this.groupSet = new GroupSet();
 
-        List usergroups = getTorqueDynamicUserGroupsJoinTorqueDynamicGroup(new Criteria());
+        List<TorqueDynamicUserGroup> usergroups = getTorqueDynamicUserGroupsJoinTorqueDynamicGroup(new Criteria());
 
-        for (Iterator i = usergroups.iterator(); i.hasNext();)
+        for (TorqueDynamicUserGroup tdug : usergroups)
         {
-            TorqueDynamicUserGroup tdug = (TorqueDynamicUserGroup)i.next();
             groupSet.add(tdug.getTorqueDynamicGroup());
         }
 
-        this.delegators = new HashSet();
+        this.delegators = new UserSet();
 
-        List delegatorlist = getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(new Criteria());
+        List<TorqueDynamicUserDelegates> delegatorlist = getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(new Criteria());
 
-        for (Iterator i = delegatorlist.iterator(); i.hasNext();)
+        for (TorqueDynamicUserDelegates tdud : delegatorlist)
         {
-            TorqueDynamicUserDelegates tdud = (TorqueDynamicUserDelegates)i.next();
             delegators.add(tdud.getTorqueDynamicUserRelatedByDelegatorUserId());
         }
 
-        this.delegatees = new HashSet();
+        this.delegatees = new UserSet();
 
-        List delegateelist = getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(new Criteria());
+        List<TorqueDynamicUserDelegates> delegateelist = getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(new Criteria());
 
-        for (Iterator i = delegateelist.iterator(); i.hasNext();)
+        for (TorqueDynamicUserDelegates tdud : delegateelist)
         {
-            TorqueDynamicUserDelegates tdud = (TorqueDynamicUserDelegates)i.next();
             delegatees.add(tdud.getTorqueDynamicUserRelatedByDelegateeUserId());
         }
     }
@@ -274,13 +275,11 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
             criteria.add(TorqueDynamicUserGroupPeer.USER_ID, getEntityId());
             TorqueDynamicUserGroupPeer.doDelete(criteria, con);
 
-            for (Iterator i = groupSet.iterator(); i.hasNext();)
+            for (Group g : groupSet)
             {
-                TorqueDynamicGroup group = (TorqueDynamicGroup)i.next();
-
                 TorqueDynamicUserGroup ug = new TorqueDynamicUserGroup();
                 ug.setUserId(getEntityId());
-                ug.setGroupId(group.getEntityId());
+                ug.setGroupId((Integer)g.getId());
                 ug.save(con);
             }
         }
@@ -293,13 +292,11 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
             criteria.add(TorqueDynamicUserDelegatesPeer.DELEGATEE_USER_ID, getEntityId());
             TorqueDynamicUserDelegatesPeer.doDelete(criteria, con);
 
-            for (Iterator i = delegators.iterator(); i.hasNext();)
+            for (User u : delegators)
             {
-                TorqueDynamicUser user = (TorqueDynamicUser)i.next();
-
                 TorqueDynamicUserDelegates ud = new TorqueDynamicUserDelegates();
                 ud.setDelegateeUserId(getEntityId());
-                ud.setDelegatorUserId(user.getEntityId());
+                ud.setDelegatorUserId((Integer)u.getId());
                 ud.save(con);
             }
         }
@@ -312,13 +309,11 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
             criteria.add(TorqueDynamicUserDelegatesPeer.DELEGATOR_USER_ID, getEntityId());
             TorqueDynamicUserDelegatesPeer.doDelete(criteria, con);
 
-            for (Iterator i = delegatees.iterator(); i.hasNext();)
+            for (User u : delegatees)
             {
-                TorqueDynamicUser user = (TorqueDynamicUser)i.next();
-
                 TorqueDynamicUserDelegates ud = new TorqueDynamicUserDelegates();
                 ud.setDelegatorUserId(getEntityId());
-                ud.setDelegateeUserId(user.getEntityId());
+                ud.setDelegateeUserId((Integer)u.getId());
                 ud.save(con);
             }
         }

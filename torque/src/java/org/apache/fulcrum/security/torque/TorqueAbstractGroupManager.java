@@ -18,12 +18,12 @@ package org.apache.fulcrum.security.torque;
  * under the License.
  */
 import java.sql.Connection;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.spi.AbstractGroupManager;
 import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.torque.NoRowsException;
@@ -48,7 +48,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
      *
      * @throws TorqueException if any database error occurs
      */
-    protected abstract List doSelectAllGroups(Connection con)
+    protected abstract <T extends Group> List<T> doSelectAllGroups(Connection con)
         throws TorqueException;
 
     /**
@@ -221,12 +221,10 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
         {
             con = Transaction.begin(((TorqueAbstractSecurityEntity)getGroupInstance()).getDatabaseName());
 
-            List groups = doSelectAllGroups(con);
+            List<Group> groups = doSelectAllGroups(con);
 
-            for (Iterator i = groups.iterator(); i.hasNext();)
+            for (Group group : groups)
             {
-                Group group = (Group)i.next();
-
                 // Add dependent objects if they exist
                 ((TorqueAbstractSecurityEntity)group).retrieveAttachedObjects(con);
 

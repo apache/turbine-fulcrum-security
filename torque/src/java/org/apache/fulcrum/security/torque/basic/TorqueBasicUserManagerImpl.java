@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.torque.TorqueAbstractUserManager;
+import org.apache.fulcrum.security.torque.om.TorqueBasicUser;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserPeer;
 import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
@@ -38,11 +39,12 @@ public class TorqueBasicUserManagerImpl extends TorqueAbstractUserManager
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractUserManager#doSelectAllUsers(java.sql.Connection)
      */
-    protected List doSelectAllUsers(Connection con) throws TorqueException
+    @SuppressWarnings("unchecked")
+	protected <T extends User> List<T> doSelectAllUsers(Connection con) throws TorqueException
     {
         Criteria criteria = new Criteria(TorqueBasicUserPeer.DATABASE_NAME);
 
-        return TorqueBasicUserPeer.doSelect(criteria, con);
+        return (List<T>)TorqueBasicUserPeer.doSelect(criteria, con);
     }
 
     /**
@@ -63,13 +65,13 @@ public class TorqueBasicUserManagerImpl extends TorqueAbstractUserManager
         criteria.setIgnoreCase(true);
         criteria.setSingleRecord(true);
 
-        List users = TorqueBasicUserPeer.doSelect(criteria, con);
+        List<TorqueBasicUser> users = TorqueBasicUserPeer.doSelect(criteria, con);
 
         if (users.isEmpty())
         {
             throw new NoRowsException(name);
         }
 
-        return (User)users.get(0);
+        return users.get(0);
     }
 }

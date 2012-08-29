@@ -31,7 +31,10 @@ import org.apache.torque.om.BaseObject;
 public abstract class TorqueAbstractSecurityEntity extends BaseObject
     implements SecurityEntity
 {
-    /**
+    /** Serial version */
+	private static final long serialVersionUID = -4052254585021044275L;
+
+	/**
      * Get a numeric entity id
      *
      * @return numeric id of this entity

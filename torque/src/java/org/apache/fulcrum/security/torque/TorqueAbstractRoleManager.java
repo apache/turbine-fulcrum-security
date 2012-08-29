@@ -18,7 +18,6 @@ package org.apache.fulcrum.security.torque;
  * under the License.
  */
 import java.sql.Connection;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.fulcrum.security.entity.Role;
@@ -48,7 +47,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
      *
      * @throws TorqueException if any database error occurs
      */
-    protected abstract List doSelectAllRoles(Connection con)
+    protected abstract List<Role> doSelectAllRoles(Connection con)
         throws TorqueException;
 
     /**
@@ -228,12 +227,10 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
         {
             con = Transaction.begin(((TorqueAbstractSecurityEntity)getRoleInstance()).getDatabaseName());
 
-            List roles = doSelectAllRoles(con);
+            List<Role> roles = doSelectAllRoles(con);
 
-            for (Iterator i = roles.iterator(); i.hasNext();)
+            for (Role role : roles)
             {
-                Role role = (Role)i.next();
-
                 // Add attached objects if they exist
                 ((TorqueAbstractSecurityEntity)role).retrieveAttachedObjects(con);
 

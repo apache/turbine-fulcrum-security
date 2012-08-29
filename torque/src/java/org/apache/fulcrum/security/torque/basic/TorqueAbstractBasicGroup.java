@@ -18,7 +18,6 @@ package org.apache.fulcrum.security.torque.basic;
  * under the License.
  */
 import java.sql.Connection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -26,7 +25,6 @@ import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.basic.entity.BasicGroup;
 import org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity;
 import org.apache.fulcrum.security.torque.om.TorqueBasicGroupPeer;
-import org.apache.fulcrum.security.torque.om.TorqueBasicUser;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroup;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroupPeer;
 import org.apache.fulcrum.security.util.UserSet;
@@ -42,8 +40,11 @@ import org.apache.torque.util.Criteria;
 public abstract class TorqueAbstractBasicGroup extends TorqueAbstractSecurityEntity
     implements BasicGroup
 {
-    /** a cache of user objects */
-    private Set userSet = null;
+    /** Serial version */
+	private static final long serialVersionUID = -3639383219058996135L;
+
+	/** a cache of user objects */
+    private Set<User> userSet = null;
 
     /**
      * Forward reference to generated code
@@ -56,7 +57,7 @@ public abstract class TorqueAbstractBasicGroup extends TorqueAbstractSecurityEnt
      *
      * @return a list of User/Group relations
      */
-    protected abstract List getTorqueBasicUserGroupsJoinTorqueBasicUser(Criteria criteria)
+    protected abstract List<TorqueBasicUserGroup> getTorqueBasicUserGroupsJoinTorqueBasicUser(Criteria criteria)
         throws TorqueException;
 
     /**
@@ -87,9 +88,10 @@ public abstract class TorqueAbstractBasicGroup extends TorqueAbstractSecurityEnt
     /**
      * @see org.apache.fulcrum.security.model.basic.entity.BasicGroup#getUsersAsSet()
      */
-    public Set getUsersAsSet()
+    @SuppressWarnings("unchecked")
+	public <T extends User> Set<T> getUsersAsSet()
     {
-        return userSet;
+        return (Set<T>)userSet;
     }
 
     /**
@@ -118,7 +120,7 @@ public abstract class TorqueAbstractBasicGroup extends TorqueAbstractSecurityEnt
     /**
      * @see org.apache.fulcrum.security.model.basic.entity.BasicGroup#setUsersAsSet(java.util.Set)
      */
-    public void setUsersAsSet(Set users)
+    public <T extends User> void setUsersAsSet(Set<T> users)
     {
         setUsers(new UserSet(users));
     }
@@ -131,17 +133,17 @@ public abstract class TorqueAbstractBasicGroup extends TorqueAbstractSecurityEnt
         this.userSet = new UserSet();
 
         // the generated method that allows a Connection parameter is missing
-        List usergroups = getTorqueBasicUserGroupsJoinTorqueBasicUser(new Criteria());
+        List<TorqueBasicUserGroup> usergroups =
+        	getTorqueBasicUserGroupsJoinTorqueBasicUser(new Criteria());
 
-        for (Iterator i = usergroups.iterator(); i.hasNext();)
+        for (TorqueBasicUserGroup tbug : usergroups)
         {
-            TorqueBasicUserGroup tbug = (TorqueBasicUserGroup)i.next();
             userSet.add(tbug.getTorqueBasicUser());
         }
     }
 
     /**
-     * Update this instance to the database with all dependend objects
+     * Update this instance to the database with all dependent objects
      *
      * @param con A database connection
      */
@@ -155,12 +157,10 @@ public abstract class TorqueAbstractBasicGroup extends TorqueAbstractSecurityEnt
             criteria.add(TorqueBasicUserGroupPeer.GROUP_ID, getEntityId());
             TorqueBasicUserGroupPeer.doDelete(criteria, con);
 
-            for (Iterator i = userSet.iterator(); i.hasNext();)
+            for (User u : userSet)
             {
-                TorqueBasicUser user = (TorqueBasicUser)i.next();
-
                 TorqueBasicUserGroup ug = new TorqueBasicUserGroup();
-                ug.setUserId(user.getEntityId());
+                ug.setUserId((Integer)u.getId());
                 ug.setGroupId(getEntityId());
                 ug.save(con);
             }
@@ -177,7 +177,7 @@ public abstract class TorqueAbstractBasicGroup extends TorqueAbstractSecurityEnt
     }
 
     /**
-     * Get the name of the connnection pool associated to this object
+     * Get the name of the connection pool associated to this object
      *
      * @return the logical Torque database name
      */

@@ -18,7 +18,6 @@ package org.apache.fulcrum.security.torque.dynamic;
  * under the License.
  */
 import java.sql.Connection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -29,8 +28,6 @@ import org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupRole;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupRolePeer;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicRole;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicUser;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUserGroup;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUserGroupPeer;
 import org.apache.fulcrum.security.util.RoleSet;
@@ -47,11 +44,14 @@ import org.apache.torque.util.Criteria;
 public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityEntity
     implements DynamicGroup
 {
-    /** a cache of user objects */
-    private Set userSet = null;
+    /** Serial version */
+	private static final long serialVersionUID = -122088742532595477L;
+
+	/** a cache of user objects */
+    private Set<User> userSet = null;
 
     /** a cache of role objects */
-    private Set roleSet = null;
+    private Set<Role> roleSet = null;
 
     /**
      * Forward reference to generated code
@@ -64,7 +64,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
      *
      * @return a list of User/Group relations
      */
-    protected abstract List getTorqueDynamicUserGroupsJoinTorqueDynamicUser(Criteria criteria)
+    protected abstract List<TorqueDynamicUserGroup> getTorqueDynamicUserGroupsJoinTorqueDynamicUser(Criteria criteria)
         throws TorqueException;
 
     /**
@@ -78,7 +78,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
      *
      * @return a list of Role/Group relations
      */
-    protected abstract List getTorqueDynamicGroupRolesJoinTorqueDynamicRole(Criteria criteria)
+    protected abstract List<TorqueDynamicGroupRole> getTorqueDynamicGroupRolesJoinTorqueDynamicRole(Criteria criteria)
         throws TorqueException;
 
     /**
@@ -109,9 +109,10 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
     /**
      * @see org.apache.fulcrum.security.model.basic.entity.BasicGroup#getUsersAsSet()
      */
-    public Set getUsersAsSet()
+    @SuppressWarnings("unchecked")
+	public <T extends User> Set<T> getUsersAsSet()
     {
-        return userSet;
+        return (Set<T>)userSet;
     }
 
     /**
@@ -140,7 +141,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
     /**
      * @see org.apache.fulcrum.security.model.basic.entity.BasicGroup#setUsersAsSet(java.util.Set)
      */
-    public void setUsersAsSet(Set users)
+    public <T extends User> void setUsersAsSet(Set<T> users)
     {
         setUsers(new UserSet(users));
     }
@@ -173,9 +174,10 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
     /**
      * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup#getRolesAsSet()
      */
-    public Set getRolesAsSet()
+    @SuppressWarnings("unchecked")
+	public <T extends Role> Set<T> getRolesAsSet()
     {
-        return roleSet;
+        return (Set<T>)roleSet;
     }
 
     /**
@@ -204,7 +206,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
     /**
      * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup#setRolesAsSet(java.util.Set)
      */
-    public void setRolesAsSet(Set roles)
+    public <T extends Role> void setRolesAsSet(Set<T> roles)
     {
         setRoles(new RoleSet(roles));
     }
@@ -225,22 +227,20 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
         this.userSet = new UserSet();
 
         // the generated method that allows a Connection parameter is missing
-        List usergroups = getTorqueDynamicUserGroupsJoinTorqueDynamicUser(new Criteria());
+        List<TorqueDynamicUserGroup> usergroups = getTorqueDynamicUserGroupsJoinTorqueDynamicUser(new Criteria());
 
-        for (Iterator i = usergroups.iterator(); i.hasNext();)
+        for (TorqueDynamicUserGroup tdug : usergroups)
         {
-            TorqueDynamicUserGroup tdug = (TorqueDynamicUserGroup)i.next();
             userSet.add(tdug.getTorqueDynamicUser());
         }
 
         this.roleSet = new RoleSet();
 
         // the generated method that allows a Connection parameter is missing
-        List grouproles = getTorqueDynamicGroupRolesJoinTorqueDynamicRole(new Criteria());
+        List<TorqueDynamicGroupRole> grouproles = getTorqueDynamicGroupRolesJoinTorqueDynamicRole(new Criteria());
 
-        for (Iterator i = grouproles.iterator(); i.hasNext();)
+        for (TorqueDynamicGroupRole tdgr : grouproles)
         {
-            TorqueDynamicGroupRole tdgr = (TorqueDynamicGroupRole)i.next();
             roleSet.add(tdgr.getTorqueDynamicRole());
         }
     }
@@ -258,12 +258,10 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
             criteria.add(TorqueDynamicUserGroupPeer.GROUP_ID, getEntityId());
             TorqueDynamicUserGroupPeer.doDelete(criteria, con);
 
-            for (Iterator i = userSet.iterator(); i.hasNext();)
+            for (User u : userSet)
             {
-                TorqueDynamicUser user = (TorqueDynamicUser)i.next();
-
                 TorqueDynamicUserGroup ug = new TorqueDynamicUserGroup();
-                ug.setUserId(user.getEntityId());
+                ug.setUserId((Integer)u.getId());
                 ug.setGroupId(getEntityId());
                 ug.save(con);
             }
@@ -277,12 +275,10 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
             criteria.add(TorqueDynamicGroupRolePeer.GROUP_ID, getEntityId());
             TorqueDynamicGroupRolePeer.doDelete(criteria, con);
 
-            for (Iterator i = roleSet.iterator(); i.hasNext();)
+            for (Role r : roleSet)
             {
-                TorqueDynamicRole role = (TorqueDynamicRole)i.next();
-
                 TorqueDynamicGroupRole gr = new TorqueDynamicGroupRole();
-                gr.setRoleId(role.getEntityId());
+                gr.setRoleId((Integer)r.getId());
                 gr.setGroupId(getEntityId());
                 gr.save(con);
             }

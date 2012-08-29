@@ -19,7 +19,6 @@ package org.apache.fulcrum.security.torque.basic;
  */
 import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.fulcrum.security.entity.Group;
@@ -174,11 +173,10 @@ public class TorqueBasicModelManagerImpl extends AbstractManager implements Basi
             BasicUser u = (BasicUser) user;
 
             // copy to avoid ConcurrentModificationException
-            List groups = new ArrayList(u.getGroups());
+            List<Group> groups = new ArrayList<Group>(u.getGroups());
 
-            for (Iterator i = groups.iterator(); i.hasNext();)
+            for (Group group : groups)
             {
-                Group group = (Group)i.next();
                 u.removeGroup(group);
             }
 

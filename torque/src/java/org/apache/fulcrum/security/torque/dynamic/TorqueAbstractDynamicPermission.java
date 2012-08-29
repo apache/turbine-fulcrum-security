@@ -18,7 +18,6 @@ package org.apache.fulcrum.security.torque.dynamic;
  * under the License.
  */
 import java.sql.Connection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -26,7 +25,6 @@ import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission;
 import org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicPermissionPeer;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicRole;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePermission;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePermissionPeer;
 import org.apache.fulcrum.security.util.RoleSet;
@@ -42,8 +40,10 @@ import org.apache.torque.util.Criteria;
 public abstract class TorqueAbstractDynamicPermission extends TorqueAbstractSecurityEntity
     implements DynamicPermission
 {
-    /** a cache of role objects */
-    private Set roleSet = null;
+    /** Serial version */
+	private static final long serialVersionUID = -6857144824327889029L;
+	/** a cache of role objects */
+    private Set<Role> roleSet = null;
 
     /**
      * Forward reference to generated code
@@ -56,7 +56,7 @@ public abstract class TorqueAbstractDynamicPermission extends TorqueAbstractSecu
      *
      * @return a list of Role/Permission relations
      */
-    protected abstract List getTorqueDynamicRolePermissionsJoinTorqueDynamicRole(Criteria criteria)
+    protected abstract List<TorqueDynamicRolePermission> getTorqueDynamicRolePermissionsJoinTorqueDynamicRole(Criteria criteria)
         throws TorqueException;
 
     /**
@@ -87,9 +87,10 @@ public abstract class TorqueAbstractDynamicPermission extends TorqueAbstractSecu
     /**
      * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission#getRolesAsSet()
      */
-    public Set getRolesAsSet()
+    @SuppressWarnings("unchecked")
+	public <T extends Role> Set<T> getRolesAsSet()
     {
-        return roleSet;
+        return (Set<T>)roleSet;
     }
 
     /**
@@ -118,7 +119,7 @@ public abstract class TorqueAbstractDynamicPermission extends TorqueAbstractSecu
     /**
      * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission#setRolesAsSet(java.util.Set)
      */
-    public void setRolesAsSet(Set roles)
+    public <T extends Role> void setRolesAsSet(Set<T> roles)
     {
         setRoles(new RoleSet(roles));
     }
@@ -139,11 +140,10 @@ public abstract class TorqueAbstractDynamicPermission extends TorqueAbstractSecu
         this.roleSet = new RoleSet();
 
         // the generated method that allows a Connection parameter is missing
-        List rolepermissions = getTorqueDynamicRolePermissionsJoinTorqueDynamicRole(new Criteria());
+        List<TorqueDynamicRolePermission> rolepermissions = getTorqueDynamicRolePermissionsJoinTorqueDynamicRole(new Criteria());
 
-        for (Iterator i = rolepermissions.iterator(); i.hasNext();)
+        for (TorqueDynamicRolePermission tdrp : rolepermissions)
         {
-            TorqueDynamicRolePermission tdrp = (TorqueDynamicRolePermission)i.next();
             roleSet.add(tdrp.getTorqueDynamicRole());
         }
     }
@@ -161,12 +161,10 @@ public abstract class TorqueAbstractDynamicPermission extends TorqueAbstractSecu
             criteria.add(TorqueDynamicRolePermissionPeer.PERMISSION_ID, getEntityId());
             TorqueDynamicRolePermissionPeer.doDelete(criteria, con);
 
-            for (Iterator i = roleSet.iterator(); i.hasNext();)
+            for (Role r : roleSet)
             {
-                TorqueDynamicRole role = (TorqueDynamicRole)i.next();
-
                 TorqueDynamicRolePermission rp = new TorqueDynamicRolePermission();
-                rp.setRoleId(role.getEntityId());
+                rp.setRoleId((Integer)r.getId());
                 rp.setPermissionId(getEntityId());
                 rp.save(con);
             }

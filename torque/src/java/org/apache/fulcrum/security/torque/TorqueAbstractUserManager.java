@@ -18,7 +18,6 @@ package org.apache.fulcrum.security.torque;
  * under the License.
  */
 import java.sql.Connection;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.fulcrum.security.entity.User;
@@ -48,7 +47,7 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
      *
      * @throws TorqueException if any database error occurs
      */
-    protected abstract List doSelectAllUsers(Connection con)
+    protected abstract <T extends User> List<T> doSelectAllUsers(Connection con)
         throws TorqueException;
 
     /**
@@ -271,12 +270,10 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
         {
             con = Transaction.begin(((TorqueAbstractSecurityEntity)getUserInstance()).getDatabaseName());
 
-            List users = doSelectAllUsers(con);
+            List<User> users = doSelectAllUsers(con);
 
-            for (Iterator i = users.iterator(); i.hasNext();)
+            for (User user : users)
             {
-                User user = (User)i.next();
-
                 // Add attached objects if they exist
                 ((TorqueAbstractSecurityEntity)user).retrieveAttachedObjects(con);
 

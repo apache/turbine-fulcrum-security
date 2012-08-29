@@ -18,7 +18,6 @@ package org.apache.fulcrum.security.torque;
  * under the License.
  */
 import java.sql.Connection;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.fulcrum.security.entity.Permission;
@@ -48,7 +47,7 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
      *
      * @throws TorqueException if any database error occurs
      */
-    protected abstract List doSelectAllPermissions(Connection con)
+    protected abstract List<Permission> doSelectAllPermissions(Connection con)
         throws TorqueException;
 
     /**
@@ -186,12 +185,10 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
         {
             con = Transaction.begin(((TorqueAbstractSecurityEntity)getPermissionInstance()).getDatabaseName());
 
-            List permissions = doSelectAllPermissions(con);
+            List<Permission> permissions = doSelectAllPermissions(con);
 
-            for (Iterator i = permissions.iterator(); i.hasNext();)
+            for (Permission p : permissions)
             {
-                Permission p = (Permission)i.next();
-
                 // Add attached objects if they exist
                 ((TorqueAbstractSecurityEntity)p).retrieveAttachedObjects(con);
 
