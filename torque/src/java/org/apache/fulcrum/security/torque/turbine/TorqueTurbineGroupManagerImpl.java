@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.torque.TorqueAbstractGroupManager;
+import org.apache.fulcrum.security.torque.om.TorqueTurbineGroup;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineGroupPeer;
 import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
@@ -38,11 +39,12 @@ public class TorqueTurbineGroupManagerImpl extends TorqueAbstractGroupManager
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractGroupManager#doSelectAllGroups(java.sql.Connection)
      */
-    protected List doSelectAllGroups(Connection con) throws TorqueException
+    @SuppressWarnings("unchecked")
+	protected <T extends Group> List<T> doSelectAllGroups(Connection con) throws TorqueException
     {
         Criteria criteria = new Criteria(TorqueTurbineGroupPeer.DATABASE_NAME);
 
-        return TorqueTurbineGroupPeer.doSelect(criteria, con);
+        return (List<T>)TorqueTurbineGroupPeer.doSelect(criteria, con);
     }
 
     /**
@@ -63,13 +65,13 @@ public class TorqueTurbineGroupManagerImpl extends TorqueAbstractGroupManager
         criteria.setIgnoreCase(true);
         criteria.setSingleRecord(true);
 
-        List groups = TorqueTurbineGroupPeer.doSelect(criteria, con);
+        List<TorqueTurbineGroup> groups = TorqueTurbineGroupPeer.doSelect(criteria, con);
 
         if (groups.isEmpty())
         {
             throw new NoRowsException(name);
         }
 
-        return (Group)groups.get(0);
+        return groups.get(0);
     }
 }

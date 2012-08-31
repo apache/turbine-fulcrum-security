@@ -47,7 +47,7 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
      *
      * @throws TorqueException if any database error occurs
      */
-    protected abstract List<Permission> doSelectAllPermissions(Connection con)
+    protected abstract <T extends Permission> List<T> doSelectAllPermissions(Connection con)
         throws TorqueException;
 
     /**
@@ -191,7 +191,6 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
             {
                 // Add attached objects if they exist
                 ((TorqueAbstractSecurityEntity)p).retrieveAttachedObjects(con);
-
                 permissionSet.add(p);
             }
 

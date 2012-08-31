@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.torque.TorqueAbstractRoleManager;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicRole;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePeer;
 import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
@@ -38,11 +39,12 @@ public class TorqueDynamicRoleManagerImpl extends TorqueAbstractRoleManager
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractRoleManager#doSelectAllRoles(java.sql.Connection)
      */
-    protected List doSelectAllRoles(Connection con) throws TorqueException
+    @SuppressWarnings("unchecked")
+	protected <T extends Role> List<T> doSelectAllRoles(Connection con) throws TorqueException
     {
         Criteria criteria = new Criteria(TorqueDynamicRolePeer.DATABASE_NAME);
 
-        return TorqueDynamicRolePeer.doSelect(criteria, con);
+        return (List<T>)TorqueDynamicRolePeer.doSelect(criteria, con);
     }
 
     /**
@@ -63,13 +65,13 @@ public class TorqueDynamicRoleManagerImpl extends TorqueAbstractRoleManager
         criteria.setIgnoreCase(true);
         criteria.setSingleRecord(true);
 
-        List roles = TorqueDynamicRolePeer.doSelect(criteria, con);
+        List<TorqueDynamicRole> roles = TorqueDynamicRolePeer.doSelect(criteria, con);
 
         if (roles.isEmpty())
         {
             throw new NoRowsException(name);
         }
 
-        return (Role)roles.get(0);
+        return roles.get(0);
     }
 }

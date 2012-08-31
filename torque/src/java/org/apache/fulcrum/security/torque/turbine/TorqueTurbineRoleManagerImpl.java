@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.torque.TorqueAbstractRoleManager;
+import org.apache.fulcrum.security.torque.om.TorqueTurbineRole;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePeer;
 import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
@@ -38,11 +39,12 @@ public class TorqueTurbineRoleManagerImpl extends TorqueAbstractRoleManager
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractRoleManager#doSelectAllRoles(java.sql.Connection)
      */
-    protected List doSelectAllRoles(Connection con) throws TorqueException
+    @SuppressWarnings("unchecked")
+	protected <T extends Role> List<T> doSelectAllRoles(Connection con) throws TorqueException
     {
         Criteria criteria = new Criteria(TorqueTurbineRolePeer.DATABASE_NAME);
 
-        return TorqueTurbineRolePeer.doSelect(criteria, con);
+        return (List<T>)TorqueTurbineRolePeer.doSelect(criteria, con);
     }
 
     /**
@@ -63,13 +65,13 @@ public class TorqueTurbineRoleManagerImpl extends TorqueAbstractRoleManager
         criteria.setIgnoreCase(true);
         criteria.setSingleRecord(true);
 
-        List roles = TorqueTurbineRolePeer.doSelect(criteria, con);
+        List<TorqueTurbineRole> roles = TorqueTurbineRolePeer.doSelect(criteria, con);
 
         if (roles.isEmpty())
         {
             throw new NoRowsException(name);
         }
 
-        return (Role)roles.get(0);
+        return roles.get(0);
     }
 }

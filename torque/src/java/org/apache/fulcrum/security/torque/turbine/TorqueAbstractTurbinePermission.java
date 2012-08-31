@@ -18,7 +18,6 @@ package org.apache.fulcrum.security.torque.turbine;
  * under the License.
  */
 import java.sql.Connection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -26,7 +25,6 @@ import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.model.turbine.entity.TurbinePermission;
 import org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity;
 import org.apache.fulcrum.security.torque.om.TorqueTurbinePermissionPeer;
-import org.apache.fulcrum.security.torque.om.TorqueTurbineRole;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePermission;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePermissionPeer;
 import org.apache.fulcrum.security.util.RoleSet;
@@ -42,8 +40,11 @@ import org.apache.torque.util.Criteria;
 public abstract class TorqueAbstractTurbinePermission extends TorqueAbstractSecurityEntity
     implements TurbinePermission
 {
-    /** a cache of role objects */
-    private Set roleSet = null;
+    /** Serial version */
+	private static final long serialVersionUID = -5313324873688923207L;
+
+	/** a cache of role objects */
+    private Set<Role> roleSet = null;
 
     /**
      * Forward reference to generated code
@@ -56,7 +57,7 @@ public abstract class TorqueAbstractTurbinePermission extends TorqueAbstractSecu
      *
      * @return a list of Role/Permission relations
      */
-    protected abstract List getTorqueTurbineRolePermissionsJoinTorqueTurbineRole(Criteria criteria)
+    protected abstract List<TorqueTurbineRolePermission> getTorqueTurbineRolePermissionsJoinTorqueTurbineRole(Criteria criteria)
         throws TorqueException;
 
     /**
@@ -87,9 +88,10 @@ public abstract class TorqueAbstractTurbinePermission extends TorqueAbstractSecu
     /**
      * @see org.apache.fulcrum.security.model.turbine.entity.TurbinePermission#getRolesAsSet()
      */
-    public Set getRolesAsSet()
+    @SuppressWarnings("unchecked")
+	public <T extends Role> Set<T> getRolesAsSet()
     {
-        return roleSet;
+        return (Set<T>)roleSet;
     }
 
     /**
@@ -118,7 +120,7 @@ public abstract class TorqueAbstractTurbinePermission extends TorqueAbstractSecu
     /**
      * @see org.apache.fulcrum.security.model.turbine.entity.TurbinePermission#setRolesAsSet(java.util.Set)
      */
-    public void setRolesAsSet(Set roles)
+    public <T extends Role> void setRolesAsSet(Set<T> roles)
     {
         setRoles(new RoleSet(roles));
     }
@@ -139,11 +141,10 @@ public abstract class TorqueAbstractTurbinePermission extends TorqueAbstractSecu
         this.roleSet = new RoleSet();
 
         // the generated method that allows a Connection parameter is missing
-        List rolepermissions = getTorqueTurbineRolePermissionsJoinTorqueTurbineRole(new Criteria());
+        List<TorqueTurbineRolePermission> rolepermissions = getTorqueTurbineRolePermissionsJoinTorqueTurbineRole(new Criteria());
 
-        for (Iterator i = rolepermissions.iterator(); i.hasNext();)
+        for (TorqueTurbineRolePermission ttrp : rolepermissions)
         {
-            TorqueTurbineRolePermission ttrp = (TorqueTurbineRolePermission)i.next();
             roleSet.add(ttrp.getTorqueTurbineRole());
         }
     }
@@ -161,12 +162,10 @@ public abstract class TorqueAbstractTurbinePermission extends TorqueAbstractSecu
             criteria.add(TorqueTurbineRolePermissionPeer.PERMISSION_ID, getEntityId());
             TorqueTurbineRolePermissionPeer.doDelete(criteria, con);
 
-            for (Iterator i = roleSet.iterator(); i.hasNext();)
+            for (Role r : roleSet)
             {
-                TorqueTurbineRole role = (TorqueTurbineRole)i.next();
-
                 TorqueTurbineRolePermission rp = new TorqueTurbineRolePermission();
-                rp.setRoleId(role.getEntityId());
+                rp.setRoleId((Integer)r.getId());
                 rp.setPermissionId(getEntityId());
                 rp.save(con);
             }

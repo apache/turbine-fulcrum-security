@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager;
+import org.apache.fulcrum.security.torque.om.TorqueTurbinePermission;
 import org.apache.fulcrum.security.torque.om.TorqueTurbinePermissionPeer;
 import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
@@ -38,11 +39,12 @@ public class TorqueTurbinePermissionManagerImpl extends TorqueAbstractPermission
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager#doSelectAllPermissions(java.sql.Connection)
      */
-    protected List doSelectAllPermissions(Connection con) throws TorqueException
+    @SuppressWarnings("unchecked")
+	protected <T extends Permission> List<T> doSelectAllPermissions(Connection con) throws TorqueException
     {
         Criteria criteria = new Criteria(TorqueTurbinePermissionPeer.DATABASE_NAME);
 
-        return TorqueTurbinePermissionPeer.doSelect(criteria, con);
+        return (List<T>)TorqueTurbinePermissionPeer.doSelect(criteria, con);
     }
 
     /**
@@ -63,13 +65,13 @@ public class TorqueTurbinePermissionManagerImpl extends TorqueAbstractPermission
         criteria.setIgnoreCase(true);
         criteria.setSingleRecord(true);
 
-        List permissions = TorqueTurbinePermissionPeer.doSelect(criteria, con);
+        List<TorqueTurbinePermission> permissions = TorqueTurbinePermissionPeer.doSelect(criteria, con);
 
         if (permissions.isEmpty())
         {
             throw new NoRowsException(name);
         }
 
-        return (Permission)permissions.get(0);
+        return permissions.get(0);
     }
 }

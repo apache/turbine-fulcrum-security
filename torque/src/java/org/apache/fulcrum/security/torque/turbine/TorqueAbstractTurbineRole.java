@@ -19,15 +19,12 @@ package org.apache.fulcrum.security.torque.turbine;
  */
 import java.sql.Connection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineRole;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
-import org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity;
-import org.apache.fulcrum.security.torque.om.TorqueTurbinePermission;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePeer;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePermission;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePermissionPeer;
@@ -43,14 +40,14 @@ import org.apache.torque.util.Criteria;
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id:$
  */
-public abstract class TorqueAbstractTurbineRole extends TorqueAbstractSecurityEntity
+public abstract class TorqueAbstractTurbineRole extends TorqueAbstractTurbineTurbineSecurityEntity
     implements TurbineRole
 {
-    /** a cache of permission objects */
-    private Set permissionSet = null;
+    /** Serial version */
+	private static final long serialVersionUID = -1782236723198646728L;
 
-    /** a cache of user_group_role objects */
-    private Set userGroupRoleSet = null;
+	/** a cache of permission objects */
+    private Set<Permission> permissionSet = null;
 
     /**
      * Forward reference to generated code
@@ -63,7 +60,7 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractSecurityEn
      *
      * @return a list of Role/Permission relations
      */
-    protected abstract List getTorqueTurbineRolePermissionsJoinTorqueTurbinePermission(Criteria criteria)
+    protected abstract List<TorqueTurbineRolePermission> getTorqueTurbineRolePermissionsJoinTorqueTurbinePermission(Criteria criteria)
         throws TorqueException;
 
     /**
@@ -77,7 +74,7 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractSecurityEn
      *
      * @return a list of User/Group/Role relations
      */
-    protected abstract List getTorqueTurbineUserGroupRolesJoinTorqueTurbineGroup(Criteria criteria)
+    protected abstract List<TorqueTurbineUserGroupRole> getTorqueTurbineUserGroupRolesJoinTorqueTurbineGroup(Criteria criteria)
         throws TorqueException;
 
     /**
@@ -86,14 +83,6 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractSecurityEn
     public void addPermission(Permission permission)
     {
         getPermissions().add(permission);
-    }
-
-    /**
-     * @see org.apache.fulcrum.security.model.turbine.entity.TurbineRole#addUserGroupRole(org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole)
-     */
-    public void addUserGroupRole(TurbineUserGroupRole userGroupRole)
-    {
-        getUserGroupRoleSet().add(userGroupRole);
     }
 
     /**
@@ -116,22 +105,10 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractSecurityEn
     /**
      * @see org.apache.fulcrum.security.model.turbine.entity.TurbineRole#getPermissionsAsSet()
      */
-    public Set getPermissionsAsSet()
+    @SuppressWarnings("unchecked")
+	public <T extends Permission> Set<T> getPermissionsAsSet()
     {
-        return permissionSet;
-    }
-
-    /**
-     * @see org.apache.fulcrum.security.model.turbine.entity.TurbineRole#getUserGroupRoleSet()
-     */
-    public Set getUserGroupRoleSet()
-    {
-        if (userGroupRoleSet == null)
-        {
-            userGroupRoleSet = new HashSet();
-        }
-
-        return userGroupRoleSet;
+        return (Set<T>)permissionSet;
     }
 
     /**
@@ -140,14 +117,6 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractSecurityEn
     public void removePermission(Permission permission)
     {
         getPermissions().remove(permission);
-    }
-
-    /**
-     * @see org.apache.fulcrum.security.model.turbine.entity.TurbineRole#removeUserGroupRole(org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole)
-     */
-    public void removeUserGroupRole(TurbineUserGroupRole userGroupRole)
-    {
-        getUserGroupRoleSet().remove(userGroupRole);
     }
 
     /**
@@ -168,24 +137,9 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractSecurityEn
     /**
      * @see org.apache.fulcrum.security.model.turbine.entity.TurbineRole#setPermissionsAsSet(java.util.Set)
      */
-    public void setPermissionsAsSet(Set permissions)
+    public <T extends Permission> void setPermissionsAsSet(Set<T> permissions)
     {
         setPermissions(new PermissionSet(permissions));
-    }
-
-    /**
-     * @see org.apache.fulcrum.security.model.turbine.entity.TurbineRole#setUserGroupRoleSet(java.util.Set)
-     */
-    public void setUserGroupRoleSet(Set userGroupRoleSet)
-    {
-        if (userGroupRoleSet != null)
-        {
-            this.userGroupRoleSet = userGroupRoleSet;
-        }
-        else
-        {
-            this.userGroupRoleSet = new HashSet();
-        }
     }
 
     /**
@@ -204,29 +158,28 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractSecurityEn
         this.permissionSet = new PermissionSet();
 
         // the generated method that allows a Connection parameter is missing
-        List rolepermissions = getTorqueTurbineRolePermissionsJoinTorqueTurbinePermission(new Criteria());
+        List<TorqueTurbineRolePermission> rolepermissions = getTorqueTurbineRolePermissionsJoinTorqueTurbinePermission(new Criteria());
 
-        for (Iterator i = rolepermissions.iterator(); i.hasNext();)
+        for (TorqueTurbineRolePermission ttrp : rolepermissions)
         {
-            TorqueTurbineRolePermission ttrp = (TorqueTurbineRolePermission)i.next();
             permissionSet.add(ttrp.getTorqueTurbinePermission());
         }
 
-        this.userGroupRoleSet = new HashSet();
+        Set<TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
 
         // the generated method that allows a Connection parameter is missing
-        List ugrs = getTorqueTurbineUserGroupRolesJoinTorqueTurbineGroup(new Criteria());
+        List<TorqueTurbineUserGroupRole> ugrs = getTorqueTurbineUserGroupRolesJoinTorqueTurbineGroup(new Criteria());
 
-        for (Iterator i = ugrs.iterator(); i.hasNext();)
+        for (TorqueTurbineUserGroupRole ttugr : ugrs)
         {
-            TorqueTurbineUserGroupRole ttugr = (TorqueTurbineUserGroupRole)i.next();
-
             TurbineUserGroupRole ugr = new TurbineUserGroupRole();
             ugr.setRole(this);
             ugr.setGroup(ttugr.getTorqueTurbineGroup());
             ugr.setUser(ttugr.getTorqueTurbineUser(con));
             userGroupRoleSet.add(ugr);
         }
+
+        setUserGroupRoleSet(userGroupRoleSet);
     }
 
     /**
@@ -242,17 +195,16 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractSecurityEn
             criteria.add(TorqueTurbineRolePermissionPeer.ROLE_ID, getEntityId());
             TorqueTurbineRolePermissionPeer.doDelete(criteria, con);
 
-            for (Iterator i = permissionSet.iterator(); i.hasNext();)
+            for (Permission p : permissionSet)
             {
-                TorqueTurbinePermission permission = (TorqueTurbinePermission)i.next();
-
                 TorqueTurbineRolePermission rp = new TorqueTurbineRolePermission();
-                rp.setPermissionId(permission.getEntityId());
+                rp.setPermissionId((Integer)p.getId());
                 rp.setRoleId(getEntityId());
                 rp.save(con);
             }
         }
 
+    	Set<TurbineUserGroupRole> userGroupRoleSet = getUserGroupRoleSet();
         if (userGroupRoleSet != null)
         {
             Criteria criteria = new Criteria();
@@ -261,10 +213,8 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractSecurityEn
             criteria.add(TorqueTurbineUserGroupRolePeer.ROLE_ID, getEntityId());
             TorqueTurbineUserGroupRolePeer.doDelete(criteria, con);
 
-            for (Iterator i = userGroupRoleSet.iterator(); i.hasNext();)
+            for (TurbineUserGroupRole ugr : userGroupRoleSet)
             {
-                TurbineUserGroupRole ugr = (TurbineUserGroupRole)i.next();
-
                 TorqueTurbineUserGroupRole ttugr = new TorqueTurbineUserGroupRole();
                 ttugr.setGroupId((Integer)ugr.getGroup().getId());
                 ttugr.setUserId((Integer)ugr.getUser().getId());

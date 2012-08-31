@@ -47,7 +47,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
      *
      * @throws TorqueException if any database error occurs
      */
-    protected abstract List<Role> doSelectAllRoles(Connection con)
+    protected abstract <T extends Role> List<T> doSelectAllRoles(Connection con)
         throws TorqueException;
 
     /**

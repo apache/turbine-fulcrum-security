@@ -18,7 +18,6 @@ package org.apache.fulcrum.security.torque.turbine;
  * under the License.
  */
 import java.sql.Connection;
-import java.util.Iterator;
 
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
@@ -231,17 +230,17 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
         if (roleExists && groupExists && userExists)
         {
             boolean ugrFound = false;
-            TurbineUserGroupRole user_group_role = null;
 
-            for (Iterator i = ((TurbineUser) user).getUserGroupRoleSet()
-                    .iterator(); i.hasNext();)
+            for (TurbineUserGroupRole user_group_role : ((TurbineUser) user).getUserGroupRoleSet())
             {
-                user_group_role = (TurbineUserGroupRole) i.next();
                 if (user_group_role.getUser().equals(user)
                     && user_group_role.getGroup().equals(group)
                     && user_group_role.getRole().equals(role))
                 {
                     ugrFound = true;
+                    ((TurbineUser)user).removeUserGroupRole(user_group_role);
+                    ((TurbineGroup)group).removeUserGroupRole(user_group_role);
+                    ((TurbineRole)role).removeUserGroupRole(user_group_role);
                     break;
                 }
             }
@@ -250,10 +249,6 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
             {
                 throw new UnknownEntityException("Could not find User/Group/Role");
             }
-
-            ((TurbineUser)user).removeUserGroupRole(user_group_role);
-            ((TurbineGroup)group).removeUserGroupRole(user_group_role);
-            ((TurbineRole)role).removeUserGroupRole(user_group_role);
 
             Connection con = null;
 
