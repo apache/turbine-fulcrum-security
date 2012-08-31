@@ -37,7 +37,7 @@ import org.apache.fulcrum.security.entity.SecurityEntity;
  * ID. They may or may not have a name, that depends on the implementation. Want
  * to get away frm requiring an ID and a name... Nothing should force Name to be
  * unique in the basic architecture of Fulcrum Security.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
@@ -66,9 +66,9 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 
     /**
      * Returns a set of security objects in this object.
-     * 
+     *
      * @return A Set Object
-     * 
+     *
      */
     public Set<T> getSet()
     {
@@ -77,7 +77,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 
     /**
      * Returns a set of Names in this Object.
-     * 
+     *
      * @return The Set of Names in this Object, backed by the actual data.
      */
     public Set<String> getNames()
@@ -87,7 +87,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 
     /**
      * Returns a set of Id values in this Object.
-     * 
+     *
      * @return The Set of Ids in this Object, backed by the actual data.
      */
     public Set<Object> getIds()
@@ -106,7 +106,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 
     /**
      * Searches if an Object with a given name is in the Set
-     * 
+     *
      * @param roleName
      *            Name of the Security Object.
      * @return True if argument matched an Object in this Set; false if no
@@ -119,7 +119,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 
     /**
      * Searches if an Object with a given Id is in the Set
-     * 
+     *
      * @param id
      *            Id of the Security Object.
      * @return True if argument matched an Object in this Set; false if no
@@ -132,7 +132,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 
     /**
      * Returns an Iterator for Objects in this Set.
-     * 
+     *
      * @return An iterator for the Set
      */
     public Iterator<T> iterator()
@@ -142,7 +142,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 
     /**
      * Returns size (cardinality) of this set.
-     * 
+     *
      * @return The cardinality of this Set.
      */
     public int size()
@@ -152,7 +152,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 
     /**
      * list of role names in this set
-     * 
+     *
      * @return The string representation of this Set.
      */
     @Override
@@ -202,7 +202,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 
     /**
      * Adds the entities in a Collection to this SecuritySet.
-     * 
+     *
      * @param collection
      *            A Collection of entities.
      * @return True if this Set changed as a result; false if no change to this
@@ -265,7 +265,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.util.Collection#toArray()
      */
     public Object[] toArray()
@@ -275,7 +275,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 
     /**
      * Checks whether this SecuritySet contains an entity.
-     * 
+     *
      * @param o
      *            An entity.
      * @return True if this Set contains the entity, false otherwise.
@@ -288,13 +288,13 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
         }
         else
         {
-            return containsName(((SecurityEntity) o).getName());
+            return containsId(((SecurityEntity) o).getId());
         }
     }
 
     /**
      * Removes an entity from this SecuritySet.
-     * 
+     *
      * @param o
      *            An entity.
      * @return True if this Set contained the entity before it was removed.
@@ -314,7 +314,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.util.Set#toArray(T[])
      */
     public <A> A[] toArray(A[] a)
@@ -325,7 +325,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
     /**
      * Returns an entity with the given name, if it is contained in this
      * SecuritySet.
-     * 
+     *
      * @param name
      *            Name of entity.
      * @return entity if argument matched an entity in this Set; null if no
@@ -333,13 +333,13 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
      */
     public T getByName(String name)
     {
-        return nameMap.get(name);
+        return nameMap.get(name.toLowerCase());
     }
 
     /**
      * Returns an entity with the given id, if it is contained in this
      * SecuritySet.
-     * 
+     *
      * @param id
      *            ID of entity.
      * @return entity if argument matched an entity in this Set; null if no
