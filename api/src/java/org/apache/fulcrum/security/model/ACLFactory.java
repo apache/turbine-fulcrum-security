@@ -24,7 +24,7 @@ import org.apache.fulcrum.security.entity.User;
 
 /**
  * This interface describes a factory for creating AccessControlList objects.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:greg@shwoop.com">Greg Ritter</a>
@@ -34,10 +34,8 @@ import org.apache.fulcrum.security.entity.User;
  * @version $Id$
  */
 public interface ACLFactory
-
 {
-    public static final String ROLE = ACLFactory.class.getName();
+    String ROLE = ACLFactory.class.getName();
 
-    public AccessControlList getAccessControlList(User user);
-
+    <T extends AccessControlList> T getAccessControlList(User user);
 }

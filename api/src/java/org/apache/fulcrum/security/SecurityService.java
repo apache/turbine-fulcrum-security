@@ -18,51 +18,50 @@ package org.apache.fulcrum.security;
  * specific language governing permissions and limitations
  * under the License.
  */
-import org.apache.avalon.framework.component.Component;
 
 /**
  * The Security Service manages Users, Groups Roles and Permissions in the
  * system.
- * 
+ *
  * The task performed by the security service include providing access to the
  * various types of managers.
- * 
+ *
  * <p>
  * Because of pluggable nature of the Services, it is possible to create
  * multiple implementations of SecurityService, for example employing database
  * and directory server as the data backend. <br>
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public interface SecurityService extends Component
+public interface SecurityService
 {
     String ROLE = SecurityService.class.getName();
 
     /**
      * Returns the configured UserManager.
-     * 
+     *
      * @return An UserManager object
      */
     UserManager getUserManager();
 
     /**
      * Returns the configured GroupManager.
-     * 
+     *
      * @return An UserManager object
      */
     GroupManager getGroupManager();
 
     /**
      * Returns the configured RoleManager.
-     * 
+     *
      * @return An RoleManager object
      */
     RoleManager getRoleManager();
 
     /**
      * Returns the configured PermissionManager.
-     * 
+     *
      * @return An PermissionManager object
      */
     PermissionManager getPermissionManager();
@@ -70,7 +69,7 @@ public interface SecurityService extends Component
     /**
      * Returns the configured ModelManager object that can then be casted to the
      * specific model.
-     * 
+     *
      * @return An ModelManager object
      */
     ModelManager getModelManager();

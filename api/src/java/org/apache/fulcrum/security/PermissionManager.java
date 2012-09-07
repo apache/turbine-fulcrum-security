@@ -18,7 +18,6 @@ package org.apache.fulcrum.security;
  * specific language governing permissions and limitations
  * under the License.
  */
-import org.apache.avalon.framework.component.Component;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
@@ -29,16 +28,16 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * An GroupManager performs {@link org.apache.fulcrum.security.entity.Group}
  * objects related tasks on behalf of the
  * {@link org.apache.fulcrum.security.BaseSecurityService}.
- * 
+ *
  * The responsibilities of this class include loading data of an group from the
  * storage and putting them into the
  * {@link org.apache.fulcrum.security.entity.Group} objects, saving those data
  * to the permanent storage.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public interface PermissionManager extends Component
+public interface PermissionManager
 {
 
     /** Avalon role - used to id the component within the manager */
@@ -46,34 +45,34 @@ public interface PermissionManager extends Component
 
     /**
      * Construct a blank Permission object.
-     * 
+     *
      * This method calls getPermissionClass, and then creates a new object using
      * the default constructor.
-     * 
+     *
      * @return an object implementing Permission interface.
      * @throws UnknownEntityException
      *             if the object could not be instantiated.
      */
-    Permission getPermissionInstance() throws UnknownEntityException;
+    <T extends Permission> T getPermissionInstance() throws UnknownEntityException;
 
     /**
      * Construct a blank Permission object.
-     * 
+     *
      * This method calls getPermissionClass, and then creates a new object using
      * the default constructor.
-     * 
+     *
      * @param permName
      *            The name of the Permission
-     * 
+     *
      * @return an object implementing Permission interface.
      * @throws UnknownEntityException
      *             if the object could not be instantiated.
      */
-    Permission getPermissionInstance(String permName) throws UnknownEntityException;
+    <T extends Permission> T getPermissionInstance(String permName) throws UnknownEntityException;
 
     /**
      * Retrieve a Permission object with specified name.
-     * 
+     *
      * @param name
      *            the name of the Permission.
      * @return an object representing the Permission with specified name.
@@ -82,26 +81,26 @@ public interface PermissionManager extends Component
      * @throws UnknownEntityException
      *             if the permission does not exist.
      */
-    Permission getPermissionByName(String name) throws DataBackendException, UnknownEntityException;
+    <T extends Permission> T getPermissionByName(String name) throws DataBackendException, UnknownEntityException;
 
     /**
      * Retrieve a Permission object with specified Id.
-     * 
+     *
      * @param name
      *            the name of the Permission.
-     * 
+     *
      * @return an object representing the Permission with specified name.
-     * 
+     *
      * @exception UnknownEntityException
      *                if the permission does not exist in the database.
      * @exception DataBackendException
      *                if there is a problem accessing the storage.
      */
-    Permission getPermissionById(Object id) throws DataBackendException, UnknownEntityException;
+    <T extends Permission> T getPermissionById(Object id) throws DataBackendException, UnknownEntityException;
 
     /**
      * Retrieves all permissions defined in the system.
-     * 
+     *
      * @return the names of all permissions defined in the system.
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
@@ -110,7 +109,7 @@ public interface PermissionManager extends Component
 
     /**
      * Creates a new permission with specified attributes.
-     * 
+     *
      * @param permission
      *            The object describing the permission to be created.
      * @return the new Permission object.
@@ -119,11 +118,11 @@ public interface PermissionManager extends Component
      * @throws EntityExistsException
      *             if the permission already exists.
      */
-    Permission addPermission(Permission permission) throws DataBackendException, EntityExistsException;
+    <T extends Permission> T addPermission(T permission) throws DataBackendException, EntityExistsException;
 
     /**
      * Removes a Permission from the system.
-     * 
+     *
      * @param permission
      *            The object describing the permission to be removed.
      * @throws DataBackendException
@@ -135,7 +134,7 @@ public interface PermissionManager extends Component
 
     /**
      * Renames an existing Permission.
-     * 
+     *
      * @param permission
      *            The object describing the permission to be renamed.
      * @param name
@@ -149,7 +148,7 @@ public interface PermissionManager extends Component
 
     /**
      * Determines if the <code>Permission</code> exists in the security system.
-     * 
+     *
      * @param permission
      *            a <code>Permission</code> value
      * @return true if the permission exists in the system, false otherwise
@@ -163,7 +162,7 @@ public interface PermissionManager extends Component
     /**
      * Determines if a <code>Permission</code> exists in the security system
      * with the specified name.
-     * 
+     *
      * @param permissionName
      *            the name of a <code>Permission</code> to check
      * @return true if the permission exists in the system, false otherwise

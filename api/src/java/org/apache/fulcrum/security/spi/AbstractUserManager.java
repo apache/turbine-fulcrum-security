@@ -32,28 +32,28 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
  * This implementation keeps all objects in memory. This is mostly meant to help
  * with testing and prototyping of ideas.
- * 
+ *
  * @todo Need to load up Crypto component and actually encrypt passwords!
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public abstract class AbstractUserManager extends AbstractEntityManager implements UserManager
 {
-    protected abstract User persistNewUser(User user) throws DataBackendException;
+    protected abstract <T extends User> T persistNewUser(T user) throws DataBackendException;
 
     private ACLFactory aclFactory;
     private Authenticator authenticator;
 
-    public AccessControlList getACL(User user) throws UnknownEntityException
+    public <T extends AccessControlList> T getACL(User user) throws UnknownEntityException
     {
         return getACLFactory().getAccessControlList(user);
     }
 
     /**
      * Check whether a specified user's account exists.
-     * 
+     *
      * The login name is used for looking up the account.
-     * 
+     *
      * @param user
      *            The user to be checked.
      * @return true if the specified account exists
@@ -69,7 +69,7 @@ public abstract class AbstractUserManager extends AbstractEntityManager implemen
      * Retrieve a user from persistent storage using username as the key, and
      * authenticate the user. The implementation may chose to authenticate to
      * the server as the user whose data is being retrieved.
-     * 
+     *
      * @param userName
      *            the name of the user.
      * @param password
@@ -82,16 +82,17 @@ public abstract class AbstractUserManager extends AbstractEntityManager implemen
      * @exception DataBackendException
      *                if there is a problem accessing the storage.
      */
-    public User getUser(String userName, String password) throws PasswordMismatchException, UnknownEntityException, DataBackendException
+    public <T extends User> T getUser(String userName, String password) throws PasswordMismatchException, UnknownEntityException, DataBackendException
     {
-        User user = getUser(userName);
+        T user = getUser(userName);
         authenticate(user, password);
         return user;
     }
 
-    public User getUser(String name) throws DataBackendException, UnknownEntityException
+    public <T extends User> T getUser(String name) throws DataBackendException, UnknownEntityException
     {
-        User user = getAllUsers().getByName(name);
+        @SuppressWarnings("unchecked")
+		T user = (T)getAllUsers().getByName(name);
         if (user == null)
         {
             throw new UnknownEntityException("The specified user does not exist");
@@ -101,20 +102,21 @@ public abstract class AbstractUserManager extends AbstractEntityManager implemen
 
     /**
      * Retrieve a User object with specified Id.
-     * 
+     *
      * @param id
      *            the id of the User.
-     * 
+     *
      * @return an object representing the User with specified id.
-     * 
+     *
      * @throws UnknownEntityException
      *             if the user does not exist in the database.
      * @throws DataBackendException
      *             if there is a problem accessing the storage.
      */
-    public User getUserById(Object id) throws DataBackendException, UnknownEntityException
+    public <T extends User> T getUserById(Object id) throws DataBackendException, UnknownEntityException
     {
-        User user = getAllUsers().getById(id);
+        @SuppressWarnings("unchecked")
+		T user = (T)getAllUsers().getById(id);
         if (user == null)
         {
             throw new UnknownEntityException("The specified user does not exist");
@@ -126,7 +128,7 @@ public abstract class AbstractUserManager extends AbstractEntityManager implemen
      * Authenticate an User with the specified password. If authentication is
      * successful the method returns nothing. If there are any problems,
      * exception was thrown.
-     * 
+     *
      * @param user
      *            an User object to authenticate.
      * @param password
@@ -154,7 +156,7 @@ public abstract class AbstractUserManager extends AbstractEntityManager implemen
     /**
      * Change the password for an User. The user must have supplied the old
      * password to allow the change.
-     * 
+     *
      * @param user
      *            an User to change password for.
      * @param oldPassword
@@ -188,12 +190,12 @@ public abstract class AbstractUserManager extends AbstractEntityManager implemen
 
     /**
      * Forcibly sets new password for an User.
-     * 
+     *
      * This is supposed by the administrator to change the forgotten or
      * compromised passwords. Certain implementatations of this feature would
      * require administrative level access to the authenticating server /
      * program.
-     * 
+     *
      * @param user
      *            an User to change password for.
      * @param password
@@ -218,65 +220,63 @@ public abstract class AbstractUserManager extends AbstractEntityManager implemen
 
     /**
      * Construct a blank User object.
-     * 
+     *
      * This method calls getUserClass, and then creates a new object using the
      * default constructor.
-     * 
+     *
      * @return an object implementing User interface.
      * @throws DataBackendException
      *             if the object could not be instantiated.
      */
-    public User getUserInstance() throws DataBackendException
+    public <T extends User> T getUserInstance() throws DataBackendException
     {
-        User user;
-
         try
         {
-            user = (User) Class.forName(getClassName()).newInstance();
+            @SuppressWarnings("unchecked")
+			T user = (T) Class.forName(getClassName()).newInstance();
+            return user;
         }
         catch (Exception e)
         {
             throw new DataBackendException("Problem creating instance of class " + getClassName(), e);
         }
-
-        return user;
     }
 
     /**
      * Construct a blank User object.
-     * 
+     *
      * This method calls getUserClass, and then creates a new object using the
      * default constructor.
-     * 
+     *
      * @param userName
      *            The name of the user.
-     * 
+     *
      * @return an object implementing User interface.
-     * 
+     *
      * @throws DataBackendException
      *             if the object could not be instantiated.
      */
-    public User getUserInstance(String userName) throws DataBackendException
+    public <T extends User> T getUserInstance(String userName) throws DataBackendException
     {
-        User user = getUserInstance();
+        T user = getUserInstance();
         user.setName(userName);
         return user;
     }
 
     /**
      * Creates new user account with specified attributes.
-     * 
+     *
      * @param user
      *            the object describing account to be created.
      * @param password
      *            The password to use for the account.
-     * 
+     *
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      * @throws EntityExistsException
      *             if the user account already exists.
      */
-    public User addUser(User user, String password) throws DataBackendException, EntityExistsException
+    public <T extends User> T addUser(T user, String password) throws DataBackendException, EntityExistsException
     {
         if (StringUtils.isEmpty(user.getName()))
         {

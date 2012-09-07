@@ -18,7 +18,6 @@ package org.apache.fulcrum.security;
  * specific language governing permissions and limitations
  * under the License.
  */
-import org.apache.avalon.framework.component.Component;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -31,51 +30,51 @@ import org.apache.fulcrum.security.util.UserSet;
  * An UserManager performs {@link org.apache.fulcrum.security.entity.User}
  * objects related tasks on behalf of the
  * {@link org.apache.fulcrum.security.BaseSecurityService}.
- * 
+ *
  * The responsibilities of this class include loading data of an user from the
  * storage and putting them into the
  * {@link org.apache.fulcrum.security.entity.User} objects, saving those data to
  * the permanent storage, and authenticating users.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @version $Id$
  */
-public interface UserManager extends Component
+public interface UserManager
 {
     /** Avalon role - used to id the component within the manager */
     String ROLE = UserManager.class.getName();
 
     /**
      * Construct a blank User object.
-     * 
+     *
      * This method calls getUserClass, and then creates a new object using the
      * default constructor.
-     * 
+     *
      * @return an object implementing User interface.
      * @throws DataBackendException
      *             if the object could not be instantiated.
      */
-    User getUserInstance() throws DataBackendException;
+    <T extends User> T getUserInstance() throws DataBackendException;
 
     /**
      * Construct a blank User object.
-     * 
+     *
      * This method calls getUserClass, and then creates a new object using the
      * default constructor.
-     * 
+     *
      * @param userName
      *            The name of the user.
-     * 
+     *
      * @return an object implementing User interface.
      * @throws DataBackendException
      *             if the object could not be instantiated.
      */
-    User getUserInstance(String userName) throws DataBackendException;
+    <T extends User> T getUserInstance(String userName) throws DataBackendException;
 
     /**
      * Determines if the <code>User</code> exists in the security system.
-     * 
+     *
      * @param role
      *            a <code>User</code> value
      * @return true if the user exists in the system, false otherwise
@@ -88,9 +87,9 @@ public interface UserManager extends Component
 
     /**
      * Check whether a specified user's account exists.
-     * 
+     *
      * The login name is used for looking up the account.
-     * 
+     *
      * @param userName
      *            The name of the user to be checked.
      * @return true if the specified account exists
@@ -101,7 +100,7 @@ public interface UserManager extends Component
 
     /**
      * Retrieve a user from persistent storage using username as the key.
-     * 
+     *
      * @param username
      *            the name of the user.
      * @return an User object.
@@ -110,11 +109,11 @@ public interface UserManager extends Component
      * @exception DataBackendException
      *                if there is a problem accessing the storage.
      */
-    User getUser(String username) throws UnknownEntityException, DataBackendException;
+    <T extends User> T getUser(String username) throws UnknownEntityException, DataBackendException;
 
     /**
      * Retrieve a user from persistent storage using the id as the key.
-     * 
+     *
      * @param id
      *            the id of the user.
      * @return an User object.
@@ -123,13 +122,13 @@ public interface UserManager extends Component
      * @exception DataBackendException
      *                if there is a problem accessing the storage.
      */
-    User getUserById(Object id) throws UnknownEntityException, DataBackendException;
+    <T extends User> T getUserById(Object id) throws UnknownEntityException, DataBackendException;
 
     /**
      * Retrieve a user from persistent storage using username as the key, and
      * authenticate the user. The implementation may chose to authenticate to
      * the server as the user whose data is being retrieved.
-     * 
+     *
      * @param username
      *            the name of the user.
      * @param password
@@ -142,11 +141,11 @@ public interface UserManager extends Component
      * @exception DataBackendException
      *                if there is a problem accessing the storage.
      */
-    User getUser(String username, String password) throws PasswordMismatchException, UnknownEntityException, DataBackendException;
+    <T extends User> T getUser(String username, String password) throws PasswordMismatchException, UnknownEntityException, DataBackendException;
 
     /**
      * Retrieves all users defined in the system.
-     * 
+     *
      * @return the names of all users defined in the system.
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
@@ -156,7 +155,7 @@ public interface UserManager extends Component
     /**
      * Saves User's data in the permanent storage. The user account is required
      * to exist in the storage.
-     * 
+     *
      * @param user
      *            the user object to save
      * @throws UnknownEntityException
@@ -170,7 +169,7 @@ public interface UserManager extends Component
      * Authenticate an User with the specified password. If authentication is
      * successful the method returns nothing. If there are any problems,
      * exception was thrown.
-     * 
+     *
      * @param user
      *            an User object to authenticate.
      * @param password
@@ -186,22 +185,22 @@ public interface UserManager extends Component
 
     /**
      * Creates new user account with specified attributes.
-     * 
+     *
      * @param user
      *            the object describing account to be created.
      * @param password
      *            The password to use for the object creation
-     * 
+     *
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      * @throws EntityExistsException
      *             if the user account already exists.
      */
-    public User addUser(User user, String password) throws EntityExistsException, DataBackendException;
+    <T extends User> T addUser(T user, String password) throws EntityExistsException, DataBackendException;
 
     /**
      * Removes an user account from the system.
-     * 
+     *
      * @param user
      *            the object describing the account to be removed.
      * @throws DataBackendException
@@ -213,7 +212,7 @@ public interface UserManager extends Component
 
     /**
      * Change the password for an User.
-     * 
+     *
      * @param user
      *            an User to change password for.
      * @param oldPassword
@@ -232,12 +231,12 @@ public interface UserManager extends Component
 
     /**
      * Forcibly sets new password for an User.
-     * 
+     *
      * This is supposed by the administrator to change the forgotten or
      * compromised passwords. Certain implementatations of this feature would
      * require administrative level access to the authenticating server /
      * program.
-     * 
+     *
      * @param user
      *            an User to change password for.
      * @param password
@@ -252,12 +251,11 @@ public interface UserManager extends Component
     /**
      * Return a Class object representing the system's chosen implementation of
      * of ACL interface.
-     * 
+     *
      * @return systems's chosen implementation of ACL interface.
      * @throws UnknownEntityException
      *             if the implementation of ACL interface could not be
      *             determined, or does not exist.
      */
-    public AccessControlList getACL(User user) throws UnknownEntityException;
-
+    <T extends AccessControlList> T getACL(User user) throws UnknownEntityException;
 }
