@@ -27,9 +27,9 @@ import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
- * 
+ *
  * This factory creates instance of the DynamicAccessControlList
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -37,49 +37,44 @@ public class BasicACLFactory extends AbstractManager implements ACLFactory
 {
     /**
      * Construct a new ACL object.
-     * 
+     *
      * This constructs a new ACL object from the configured class and
      * initializes it with the supplied roles and permissions.
-     * 
+     *
      * @param roles
      *            The roles that this ACL should contain
      * @param permissions
      *            The permissions for this ACL
-     * 
+     *
      * @return an object implementing ACL interface.
      * @throws UnknownEntityException
      *             if the object could not be instantiated.
      */
-    private AccessControlList getAclInstance(GroupSet groupSet) throws UnknownEntityException
+    private BasicAccessControlListImpl getAclInstance(GroupSet groupSet) throws UnknownEntityException
     {
-        // Object[] objects = { groupSet};
-        // String[] signatures = { GroupSet.class.getName()};
-        AccessControlList accessControlList;
+    	BasicAccessControlListImpl accessControlList;
+
         try
         {
-            /*
-             * 
-             * @todo I think this is overkill for now.. accessControlList =
-             * (AccessControlList)
-             * aclFactoryService.getInstance(aclClass.getName(), objects,
-             * signatures);
-             */
             accessControlList = new BasicAccessControlListImpl(groupSet);
         }
         catch (Exception e)
         {
             throw new UnknownEntityException("Failed to instantiate an ACL implementation object", e);
         }
+
         return accessControlList;
     }
 
-    public AccessControlList getAccessControlList(User user)
+    public <T extends AccessControlList> T getAccessControlList(User user)
     {
         GroupSet groupSet = ((BasicUser) user).getGroups();
 
         try
         {
-            return getAclInstance(groupSet);
+            @SuppressWarnings("unchecked")
+			T aclInstance = (T) getAclInstance(groupSet);
+			return aclInstance;
         }
         catch (UnknownEntityException uue)
         {

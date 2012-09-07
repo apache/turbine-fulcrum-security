@@ -26,66 +26,65 @@ import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
- * 
+ *
  * This implementation keeps all objects in memory. This is mostly meant to help
  * with testing and prototyping of ideas.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public abstract class AbstractRoleManager extends AbstractEntityManager implements RoleManager
 {
-    protected abstract Role persistNewRole(Role role) throws DataBackendException;
+    protected abstract <T extends Role> T persistNewRole(T role) throws DataBackendException;
 
     /**
      * Construct a blank Role object.
-     * 
+     *
      * This method calls getRoleClass, and then creates a new object using the
      * default constructor.
-     * 
+     *
      * @return an object implementing Role interface.
      * @throws DataBackendException
      *             if the object could not be instantiated.
      */
-    public Role getRoleInstance() throws DataBackendException
+    public <T extends Role> T getRoleInstance() throws DataBackendException
     {
-        Role role;
         try
         {
-            role = (Role) Class.forName(getClassName()).newInstance();
+            @SuppressWarnings("unchecked")
+			T role = (T) Class.forName(getClassName()).newInstance();
+            return role;
         }
         catch (Exception e)
         {
             throw new DataBackendException("Problem creating instance of class " + getClassName(), e);
         }
-
-        return role;
     }
 
     /**
      * Construct a blank Role object.
-     * 
+     *
      * This method calls getRoleClass, and then creates a new object using the
      * default constructor.
-     * 
+     *
      * @param roleName
      *            The name of the role.
-     * 
+     *
      * @return an object implementing Role interface.
-     * 
+     *
      * @throws DataBackendException
      *             if the object could not be instantiated.
      */
-    public Role getRoleInstance(String roleName) throws DataBackendException
+    public <T extends Role> T getRoleInstance(String roleName) throws DataBackendException
     {
-        Role role = getRoleInstance();
+        T role = getRoleInstance();
         role.setName(roleName);
         return role;
     }
 
     /**
      * Retrieve a Role object with specified name.
-     * 
+     *
      * @param name
      *            the name of the Role.
      * @return an object representing the Role with specified name.
@@ -94,9 +93,10 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
      * @throws UnknownEntityException
      *             if the role does not exist.
      */
-    public Role getRoleByName(String name) throws DataBackendException, UnknownEntityException
+    public <T extends Role> T getRoleByName(String name) throws DataBackendException, UnknownEntityException
     {
-        Role role = getAllRoles().getByName(name);
+        @SuppressWarnings("unchecked")
+		T role = (T) getAllRoles().getByName(name);
         if (role == null)
         {
             throw new UnknownEntityException("The specified role does not exist");
@@ -106,20 +106,21 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
 
     /**
      * Retrieve a Role object with specified Id.
-     * 
+     *
      * @param name
      *            the name of the Role.
-     * 
+     *
      * @return an object representing the Role with specified name.
-     * 
+     *
      * @throws UnknownEntityException
      *             if the permission does not exist in the database.
      * @throws DataBackendException
      *             if there is a problem accessing the storage.
      */
-    public Role getRoleById(Object id) throws DataBackendException, UnknownEntityException
+    public <T extends Role> T getRoleById(Object id) throws DataBackendException, UnknownEntityException
     {
-        Role role = getAllRoles().getById(id);
+        @SuppressWarnings("unchecked")
+		T role = (T) getAllRoles().getById(id);
         if (role == null)
         {
             throw new UnknownEntityException("The specified role does not exist");
@@ -129,7 +130,7 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
 
     /**
      * Creates a new role with specified attributes.
-     * 
+     *
      * @param role
      *            the object describing the role to be created.
      * @return a new Role object that has id set up properly.
@@ -138,7 +139,7 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
      * @throws EntityExistsException
      *             if the role already exists.
      */
-    public synchronized Role addRole(Role role) throws DataBackendException, EntityExistsException
+    public synchronized <T extends Role> T addRole(T role) throws DataBackendException, EntityExistsException
     {
         boolean roleExists = false;
         if (StringUtils.isEmpty(role.getName()))
@@ -169,9 +170,9 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
 
     /**
      * Check whether a specified role exists.
-     * 
+     *
      * The name is used for looking up the role
-     * 
+     *
      * @param role
      *            The role to be checked.
      * @return true if the specified role exists
@@ -182,5 +183,4 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
     {
         return checkExists(role.getName());
     }
-
 }

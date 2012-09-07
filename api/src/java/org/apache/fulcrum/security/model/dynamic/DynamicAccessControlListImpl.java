@@ -30,7 +30,7 @@ import org.apache.fulcrum.security.util.RoleSet;
 /**
  * This is a control class that makes it easy to find out if a particular User
  * has a given Permission. It also determines if a User has a a particular Role.
- * 
+ *
  * @todo Need to rethink the two maps.. Why not just a single list of groups?
  *       That would then cascade down to all the other roles and so on..
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
@@ -57,7 +57,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 
     /**
      * Constructs a new AccessControlList.
-     * 
+     *
      * This class follows 'immutable' pattern - it's objects can't be modified
      * once they are created. This means that the permissions the users have are
      * in effect form the moment they log in to the moment they log out, and
@@ -66,7 +66,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
      * need to invalidate his session. <br>
      * The objects that constructs an AccessControlList must supply hashtables
      * of role/permission sets keyed with group objects. <br>
-     * 
+     *
      * @param roleSets
      *            a hashtable containing RoleSet objects keyed with Group
      *            objects
@@ -97,7 +97,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 
     /**
      * Retrieves a set of Roles an user is assigned in a Group.
-     * 
+     *
      * @param group
      *            the Group
      * @return the set of Roles this user has within the Group.
@@ -114,7 +114,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 
     /**
      * Retrieves a set of Roles an user is assigned in the global Group.
-     * 
+     *
      * @return the set of Roles this user has within the global Group.
      */
     public RoleSet getRoles()
@@ -124,7 +124,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 
     /**
      * Retrieves a set of Permissions an user is assigned in a Group.
-     * 
+     *
      * @param group
      *            the Group
      * @return the set of Permissions this user has within the Group.
@@ -147,7 +147,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 
     /**
      * Retrieves a set of Permissions an user is assigned in the global Group.
-     * 
+     *
      * @return the set of Permissions this user has within the global Group.
      */
     public PermissionSet getPermissions()
@@ -157,7 +157,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 
     /**
      * Checks if the user is assigned a specific Role in the Group.
-     * 
+     *
      * @param role
      *            the Role
      * @param group
@@ -176,7 +176,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 
     /**
      * Checks if the user is assigned a specific Role in any of the given Groups
-     * 
+     *
      * @param role
      *            the Role
      * @param groupset
@@ -204,7 +204,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 
     /**
      * Checks if the user is assigned a specific Role in the Group.
-     * 
+     *
      * @param role
      *            the Role
      * @param group
@@ -235,7 +235,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 
     /**
      * Checks if the user is assigned a specific Role in any of the given Groups
-     * 
+     *
      * @param rolename
      *            the name of the Role
      * @param groupset
@@ -271,7 +271,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 
     /**
      * Checks if the user is assigned a specific Role
-     * 
+     *
      * @param role
      *            the Role
      * @return <code>true</code> if the user is assigned the Role in the global
@@ -284,7 +284,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 
     /**
      * Checks if the user is assigned a specific Role .
-     * 
+     *
      * @param role
      *            the Role
      * @return <code>true</code> if the user is assigned the Role .
@@ -303,7 +303,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 
     /**
      * Checks if the user is assigned a specific Permission in the Group.
-     * 
+     *
      * @param permission
      *            the Permission
      * @param group
@@ -324,7 +324,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
     /**
      * Checks if the user is assigned a specific Permission in any of the given
      * Groups
-     * 
+     *
      * @param permission
      *            the Permission
      * @param groupset
@@ -351,7 +351,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 
     /**
      * Checks if the user is assigned a specific Permission in the Group.
-     * 
+     *
      * @param permission
      *            the Permission
      * @param group
@@ -373,7 +373,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 
     /**
      * Checks if the user is assigned a specific Permission in the Group.
-     * 
+     *
      * @param permission
      *            the Permission
      * @param group
@@ -394,9 +394,9 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
     }
 
     /**
-     * Checks if the user is assigned a specifie Permission in any of the given
+     * Checks if the user is assigned a specific Permission in any of the given
      * Groups
-     * 
+     *
      * @param permissionName
      *            the name of the Permission
      * @param groupset
@@ -435,7 +435,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 
     /**
      * Checks if the user is assigned a specific Permission.
-     * 
+     *
      * @param permission
      *            the Permission
      * @return <code>true</code> if the user is assigned the Permission .
@@ -447,7 +447,7 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 
     /**
      * Checks if the user is assigned a specific Permission in the global Group.
-     * 
+     *
      * @param permission
      *            the Permission
      * @return <code>true</code> if the user is assigned the Permission in the

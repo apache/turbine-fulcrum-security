@@ -28,62 +28,62 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
  * This implementation keeps all objects in memory. This is mostly meant to help
  * with testing and prototyping of ideas.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id: AbstractPermissionManager.java 1372918 2012-08-14 15:19:40Z tv
  *          $
  */
 public abstract class AbstractPermissionManager extends AbstractEntityManager implements PermissionManager
 {
-    protected abstract Permission persistNewPermission(Permission permission) throws DataBackendException;
+    protected abstract <T extends Permission> T persistNewPermission(T permission) throws DataBackendException;
 
     /**
      * Construct a blank Permission object.
-     * 
+     *
      * This method calls getPermissionClass, and then creates a new object using
      * the default constructor.
-     * 
+     *
      * @return an object implementing Permission interface.
      * @throws UnknownEntityException
      *             if the object could not be instantiated.
      */
-    public Permission getPermissionInstance() throws UnknownEntityException
+    public <T extends Permission> T getPermissionInstance() throws UnknownEntityException
     {
-        Permission permission;
         try
         {
-            permission = (Permission) Class.forName(getClassName()).newInstance();
+            @SuppressWarnings("unchecked")
+			T permission = (T) Class.forName(getClassName()).newInstance();
+            return permission;
         }
         catch (Exception e)
         {
             throw new UnknownEntityException("Failed to instantiate a Permission implementation object", e);
         }
-        return permission;
     }
 
     /**
      * Construct a blank Permission object.
-     * 
+     *
      * This method calls getPermissionClass, and then creates a new object using
      * the default constructor.
-     * 
+     *
      * @param permName
      *            The name of the permission.
-     * 
+     *
      * @return an object implementing Permission interface.
      * @throws UnknownEntityException
      *             if the object could not be instantiated.
      */
-    public Permission getPermissionInstance(String permName) throws UnknownEntityException
+    public <T extends Permission> T getPermissionInstance(String permName) throws UnknownEntityException
     {
-        Permission perm = getPermissionInstance();
+        T perm = getPermissionInstance();
         perm.setName(permName);
         return perm;
     }
 
     /**
      * Retrieve a Permission object with specified name.
-     * 
+     *
      * @param name
      *            the name of the Permission.
      * @return an object representing the Permission with specified name.
@@ -92,9 +92,10 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
      * @throws UnknownEntityException
      *             if the permission does not exist.
      */
-    public Permission getPermissionByName(String name) throws DataBackendException, UnknownEntityException
+    public <T extends Permission> T getPermissionByName(String name) throws DataBackendException, UnknownEntityException
     {
-        Permission permission = getAllPermissions().getByName(name);
+        @SuppressWarnings("unchecked")
+		T permission = (T) getAllPermissions().getByName(name);
         if (permission == null)
         {
             throw new UnknownEntityException("The specified permission does not exist");
@@ -104,20 +105,21 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
 
     /**
      * Retrieve a Permission object with specified Id.
-     * 
+     *
      * @param name
      *            the name of the Permission.
-     * 
+     *
      * @return an object representing the Permission with specified name.
-     * 
+     *
      * @throws UnknownEntityException
      *             if the permission does not exist in the database.
      * @throws DataBackendException
      *             if there is a problem accessing the storage.
      */
-    public Permission getPermissionById(Object id) throws DataBackendException, UnknownEntityException
+    public <T extends Permission> T getPermissionById(Object id) throws DataBackendException, UnknownEntityException
     {
-        Permission permission = getAllPermissions().getById(id);
+        @SuppressWarnings("unchecked")
+		T permission = (T) getAllPermissions().getById(id);
         if (permission == null)
         {
             throw new UnknownEntityException("The specified permission does not exist");
@@ -127,7 +129,7 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
 
     /**
      * Creates a new permission with specified attributes.
-     * 
+     *
      * @param permission
      *            the object describing the permission to be created.
      * @return a new Permission object that has id set up properly.
@@ -136,7 +138,7 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
      * @throws EntityExistsException
      *             if the permission already exists.
      */
-    public synchronized Permission addPermission(Permission permission) throws DataBackendException, EntityExistsException
+    public synchronized <T extends Permission> T addPermission(T permission) throws DataBackendException, EntityExistsException
     {
         boolean permissionExists = false;
         if (StringUtils.isEmpty(permission.getName()))
@@ -165,10 +167,10 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
     }
 
     /**
-     * Check whether a specifieds permission exists.
-     * 
+     * Check whether a specified permission exists.
+     *
      * The name is used for looking up the permission
-     * 
+     *
      * @param role
      *            The permission to be checked.
      * @return true if the specified permission exists

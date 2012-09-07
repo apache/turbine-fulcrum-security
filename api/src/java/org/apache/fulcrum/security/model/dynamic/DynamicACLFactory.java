@@ -37,9 +37,9 @@ import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
- * 
+ *
  * This factory creates instance of the DynamicAccessControlList
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @author <a href="mailto:ben@gidley.co.uk">Ben Gidley </a>
  * @version $Id$
@@ -49,7 +49,7 @@ public class DynamicACLFactory extends AbstractManager implements ACLFactory
     /**
      * @see org.apache.fulcrum.security.model.ACLFactory#getAccessControlList(org.apache.fulcrum.security.entity.User)
      */
-    public AccessControlList getAccessControlList(User user)
+    public <T extends AccessControlList> T getAccessControlList(User user)
     {
         Map<Group, RoleSet> roleSets = new HashMap<Group, RoleSet>();
         Map<Role, PermissionSet> permissionSets = new HashMap<Role, PermissionSet>();
@@ -67,7 +67,9 @@ public class DynamicACLFactory extends AbstractManager implements ACLFactory
 
         try
         {
-            return getAclInstance(roleSets, permissionSets);
+            @SuppressWarnings("unchecked")
+			T aclInstance = (T) getAclInstance(roleSets, permissionSets);
+			return aclInstance;
         }
         catch (UnknownEntityException uue)
         {
@@ -77,35 +79,25 @@ public class DynamicACLFactory extends AbstractManager implements ACLFactory
 
     /**
      * Construct a new ACL object.
-     * 
+     *
      * This constructs a new ACL object from the configured class and
      * initializes it with the supplied roles and permissions.
-     * 
+     *
      * @param roles
      *            The roles that this ACL should contain
      * @param permissions
      *            The permissions for this ACL
-     * 
+     *
      * @return an object implementing ACL interface.
      * @throws UnknownEntityException
      *             if the object could not be instantiated.
      */
-    private AccessControlList getAclInstance(Map<? extends Group, ? extends RoleSet> roles,
+    private DynamicAccessControlList getAclInstance(Map<? extends Group, ? extends RoleSet> roles,
             Map<? extends Role, ? extends PermissionSet> permissions) throws UnknownEntityException
     {
-        AccessControlList accessControlList;
+    	DynamicAccessControlList accessControlList;
         try
         {
-            // Object[] objects = { roles, permissions };
-            // String[] signatures = { Map.class.getName(), Map.class.getName()
-            // };
-            /*
-             * 
-             * @todo I think this is overkill for now.. accessControlList =
-             * (AccessControlList)
-             * aclFactoryService.getInstance(aclClass.getName(), objects,
-             * signatures);
-             */
             accessControlList = new DynamicAccessControlListImpl(roles, permissions);
         }
         catch (Exception e)
@@ -117,7 +109,7 @@ public class DynamicACLFactory extends AbstractManager implements ACLFactory
 
     /**
      * Add delegators to the user list
-     * 
+     *
      * @param user
      *            the user to add to
      * @param users
@@ -142,7 +134,7 @@ public class DynamicACLFactory extends AbstractManager implements ACLFactory
      * Adds the passed users roles and permissions to the sets As maps overwrite
      * duplicates we just put it in an let it overwrite it is probably quicker
      * than checking for duplicates
-     * 
+     *
      * @param user
      * @param roleSets
      * @param permissionSets
