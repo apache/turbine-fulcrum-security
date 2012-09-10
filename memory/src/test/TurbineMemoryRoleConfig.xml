@@ -51,6 +51,6 @@
     <role
         name="org.apache.fulcrum.security.model.ACLFactory"
         shorthand="aclFactory"
-        default-class="org.apache.fulcrum.security.model.dynamic.DynamicACLFactory"/>
+        default-class="org.apache.fulcrum.security.model.turbine.TurbineACLFactory"/>
 </role-list>
 
