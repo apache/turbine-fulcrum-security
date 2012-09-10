@@ -28,7 +28,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
  * This implementation keeps all objects in memory. This is mostly meant to help
  * with testing and prototyping of ideas.
- * 
+ *
  * @todo Need to load up Crypto component and actually encrypt passwords!
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id: MemoryTurbineUserManagerImpl.java 535465 2007-05-05 06:58:06Z
@@ -39,23 +39,24 @@ public class MemoryTurbineUserManagerImpl extends MemoryUserManagerImpl implemen
     /**
      * Constructs an User object to represent an anonymous user of the
      * application.
-     * 
+     *
      * @return An anonymous Turbine User.
      * @throws UnknownEntityException
      *             if the implementation of User interface could not be
      *             determined, or does not exist.
      */
-    public User getAnonymousUser() throws UnknownEntityException
+    public <T extends User> T getAnonymousUser() throws UnknownEntityException
     {
-        User user;
+        T user;
         try
         {
             user = getUserInstance();
         }
         catch (DataBackendException dbe)
         {
-            throw new UnknownEntityException("Coudl not create an anonymous user.", dbe);
+            throw new UnknownEntityException("Could not create an anonymous user.", dbe);
         }
+
         user.setName("");
         return user;
     }
@@ -63,12 +64,12 @@ public class MemoryTurbineUserManagerImpl extends MemoryUserManagerImpl implemen
     /**
      * Checks whether a passed user object matches the anonymous user pattern
      * according to the configured user manager
-     * 
+     *
      * @param user
      *            An user object
-     * 
+     *
      * @return True if this is an anonymous user
-     * 
+     *
      */
     public boolean isAnonymousUser(User user)
     {

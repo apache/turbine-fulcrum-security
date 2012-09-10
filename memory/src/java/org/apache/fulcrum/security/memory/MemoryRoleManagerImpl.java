@@ -29,10 +29,10 @@ import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
- * 
+ *
  * This implementation keeps all objects in memory. This is mostly meant to help
  * with testing and prototyping of ideas.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -46,7 +46,7 @@ public class MemoryRoleManagerImpl extends AbstractRoleManager
 
     /**
      * Renames an existing Role.
-     * 
+     *
      * @param role
      *            The object describing the role to be renamed.
      * @param name
@@ -80,7 +80,7 @@ public class MemoryRoleManagerImpl extends AbstractRoleManager
 
     /**
      * Determines if the <code>Role</code> exists in the security system.
-     * 
+     *
      * @param permission
      *            a <code>String</code> value
      * @return true if the role exists in the system, false otherwise
@@ -96,7 +96,7 @@ public class MemoryRoleManagerImpl extends AbstractRoleManager
 
     /**
      * Retrieves all roles defined in the system.
-     * 
+     *
      * @return the names of all roles defined in the system.
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
@@ -108,7 +108,7 @@ public class MemoryRoleManagerImpl extends AbstractRoleManager
 
     /**
      * Creates a new role with specified attributes.
-     * 
+     *
      * @param role
      *            the object describing the role to be created.
      * @return a new Role object that has id set up properly.
@@ -118,7 +118,7 @@ public class MemoryRoleManagerImpl extends AbstractRoleManager
      *             if the role already exists.
      */
     @Override
-    protected synchronized Role persistNewRole(Role role) throws DataBackendException
+    protected synchronized <T extends Role> T persistNewRole(T role) throws DataBackendException
     {
         role.setId(MemoryHelper.getUniqueId());
         roles.add(role);
@@ -130,7 +130,7 @@ public class MemoryRoleManagerImpl extends AbstractRoleManager
 
     /**
      * Removes a Role from the system.
-     * 
+     *
      * @param role
      *            The object describing the role to be removed.
      * @throws DataBackendException

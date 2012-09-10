@@ -31,7 +31,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
  * This implementation keeps all objects in memory. This is mostly meant to help
  * with testing and prototyping of ideas.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id: MemoryPermissionManagerImpl.java 1374008 2012-08-16 19:42:18Z
  *          tv $
@@ -45,7 +45,7 @@ public class MemoryPermissionManagerImpl extends AbstractPermissionManager
 
     /**
      * Retrieves all permissions defined in the system.
-     * 
+     *
      * @return the names of all permissions defined in the system.
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
@@ -57,7 +57,7 @@ public class MemoryPermissionManagerImpl extends AbstractPermissionManager
 
     /**
      * Renames an existing Permission.
-     * 
+     *
      * @param permission
      *            The object describing the permission to be renamed.
      * @param name
@@ -91,7 +91,7 @@ public class MemoryPermissionManagerImpl extends AbstractPermissionManager
 
     /**
      * Determines if the <code>Permission</code> exists in the security system.
-     * 
+     *
      * @param permission
      *            a <code>String</code> value
      * @return true if the permission exists in the system, false otherwise
@@ -107,7 +107,7 @@ public class MemoryPermissionManagerImpl extends AbstractPermissionManager
 
     /**
      * Removes a Permission from the system.
-     * 
+     *
      * @param permission
      *            The object describing the permission to be removed.
      * @throws DataBackendException
@@ -137,7 +137,7 @@ public class MemoryPermissionManagerImpl extends AbstractPermissionManager
 
     /**
      * Creates a new permission with specified attributes.
-     * 
+     *
      * @param permission
      *            the object describing the permission to be created.
      * @return a new Permission object that has id set up properly.
@@ -147,7 +147,7 @@ public class MemoryPermissionManagerImpl extends AbstractPermissionManager
      *             if the permission already exists.
      */
     @Override
-    protected synchronized Permission persistNewPermission(Permission permission) throws DataBackendException
+    protected synchronized <T extends Permission> T persistNewPermission(T permission) throws DataBackendException
     {
         permission.setId(MemoryHelper.getUniqueId());
         permissions.add(permission);

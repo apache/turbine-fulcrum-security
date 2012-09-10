@@ -32,7 +32,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
  * This implementation keeps all objects in memory. This is mostly meant to help
  * with testing and prototyping of ideas.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -45,7 +45,7 @@ public class MemoryGroupManagerImpl extends AbstractGroupManager implements Grou
 
     /**
      * Retrieves all groups defined in the system.
-     * 
+     *
      * @return the names of all groups defined in the system.
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
@@ -57,7 +57,7 @@ public class MemoryGroupManagerImpl extends AbstractGroupManager implements Grou
 
     /**
      * Removes a Group from the system.
-     * 
+     *
      * @param group
      *            The object describing the group to be removed.
      * @throws DataBackendException
@@ -90,7 +90,7 @@ public class MemoryGroupManagerImpl extends AbstractGroupManager implements Grou
 
     /**
      * Renames an existing Group.
-     * 
+     *
      * @param group
      *            The object describing the group to be renamed.
      * @param name
@@ -125,7 +125,7 @@ public class MemoryGroupManagerImpl extends AbstractGroupManager implements Grou
 
     /**
      * Determines if the <code>Group</code> exists in the security system.
-     * 
+     *
      * @param group
      *            a <code>Group</code> value
      * @return true if the group exists in the system, false otherwise
@@ -141,7 +141,7 @@ public class MemoryGroupManagerImpl extends AbstractGroupManager implements Grou
 
     /**
      * Creates a new group with specified attributes.
-     * 
+     *
      * @param group
      *            the object describing the group to be created.
      * @return a new Group object that has id set up properly.
@@ -151,9 +151,8 @@ public class MemoryGroupManagerImpl extends AbstractGroupManager implements Grou
      *             if the group already exists.
      */
     @Override
-    public synchronized Group persistNewGroup(Group group) throws DataBackendException
+    protected synchronized <T extends Group> T persistNewGroup(T group) throws DataBackendException
     {
-
         group.setId(MemoryHelper.getUniqueId());
         groups.add(group);
         // return the object with correct id
