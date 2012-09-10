@@ -62,7 +62,7 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
      * @throws TooManyRowsException if multiple groups with the given name exist
      * @throws TorqueException if any other database error occurs
      */
-    protected abstract Permission doSelectByName(String name, Connection con)
+    protected abstract <T extends Permission> T doSelectByName(String name, Connection con)
         throws NoRowsException, TooManyRowsException, TorqueException;
 
     /**
@@ -77,7 +77,7 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
      * @throws TooManyRowsException if multiple groups with the given id exist
      * @throws TorqueException if any other database error occurs
      */
-    protected abstract Permission doSelectById(Integer id, Connection con)
+    protected abstract <T extends Permission> T doSelectById(Integer id, Connection con)
         throws NoRowsException, TooManyRowsException, TorqueException;
 
     /**
@@ -155,7 +155,7 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
      * @throws EntityExistsException
      *             if the permission already exists.
      */
-    protected synchronized Permission persistNewPermission(Permission permission) throws DataBackendException
+    protected synchronized <T extends Permission> T persistNewPermission(T permission) throws DataBackendException
     {
         try
         {
@@ -281,9 +281,9 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
      * @throws UnknownEntityException
      *             if the permission does not exist.
      */
-    public Permission getPermissionById(Object id) throws DataBackendException, UnknownEntityException
+    public <T extends Permission> T getPermissionById(Object id) throws DataBackendException, UnknownEntityException
     {
-        Permission permission;
+        T permission;
 
         if (id != null && id instanceof Integer)
         {
@@ -334,9 +334,9 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
      *         data backend.
      * @throws UnknownEntityException if the group does not exist.
      */
-    public Permission getPermissionByName(String name) throws DataBackendException, UnknownEntityException
+    public <T extends Permission> T getPermissionByName(String name) throws DataBackendException, UnknownEntityException
     {
-        Permission permission = null;
+        T permission = null;
         Connection con = null;
 
         try

@@ -50,15 +50,17 @@ public class TorqueTurbinePermissionManagerImpl extends TorqueAbstractPermission
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager#doSelectById(java.lang.Integer, java.sql.Connection)
      */
-    protected Permission doSelectById(Integer id, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    @SuppressWarnings("unchecked")
+	protected <T extends Permission> T doSelectById(Integer id, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
     {
-        return TorqueTurbinePermissionPeer.retrieveByPK(id, con);
+        return (T) TorqueTurbinePermissionPeer.retrieveByPK(id, con);
     }
 
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager#doSelectByName(java.lang.String, java.sql.Connection)
      */
-    protected Permission doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    @SuppressWarnings("unchecked")
+	protected <T extends Permission> T doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
     {
         Criteria criteria = new Criteria(TorqueTurbinePermissionPeer.DATABASE_NAME);
         criteria.add(TorqueTurbinePermissionPeer.PERMISSION_NAME, name);
@@ -72,6 +74,6 @@ public class TorqueTurbinePermissionManagerImpl extends TorqueAbstractPermission
             throw new NoRowsException(name);
         }
 
-        return permissions.get(0);
+        return (T) permissions.get(0);
     }
 }

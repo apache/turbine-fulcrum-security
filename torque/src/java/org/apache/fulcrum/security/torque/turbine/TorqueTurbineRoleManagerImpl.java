@@ -50,15 +50,17 @@ public class TorqueTurbineRoleManagerImpl extends TorqueAbstractRoleManager
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractRoleManager#doSelectById(java.lang.Integer, java.sql.Connection)
      */
-    protected Role doSelectById(Integer id, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    @SuppressWarnings("unchecked")
+	protected <T extends Role> T doSelectById(Integer id, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
     {
-        return TorqueTurbineRolePeer.retrieveByPK(id, con);
+        return (T) TorqueTurbineRolePeer.retrieveByPK(id, con);
     }
 
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractRoleManager#doSelectByName(java.lang.String, java.sql.Connection)
      */
-    protected Role doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    @SuppressWarnings("unchecked")
+	protected <T extends Role> T doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
     {
         Criteria criteria = new Criteria(TorqueTurbineRolePeer.DATABASE_NAME);
         criteria.add(TorqueTurbineRolePeer.ROLE_NAME, name);
@@ -72,6 +74,6 @@ public class TorqueTurbineRoleManagerImpl extends TorqueAbstractRoleManager
             throw new NoRowsException(name);
         }
 
-        return roles.get(0);
+        return (T) roles.get(0);
     }
 }

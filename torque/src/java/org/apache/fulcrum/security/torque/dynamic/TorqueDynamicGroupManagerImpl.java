@@ -50,15 +50,17 @@ public class TorqueDynamicGroupManagerImpl extends TorqueAbstractGroupManager
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractGroupManager#doSelectById(java.lang.Integer, java.sql.Connection)
      */
-    protected Group doSelectById(Integer id, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    @SuppressWarnings("unchecked")
+	protected <T extends Group> T doSelectById(Integer id, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
     {
-        return TorqueDynamicGroupPeer.retrieveByPK(id, con);
+        return (T) TorqueDynamicGroupPeer.retrieveByPK(id, con);
     }
 
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractGroupManager#doSelectByName(java.lang.String, java.sql.Connection)
      */
-    protected Group doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    @SuppressWarnings("unchecked")
+	protected <T extends Group> T doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
     {
         Criteria criteria = new Criteria(TorqueDynamicGroupPeer.DATABASE_NAME);
         criteria.add(TorqueDynamicGroupPeer.GROUP_NAME, name);
@@ -72,6 +74,6 @@ public class TorqueDynamicGroupManagerImpl extends TorqueAbstractGroupManager
             throw new NoRowsException(name);
         }
 
-        return groups.get(0);
+        return (T) groups.get(0);
     }
 }

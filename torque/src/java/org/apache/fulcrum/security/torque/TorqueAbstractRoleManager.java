@@ -62,7 +62,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
      * @throws TooManyRowsException if multiple groups with the given name exist
      * @throws TorqueException if any other database error occurs
      */
-    protected abstract Role doSelectByName(String name, Connection con)
+    protected abstract <T extends Role> T doSelectByName(String name, Connection con)
         throws NoRowsException, TooManyRowsException, TorqueException;
 
     /**
@@ -77,7 +77,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
      * @throws TooManyRowsException if multiple groups with the given id exist
      * @throws TorqueException if any other database error occurs
      */
-    protected abstract Role doSelectById(Integer id, Connection con)
+    protected abstract <T extends Role> T doSelectById(Integer id, Connection con)
         throws NoRowsException, TooManyRowsException, TorqueException;
 
 
@@ -122,7 +122,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
     *         backend.
     * @throws EntityExistsException if the role already exists.
     */
-    protected synchronized Role persistNewRole(Role role) throws DataBackendException
+    protected synchronized <T extends Role> T persistNewRole(T role) throws DataBackendException
     {
         try
         {
@@ -266,9 +266,9 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
      * @throws UnknownEntityException
      *             if the role does not exist.
      */
-    public Role getRoleById(Object id) throws DataBackendException, UnknownEntityException
+    public <T extends Role> T getRoleById(Object id) throws DataBackendException, UnknownEntityException
     {
-        Role role;
+        T role;
 
         if (id != null && id instanceof Integer)
         {
@@ -319,9 +319,9 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
      *         data backend.
      * @throws UnknownEntityException if the role does not exist.
      */
-    public Role getRoleByName(String name) throws DataBackendException, UnknownEntityException
+    public <T extends Role> T getRoleByName(String name) throws DataBackendException, UnknownEntityException
     {
-        Role role = null;
+        T role = null;
         Connection con = null;
 
         try

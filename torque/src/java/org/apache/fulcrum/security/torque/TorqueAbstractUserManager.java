@@ -62,7 +62,7 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
      * @throws TooManyRowsException if multiple groups with the given name exist
      * @throws TorqueException if any other database error occurs
      */
-    protected abstract User doSelectByName(String name, Connection con)
+    protected abstract <T extends User> T doSelectByName(String name, Connection con)
         throws NoRowsException, TooManyRowsException, TorqueException;
 
     /**
@@ -77,7 +77,7 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
      * @throws TooManyRowsException if multiple groups with the given id exist
      * @throws TorqueException if any other database error occurs
      */
-    protected abstract User doSelectById(Integer id, Connection con)
+    protected abstract <T extends User> T doSelectById(Integer id, Connection con)
         throws NoRowsException, TooManyRowsException, TorqueException;
 
     /**
@@ -110,7 +110,7 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
        *         data backend.
        * @throws EntityExistsException if the user account already exists.
        */
-    protected synchronized User persistNewUser(User user) throws DataBackendException
+    protected synchronized <T extends User> T persistNewUser(T user) throws DataBackendException
     {
         try
         {
@@ -214,9 +214,9 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public User getUser(String userName) throws UnknownEntityException, DataBackendException
+    public <T extends User> T getUser(String userName) throws UnknownEntityException, DataBackendException
     {
-        User user = null;
+        T user = null;
         Connection con = null;
 
         try
@@ -309,9 +309,9 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
      * @throws UnknownEntityException
      *             if the user does not exist.
      */
-    public User getUserById(Object id) throws DataBackendException, UnknownEntityException
+    public <T extends User> T getUserById(Object id) throws DataBackendException, UnknownEntityException
     {
-        User user;
+        T user;
 
         if (id != null && id instanceof Integer)
         {

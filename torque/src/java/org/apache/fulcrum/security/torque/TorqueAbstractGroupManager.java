@@ -63,7 +63,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
      * @throws TooManyRowsException if multiple groups with the given name exist
      * @throws TorqueException if any other database error occurs
      */
-    protected abstract Group doSelectByName(String name, Connection con)
+    protected abstract <T extends Group> T doSelectByName(String name, Connection con)
         throws NoRowsException, TooManyRowsException, TorqueException;
 
     /**
@@ -78,7 +78,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
      * @throws TooManyRowsException if multiple groups with the given id exist
      * @throws TorqueException if any other database error occurs
      */
-    protected abstract Group doSelectById(Integer id, Connection con)
+    protected abstract <T extends Group> T doSelectById(Integer id, Connection con)
         throws NoRowsException, TooManyRowsException, TorqueException;
 
     /**
@@ -90,7 +90,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
     *         backend.
     * @throws EntityExistsException if the group already exists.
     */
-    protected synchronized Group persistNewGroup(Group group) throws DataBackendException
+    protected synchronized <T extends Group> T persistNewGroup(T group) throws DataBackendException
     {
         try
         {
@@ -165,9 +165,9 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
      *         data backend.
      * @throws UnknownEntityException if the group does not exist.
      */
-    public Group getGroupByName(String name) throws DataBackendException, UnknownEntityException
+    public <T extends Group> T getGroupByName(String name) throws DataBackendException, UnknownEntityException
     {
-        Group group = null;
+        T group = null;
         Connection con = null;
 
         try
@@ -309,9 +309,9 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
      * @throws UnknownEntityException
      *             if the group does not exist.
      */
-    public Group getGroupById(Object id) throws DataBackendException, UnknownEntityException
+    public <T extends Group> T getGroupById(Object id) throws DataBackendException, UnknownEntityException
     {
-        Group group;
+        T group;
 
         if (id != null && id instanceof Integer)
         {

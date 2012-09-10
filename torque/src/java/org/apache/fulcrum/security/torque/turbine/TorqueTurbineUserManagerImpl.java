@@ -50,15 +50,17 @@ public class TorqueTurbineUserManagerImpl extends TorqueAbstractUserManager
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractUserManager#doSelectById(java.lang.Integer, java.sql.Connection)
      */
-    protected User doSelectById(Integer id, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    @SuppressWarnings("unchecked")
+	protected <T extends User> T doSelectById(Integer id, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
     {
-        return TorqueTurbineUserPeer.retrieveByPK(id, con);
+        return (T) TorqueTurbineUserPeer.retrieveByPK(id, con);
     }
 
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractUserManager#doSelectByName(java.lang.String, java.sql.Connection)
      */
-    protected User doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    @SuppressWarnings("unchecked")
+	protected <T extends User> T doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
     {
         Criteria criteria = new Criteria(TorqueTurbineUserPeer.DATABASE_NAME);
         criteria.add(TorqueTurbineUserPeer.LOGIN_NAME, name);
@@ -72,6 +74,6 @@ public class TorqueTurbineUserManagerImpl extends TorqueAbstractUserManager
             throw new NoRowsException(name);
         }
 
-        return users.get(0);
+        return (T) users.get(0);
     }
 }
