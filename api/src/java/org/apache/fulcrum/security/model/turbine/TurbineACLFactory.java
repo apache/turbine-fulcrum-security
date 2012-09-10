@@ -18,18 +18,16 @@ package org.apache.fulcrum.security.model.turbine;
  * specific language governing permissions and limitations
  * under the License.
  */
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Set;
 
 import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
-import org.apache.fulcrum.security.entity.Group;
-import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.ACLFactory;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
 import org.apache.fulcrum.security.spi.AbstractManager;
-import org.apache.fulcrum.security.util.PermissionSet;
-import org.apache.fulcrum.security.util.RoleSet;
+import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
@@ -46,13 +44,13 @@ public class TurbineACLFactory extends AbstractManager implements ACLFactory
      */
     public <T extends AccessControlList> T getAccessControlList(User user)
     {
-        Map<Group, RoleSet> roleSets = new HashMap<Group, RoleSet>();
-        Map<Role, PermissionSet> permissionSets = new HashMap<Role, PermissionSet>();
+    	TurbineUser tu = (TurbineUser)user;
+    	Set<TurbineUserGroupRole> tugr = tu.getUserGroupRoleSet();
 
         try
         {
             @SuppressWarnings("unchecked")
-			T aclInstance = (T) getAclInstance(roleSets, permissionSets);
+			T aclInstance = (T) getAclInstance(tugr);
 			return aclInstance;
         }
         catch (UnknownEntityException uue)
@@ -67,23 +65,30 @@ public class TurbineACLFactory extends AbstractManager implements ACLFactory
      * This constructs a new ACL object from the configured class and
      * initializes it with the supplied roles and permissions.
      *
-     * @param roles
-     *            The roles that this ACL should contain
-     * @param permissions
-     *            The permissions for this ACL
+     * @param turbineUserGroupRoleSet
+     *            The set of user/group/role relations that this acl is built from
      *
      * @return an object implementing ACL interface.
      * @throws UnknownEntityException
      *             if the object could not be instantiated.
      */
-    private TurbineAccessControlList getAclInstance(Map<? extends Group, ? extends RoleSet> roles,
-            Map<? extends Role, ? extends PermissionSet> permissions) throws UnknownEntityException
+    private TurbineAccessControlList getAclInstance(Set<? extends TurbineUserGroupRole> turbineUserGroupRoleSet) throws UnknownEntityException
     {
+    	GroupManager groupManager = null;
+
+    	try
+    	{
+			groupManager = getGroupManager();
+		}
+    	catch (DataBackendException e)
+    	{
+    		// ignore
+		}
+
     	TurbineAccessControlList accessControlList;
         try
         {
-        	GroupManager groupManager = (GroupManager) resolve(GroupManager.ROLE);
-            accessControlList = new TurbineAccessControlListImpl(roles, permissions, groupManager);
+            accessControlList = new TurbineAccessControlListImpl(turbineUserGroupRoleSet, groupManager);
         }
         catch (Exception e)
         {

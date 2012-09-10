@@ -34,10 +34,20 @@ import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicGroupImpl;
 import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicPermissionImpl;
 import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicRoleImpl;
 import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
+import org.apache.fulcrum.security.model.turbine.TurbineAccessControlList;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineGroup;
+import org.apache.fulcrum.security.model.turbine.entity.TurbinePermission;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineRole;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
+import org.apache.fulcrum.security.model.turbine.entity.impl.TurbineGroupImpl;
+import org.apache.fulcrum.security.model.turbine.entity.impl.TurbinePermissionImpl;
+import org.apache.fulcrum.security.model.turbine.entity.impl.TurbineRoleImpl;
+import org.apache.fulcrum.security.model.turbine.entity.impl.TurbineUserImpl;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -47,6 +57,36 @@ public class ACLFactoryTest extends BaseUnitTest
     public ACLFactoryTest(String arg0)
     {
         super(arg0);
+    }
+
+    public void testCreatingTurbineACL() throws Exception
+    {
+        this.setRoleFileName("src/test/TurbineACLRoleConfig.xml");
+        this.setConfigurationFileName("src/test/ACLComponentConfig.xml");
+
+        ACLFactory factory = (ACLFactory) lookup(ACLFactory.ROLE);
+        TurbineUser user = new TurbineUserImpl();
+        user.setName("bob");
+        user.setId(new Integer(1));
+        TurbineGroup group = new TurbineGroupImpl();
+        group.setName("group1");
+        group.setId(new Integer(1));
+        TurbineRole role = new TurbineRoleImpl();
+        role.setName("role1");
+        role.setId(new Integer(1));
+        TurbinePermission permission = new TurbinePermissionImpl();
+        permission.setName("permission1");
+        permission.setId(new Integer(1));
+        role.addPermission(permission);
+        TurbineUserGroupRole ugr = new TurbineUserGroupRole();
+        ugr.setGroup(group);
+        ugr.setRole(role);
+        ugr.setUser(user);
+        user.addUserGroupRole(ugr);
+        AccessControlList acl = factory.getAccessControlList(user);
+        assertTrue(acl instanceof TurbineAccessControlList);
+        TurbineAccessControlList tacl = (TurbineAccessControlList) acl;
+        assertTrue(tacl.hasPermission(permission, group));
     }
 
     public void testCreatingDynamicACL() throws Exception
@@ -74,7 +114,6 @@ public class ACLFactoryTest extends BaseUnitTest
         assertTrue(acl instanceof DynamicAccessControlList);
         DynamicAccessControlList dacl = (DynamicAccessControlList) acl;
         assertTrue(dacl.hasPermission(permission));
-
     }
 
     public void testCreatingBasicACL() throws Exception
@@ -94,7 +133,5 @@ public class ACLFactoryTest extends BaseUnitTest
         assertTrue(acl instanceof BasicAccessControlList);
         BasicAccessControlList bacl = (BasicAccessControlList) acl;
         assertTrue(bacl.hasGroup(group));
-
     }
-
 }

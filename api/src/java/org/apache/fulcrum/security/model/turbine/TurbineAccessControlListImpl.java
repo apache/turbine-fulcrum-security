@@ -21,12 +21,16 @@ package org.apache.fulcrum.security.model.turbine;
  */
 
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineRole;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
 import org.apache.fulcrum.security.util.FulcrumSecurityException;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PermissionSet;
@@ -52,9 +56,9 @@ public class TurbineAccessControlListImpl
 	private static final long serialVersionUID = 2678947159949477950L;
 
     /** The sets of roles that the user has in different groups */
-    private Map<? extends Group, ? extends RoleSet> roleSets;
+    private Map<Group, RoleSet> roleSets;
     /** The sets of permissions that the user has in different groups */
-    private Map<? extends Role, ? extends PermissionSet> permissionSets;
+    private Map<Group, PermissionSet> permissionSets;
     /** The global group */
     private Group globalGroup;
     /** The group manager */
@@ -75,36 +79,58 @@ public class TurbineAccessControlListImpl
      * changes made to the security settings in that time are not reflected
      * in the state of this object. If you need to reset an user's permissions
      * you need to invalidate his session. <br>
-     * The objects that constructs an AccessControlList must supply hashtables
-     * of role/permission sets keyed with group objects. <br>
      *
-     * @param roleSets a hashtable containing RoleSet objects keyed with Group objects
-     * @param permissionSets a hashtable containing PermissionSet objects keyed with Group objects
+     * @param turbineUserGroupRoleSet
+     *            The set of user/group/role relations that this acl is built from
      * @param groupManager the Group manager
+     *
      * @throws FulcrumSecurityException if the global group cannot be retrieved
      */
     public TurbineAccessControlListImpl(
-    		Map<? extends Group, ? extends RoleSet> roleSets,
-            Map<? extends Role, ? extends PermissionSet> permissionSets,
+    		Set<? extends TurbineUserGroupRole> turbineUserGroupRoleSet,
     		GroupManager groupManager) throws FulcrumSecurityException
     {
-        this.roleSets = roleSets;
-        this.permissionSets = permissionSets;
+        this.roleSets = new HashMap<Group, RoleSet>();
+        this.permissionSets = new HashMap<Group, PermissionSet>();
         this.groupManager = groupManager;
-        this.globalGroup = groupManager.getGroupByName(TurbineModelManager.GLOBAL_GROUP_NAME);
-        for (Map.Entry<? extends Group, ? extends RoleSet> entry : roleSets.entrySet())
+
+        for (TurbineUserGroupRole ugr : turbineUserGroupRoleSet)
         {
-            Group group = entry.getKey();
+            Group group = ugr.getGroup();
             groupSet.add(group);
-            RoleSet rs = entry.getValue();
-            roleSet.add(rs);
-        }
-        for (Map.Entry<? extends Role, ? extends PermissionSet> entry : permissionSets.entrySet())
-        {
-            Role role = entry.getKey();
+
+            TurbineRole role = (TurbineRole)ugr.getRole();
             roleSet.add(role);
-            PermissionSet ps = entry.getValue();
+            if (roleSets.containsKey(group))
+            {
+            	roleSets.get(group).add(role);
+            }
+            else
+            {
+            	RoleSet rs = new RoleSet();
+            	rs.add(role);
+            	roleSets.put(group, rs);
+            }
+
+            PermissionSet ps = role.getPermissions();
             permissionSet.add(ps);
+            if (permissionSets.containsKey(group))
+            {
+            	permissionSets.get(group).add(ps);
+            }
+            else
+            {
+            	permissionSets.put(group, ps);
+            }
+        }
+
+        if (groupManager != null)
+        {
+        	this.globalGroup = groupManager.getGroupByName(TurbineModelManager.GLOBAL_GROUP_NAME);
+        }
+        else
+        {
+        	this.globalGroup = groupSet.getByName(TurbineModelManager.GLOBAL_GROUP_NAME);
         }
     }
 
@@ -206,34 +232,24 @@ public class TurbineAccessControlListImpl
     /**
      * Checks if the user is assigned a specific Role in the Group.
      *
-     * @param role the Role
-     * @param group the Group
+     * @param roleName the Role name
+     * @param groupName the Group name
      * @return <code>true</code> if the user is assigned the Role in the Group.
      */
-    public boolean hasRole(String role, String group)
+    public boolean hasRole(String roleName, String groupName)
     {
-        boolean roleFound = false;
         try
         {
-            for (Map.Entry<? extends Group, ? extends RoleSet> entry : roleSets.entrySet())
-            {
-                Group g = entry.getKey();
-                if (g.getName().equalsIgnoreCase(group))
-                {
-                    RoleSet rs = entry.getValue();
-                    roleFound = rs.containsName(role);
-                }
-            }
+        	return hasRole(roleSet.getByName(roleName), groupSet.getByName(groupName));
         }
         catch (Exception e)
         {
-            roleFound = false;
+            return false;
         }
-        return roleFound;
     }
 
     /**
-     * Checks if the user is assigned a specifie Role in any of the given
+     * Checks if the user is assigned a specific Role in any of the given
      * Groups
      *
      * @param rolename the name of the Role
@@ -243,28 +259,14 @@ public class TurbineAccessControlListImpl
      */
     public boolean hasRole(String rolename, GroupSet groupset)
     {
-        Role role;
         try
         {
-            role = roleSet.getByName(rolename);
+        	return hasRole(roleSet.getByName(rolename), groupset);
         }
         catch (Exception e)
         {
             return false;
         }
-        if (role == null)
-        {
-            return false;
-        }
-        for (Group group : groupset)
-        {
-            RoleSet roles = getRoles(group);
-            if (roles != null && roles.contains(role))
-            {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -288,7 +290,7 @@ public class TurbineAccessControlListImpl
     {
         try
         {
-            return roleSet.containsName(role);
+            return hasRole(roleSet.getByName(role));
         }
         catch (Exception e)
         {
@@ -438,7 +440,7 @@ public class TurbineAccessControlListImpl
     {
         try
         {
-            return permissionSet.containsName(permission);
+            return hasPermission(permissionSet.getByName(permission));
         }
         catch (Exception e)
         {
