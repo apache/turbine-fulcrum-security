@@ -28,8 +28,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.fulcrum</groupId>
     <artifactId>fulcrum-security-hibernate</artifactId>
-    <name>Fulcrum Security Hibernate Impl</name>
     <version>1.1.0-SNAPSHOT</version>
+    <name>Fulcrum Security Hibernate Impl</name>
+    <description>
+      Fulcrum Security Hibernate Impl is an implementation of the Fulcrum Security API
+      that uses Hibernate as a database backend.
+    </description>
     <url>http://turbine.apache.org/fulcrum/fulcrum-security-hibernate/</url>
     <scm>
       <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/hibernate/</connection>

@@ -25,8 +25,12 @@
 	<modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.fulcrum</groupId>
   <artifactId>fulcrum-security-nt</artifactId>
-  <name>Fulcrum Security NT Impl</name>
   <version>1.1.0-SNAPSHOT</version>
+  <name>Fulcrum Security NT Impl</name>
+  <description>
+    Fulcrum Security NT Impl is an implementation of the Fulcrum Security API
+    that uses a Microsoft Windows NT Server as a backend.
+  </description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-security-nt</url>
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/nt/</connection>
