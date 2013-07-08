@@ -35,14 +35,14 @@ import com.tagish.auth.win32.NTSystem;
 
 /**
  * This implementation attempts to manager users against NT.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public class NTUserManagerImpl extends AbstractUserManager
 {
     @Override
-    protected User persistNewUser(User user) throws DataBackendException
+    protected <T extends User> T persistNewUser(T user) throws DataBackendException
     {
         throw new RuntimeException("This method is not supported.");
     }
@@ -51,7 +51,7 @@ public class NTUserManagerImpl extends AbstractUserManager
      * Retrieve a user from persistent storage using username as the key, and
      * authenticate the user. The implementation may chose to authenticate to
      * the server as the user whose data is being retrieved.
-     * 
+     *
      * @param userName
      *            the name of the user.
      * @param password
@@ -65,18 +65,18 @@ public class NTUserManagerImpl extends AbstractUserManager
      *                if there is a problem accessing the storage.
      */
     @Override
-    public User getUser(String userName, String password) throws PasswordMismatchException, UnknownEntityException, DataBackendException
+    public <T extends User> T getUser(String userName, String password) throws PasswordMismatchException, UnknownEntityException, DataBackendException
     {
-        User user = getUserInstance(userName);
+        T user = getUserInstance(userName);
         authenticate(user, password);
         return user;
     }
 
     /**
      * Check whether a specified user's account exists.
-     * 
+     *
      * The login name is used for looking up the account.
-     * 
+     *
      * @param user
      *            The user to be checked.
      * @return true if the specified account exists
@@ -105,9 +105,9 @@ public class NTUserManagerImpl extends AbstractUserManager
 
     /**
      * Check whether a specified user's account exists.
-     * 
+     *
      * The login name is used for looking up the account.
-     * 
+     *
      * @param userName
      *            The name of the user to be checked.
      * @return true if the specified account exists
@@ -122,7 +122,7 @@ public class NTUserManagerImpl extends AbstractUserManager
     /**
      * Retrieve a user from persistent storage using username as the key. Not
      * supported currently.
-     * 
+     *
      * @param userName
      *            the name of the user.
      * @return an User object.
@@ -132,7 +132,7 @@ public class NTUserManagerImpl extends AbstractUserManager
      *                if there is a problem accessing the storage.
      */
     @Override
-    public User getUser(String userName) throws UnknownEntityException, DataBackendException
+    public <T extends User> T getUser(String userName) throws UnknownEntityException, DataBackendException
     {
         throw new RuntimeException("Not supported by NT User Manager");
     }
@@ -143,7 +143,7 @@ public class NTUserManagerImpl extends AbstractUserManager
      * exception was thrown. Additionally, if the User object is of type
      * BasicUser or DynamicUser, then it will populate all the group information
      * as well!
-     * 
+     *
      * @param user
      *            an User object to authenticate.
      * @param password
@@ -199,7 +199,7 @@ public class NTUserManagerImpl extends AbstractUserManager
 
     /**
      * Removes an user account from the system. Not supported currently.
-     * 
+     *
      * @param user
      *            the object describing the account to be removed.
      * @throws DataBackendException
@@ -215,19 +215,19 @@ public class NTUserManagerImpl extends AbstractUserManager
     /**
      * Creates new user account with specified attributes. Not supported
      * currently.
-     * 
+     *
      * @param user
      *            the object describing account to be created.
      * @param password
      *            The password to use for the account.
-     * 
+     *
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      * @throws EntityExistsException
      *             if the user account already exists.
      */
     @Override
-    public User addUser(User user, String password) throws DataBackendException, EntityExistsException
+    public <T extends User> T addUser(T user, String password) throws DataBackendException, EntityExistsException
     {
         throw new RuntimeException("Not supported by NT User Manager");
     }
@@ -235,7 +235,7 @@ public class NTUserManagerImpl extends AbstractUserManager
     /**
      * Stores User attributes. The User is required to exist in the system. Not
      * supported currently.
-     * 
+     *
      * @param role
      *            The User to be stored.
      * @throws DataBackendException
@@ -250,7 +250,7 @@ public class NTUserManagerImpl extends AbstractUserManager
 
     /**
      * Retrieves all users defined in the system.
-     * 
+     *
      * @return the names of all users defined in the system.
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
