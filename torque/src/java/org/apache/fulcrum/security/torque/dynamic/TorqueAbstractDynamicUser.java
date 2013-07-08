@@ -33,8 +33,8 @@ import org.apache.fulcrum.security.torque.om.TorqueDynamicUserPeer;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UserSet;
 import org.apache.torque.TorqueException;
+import org.apache.torque.criteria.Criteria;
 import org.apache.torque.om.SimpleKey;
-import org.apache.torque.util.Criteria;
 /**
  * This abstract class provides the SecurityInterface to the managers.
  *
@@ -63,11 +63,12 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
      * objects.
      *
      * @param criteria Criteria to define the selection of records
+     * @param con a database connection
      * @throws TorqueException
      *
      * @return a list of User/Group relations
      */
-    protected abstract List<TorqueDynamicUserGroup> getTorqueDynamicUserGroupsJoinTorqueDynamicGroup(Criteria criteria)
+    protected abstract List<TorqueDynamicUserGroup> getTorqueDynamicUserGroupsJoinTorqueDynamicGroup(Criteria criteria, Connection con)
         throws TorqueException;
 
     /**
@@ -77,11 +78,12 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
      * TorqueDynamicUserDelegates objects.
      *
      * @param criteria Criteria to define the selection of records
+     * @param con a database connection
      * @throws TorqueException
      *
      * @return a list of User/Delegator relations
      */
-    protected abstract List<TorqueDynamicUserDelegates> getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(Criteria criteria)
+    protected abstract List<TorqueDynamicUserDelegates> getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(Criteria criteria, Connection con)
         throws TorqueException;
 
     /**
@@ -91,11 +93,12 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
      * TorqueDynamicUserDelegates objects.
      *
      * @param criteria Criteria to define the selection of records
+     * @param con a database connection
      * @throws TorqueException
      *
      * @return a list of User/Delegator relations
      */
-    protected abstract List<TorqueDynamicUserDelegates> getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(Criteria criteria)
+    protected abstract List<TorqueDynamicUserDelegates> getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(Criteria criteria, Connection con)
         throws TorqueException;
 
     /**
@@ -236,7 +239,7 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
     {
         this.groupSet = new GroupSet();
 
-        List<TorqueDynamicUserGroup> usergroups = getTorqueDynamicUserGroupsJoinTorqueDynamicGroup(new Criteria());
+        List<TorqueDynamicUserGroup> usergroups = getTorqueDynamicUserGroupsJoinTorqueDynamicGroup(new Criteria(), con);
 
         for (TorqueDynamicUserGroup tdug : usergroups)
         {
@@ -245,7 +248,7 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
 
         this.delegators = new UserSet();
 
-        List<TorqueDynamicUserDelegates> delegatorlist = getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(new Criteria());
+        List<TorqueDynamicUserDelegates> delegatorlist = getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(new Criteria(), con);
 
         for (TorqueDynamicUserDelegates tdud : delegatorlist)
         {
@@ -254,7 +257,7 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
 
         this.delegatees = new UserSet();
 
-        List<TorqueDynamicUserDelegates> delegateelist = getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(new Criteria());
+        List<TorqueDynamicUserDelegates> delegateelist = getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(new Criteria(), con);
 
         for (TorqueDynamicUserDelegates tdud : delegateelist)
         {
@@ -272,7 +275,7 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
             Criteria criteria = new Criteria();
 
             /* remove old entries */
-            criteria.add(TorqueDynamicUserGroupPeer.USER_ID, getEntityId());
+            criteria.where(TorqueDynamicUserGroupPeer.USER_ID, getEntityId());
             TorqueDynamicUserGroupPeer.doDelete(criteria, con);
 
             for (Group g : groupSet)
@@ -289,7 +292,7 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
             Criteria criteria = new Criteria();
 
             /* remove old entries */
-            criteria.add(TorqueDynamicUserDelegatesPeer.DELEGATEE_USER_ID, getEntityId());
+            criteria.where(TorqueDynamicUserDelegatesPeer.DELEGATEE_USER_ID, getEntityId());
             TorqueDynamicUserDelegatesPeer.doDelete(criteria, con);
 
             for (User u : delegators)
@@ -306,7 +309,7 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
             Criteria criteria = new Criteria();
 
             /* remove old entries */
-            criteria.add(TorqueDynamicUserDelegatesPeer.DELEGATOR_USER_ID, getEntityId());
+            criteria.where(TorqueDynamicUserDelegatesPeer.DELEGATOR_USER_ID, getEntityId());
             TorqueDynamicUserDelegatesPeer.doDelete(criteria, con);
 
             for (User u : delegatees)

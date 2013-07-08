@@ -22,12 +22,12 @@ import java.util.List;
 
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.torque.TorqueAbstractGroupManager;
-import org.apache.fulcrum.security.torque.om.TorqueBasicGroup;
 import org.apache.fulcrum.security.torque.om.TorqueBasicGroupPeer;
 import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
-import org.apache.torque.util.Criteria;
+import org.apache.torque.criteria.Criteria;
+
 /**
  * This implementation persists to a database via Torque.
  *
@@ -66,17 +66,16 @@ public class TorqueBasicGroupManagerImpl extends TorqueAbstractGroupManager
         throws NoRowsException, TooManyRowsException, TorqueException
     {
         Criteria criteria = new Criteria(TorqueBasicGroupPeer.DATABASE_NAME);
-        criteria.add(TorqueBasicGroupPeer.GROUP_NAME, name);
+        criteria.where(TorqueBasicGroupPeer.GROUP_NAME, name);
         criteria.setIgnoreCase(true);
         criteria.setSingleRecord(true);
 
-        List<TorqueBasicGroup> groups = TorqueBasicGroupPeer.doSelect(criteria, con);
-
-        if (groups.isEmpty())
+        T t = (T)TorqueBasicGroupPeer.doSelectSingleRecord(criteria, con);
+        if (t == null)
         {
             throw new NoRowsException(name);
         }
 
-        return (T)groups.get(0);
+        return t;
     }
 }

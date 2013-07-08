@@ -26,7 +26,10 @@
   <body>
     <release version="1.1.0" date="">
       <action type="update" dev="tv">
-        Update fulcrum-hibernate to use a recent version of Hibernate (3.6.7-Final).
+        Update fulcrum-security-torque to use Torque 4.0.
+      </action>
+      <action type="update" dev="tv">
+        Update fulcrum-security-hibernate to use a recent version of Hibernate (3.6.7-Final).
       </action>
       <action type="update" dev="tv">
         Move all builds to Maven2

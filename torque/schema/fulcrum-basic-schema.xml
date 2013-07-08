@@ -17,8 +17,6 @@
  specific language governing permissions and limitations
  under the License.
 -->
-<!DOCTYPE database SYSTEM "http://db.apache.org/torque/dtd/database_3_3.dtd">
-
 <!-- ====================================================================     -->
 <!--                                                                          -->
 <!-- F U L C R U M  B A S I C  S E C U R I T Y  S C H E M A                   -->
@@ -27,8 +25,12 @@
 <!-- @author: <a href="mailto:tv@apache.org">Thomas Vandahl</a> -->
 <!-- @version $Id: torque-security-schema.xml,v 1.1 2005/09/26 14:10:04 tvan Exp $ -->
 <!-- ====================================================================     -->
-
-<database name="fulcrum">
+<database name="fulcrum"
+    defaultIdMethod="none"
+    xmlns="http://db.apache.org/torque/4.0/templates/database"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database 
+        http://db.apache.org/torque/4.0/templates/database.xsd">
 
   <table name="FULCRUM_BASIC_GROUP" javaName="TorqueBasicGroup" idMethod="idbroker"
       baseClass="org.apache.fulcrum.security.torque.basic.TorqueAbstractBasicGroup">

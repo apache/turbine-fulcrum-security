@@ -22,12 +22,12 @@ import java.util.List;
 
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.torque.TorqueAbstractUserManager;
-import org.apache.fulcrum.security.torque.om.TorqueBasicUser;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserPeer;
 import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
-import org.apache.torque.util.Criteria;
+import org.apache.torque.criteria.Criteria;
+
 /**
  * This implementation persists to a database via Torque.
  *
@@ -63,17 +63,16 @@ public class TorqueBasicUserManagerImpl extends TorqueAbstractUserManager
 	protected <T extends User> T doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
     {
         Criteria criteria = new Criteria(TorqueBasicUserPeer.DATABASE_NAME);
-        criteria.add(TorqueBasicUserPeer.LOGIN_NAME, name);
+        criteria.where(TorqueBasicUserPeer.LOGIN_NAME, name);
         criteria.setIgnoreCase(true);
         criteria.setSingleRecord(true);
 
-        List<TorqueBasicUser> users = TorqueBasicUserPeer.doSelect(criteria, con);
-
-        if (users.isEmpty())
+        T t = (T)TorqueBasicUserPeer.doSelectSingleRecord(criteria, con);
+        if (t == null)
         {
             throw new NoRowsException(name);
         }
 
-        return (T) users.get(0);
+        return t;
     }
 }

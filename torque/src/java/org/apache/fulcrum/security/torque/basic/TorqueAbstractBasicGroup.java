@@ -29,8 +29,9 @@ import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroup;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroupPeer;
 import org.apache.fulcrum.security.util.UserSet;
 import org.apache.torque.TorqueException;
+import org.apache.torque.criteria.Criteria;
 import org.apache.torque.om.SimpleKey;
-import org.apache.torque.util.Criteria;
+
 /**
  * This abstract class provides the SecurityInterface to the managers.
  *
@@ -53,11 +54,12 @@ public abstract class TorqueAbstractBasicGroup extends TorqueAbstractSecurityEnt
      * objects.
      *
      * @param criteria Criteria to define the selection of records
+     * @param con a database connection
      * @throws TorqueException
      *
      * @return a list of User/Group relations
      */
-    protected abstract List<TorqueBasicUserGroup> getTorqueBasicUserGroupsJoinTorqueBasicUser(Criteria criteria)
+    protected abstract List<TorqueBasicUserGroup> getTorqueBasicUserGroupsJoinTorqueBasicUser(Criteria criteria, Connection con)
         throws TorqueException;
 
     /**
@@ -132,9 +134,8 @@ public abstract class TorqueAbstractBasicGroup extends TorqueAbstractSecurityEnt
     {
         this.userSet = new UserSet();
 
-        // the generated method that allows a Connection parameter is missing
         List<TorqueBasicUserGroup> usergroups =
-        	getTorqueBasicUserGroupsJoinTorqueBasicUser(new Criteria());
+        	getTorqueBasicUserGroupsJoinTorqueBasicUser(new Criteria(), con);
 
         for (TorqueBasicUserGroup tbug : usergroups)
         {
@@ -154,7 +155,7 @@ public abstract class TorqueAbstractBasicGroup extends TorqueAbstractSecurityEnt
             Criteria criteria = new Criteria();
 
             /* remove old entries */
-            criteria.add(TorqueBasicUserGroupPeer.GROUP_ID, getEntityId());
+            criteria.where(TorqueBasicUserGroupPeer.GROUP_ID, getEntityId());
             TorqueBasicUserGroupPeer.doDelete(criteria, con);
 
             for (User u : userSet)

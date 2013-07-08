@@ -32,8 +32,8 @@ import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRole;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRolePeer;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.torque.TorqueException;
+import org.apache.torque.criteria.Criteria;
 import org.apache.torque.om.SimpleKey;
-import org.apache.torque.util.Criteria;
 /**
  * This abstract class provides the SecurityInterface to the managers.
  *
@@ -56,11 +56,12 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractTurbineTur
      * objects.
      *
      * @param criteria Criteria to define the selection of records
+     * @param con a database connection
      * @throws TorqueException
      *
      * @return a list of Role/Permission relations
      */
-    protected abstract List<TorqueTurbineRolePermission> getTorqueTurbineRolePermissionsJoinTorqueTurbinePermission(Criteria criteria)
+    protected abstract List<TorqueTurbineRolePermission> getTorqueTurbineRolePermissionsJoinTorqueTurbinePermission(Criteria criteria, Connection con)
         throws TorqueException;
 
     /**
@@ -70,11 +71,12 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractTurbineTur
      * objects.
      *
      * @param criteria Criteria to define the selection of records
+     * @param con a database connection
      * @throws TorqueException
      *
      * @return a list of User/Group/Role relations
      */
-    protected abstract List<TorqueTurbineUserGroupRole> getTorqueTurbineUserGroupRolesJoinTorqueTurbineGroup(Criteria criteria)
+    protected abstract List<TorqueTurbineUserGroupRole> getTorqueTurbineUserGroupRolesJoinTorqueTurbineGroup(Criteria criteria, Connection con)
         throws TorqueException;
 
     /**
@@ -157,8 +159,7 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractTurbineTur
     {
         this.permissionSet = new PermissionSet();
 
-        // the generated method that allows a Connection parameter is missing
-        List<TorqueTurbineRolePermission> rolepermissions = getTorqueTurbineRolePermissionsJoinTorqueTurbinePermission(new Criteria());
+        List<TorqueTurbineRolePermission> rolepermissions = getTorqueTurbineRolePermissionsJoinTorqueTurbinePermission(new Criteria(), con);
 
         for (TorqueTurbineRolePermission ttrp : rolepermissions)
         {
@@ -167,8 +168,7 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractTurbineTur
 
         Set<TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
 
-        // the generated method that allows a Connection parameter is missing
-        List<TorqueTurbineUserGroupRole> ugrs = getTorqueTurbineUserGroupRolesJoinTorqueTurbineGroup(new Criteria());
+        List<TorqueTurbineUserGroupRole> ugrs = getTorqueTurbineUserGroupRolesJoinTorqueTurbineGroup(new Criteria(), con);
 
         for (TorqueTurbineUserGroupRole ttugr : ugrs)
         {
@@ -192,7 +192,7 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractTurbineTur
             Criteria criteria = new Criteria();
 
             /* remove old entries */
-            criteria.add(TorqueTurbineRolePermissionPeer.ROLE_ID, getEntityId());
+            criteria.where(TorqueTurbineRolePermissionPeer.ROLE_ID, getEntityId());
             TorqueTurbineRolePermissionPeer.doDelete(criteria, con);
 
             for (Permission p : permissionSet)
@@ -210,7 +210,7 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractTurbineTur
             Criteria criteria = new Criteria();
 
             /* remove old entries */
-            criteria.add(TorqueTurbineUserGroupRolePeer.ROLE_ID, getEntityId());
+            criteria.where(TorqueTurbineUserGroupRolePeer.ROLE_ID, getEntityId());
             TorqueTurbineUserGroupRolePeer.doDelete(criteria, con);
 
             for (TurbineUserGroupRole ugr : userGroupRoleSet)

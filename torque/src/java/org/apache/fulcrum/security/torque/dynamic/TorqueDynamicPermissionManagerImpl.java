@@ -27,7 +27,7 @@ import org.apache.fulcrum.security.torque.om.TorqueDynamicPermissionPeer;
 import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
-import org.apache.torque.util.Criteria;
+import org.apache.torque.criteria.Criteria;
 /**
  * This implementation persists to a database via Torque.
  *
@@ -63,7 +63,7 @@ public class TorqueDynamicPermissionManagerImpl extends TorqueAbstractPermission
 	protected <T extends Permission> T doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
     {
         Criteria criteria = new Criteria(TorqueDynamicPermissionPeer.DATABASE_NAME);
-        criteria.add(TorqueDynamicPermissionPeer.PERMISSION_NAME, name);
+        criteria.where(TorqueDynamicPermissionPeer.PERMISSION_NAME, name);
         criteria.setIgnoreCase(true);
         criteria.setSingleRecord(true);
 

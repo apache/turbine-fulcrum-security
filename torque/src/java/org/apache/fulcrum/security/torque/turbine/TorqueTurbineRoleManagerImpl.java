@@ -27,7 +27,7 @@ import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePeer;
 import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
-import org.apache.torque.util.Criteria;
+import org.apache.torque.criteria.Criteria;
 /**
  * This implementation persists to a database via Torque.
  *
@@ -63,7 +63,7 @@ public class TorqueTurbineRoleManagerImpl extends TorqueAbstractRoleManager
 	protected <T extends Role> T doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
     {
         Criteria criteria = new Criteria(TorqueTurbineRolePeer.DATABASE_NAME);
-        criteria.add(TorqueTurbineRolePeer.ROLE_NAME, name);
+        criteria.where(TorqueTurbineRolePeer.ROLE_NAME, name);
         criteria.setIgnoreCase(true);
         criteria.setSingleRecord(true);
 

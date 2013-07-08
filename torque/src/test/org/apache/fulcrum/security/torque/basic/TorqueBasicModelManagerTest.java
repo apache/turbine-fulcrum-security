@@ -23,12 +23,12 @@ import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 import org.apache.fulcrum.security.model.basic.test.AbstractModelManagerTest;
+import org.apache.fulcrum.security.torque.HsqlDB;
 import org.apache.fulcrum.security.torque.om.TorqueBasicGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserPeer;
-import org.apache.fulcrum.security.torque.HsqlDB;
 import org.apache.torque.TorqueException;
-import org.apache.torque.util.Criteria;
+import org.apache.torque.criteria.Criteria;
 
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
@@ -67,16 +67,16 @@ public class TorqueBasicModelManagerTest extends AbstractModelManagerTest
         try
         {
             Criteria criteria = new Criteria();
-            criteria.add(TorqueBasicUserGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
-            criteria.add(TorqueBasicUserGroupPeer.USER_ID, 0, Criteria.GREATER_THAN);
+            criteria.where(TorqueBasicUserGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
+            criteria.where(TorqueBasicUserGroupPeer.USER_ID, 0, Criteria.GREATER_THAN);
             TorqueBasicUserGroupPeer.doDelete(criteria);
 
-            criteria.clear();
-            criteria.add(TorqueBasicUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
+            criteria = new Criteria();
+            criteria.where(TorqueBasicUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
             TorqueBasicUserPeer.doDelete(criteria);
 
-            criteria.clear();
-            criteria.add(TorqueBasicGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
+            criteria = new Criteria();
+            criteria.where(TorqueBasicGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
             TorqueBasicGroupPeer.doDelete(criteria);
         }
         catch (TorqueException e)

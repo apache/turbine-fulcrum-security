@@ -61,35 +61,35 @@ public class TorqueUserManagerTest extends AbstractUserManagerTest
  *        try
  *        {
  *            Criteria criteria = new Criteria();
- *            criteria.add(TorqueDynamicUserGroupPeer.USER_ID, 0, Criteria.GREATER_THAN);
+ *            criteria.where(TorqueDynamicUserGroupPeer.USER_ID, 0, Criteria.GREATER_THAN);
  *            TorqueDynamicUserGroupPeer.doDelete(criteria);
  *
  *            criteria.clear();
- *            criteria.add(TorqueDynamicGroupRolePeer.GROUP_ID, 0, Criteria.GREATER_THAN);
+ *            criteria.where(TorqueDynamicGroupRolePeer.GROUP_ID, 0, Criteria.GREATER_THAN);
  *            TorqueDynamicGroupRolePeer.doDelete(criteria);
  *
  *            criteria.clear();
- *            criteria.add(TorqueDynamicRolePermissionPeer.ROLE_ID, 0, Criteria.GREATER_THAN);
+ *            criteria.where(TorqueDynamicRolePermissionPeer.ROLE_ID, 0, Criteria.GREATER_THAN);
  *            TorqueDynamicRolePermissionPeer.doDelete(criteria);
  *
  *            criteria.clear();
- *            criteria.add(TorqueDynamicUserDelegatesPeer.DELEGATEE_USER_ID, 0, Criteria.GREATER_THAN);
+ *            criteria.where(TorqueDynamicUserDelegatesPeer.DELEGATEE_USER_ID, 0, Criteria.GREATER_THAN);
  *            TorqueDynamicUserDelegatesPeer.doDelete(criteria);
  *
  *            criteria.clear();
- *            criteria.add(TorqueUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
+ *            criteria.where(TorqueUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
  *            TorqueUserPeer.doDelete(criteria);
  *
  *            criteria.clear();
- *            criteria.add(TorqueGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
+ *            criteria.where(TorqueGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
  *            TorqueGroupPeer.doDelete(criteria);
  *
  *            criteria.clear();
- *            criteria.add(TorqueRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN);
+ *            criteria.where(TorqueRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN);
  *            TorqueRolePeer.doDelete(criteria);
  *
  *            criteria.clear();
- *            criteria.add(TorquePermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN);
+ *            criteria.where(TorquePermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN);
  *            TorquePermissionPeer.doDelete(criteria);
  *        }
  *        catch (TorqueException e)

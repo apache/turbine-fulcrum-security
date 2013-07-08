@@ -33,8 +33,8 @@ import org.apache.fulcrum.security.torque.om.TorqueDynamicUserGroupPeer;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UserSet;
 import org.apache.torque.TorqueException;
+import org.apache.torque.criteria.Criteria;
 import org.apache.torque.om.SimpleKey;
-import org.apache.torque.util.Criteria;
 /**
  * This abstract class provides the SecurityInterface to the managers.
  *
@@ -60,11 +60,12 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
      * objects.
      *
      * @param criteria Criteria to define the selection of records
+     * @param con a database connection
      * @throws TorqueException
      *
      * @return a list of User/Group relations
      */
-    protected abstract List<TorqueDynamicUserGroup> getTorqueDynamicUserGroupsJoinTorqueDynamicUser(Criteria criteria)
+    protected abstract List<TorqueDynamicUserGroup> getTorqueDynamicUserGroupsJoinTorqueDynamicUser(Criteria criteria, Connection con)
         throws TorqueException;
 
     /**
@@ -74,11 +75,12 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
      * objects.
      *
      * @param criteria Criteria to define the selection of records
+     * @param con a database connection
      * @throws TorqueException
      *
      * @return a list of Role/Group relations
      */
-    protected abstract List<TorqueDynamicGroupRole> getTorqueDynamicGroupRolesJoinTorqueDynamicRole(Criteria criteria)
+    protected abstract List<TorqueDynamicGroupRole> getTorqueDynamicGroupRolesJoinTorqueDynamicRole(Criteria criteria, Connection con)
         throws TorqueException;
 
     /**
@@ -226,8 +228,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
     {
         this.userSet = new UserSet();
 
-        // the generated method that allows a Connection parameter is missing
-        List<TorqueDynamicUserGroup> usergroups = getTorqueDynamicUserGroupsJoinTorqueDynamicUser(new Criteria());
+        List<TorqueDynamicUserGroup> usergroups = getTorqueDynamicUserGroupsJoinTorqueDynamicUser(new Criteria(), con);
 
         for (TorqueDynamicUserGroup tdug : usergroups)
         {
@@ -236,8 +237,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
 
         this.roleSet = new RoleSet();
 
-        // the generated method that allows a Connection parameter is missing
-        List<TorqueDynamicGroupRole> grouproles = getTorqueDynamicGroupRolesJoinTorqueDynamicRole(new Criteria());
+        List<TorqueDynamicGroupRole> grouproles = getTorqueDynamicGroupRolesJoinTorqueDynamicRole(new Criteria(), con);
 
         for (TorqueDynamicGroupRole tdgr : grouproles)
         {
@@ -255,7 +255,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
             Criteria criteria = new Criteria();
 
             /* remove old entries */
-            criteria.add(TorqueDynamicUserGroupPeer.GROUP_ID, getEntityId());
+            criteria.where(TorqueDynamicUserGroupPeer.GROUP_ID, getEntityId());
             TorqueDynamicUserGroupPeer.doDelete(criteria, con);
 
             for (User u : userSet)
@@ -272,7 +272,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
             Criteria criteria = new Criteria();
 
             /* remove old entries */
-            criteria.add(TorqueDynamicGroupRolePeer.GROUP_ID, getEntityId());
+            criteria.where(TorqueDynamicGroupRolePeer.GROUP_ID, getEntityId());
             TorqueDynamicGroupRolePeer.doDelete(criteria, con);
 
             for (Role r : roleSet)

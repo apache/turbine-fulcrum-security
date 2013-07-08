@@ -20,15 +20,15 @@ package org.apache.fulcrum.security.torque.turbine;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.turbine.test.AbstractTurbineModelManagerTest;
+import org.apache.fulcrum.security.torque.HsqlDB;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueTurbinePermissionPeer;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePeer;
-import org.apache.fulcrum.security.torque.HsqlDB;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePermissionPeer;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRolePeer;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineUserPeer;
 import org.apache.torque.TorqueException;
-import org.apache.torque.util.Criteria;
+import org.apache.torque.criteria.Criteria;
 
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
@@ -67,27 +67,27 @@ public class TorqueTurbineModelManagerTest
         try
         {
             Criteria criteria = new Criteria();
-            criteria.add(TorqueTurbineUserGroupRolePeer.USER_ID, 0, Criteria.GREATER_THAN);
+            criteria.where(TorqueTurbineUserGroupRolePeer.USER_ID, 0, Criteria.GREATER_THAN);
             TorqueTurbineUserGroupRolePeer.doDelete(criteria);
 
-            criteria.clear();
-            criteria.add(TorqueTurbineRolePermissionPeer.ROLE_ID, 0, Criteria.GREATER_THAN);
+            criteria = new Criteria();
+            criteria.where(TorqueTurbineRolePermissionPeer.ROLE_ID, 0, Criteria.GREATER_THAN);
             TorqueTurbineRolePermissionPeer.doDelete(criteria);
 
-            criteria.clear();
-            criteria.add(TorqueTurbineUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
+            criteria = new Criteria();
+            criteria.where(TorqueTurbineUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
             TorqueTurbineUserPeer.doDelete(criteria);
 
-            criteria.clear();
-            criteria.add(TorqueTurbineGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
+            criteria = new Criteria();
+            criteria.where(TorqueTurbineGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
             TorqueTurbineGroupPeer.doDelete(criteria);
 
-            criteria.clear();
-            criteria.add(TorqueTurbineRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN);
+            criteria = new Criteria();
+            criteria.where(TorqueTurbineRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN);
             TorqueTurbineRolePeer.doDelete(criteria);
 
-            criteria.clear();
-            criteria.add(TorqueTurbinePermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN);
+            criteria = new Criteria();
+            criteria.where(TorqueTurbinePermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN);
             TorqueTurbinePermissionPeer.doDelete(criteria);
         }
         catch (TorqueException e)

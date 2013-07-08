@@ -21,15 +21,15 @@ import java.sql.Connection;
 
 import org.apache.fulcrum.security.entity.SecurityEntity;
 import org.apache.torque.TorqueException;
-import org.apache.torque.om.BaseObject;
+import org.apache.torque.om.Persistent;
 /**
  * This abstract class provides the SecurityInterface to the managers.
  *
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id:$
  */
-public abstract class TorqueAbstractSecurityEntity extends BaseObject
-    implements SecurityEntity
+public abstract class TorqueAbstractSecurityEntity
+    implements SecurityEntity, Persistent
 {
     /** Serial version */
 	private static final long serialVersionUID = -4052254585021044275L;
@@ -70,7 +70,7 @@ public abstract class TorqueAbstractSecurityEntity extends BaseObject
     public abstract void retrieveAttachedObjects(Connection con) throws TorqueException;
 
     /**
-     * Update this instance to the database with all dependend objects
+     * Update this instance to the database with all dependent objects
      *
      * @param con A database connection
      */

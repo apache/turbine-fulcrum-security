@@ -28,8 +28,8 @@ import org.apache.fulcrum.security.torque.om.TorqueTurbineGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRole;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRolePeer;
 import org.apache.torque.TorqueException;
+import org.apache.torque.criteria.Criteria;
 import org.apache.torque.om.SimpleKey;
-import org.apache.torque.util.Criteria;
 /**
  * This abstract class provides the SecurityInterface to the managers.
  *
@@ -49,11 +49,12 @@ public abstract class TorqueAbstractTurbineGroup extends TorqueAbstractTurbineTu
      * objects.
      *
      * @param criteria Criteria to define the selection of records
+     * @param con a database connection
      * @throws TorqueException
      *
      * @return a list of User/Group/Role relations
      */
-    protected abstract List<TorqueTurbineUserGroupRole> getTorqueTurbineUserGroupRolesJoinTorqueTurbineRole(Criteria criteria)
+    protected abstract List<TorqueTurbineUserGroupRole> getTorqueTurbineUserGroupRolesJoinTorqueTurbineRole(Criteria criteria, Connection con)
         throws TorqueException;
 
     /**
@@ -71,8 +72,7 @@ public abstract class TorqueAbstractTurbineGroup extends TorqueAbstractTurbineTu
     {
         Set<TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
 
-        // the generated method that allows a Connection parameter is missing
-        List<TorqueTurbineUserGroupRole> ugrs = getTorqueTurbineUserGroupRolesJoinTorqueTurbineRole(new Criteria());
+        List<TorqueTurbineUserGroupRole> ugrs = getTorqueTurbineUserGroupRolesJoinTorqueTurbineRole(new Criteria(), con);
 
         for (TorqueTurbineUserGroupRole ttugr : ugrs)
         {
@@ -97,7 +97,7 @@ public abstract class TorqueAbstractTurbineGroup extends TorqueAbstractTurbineTu
             Criteria criteria = new Criteria();
 
             /* remove old entries */
-            criteria.add(TorqueTurbineUserGroupRolePeer.GROUP_ID, getEntityId());
+            criteria.where(TorqueTurbineUserGroupRolePeer.GROUP_ID, getEntityId());
             TorqueTurbineUserGroupRolePeer.doDelete(criteria, con);
 
             for (TurbineUserGroupRole ugr : userGroupRoleSet)

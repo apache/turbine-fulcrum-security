@@ -21,8 +21,8 @@ package org.apache.fulcrum.security.torque.dynamic;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.dynamic.test.AbstractDynamicModelManagerTest;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupPeer;
 import org.apache.fulcrum.security.torque.HsqlDB;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupRolePeer;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicPermissionPeer;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePeer;
@@ -31,7 +31,7 @@ import org.apache.fulcrum.security.torque.om.TorqueDynamicUserDelegatesPeer;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUserGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUserPeer;
 import org.apache.torque.TorqueException;
-import org.apache.torque.util.Criteria;
+import org.apache.torque.criteria.Criteria;
 
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
@@ -67,35 +67,35 @@ public class TorqueDynamicModelManagerTest extends AbstractDynamicModelManagerTe
         try
         {
             Criteria criteria = new Criteria();
-            criteria.add(TorqueDynamicUserGroupPeer.USER_ID, 0, Criteria.GREATER_THAN);
+            criteria.where(TorqueDynamicUserGroupPeer.USER_ID, 0, Criteria.GREATER_THAN);
             TorqueDynamicUserGroupPeer.doDelete(criteria);
 
-            criteria.clear();
-            criteria.add(TorqueDynamicGroupRolePeer.GROUP_ID, 0, Criteria.GREATER_THAN);
+            criteria = new Criteria();
+            criteria.where(TorqueDynamicGroupRolePeer.GROUP_ID, 0, Criteria.GREATER_THAN);
             TorqueDynamicGroupRolePeer.doDelete(criteria);
 
-            criteria.clear();
-            criteria.add(TorqueDynamicRolePermissionPeer.ROLE_ID, 0, Criteria.GREATER_THAN);
+            criteria = new Criteria();
+            criteria.where(TorqueDynamicRolePermissionPeer.ROLE_ID, 0, Criteria.GREATER_THAN);
             TorqueDynamicRolePermissionPeer.doDelete(criteria);
 
-            criteria.clear();
-            criteria.add(TorqueDynamicUserDelegatesPeer.DELEGATEE_USER_ID, 0, Criteria.GREATER_THAN);
+            criteria = new Criteria();
+            criteria.where(TorqueDynamicUserDelegatesPeer.DELEGATEE_USER_ID, 0, Criteria.GREATER_THAN);
             TorqueDynamicUserDelegatesPeer.doDelete(criteria);
 
-            criteria.clear();
-            criteria.add(TorqueDynamicUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
+            criteria = new Criteria();
+            criteria.where(TorqueDynamicUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
             TorqueDynamicUserPeer.doDelete(criteria);
 
-            criteria.clear();
-            criteria.add(TorqueDynamicGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
+            criteria = new Criteria();
+            criteria.where(TorqueDynamicGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
             TorqueDynamicGroupPeer.doDelete(criteria);
 
-            criteria.clear();
-            criteria.add(TorqueDynamicRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN);
+            criteria = new Criteria();
+            criteria.where(TorqueDynamicRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN);
             TorqueDynamicRolePeer.doDelete(criteria);
 
-            criteria.clear();
-            criteria.add(TorqueDynamicPermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN);
+            criteria = new Criteria();
+            criteria.where(TorqueDynamicPermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN);
             TorqueDynamicPermissionPeer.doDelete(criteria);
         }
         catch (TorqueException e)

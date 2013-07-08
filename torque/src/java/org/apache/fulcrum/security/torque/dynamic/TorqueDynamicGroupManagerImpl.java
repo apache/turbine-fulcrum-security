@@ -27,7 +27,7 @@ import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupPeer;
 import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
-import org.apache.torque.util.Criteria;
+import org.apache.torque.criteria.Criteria;
 /**
  * This implementation persists to a database via Torque.
  *
@@ -63,7 +63,7 @@ public class TorqueDynamicGroupManagerImpl extends TorqueAbstractGroupManager
 	protected <T extends Group> T doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
     {
         Criteria criteria = new Criteria(TorqueDynamicGroupPeer.DATABASE_NAME);
-        criteria.add(TorqueDynamicGroupPeer.GROUP_NAME, name);
+        criteria.where(TorqueDynamicGroupPeer.GROUP_NAME, name);
         criteria.setIgnoreCase(true);
         criteria.setSingleRecord(true);
 

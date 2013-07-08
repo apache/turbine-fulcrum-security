@@ -29,8 +29,8 @@ import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePermission;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePermissionPeer;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.torque.TorqueException;
+import org.apache.torque.criteria.Criteria;
 import org.apache.torque.om.SimpleKey;
-import org.apache.torque.util.Criteria;
 /**
  * This abstract class provides the SecurityInterface to the managers.
  *
@@ -52,11 +52,12 @@ public abstract class TorqueAbstractDynamicPermission extends TorqueAbstractSecu
      * objects.
      *
      * @param criteria Criteria to define the selection of records
+     * @param con a database connection
      * @throws TorqueException
      *
      * @return a list of Role/Permission relations
      */
-    protected abstract List<TorqueDynamicRolePermission> getTorqueDynamicRolePermissionsJoinTorqueDynamicRole(Criteria criteria)
+    protected abstract List<TorqueDynamicRolePermission> getTorqueDynamicRolePermissionsJoinTorqueDynamicRole(Criteria criteria, Connection con)
         throws TorqueException;
 
     /**
@@ -139,8 +140,7 @@ public abstract class TorqueAbstractDynamicPermission extends TorqueAbstractSecu
     {
         this.roleSet = new RoleSet();
 
-        // the generated method that allows a Connection parameter is missing
-        List<TorqueDynamicRolePermission> rolepermissions = getTorqueDynamicRolePermissionsJoinTorqueDynamicRole(new Criteria());
+        List<TorqueDynamicRolePermission> rolepermissions = getTorqueDynamicRolePermissionsJoinTorqueDynamicRole(new Criteria(), con);
 
         for (TorqueDynamicRolePermission tdrp : rolepermissions)
         {
@@ -158,7 +158,7 @@ public abstract class TorqueAbstractDynamicPermission extends TorqueAbstractSecu
             Criteria criteria = new Criteria();
 
             /* remove old entries */
-            criteria.add(TorqueDynamicRolePermissionPeer.PERMISSION_ID, getEntityId());
+            criteria.where(TorqueDynamicRolePermissionPeer.PERMISSION_ID, getEntityId());
             TorqueDynamicRolePermissionPeer.doDelete(criteria, con);
 
             for (Role r : roleSet)
