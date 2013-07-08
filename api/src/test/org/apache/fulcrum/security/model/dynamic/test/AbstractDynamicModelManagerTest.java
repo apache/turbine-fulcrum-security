@@ -47,7 +47,7 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
 /**
  * @author Eric Pugh
  * @author <a href="mailto:ben@gidley.co.uk">Ben Gidley </a>
- * 
+ *
  */
 public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
 {
@@ -98,7 +98,7 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
 
     /**
      * Constructor for AbstractRoleManagerTest.
-     * 
+     *
      * @param arg0
      */
     public AbstractDynamicModelManagerTest(String arg0)
@@ -368,7 +368,7 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
         assertFalse(sam.getDelegators().contains(borris));
 
         borrisLoaded = (DynamicUser) userManager.getUser(USERNAME_BORRIS);
-        samLoaded = (DynamicUser) userManager.getUser(USERNAME_BORRIS);
+        samLoaded = (DynamicUser) userManager.getUser(USERNAME_SAM);
         assertFalse(borrisLoaded.getDelegatees().contains(samLoaded));
         assertFalse(samLoaded.getDelegators().contains(borrisLoaded));
 
