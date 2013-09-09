@@ -71,6 +71,10 @@
 		</id>
 		<property name="name" column="USERNAME" type="string"/>
 		<property name="password" column="PASSWORD" type="string"/>
+		<property name="firstName" column="FIRST_NAME" type="string"/>
+		<property name="lastName" column="LAST_NAME" type="string"/>
+		<property name="email" column="EMAIL" type="string"/>
+		<property name="objectdata" column="OBJECTDATA" type="binary"/>
     <set inverse="true" name="userGroupRoleSet">
       <key column="user_id" />
       <one-to-many class="org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole" />

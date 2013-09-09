@@ -26,7 +26,7 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
  * Represents the "turbine" model where permissions are in a many to many
  * relationship to roles, roles are related to groups are related to users, all
  * in many to many relationships.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id: TurbineUser.java 437451 2006-08-27 20:20:44Z tv $
  */
@@ -38,9 +38,15 @@ public class TurbineUserImpl extends AbstractTurbineSecurityEntityImpl implement
     private static final long serialVersionUID = -7309619325167081811L;
 
     private String password;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private byte[] objectData;
 
     /**
-     * @return
+     * Get the password
+     *
+     * @return the password
      */
     public String getPassword()
     {
@@ -48,7 +54,9 @@ public class TurbineUserImpl extends AbstractTurbineSecurityEntityImpl implement
     }
 
     /**
-     * @param password
+     * Set the password
+     *
+     * @param password the new password
      */
     public void setPassword(String password)
     {
@@ -56,13 +64,101 @@ public class TurbineUserImpl extends AbstractTurbineSecurityEntityImpl implement
     }
 
     /**
+     * Returns the first name of the User
+     *
+     * @return The first name of the User
+     */
+    public String getFirstName()
+    {
+        return this.firstName;
+    }
+
+    /**
+     * Sets the first name of the User
+     *
+     * @param firstName The new first name of the User
+     */
+    public void setFirstName(String firstName)
+    {
+        this.firstName = firstName;
+    }
+
+    /**
+     * Returns the last name of the User
+     *
+     * @return The last name of the User
+     */
+    public String getLastName()
+    {
+        return this.lastName;
+    }
+
+    /**
+     * Sets the last name of User
+     *
+     * @param lastName The new last name of the User
+     */
+    public void setLastName(String lastName)
+    {
+        this.lastName = lastName;
+    }
+
+    /**
+     * Returns the email address of the user
+     *
+     * @return The email address of the user
+     */
+    public String getEmail()
+    {
+        return this.email;
+    }
+
+    /**
+     * Sets the new email address of the user
+     *
+     * @param email The new email address of the user
+     */
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
+
+    /**
+     * Returns the value of the objectdata for this user.
+     * Objectdata is a storage area used
+     * to store the permanent storage table from the User
+     * object.
+     *
+     * @return The bytes in the objectdata for this user
+     */
+    public byte[] getObjectdata()
+    {
+        return this.objectData;
+    }
+
+    /**
+     * Sets the value of the objectdata for the user
+     *
+     * @param objectdata The new permanent storage for the user
+     */
+    public void setObjectdata(byte[] objectdata)
+    {
+        this.objectData = objectdata;
+    }
+
+    /**
      * Calculate a hash code for this object
-     * 
+     *
      * @see org.apache.fulcrum.security.entity.impl.SecurityEntityImpl#hashCode()
      */
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder(41, 15).append(getPassword()).appendSuper(super.hashCode()).toHashCode();
+        return new HashCodeBuilder(41, 15)
+            .append(getPassword())
+            .append(getFirstName())
+            .append(getLastName())
+            .append(getEmail())
+            .appendSuper(super.hashCode()).toHashCode();
     }
 }

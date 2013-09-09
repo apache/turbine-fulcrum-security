@@ -26,6 +26,13 @@
   <body>
     <release version="1.1.0" date="">
       <action type="update" dev="tv">
+        Add extended user having first name, last name, email and objectdata
+        and derive TurbineUser from it. 
+      </action>
+      <action type="update" dev="tv">
+        Update fulcrum-security-hibernate to test with HSQLDB
+      </action>
+      <action type="update" dev="tv">
         Update fulcrum-security-torque to use Torque 4.0.
       </action>
       <action type="update" dev="tv">

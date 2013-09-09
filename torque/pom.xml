@@ -183,6 +183,24 @@
                 </configuration>
               </execution>
               <execution>
+                <id>torque-sql-hsqldb</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>generate</goal>
+                </goals>
+                <configuration>
+                  <packaging>classpath</packaging>
+                  <configPackage>org.apache.torque.templates.sql</configPackage>
+                  <sourceDir>${project.basedir}/schema</sourceDir>
+                  <defaultOutputDir>${project.build.directory}/generated-sql/torque/hsqldb</defaultOutputDir>
+                  <defaultOutputDirUsage>none</defaultOutputDirUsage>
+                  <loglevel>error</loglevel>
+                  <options>
+                    <torque.database>hsqldb</torque.database>
+                  </options>
+                </configuration>
+              </execution>
+              <execution>
                 <id>torque-sql-derby</id>
                 <phase>package</phase>
                 <goals>
@@ -270,6 +288,24 @@
                   <loglevel>error</loglevel>
                   <options>
                     <torque.database>mysql</torque.database>
+                  </options>
+                </configuration>
+              </execution>
+              <execution>
+                <id>torque-idtable-hsqldb</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>generate</goal>
+                </goals>
+                <configuration>
+                  <packaging>classpath</packaging>
+                  <configPackage>org.apache.torque.templates.idtable</configPackage>
+                  <sourceDir>${project.basedir}/schema</sourceDir>
+                  <defaultOutputDir>${project.build.directory}/generated-sql/torque/hsqldb</defaultOutputDir>
+                  <defaultOutputDirUsage>none</defaultOutputDirUsage>
+                  <loglevel>error</loglevel>
+                  <options>
+                    <torque.database>hsqldb</torque.database>
                   </options>
                 </configuration>
               </execution>
