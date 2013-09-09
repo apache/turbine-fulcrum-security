@@ -35,11 +35,11 @@
             <!-- properties for this SessionFactory only -->
             <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
             <property name="hibernate.connection.autocommit">true</property>
-            <property name="hibernate.connection.driver_class">com.mckoi.JDBCDriver</property>
-            <property name="hibernate.connection.username">test</property>
-            <property name="hibernate.connection.password">test</property>
-            <property name="hibernate.connection.url">jdbc:mckoi:local://./src/test/mcKoi.conf?create=true</property>
-            <property name="hibernate.dialect">org.hibernate.dialect.MckoiDialect</property>
+            <property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
+            <property name="hibernate.connection.username">sa</property>
+            <!--  property name="hibernate.connection.password"></property -->
+            <property name="hibernate.connection.url">jdbc:hsqldb:.</property>
+            <property name="hibernate.dialect">org.hibernate.dialect.HSQLDialect</property>
 
             <!-- mapping files -->
         </session-factory>

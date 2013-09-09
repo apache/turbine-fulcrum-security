@@ -113,12 +113,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>mckoi</groupId>
-            <artifactId>mckoi</artifactId>
-            <version>1.0.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>1.8.0.7</version>
