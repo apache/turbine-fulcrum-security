@@ -21,9 +21,9 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
     xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <parent>
-       <artifactId>fulcrum-parent</artifactId>
-       <groupId>org.apache.fulcrum</groupId>
-       <version>1</version>
+       <artifactId>turbine-parent</artifactId>
+       <groupId>org.apache.turbine</groupId>
+       <version>2</version>
    </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.fulcrum</groupId>
@@ -31,13 +31,13 @@
     <version>1.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Fulcrum Security Master Build</name>
-    <url>http://turbine.apache.org/fucrum/fulcrum-security-site</url>
+    <url>http://turbine.apache.org/fulcrum/fulcrum-security-site</url>
 
     <distributionManagement>
         <site>
             <id>apache.website</id>
             <name>Fulcrum Website</name>
-            <url>${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/fulcrum/fulcrum-security-site/</url>
+            <url>${turbine.deployment.protocol}://people.apache.org/www/turbine.apache.org/fulcrum/fulcrum-security-site/</url>
         </site>
     </distributionManagement>
     
@@ -84,6 +84,40 @@
             </plugin>
         </plugins>
     </reporting>
+
+    <profiles>
+        <profile>
+            <id>apache-release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <!-- build the source and binary distribution packages -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>fulcrum-source-release-assembly</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <configuration>
+                                    <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
+                                    <descriptorRefs>
+                                        <descriptorRef>bin</descriptorRef>
+                                        <descriptorRef>project</descriptorRef>
+                                        <descriptorRef>src</descriptorRef>
+                                    </descriptorRefs>
+                                    <tarLongFileFormat>gnu</tarLongFileFormat>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    
     <properties>
         <maven.compile.source>1.5</maven.compile.source>
         <maven.compile.target>1.5</maven.compile.target>
