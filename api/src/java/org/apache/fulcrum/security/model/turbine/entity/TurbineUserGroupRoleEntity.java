@@ -25,7 +25,7 @@ import java.util.Set;
  * Represents the "turbine" model where permissions are in a many to many
  * relationship to roles, roles are related to groups are related to users, all
  * in many to many relationships.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @version $Id: TurbineRole.java 535465 2007-05-05 06:58:06Z tv $
  */
@@ -33,14 +33,14 @@ public interface TurbineUserGroupRoleEntity
 {
     /**
      * Get the User/Group/Role set associated with this entity
-     * 
+     *
      * @return a set of User/Group/Role relations
      */
     public <T extends TurbineUserGroupRole> Set<T> getUserGroupRoleSet();
 
     /**
-     * Get the User/Group/Role set associated with this entity
-     * 
+     * Set the User/Group/Role set associated with this entity
+     *
      * @param userGroupRoleSet
      *            a set of User/Group/Role relations
      */
@@ -48,7 +48,7 @@ public interface TurbineUserGroupRoleEntity
 
     /**
      * Add a User/Group/Role relation to this entity
-     * 
+     *
      * @param userGroupRole
      *            a User/Group/Role relation to add
      */
@@ -56,7 +56,7 @@ public interface TurbineUserGroupRoleEntity
 
     /**
      * Remove a User/Group/Role relation from this entity
-     * 
+     *
      * @param userGroupRole
      *            a User/Group/Role relation to remove
      */
