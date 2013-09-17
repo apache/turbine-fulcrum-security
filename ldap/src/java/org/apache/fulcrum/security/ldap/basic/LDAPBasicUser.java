@@ -19,11 +19,12 @@ package org.apache.fulcrum.security.ldap.basic;
  * under the License.
  */
 
-import java.util.Hashtable;
+import java.util.Set;
 
-import org.apache.fulcrum.security.ldap.LDAPUser;
-import org.apache.fulcrum.security.ldap.LDAPUserManagerImpl;
-import org.apache.fulcrum.security.model.basic.entity.impl.BasicUserImpl;
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.ldap.AbstractLDAPUserImpl;
+import org.apache.fulcrum.security.model.basic.entity.BasicUser;
+import org.apache.fulcrum.security.util.GroupSet;
 
 /**
  * LDAPBasicUser implements User and provides access to a user who accesses the
@@ -37,269 +38,63 @@ import org.apache.fulcrum.security.model.basic.entity.impl.BasicUserImpl;
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id: LDAPBasicUser.java 534527 2007-05-02 16:10:59Z tv $
  */
-public class LDAPBasicUser extends BasicUserImpl
-    implements LDAPUser
+public class LDAPBasicUser extends AbstractLDAPUserImpl
+    implements BasicUser
 {
     /** Serial Version UID */
     private static final long serialVersionUID = 3953123276619326752L;
 
-    /** This is data that will survive a servlet engine restart. */
-    private Hashtable permStorage = null;
+	/**
+	 * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#getGroups()
+	 */
+	public GroupSet getGroups()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    /** This is data that will not survive a servlet engine restart. */
-    private Hashtable tempStorage = null;
+	/**
+	 * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#setGroups(org.apache.fulcrum.security.util.GroupSet)
+	 */
+	public void setGroups(GroupSet groups)
+	{
+		// TODO Auto-generated method stub
 
-    /**
-     * Constructor.
-     * Create a new User and set the createDate.
-     */
-    public LDAPBasicUser()
-    {
-        tempStorage = new Hashtable(10);
-        permStorage = new Hashtable(10);
-    }
+	}
 
-    /**
-     * Returns the Email for this user.  If this is defined, then
-     * the user is considered logged in.
-     *
-     * @return A String with the user's Email.
-     */
-    public String getEmail()
-    {
-        String tmp = null;
+	/**
+	 * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#removeGroup(org.apache.fulcrum.security.entity.Group)
+	 */
+	public void removeGroup(Group group)
+	{
+		// TODO Auto-generated method stub
 
-        tmp = (String) getPerm(LDAPUserManagerImpl.LDAP_USER_EMAIL_KEY);
-        if (tmp != null && tmp.length() == 0)
-        {
-            tmp = null;
-        }
-        return tmp;
-    }
+	}
 
-    /**
-     * Get an object from permanent storage.
-     * @param name The object's name.
-     * @return An Object with the given name.
-     */
-    public Object getPerm(String name)
-    {
-        return permStorage.get(name);
-    }
+	/**
+	 * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#addGroup(org.apache.fulcrum.security.entity.Group)
+	 */
+	public void addGroup(Group group)
+	{
+		// TODO Auto-generated method stub
 
-    /**
-     * Get an object from permanent storage; return default if value
-     * is null.
-     *
-     * @param name The object's name.
-     * @param def A default value to return.
-     * @return An Object with the given name.
-     */
-    public Object getPerm(String name, Object def)
-    {
-        try
-        {
-            Object val = permStorage.get(name);
+	}
 
-            if (val == null)
-            {
-                return def;
-            }
-            return val;
-        }
-        catch (Exception e)
-        {
-            return def;
-        }
-    }
+	/**
+	 * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#setGroupsAsSet(java.util.Set)
+	 */
+	public <T extends Group> void setGroupsAsSet(Set<T> groups)
+	{
+		// TODO Auto-generated method stub
 
-    /**
-     * This should only be used in the case where we want to save the
-     * data to the database.
-     *
-     * @return A Hashtable.
-     */
-    public Hashtable getPermStorage()
-    {
-        if (this.permStorage == null)
-        {
-            this.permStorage = new Hashtable();
-        }
-        return this.permStorage;
-    }
+	}
 
-    /**
-     * Get an object from temporary storage.
-     *
-     * @param name The object's name.
-     * @return An Object with the given name.
-     */
-    public Object getTemp(String name)
-    {
-        return tempStorage.get(name);
-    }
-
-    /**
-     * Get an object from temporary storage; return default if value
-     * is null.
-     *
-     * @param name The object's name.
-     * @param def A default value to return.
-     * @return An Object with the given name.
-     */
-    public Object getTemp(String name, Object def)
-    {
-        Object val;
-
-        try
-        {
-            val = tempStorage.get(name);
-            if (val == null)
-            {
-                val = def;
-            }
-        }
-        catch (Exception e)
-        {
-            val = def;
-        }
-        return val;
-    }
-
-    /**
-     * Returns the first name for this user.  If this is defined, then
-     * the user is considered logged in.
-     *
-     * @return A String with the user's first name.
-     */
-    public String getFirstName()
-    {
-        String tmp = null;
-
-        tmp = (String) getPerm(LDAPUserManagerImpl.LDAP_USER_FIRSTNAME_KEY);
-        if (tmp != null && tmp.length() == 0)
-        {
-            tmp = null;
-        }
-        return tmp;
-    }
-
-    /**
-     * Returns the last name for this user.  If this is defined, then
-     * the user is considered logged in.
-     *
-     * @return A String with the user's last name.
-     */
-    public String getLastName()
-    {
-        String tmp = null;
-
-        tmp = (String) getPerm(LDAPUserManagerImpl.LDAP_USER_LASTNAME_KEY);
-        if (tmp != null && tmp.length() == 0)
-        {
-            tmp = null;
-        }
-        return tmp;
-    }
-
-    /**
-     * Remove an object from temporary storage and return the object.
-     *
-     * @param name The name of the object to remove.
-     * @return An Object.
-     */
-    public Object removeTemp(String name)
-    {
-        return tempStorage.remove(name);
-    }
-
-    /**
-     * Set the users Email
-     *
-     * @param email The new email.
-     */
-    public void setEmail(String email)
-    {
-        setPerm(LDAPUserManagerImpl.LDAP_USER_EMAIL_KEY, email);
-    }
-
-    /**
-     * Set the users First Name
-     *
-     * @param fname The new firstname.
-     */
-    public void setFirstName(String fname)
-    {
-        setPerm(LDAPUserManagerImpl.LDAP_USER_FIRSTNAME_KEY, fname);
-    }
-
-    /**
-     * Set the users Last Name
-     * Sets the last name for this user.
-     *
-     * @param lname The new lastname.
-     */
-    public void setLastName(String lname)
-    {
-        setPerm(LDAPUserManagerImpl.LDAP_USER_LASTNAME_KEY, lname);
-    }
-
-    /**
-     * Put an object into permanent storage.
-     *
-     * @param name The object's name.
-     * @param value The object.
-     */
-    public void setPerm(String name, Object value)
-    {
-        permStorage.put(name, value);
-    }
-
-    /**
-     * This should only be used in the case where we want to save the
-     * data to the database.
-     *
-     * @param stuff A Hashtable.
-     */
-    public void setPermStorage(Hashtable stuff)
-    {
-        this.permStorage = stuff;
-    }
-
-    /**
-     * This should only be used in the case where we want to save the
-     * data to the database.
-     *
-     * @return A Hashtable.
-     */
-    public Hashtable getTempStorage()
-    {
-        if (this.tempStorage == null)
-        {
-            this.tempStorage = new Hashtable();
-        }
-        return this.tempStorage;
-    }
-
-    /**
-     * This should only be used in the case where we want to save the
-     * data to the database.
-     *
-     * @param storage A Hashtable.
-     */
-    public void setTempStorage(Hashtable storage)
-    {
-        this.tempStorage = storage;
-    }
-
-    /**
-     * Put an object into temporary storage.
-     *
-     * @param name The object's name.
-     * @param value The object.
-     */
-    public void setTemp(String name, Object value)
-    {
-        tempStorage.put(name, value);
-    }
+	/**
+	 * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#getGroupsAsSet()
+	 */
+	public <T extends Group> Set<T> getGroupsAsSet()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

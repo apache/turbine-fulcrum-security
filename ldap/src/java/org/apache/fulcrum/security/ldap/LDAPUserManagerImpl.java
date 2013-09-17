@@ -55,7 +55,7 @@ import org.apache.fulcrum.security.util.UserSet;
  * @author <a href="mailto:hhernandez@itweb.com.mx">Humberto Hernandez</a>
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
- * 
+ *
  * @version $Id:LDAPUserManagerImpl.java 535465 2007-05-05 06:58:06Z tv $
  */
 public class LDAPUserManagerImpl extends AbstractUserManager
@@ -193,12 +193,12 @@ public class LDAPUserManagerImpl extends AbstractUserManager
     {
         return String.valueOf(++uniqueId);
     }
-    
+
     /**
      * Check whether a specified user's account exists.
-     * 
+     *
      * The login name is used for looking up the account.
-     * 
+     *
      * @param userName
      *            The name of the user to be checked.
      * @return true if the specified account exists
@@ -209,7 +209,7 @@ public class LDAPUserManagerImpl extends AbstractUserManager
     {
         try
         {
-            User ldapUser = getUser(userName);
+            getUser(userName);
         }
         catch (UnknownEntityException ex)
         {
@@ -221,7 +221,7 @@ public class LDAPUserManagerImpl extends AbstractUserManager
 
     /**
      * Retrieves all users defined in the system.
-     * 
+     *
      * @return the names of all users defined in the system.
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
@@ -241,12 +241,12 @@ public class LDAPUserManagerImpl extends AbstractUserManager
              */
             SearchControls ctls = new SearchControls();
 
-            NamingEnumeration answer =
+            NamingEnumeration<SearchResult> answer =
                     ctx.search(this.ldapBasesearch, filter, ctls);
 
             while (answer.hasMore())
             {
-                SearchResult sr = (SearchResult) answer.next();
+                SearchResult sr = answer.next();
                 Attributes attribs = sr.getAttributes();
 
                 User ldapUser = getUserInstance();
@@ -266,7 +266,7 @@ public class LDAPUserManagerImpl extends AbstractUserManager
 
     /**
      * Removes an user account from the system.
-     * 
+     *
      * @param user
      *            the object describing the account to be removed.
      * @throws DataBackendException
@@ -298,24 +298,24 @@ public class LDAPUserManagerImpl extends AbstractUserManager
 
     /**
      * Creates new user account with specified attributes.
-     * 
+     *
      * @param user
      *            the object describing account to be created.
      * @param password
      *            The password to use for the account.
-     * 
+     *
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      */
-    protected User persistNewUser(User user) throws DataBackendException
+    protected <T extends User> T persistNewUser(T user) throws DataBackendException
     {
         if (checkExists(user))
         {
             throw new DataBackendException("The account '"
                     + user.getName() + "' already exists");
         }
-        
-        /* 
+
+        /*
          * Set a numeric id in case the framework does not provide one.
          * This is meant to be a last-resort solution and should not be
          * relied upon.
@@ -344,7 +344,7 @@ public class LDAPUserManagerImpl extends AbstractUserManager
 
     /**
      * Stores User attributes. The User is required to exist in the system.
-     * 
+     *
      * @param role
      *            The User to be stored.
      * @throws DataBackendException
@@ -377,7 +377,7 @@ public class LDAPUserManagerImpl extends AbstractUserManager
 
     /**
      * Override password change. We do not support it with LDAP
-     * 
+     *
      * @see org.apache.fulcrum.security.spi.AbstractUserManager#changePassword(org.apache.fulcrum.security.entity.User, java.lang.String, java.lang.String)
      */
     public void changePassword(User user, String oldPassword, String newPassword) throws PasswordMismatchException,
@@ -388,7 +388,7 @@ public class LDAPUserManagerImpl extends AbstractUserManager
 
     /**
      * Override password change. We do not support it with LDAP
-     * 
+     *
      * @see org.apache.fulcrum.security.spi.AbstractUserManager#forcePassword(org.apache.fulcrum.security.entity.User, java.lang.String)
      */
     public void forcePassword(User user, String password) throws UnknownEntityException, DataBackendException
@@ -401,14 +401,14 @@ public class LDAPUserManagerImpl extends AbstractUserManager
      * key.
      *
      * @param name the name of the user.
-     * 
+     *
      * @return an User object.
      * @exception UnknownEntityException if the user's account does not
      *            exist in the database.
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public User getUser(String name) throws DataBackendException, UnknownEntityException
+    public <T extends User> T getUser(String name) throws DataBackendException, UnknownEntityException
     {
         try
         {
@@ -424,15 +424,15 @@ public class LDAPUserManagerImpl extends AbstractUserManager
              */
             SearchControls ctls = new SearchControls();
 
-            NamingEnumeration answer =
+            NamingEnumeration<SearchResult> answer =
                     ctx.search(this.ldapBasesearch, filter, ctls);
 
             if (answer.hasMore())
             {
-                SearchResult sr = (SearchResult) answer.next();
+                SearchResult sr = answer.next();
                 Attributes attribs = sr.getAttributes();
-                
-                User ldapUser = getUserInstance();
+
+                T ldapUser = getUserInstance();
                 setLDAPAttributes(ldapUser, attribs);
 
                 return ldapUser;
@@ -460,7 +460,7 @@ public class LDAPUserManagerImpl extends AbstractUserManager
      * @throws DataBackendException if there is a problem accessing the
      *         storage.
      */
-    public User getUserById(Object id) throws DataBackendException, UnknownEntityException
+    public <T extends User> T getUserById(Object id) throws DataBackendException, UnknownEntityException
     {
         try
         {
@@ -476,15 +476,15 @@ public class LDAPUserManagerImpl extends AbstractUserManager
              */
             SearchControls ctls = new SearchControls();
 
-            NamingEnumeration answer =
+            NamingEnumeration<SearchResult> answer =
                     ctx.search(this.ldapBasesearch, filter, ctls);
 
             if (answer.hasMore())
             {
-                SearchResult sr = (SearchResult) answer.next();
+                SearchResult sr = answer.next();
                 Attributes attribs = sr.getAttributes();
 
-                User ldapUser = getUserInstance();
+                T ldapUser = getUserInstance();
                 setLDAPAttributes(ldapUser, attribs);
 
                 return ldapUser;
@@ -504,20 +504,20 @@ public class LDAPUserManagerImpl extends AbstractUserManager
 
     /**
      * Avalon Service lifecycle method
-     * 
+     *
      * @see org.apache.fulcrum.security.spi.AbstractEntityManager#configure(org.apache.avalon.framework.configuration.Configuration)
      */
     public void configure(Configuration conf) throws ConfigurationException
     {
         super.configure(conf);
-        
+
         Configuration ldap = conf.getChild(LDAP_KEY, false);
-        
+
         if (ldap == null)
         {
             throw new ConfigurationException("LDAP configuration is mandatory.", conf);
         }
-        
+
         this.ldapBasesearch = ldap.getChild(LDAP_BASE_SEARCH_KEY).getValue(null);
 
         if (this.ldapBasesearch == null)
@@ -543,9 +543,9 @@ public class LDAPUserManagerImpl extends AbstractUserManager
         this.ldapPort = ldap.getChild(LDAP_PORT_KEY).getValue(LDAP_PORT_DEFAULT);
         this.ldapProvider = ldap.getChild(LDAP_PROVIDER_KEY).getValue(LDAP_PROVIDER_DEFAULT);
         this.ldapSecurityAuthentication = ldap.getChild(LDAP_AUTH_KEY).getValue(LDAP_AUTH_DEFAULT);
-        
+
         Configuration ldapUser = ldap.getChild(LDAP_USER_KEY, false);
-        
+
         if (ldapUser == null)
         {
             getLogger().info("No LDAP user attributes defined, using defaults.");
@@ -568,7 +568,7 @@ public class LDAPUserManagerImpl extends AbstractUserManager
             this.ldapPassword = ldapUser.getChild(LDAP_USER_PASSWORD_KEY).getValue(LDAP_USER_PASSWORD_DEFAULT);
         }
     }
-    
+
     /**
      * Bind as the admin user.
      *
@@ -598,7 +598,7 @@ public class LDAPUserManagerImpl extends AbstractUserManager
          * creating an initial context using Sun's client
          * LDAP Provider.
          */
-        Hashtable env = new Hashtable();
+        Hashtable<String, String> env = new Hashtable<String, String>();
 
         env.put(Context.INITIAL_CONTEXT_FACTORY, this.ldapProvider);
         env.put(Context.PROVIDER_URL, providerURL);
@@ -610,7 +610,7 @@ public class LDAPUserManagerImpl extends AbstractUserManager
 
         return ctx;
     }
-    
+
     /**
      * Populates the user with values obtained from the LDAP Service.
      * This method could be redefined in subclasses.
@@ -647,21 +647,21 @@ public class LDAPUserManagerImpl extends AbstractUserManager
         if (user instanceof LDAPUser)
         {
             LDAPUser u = (LDAPUser)user;
-            
+
             // Set the Firstname.
             attr = attribs.get(this.ldapFirstname);
             if (attr != null && attr.get() != null)
             {
                 u.setFirstName(attr.get().toString());
             }
-    
+
             // Set the Lastname.
             attr = attribs.get(this.ldapLastname);
             if (attr != null && attr.get() != null)
             {
                 u.setLastName(attr.get().toString());
             }
-    
+
             // Set the E-Mail
             attr = attribs.get(this.ldapEmail);
             if (attr != null && attr.get() != null)
@@ -721,28 +721,28 @@ public class LDAPUserManagerImpl extends AbstractUserManager
         if (user instanceof LDAPUser)
         {
             LDAPUser u = (LDAPUser)user;
-            
+
             // Set the Firstname.
             value = u.getFirstName();
-    
+
             if (value != null)
             {
                 Attribute attr = new BasicAttribute(this.ldapFirstname, value);
                 attribs.put(attr);
             }
-    
+
             // Set the Lastname.
             value = u.getLastName();
-    
+
             if (value != null)
             {
                 Attribute attr = new BasicAttribute(this.ldapLastname, value);
                 attribs.put(attr);
             }
-    
+
             // Set the E-Mail.
             value = u.getEmail();
-    
+
             if (value != null)
             {
                 Attribute attr = new BasicAttribute(this.ldapEmail, value);
@@ -752,13 +752,13 @@ public class LDAPUserManagerImpl extends AbstractUserManager
 
         return attribs;
     }
-    
+
     /**
      * Gets the distinguished name (DN) of the User.
      * This method could be redefined in a subclass.
-     * 
+     *
      * @param user The user to provide the DN for
-     * 
+     *
      * @return The Distinguished Name of the user.
      */
     public String getDN(User user)

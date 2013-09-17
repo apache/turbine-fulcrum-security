@@ -27,7 +27,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
  * This implementation uses ldap for retrieving user data.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id:LDAPTurbineUserManagerImpl.java 535465 2007-05-05 06:58:06Z tv $
@@ -37,15 +37,15 @@ public class LDAPTurbineUserManagerImpl extends LDAPUserManagerImpl implements T
     /**
      * Constructs an User object to represent an anonymous user of the
      * application.
-     * 
+     *
      * @return An anonymous Turbine User.
      * @throws UnknownEntityException
      *             if the implementation of User interface could not be
      *             determined, or does not exist.
      */
-    public User getAnonymousUser() throws UnknownEntityException
+    public <T extends User> T getAnonymousUser() throws UnknownEntityException
     {
-        User user;
+        T user;
         try
         {
             user = getUserInstance();
@@ -61,17 +61,16 @@ public class LDAPTurbineUserManagerImpl extends LDAPUserManagerImpl implements T
     /**
      * Checks whether a passed user object matches the anonymous user pattern
      * according to the configured user manager
-     * 
+     *
      * @param user
      *            An user object
-     * 
+     *
      * @return True if this is an anonymous user
-     * 
+     *
      */
     public boolean isAnonymousUser(User user)
     {
         // Either just null, the name is null or the name is the empty string
         return (user == null) || StringUtils.isEmpty(user.getName());
     }
-
 }
