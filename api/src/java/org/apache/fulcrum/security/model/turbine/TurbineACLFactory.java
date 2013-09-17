@@ -22,12 +22,14 @@ import java.util.Set;
 
 import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
+import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.ACLFactory;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
 import org.apache.fulcrum.security.spi.AbstractManager;
 import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
@@ -79,7 +81,29 @@ public class TurbineACLFactory extends AbstractManager implements ACLFactory
     	try
     	{
 			groupManager = getGroupManager();
-		}
+
+	        // make sure the global group exists
+	        if (groupManager != null)
+	        {
+	            Group g = null;
+	            try
+	            {
+	                g = groupManager.getGroupByName(TurbineModelManager.GLOBAL_GROUP_NAME);
+	            }
+	            catch (UnknownEntityException uee)
+	            {
+	                g = groupManager.getGroupInstance(TurbineModelManager.GLOBAL_GROUP_NAME);
+	                try
+	                {
+	                    groupManager.addGroup(g);
+	                }
+	                catch (EntityExistsException eee)
+	                {
+	                    throw new DataBackendException(eee.getMessage(), eee);
+	                }
+	            }
+	        }
+    	}
     	catch (DataBackendException e)
     	{
     		// ignore
@@ -88,7 +112,9 @@ public class TurbineACLFactory extends AbstractManager implements ACLFactory
     	TurbineAccessControlList accessControlList;
         try
         {
-            accessControlList = new TurbineAccessControlListImpl(turbineUserGroupRoleSet, groupManager);
+            accessControlList =
+                new TurbineAccessControlListImpl(turbineUserGroupRoleSet,
+                        groupManager);
         }
         catch (Exception e)
         {
