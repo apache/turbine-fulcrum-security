@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<document>
+  <properties>
+    <title>Changes</title>
+    <author email="epugh@upstate.com">Eric Pugh</author>
+  </properties>
+
+  <body>
+    <release version="1.1.0" date="">
+      <action type="update" dev="tv">
+        Updated to Hibernate 3.6.7
+      </action>
+      <action type="update" dev="tv">
+        Moved to JDK 1.5
+      </action>
+      <action type="update" dev="tv" issue="TRB-78" due-to="Ludwig Magnusson">
+        Move API build to Maven-2.
+      </action>
+      <action type="update" dev="tv">
+        Moved tests to src/test
+      </action>
+      <action type="update" dev="tv">
+        Update to latest release of Torque (3.3).
+      </action>
+      <action dev="tv" type="update" fixes="TRB-40">
+        Changed BasicUser, BasicGroup, DynamicUser, DynamicGroup, DynamicRole,
+        DynamicPermission, TurbineUser, TurbineGroup, TurbineRole and TurbinePermission to
+        interfaces. Added default implementations for existing security services.
+        Changed all occurences of these classes to use BasicUserImpl, BasicGroupImpl,
+        DynamicUserImpl, DynamicGroupImpl, DynamicRoleImpl, DynamicPermissionImpl,
+        TurbineUserImpl, TurbineGroupImpl, TurbineRoleImpl and TurbinePermissionImpl instead.
+      </action>
+      <action dev="tv" type="add">
+        Implemented a security service based on Torque.
+      </action>
+      <action dev="tv" type="fix">
+        Fixed hash code generation and equals() for security entities.
+      </action>
+      <action dev="epugh" type="add" due-to="Kostyantyn Shchekotykhin">
+        Updated nt impl, turbine and opensymphony adapters to use released versions
+        of memory impl.
+      </action>
+    </release>
+    <release version="1.0.7" date="2004-11-24">
+      <action dev="epugh" type="add" due-to="Ben Gidley">
+        Add test to verify that usernames bob and BOB are treated the same.
+      </action>
+      <action dev="epugh" type="add">
+        Properly flesh out Turbine model of security.
+      </action>
+    </release>
+    <release version="1.0.6" date="in cvs">
+      <action dev="epugh" type="add" due-to="Ben Gidley">
+        Add to the dynamic model the ability to add delegators for users.  A user can have
+        0..n delegatees who can assume the roles and permissions of the user.
+        Also cleanup of docs.
+      </action>
+      <action dev="epugh" type="add" due-to="Peter Courcoux">
+        Make serviceManager in AbstractManager class protected to facilitate extension.
+      </action>
+      <action dev="epugh" type="add">
+        Expose revokeAll(Group group) to the DynamicModelManager API.  Was already implemented in the Hibernate
+        UserManager.
+      </action>
+      <action dev="epugh" type="add" due-to="Michael Jones">
+        Expose getUserById() to the UserManager API.  Was already implemented in the Hibernate
+        UserManager.
+      </action>
+      <action dev="epugh" type="add" due-to="Michael Jones">
+        In the Dynamic model, allow permissions to know about the sets they are in.  Allows revokeAll(permission)
+        to be called.
+      </action>
+      <action dev="epugh" type="add" due-to="Michael Jones">
+        When adding objects to SecuritySet, delegate the add to the implement RoleSet/PermissionSet etc.
+      </action>
+      <action dev="epugh" type="add">
+        Merge the fulcrum-security-spi classes into fulcurm-security-api.  The split
+        made it too complex to handle unit testing.
+      </action>
+      <action dev="mmanner" type="add">
+        Null passwords properly dealt with in TextMatchAuthenticator.
+      </action>
+      <action dev="mmanner" type="add">
+        Change Basic* entity objects to use Set.
+      </action>
+      <action dev="mmanner" type="add">
+        Change Dynamic* entity objects to use Set.  Refactored Hibernate implementation of Security to
+        use more efficient deletion when doing oneshot deletes during revokeAll methods.  Added get[Entity]ById()
+        method as well.  Change grants/revokes to be Synchronizied.
+      </action>
+    </release>
+    <release version="1.0-alpha-6" date="in cvs">
+      <action dev="epugh" type="add">
+    Added getAllUsers() to UserManager
+      </action>
+    </release>
+    <release version="1.0-alpha-4" date="in cvs">
+      <action dev="epugh" type="add">
+    Added ThreadSafe marker interface to AbstractManager.
+      </action>
+      <action dev="epugh" type="add">
+      Added the "Basic" model and supplied implementations for memory, NT, and Hibernate.
+      </action>
+      <action dev="epugh" type="add">
+      Added the "Basic" model and supplied implementations for memory, NT, and Hibernate.
+      </action>
+    <action dev="epugh" type="add">
+      AccessControlLists are now pluggable via the ACLFactory implementation you supply.
+      </action>
+    <action dev="epugh" type="update">
+    Vastly refactored the builds into multiple projects.  The api related onces are <code>/api</code> and <code>/spi</code>.
+    The implementation details are in <code>/memory</code>,<code>/hibernate</code>, and<code>/nt</code>.  And lastly, there
+    are two adapters: <code>/adapters/turbine</code> and <code>/adapters/opensymphony</code>.
+      </action>
+    <action dev="epugh" type="remove">
+    Tossed the various Torque code.  It isn't unit tested, and was causing lots of work that couldn't be tested..  At some
+    point, if there is demand, we can put it back.
+      </action>
+    </release>
+    <release version="1.0-alpha-3" date="n/a">
+    <action dev="epugh" type="add">
+    Realized the one size fits all ACL doesn't work.. ACL's are tied to models.  Now, there is
+    an AccessControlList interface, but it is just a marker.  Each model implements the ACL.
+    Added a Memory implementaiton of the Turbine model.
+      </action>
+    <action dev="epugh" type="fix">
+    All the various SecuritySet implementations base their logic off their Name, not the ID, or
+    Object type.  Fixes problems with comparisons when you have various subclasses.
+      </action>
+    <action dev="epugh" type="fix">
+    For a SecurityEntityImpl, if the name is null then throw an InvalidParameterException.
+      </action>
+      <action dev="epugh" type="add">
+    Add ModelManager interface and SimpleModelManager and TurbineModelManager
+    component that explicitly contains the relationship between the various
+    entities.
+      </action>
+    </release>
+    <release version="1.0-alpha-2" date="10-29-2003">
+    <action dev="epugh" type="update">
+    Change all get(Role/Group/User/Permssion)Instance from throwing an UnknownEntityException to
+    throwing a DataBackendException.  There is no entity id when creating a new one yet!
+      </action>
+      <action dev="epugh" type="add">
+    Added an adapter to OSUser.  This allows OSUser to query Fulcrum Security
+    for users and to authenticate them via Fulcrum Security authenticators.
+      </action>
+    </release>
+    <release version="1.0-alpha-1" date="2003-10-21">
+      <action dev="epugh" type="add">
+    Added an IntegerConverter so the adapter can be used with fulcrum SPI's
+    that use Long/Integer/String (as a number) as the ID.
+      </action>
+      <action dev="epugh" type="add">
+    Converted id to Object.  Now the various SPI's cast the Object type
+    to whatever they want to use.
+      </action>
+      <action dev="epugh" type="add">
+    Pluggable Authenticators done.  Added NT, crypto, and plain text.
+      </action>
+      <action dev="epugh" type="add">
+    Hibernate based Simple model done.
+      </action>
+      <action dev="epugh" type="update">
+        Converted all id's for security objects to "long" values to prevent running out of numbers.
+      </action>
+    </release>
+
+  </body>
+</document>
+
