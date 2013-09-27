@@ -66,8 +66,12 @@ public abstract class TorqueAbstractDynamicRole extends TorqueAbstractSecurityEn
      *
      * @return a list of Role/Permission relations
      */
-    protected abstract List<TorqueDynamicRolePermission> getTorqueDynamicRolePermissionsJoinTorqueDynamicPermission(Criteria criteria, Connection con)
-        throws TorqueException;
+    protected List<TorqueDynamicRolePermission> getTorqueDynamicRolePermissionsJoinTorqueDynamicPermission(Criteria criteria, Connection con)
+        throws TorqueException
+    {
+        criteria.and(TorqueDynamicRolePermissionPeer.ROLE_ID, getEntityId() );
+        return TorqueDynamicRolePermissionPeer.doSelectJoinTorqueDynamicPermission(criteria, con);
+    }
 
     /**
      * Forward reference to generated code
@@ -81,8 +85,12 @@ public abstract class TorqueAbstractDynamicRole extends TorqueAbstractSecurityEn
      *
      * @return a list of Group/Role relations
      */
-    protected abstract List<TorqueDynamicGroupRole> getTorqueDynamicGroupRolesJoinTorqueDynamicGroup(Criteria criteria, Connection con)
-        throws TorqueException;
+    protected List<TorqueDynamicGroupRole> getTorqueDynamicGroupRolesJoinTorqueDynamicGroup(Criteria criteria, Connection con)
+        throws TorqueException
+    {
+        criteria.and(TorqueDynamicGroupRolePeer.ROLE_ID, getEntityId() );
+        return TorqueDynamicGroupRolePeer.doSelectJoinTorqueDynamicGroup(criteria, con);
+    }
 
     /**
      * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicRole#addGroup(org.apache.fulcrum.security.entity.Group)

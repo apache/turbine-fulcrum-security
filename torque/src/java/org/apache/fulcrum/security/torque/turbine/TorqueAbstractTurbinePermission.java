@@ -58,8 +58,12 @@ public abstract class TorqueAbstractTurbinePermission extends TorqueAbstractSecu
      *
      * @return a list of Role/Permission relations
      */
-    protected abstract List<TorqueTurbineRolePermission> getTorqueTurbineRolePermissionsJoinTorqueTurbineRole(Criteria criteria, Connection con)
-        throws TorqueException;
+    protected List<TorqueTurbineRolePermission> getTorqueTurbineRolePermissionsJoinTorqueTurbineRole(Criteria criteria, Connection con)
+        throws TorqueException
+    {
+        criteria.and(TorqueTurbineRolePermissionPeer.PERMISSION_ID, getEntityId() );
+        return TorqueTurbineRolePermissionPeer.doSelectJoinTorqueTurbineRole(criteria, con);
+    }
 
     /**
      * @see org.apache.fulcrum.security.model.turbine.entity.TurbinePermission#addRole(org.apache.fulcrum.security.entity.Role)

@@ -58,8 +58,12 @@ public abstract class TorqueAbstractBasicUser extends TorqueAbstractSecurityEnti
      *
      * @return a list of User/Group relations
      */
-    protected abstract List<TorqueBasicUserGroup> getTorqueBasicUserGroupsJoinTorqueBasicGroup(Criteria criteria, Connection con)
-        throws TorqueException;
+    protected List<TorqueBasicUserGroup> getTorqueBasicUserGroupsJoinTorqueBasicGroup(Criteria criteria, Connection con)
+        throws TorqueException
+    {
+        criteria.and(TorqueBasicUserGroupPeer.USER_ID, getEntityId() );
+        return TorqueBasicUserGroupPeer.doSelectJoinTorqueBasicGroup(criteria, con);
+    }
 
     /**
      * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#addGroup(org.apache.fulcrum.security.entity.Group)

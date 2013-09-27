@@ -54,8 +54,12 @@ public abstract class TorqueAbstractTurbineUser extends TorqueAbstractTurbineTur
      *
      * @return a list of User/Group/Role relations
      */
-    protected abstract List<TorqueTurbineUserGroupRole> getTorqueTurbineUserGroupRolesJoinTorqueTurbineRole(Criteria criteria, Connection con)
-        throws TorqueException;
+    protected List<TorqueTurbineUserGroupRole> getTorqueTurbineUserGroupRolesJoinTorqueTurbineRole(Criteria criteria, Connection con)
+        throws TorqueException
+    {
+        criteria.and(TorqueTurbineUserGroupRolePeer.USER_ID, getEntityId() );
+        return TorqueTurbineUserGroupRolePeer.doSelectJoinTorqueTurbineRole(criteria, con);
+    }
 
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity#getDatabaseName()

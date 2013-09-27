@@ -57,8 +57,12 @@ public abstract class TorqueAbstractDynamicPermission extends TorqueAbstractSecu
      *
      * @return a list of Role/Permission relations
      */
-    protected abstract List<TorqueDynamicRolePermission> getTorqueDynamicRolePermissionsJoinTorqueDynamicRole(Criteria criteria, Connection con)
-        throws TorqueException;
+    protected List<TorqueDynamicRolePermission> getTorqueDynamicRolePermissionsJoinTorqueDynamicRole(Criteria criteria, Connection con)
+        throws TorqueException
+    {
+        criteria.and(TorqueDynamicRolePermissionPeer.PERMISSION_ID, getEntityId() );
+        return TorqueDynamicRolePermissionPeer.doSelectJoinTorqueDynamicRole(criteria, con);
+    }
 
     /**
      * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission#addRole(org.apache.fulcrum.security.entity.Role)

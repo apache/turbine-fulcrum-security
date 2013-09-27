@@ -65,8 +65,12 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
      *
      * @return a list of User/Group relations
      */
-    protected abstract List<TorqueDynamicUserGroup> getTorqueDynamicUserGroupsJoinTorqueDynamicUser(Criteria criteria, Connection con)
-        throws TorqueException;
+    protected List<TorqueDynamicUserGroup> getTorqueDynamicUserGroupsJoinTorqueDynamicUser(Criteria criteria, Connection con)
+        throws TorqueException
+    {
+        criteria.and(TorqueDynamicUserGroupPeer.GROUP_ID, getEntityId() );
+        return TorqueDynamicUserGroupPeer.doSelectJoinTorqueDynamicUser(criteria, con);
+    }
 
     /**
      * Forward reference to generated code
@@ -80,8 +84,12 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
      *
      * @return a list of Role/Group relations
      */
-    protected abstract List<TorqueDynamicGroupRole> getTorqueDynamicGroupRolesJoinTorqueDynamicRole(Criteria criteria, Connection con)
-        throws TorqueException;
+    protected List<TorqueDynamicGroupRole> getTorqueDynamicGroupRolesJoinTorqueDynamicRole(Criteria criteria, Connection con)
+        throws TorqueException
+    {
+        criteria.and(TorqueDynamicGroupRolePeer.GROUP_ID, getEntityId() );
+        return TorqueDynamicGroupRolePeer.doSelectJoinTorqueDynamicRole(criteria, con);
+    }
 
     /**
      * @see org.apache.fulcrum.security.model.basic.entity.BasicGroup#addUser(org.apache.fulcrum.security.entity.User)

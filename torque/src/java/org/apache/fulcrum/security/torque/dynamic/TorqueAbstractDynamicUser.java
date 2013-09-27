@@ -68,8 +68,12 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
      *
      * @return a list of User/Group relations
      */
-    protected abstract List<TorqueDynamicUserGroup> getTorqueDynamicUserGroupsJoinTorqueDynamicGroup(Criteria criteria, Connection con)
-        throws TorqueException;
+    protected List<TorqueDynamicUserGroup> getTorqueDynamicUserGroupsJoinTorqueDynamicGroup(Criteria criteria, Connection con)
+        throws TorqueException
+    {
+        criteria.and(TorqueDynamicUserGroupPeer.USER_ID, getEntityId() );
+        return TorqueDynamicUserGroupPeer.doSelectJoinTorqueDynamicGroup(criteria, con);
+    }
 
     /**
      * Forward reference to generated code
@@ -83,8 +87,12 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
      *
      * @return a list of User/Delegator relations
      */
-    protected abstract List<TorqueDynamicUserDelegates> getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(Criteria criteria, Connection con)
-        throws TorqueException;
+    protected List<TorqueDynamicUserDelegates> getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(Criteria criteria, Connection con)
+        throws TorqueException
+    {
+        criteria.and(TorqueDynamicUserDelegatesPeer.DELEGATEE_USER_ID, getEntityId() );
+        return TorqueDynamicUserDelegatesPeer.doSelectJoinTorqueDynamicUserRelatedByDelegatorUserId(criteria, con);
+    }
 
     /**
      * Forward reference to generated code
@@ -98,8 +106,12 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
      *
      * @return a list of User/Delegator relations
      */
-    protected abstract List<TorqueDynamicUserDelegates> getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(Criteria criteria, Connection con)
-        throws TorqueException;
+    protected List<TorqueDynamicUserDelegates> getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(Criteria criteria, Connection con)
+        throws TorqueException
+    {
+        criteria.and(TorqueDynamicUserDelegatesPeer.DELEGATOR_USER_ID, getEntityId() );
+        return TorqueDynamicUserDelegatesPeer.doSelectJoinTorqueDynamicUserRelatedByDelegateeUserId(criteria, con);
+    }
 
     /**
      * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#addGroup(org.apache.fulcrum.security.entity.Group)
