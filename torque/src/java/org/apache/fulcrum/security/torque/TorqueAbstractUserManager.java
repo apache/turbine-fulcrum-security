@@ -104,7 +104,6 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
        * Creates new user account with specified attributes.
        *
        * @param user the object describing account to be created.
-       * @param password The password to use for the account.
        *
        * @throws DataBackendException if there was an error accessing the
        *         data backend.
@@ -127,7 +126,7 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
     /**
        * Stores User attributes. The User is required to exist in the system.
        *
-       * @param role The User to be stored.
+       * @param user The User to be stored.
        * @throws DataBackendException if there was an error accessing the data
        *         backend.
        * @throws UnknownEntityException if the role does not exist.
