@@ -44,7 +44,7 @@
         Changed BasicUser, BasicGroup, DynamicUser, DynamicGroup, DynamicRole,
         DynamicPermission, TurbineUser, TurbineGroup, TurbineRole and TurbinePermission to
         interfaces. Added default implementations for existing security services.
-        Changed all occurences of these classes to use BasicUserImpl, BasicGroupImpl,
+        Changed all occurrences of these classes to use BasicUserImpl, BasicGroupImpl,
         DynamicUserImpl, DynamicGroupImpl, DynamicRoleImpl, DynamicPermissionImpl,
         TurbineUserImpl, TurbineGroupImpl, TurbineRoleImpl and TurbinePermissionImpl instead.
       </action>
@@ -104,17 +104,17 @@
       <action dev="mmanner" type="add">
         Change Dynamic* entity objects to use Set.  Refactored Hibernate implementation of Security to
         use more efficient deletion when doing oneshot deletes during revokeAll methods.  Added get[Entity]ById()
-        method as well.  Change grants/revokes to be Synchronizied.
+        method as well.  Change grants/revokes to be Synchronized.
       </action>
     </release>
     <release version="1.0-alpha-6" date="in cvs">
       <action dev="epugh" type="add">
-    Added getAllUsers() to UserManager
+      Added getAllUsers() to UserManager
       </action>
     </release>
     <release version="1.0-alpha-4" date="in cvs">
       <action dev="epugh" type="add">
-    Added ThreadSafe marker interface to AbstractManager.
+      Added ThreadSafe marker interface to AbstractManager.
       </action>
       <action dev="epugh" type="add">
       Added the "Basic" model and supplied implementations for memory, NT, and Hibernate.
@@ -126,9 +126,9 @@
       AccessControlLists are now pluggable via the ACLFactory implementation you supply.
       </action>
     <action dev="epugh" type="update">
-    Vastly refactored the builds into multiple projects.  The api related onces are <code>/api</code> and <code>/spi</code>.
-    The implementation details are in <code>/memory</code>,<code>/hibernate</code>, and<code>/nt</code>.  And lastly, there
-    are two adapters: <code>/adapters/turbine</code> and <code>/adapters/opensymphony</code>.
+    Vastly refactored the builds into multiple projects.  The api related onces are /api and /spi.
+    The implementation details are in /memory,/hibernate, and/nt.  And lastly, there
+    are two adapters: /adapters/turbine and /adapters/opensymphony.
       </action>
     <action dev="epugh" type="remove">
     Tossed the various Torque code.  It isn't unit tested, and was causing lots of work that couldn't be tested..  At some

@@ -20,6 +20,7 @@
         <artifactId>fulcrum-security-parent</artifactId>
         <groupId>org.apache.fulcrum</groupId>
         <version>1.1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.fulcrum</groupId>
@@ -27,20 +28,12 @@
     <name>Fulcrum Security LDAP Impl</name>
     <version>1.1.0-SNAPSHOT</version>
     
-    <url>http://turbine.apache.org/fulcrum/fulcrum-security-ldap</url>
+    <url>http://turbine.apache.org/fulcrum/security/fulcrum-security-ldap</url>
     <scm>
         <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/ldap/</connection>
         <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/ldap/</developerConnection>
         <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/security/ldap/</url>
     </scm>
-
-    <distributionManagement>
-        <site>
-            <id>apache.website</id>
-            <name>Fulcrum Website</name>
-            <url>${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/fulcrum/fulcrum-security-ldap/</url>
-        </site>
-    </distributionManagement>
 
     <build>
         <sourceDirectory>${basedir}/src/java/</sourceDirectory>
@@ -115,36 +108,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
-    <profiles>
-        <profile>
-            <id>rc</id>
-            <distributionManagement>
-                <!-- Cannot define in parent ATM, see COMMONSSITE-26 -->
-                <site>
-                    <id>apache.website</id>
-                    <name>Apache Fulcrum Release Candidate Staging Site</name>
-                    <url>${fulcrum.deployment.protocol}://people.apache.org/www/turbine.apache.org/builds/fulcrum/${fulcrum.componentid}/${fulcrum.release.version}/${fulcrum.rc.version}/site</url>
-                </site>
-            </distributionManagement>
-        </profile>
-    </profiles>
-
-    <properties>
-        <!-- This bits are used for the staging directory -->
-        <fulcrum.release.version>1.1.0</fulcrum.release.version>
-        <fulcrum.rc.version>RC1</fulcrum.rc.version>
-        <fulcrum.deployment.protocol>scpexe</fulcrum.deployment.protocol>
-    </properties>
-    
-    <reporting>
-        <plugins>
-            <plugin>
-                <artifactId>maven-changes-plugin</artifactId>
-                <configuration>
-                    <xmlPath>${basedir}/xdocs/changes.xml</xmlPath>
-                </configuration>
-            </plugin>
-        </plugins>
-    </reporting>
 </project>

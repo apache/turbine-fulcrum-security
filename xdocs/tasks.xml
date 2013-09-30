@@ -32,35 +32,22 @@
        <p>
 
           <ul>
-           <li>
-              Need to use the encryption component!
-            </li>
-           <li>
-              Finish fleshing out the Adapters for Turbine.  Right now they are a pretty minimal implementation
-              to validate that the Adapter concept would work.  Currently they only support moving objects from
-              fulcrum to turbine.  Sending objects from Turbine back to Fulcrum is not supported.  Just needs some
-              grunt work.
-            </li>
             <li>
               Try and figure out how to get both NTLM authentication, as well as retrieving the password, or the groups
               directly to use with "Basic" security model.
-            </li>
-            <li>
-              Upgrade to using Merlin for unit tests instead of ECM..  Also have demos showing using the security module
-              in Merlin.
             </li>
           </ul>
         </p>
 
     </section>
 
-    <section name="Things to Resolve">
+    <!--  section name="Things to Resolve">
 
 
 
 
 
-    </section>
+    </section -->
 
   </body>
 </document>

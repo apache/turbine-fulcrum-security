@@ -17,29 +17,23 @@
  specific language governing permissions and limitations
  under the License.
 -->
-<project
-  name="Fulcrum Security"
-  href="http://turbine.apache.org/fulcrum/fulcrum-security-site/">
+<project xmlns="http://maven.apache.org/DECORATION/1.4.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.4.0 http://maven.apache.org/xsd/decoration-1.4.0.xsd"
+  name="Fulcrum Security">
 
 <body>
-
     <menu name="Overview" inherit="top">
-      <item name="Main"                 href="http://turbine.apache.org/fulcrum/fulcrum-security-site/"/>
-      <item name="Authenticators"       href="http://turbine.apache.org/fulcrum/fulcrum-security-site/authenticators.html"/>
-      <item name="Tasks"                href="http://turbine.apache.org/fulcrum/fulcrum-security-site/tasks.html"/>
+      <item name="Main"                 href="index.html" collapse="false"/>
     </menu>
 
-    <menu name="Security Components" inherit="top">
-        <item name="Site"                  href="http://turbine.apache.org/fulcrum/fulcrum-security-site/"/>
-        <item name="Security API"          href="http://turbine.apache.org/fulcrum/fulcrum-security-api/"/>
-        <item name="Memory Impl"           href="http://turbine.apache.org/fulcrum/fulcrum-security-memory/"/>
-        <item name="Hibernate Impl"        href="http://turbine.apache.org/fulcrum/fulcrum-security-hibernate/"/>
-        <item name="Torque Impl"           href="http://turbine.apache.org/fulcrum/fulcrum-security-torque/"/>
-        <item name="NT Impl"               href="http://turbine.apache.org/fulcrum/fulcrum-security-nt/"/>
-        <item name="Adapter Turbine"       href="http://turbine.apache.org/fulcrum/fulcrum-security-adapter-turbine/"/>
-        <item name="Adapter OpenSymphony"  href="http://turbine.apache.org/fulcrum/fulcrum-security-adapter-opensymphony/"/>
-    </menu>
+    <menu ref="modules" />
 
+    <menu name="Documentation">
+      <item name="Authenticators"       href="authenticators.html"/>
+      <item name="Example"              href="example.html"/>
+      <item name="Tasks"                href="tasks.html"/>
+    </menu>
 </body>
 
 </project>

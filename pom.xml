@@ -23,7 +23,7 @@
    <parent>
        <artifactId>turbine-parent</artifactId>
        <groupId>org.apache.turbine</groupId>
-       <version>2</version>
+       <version>3</version>
    </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.fulcrum</groupId>
@@ -31,16 +31,36 @@
     <version>1.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Fulcrum Security Master Build</name>
-    <url>http://turbine.apache.org/fulcrum/fulcrum-security-site</url>
+    <url>http://turbine.apache.org/fulcrum/security/</url>
 
+    <!-- Required for staging to work -->
     <distributionManagement>
         <site>
-            <id>apache.website</id>
-            <name>Fulcrum Website</name>
-            <url>${turbine.deployment.protocol}://people.apache.org/www/turbine.apache.org/fulcrum/fulcrum-security-site/</url>
+            <id>turbine.apache.org</id>
+            <url>http://turbine.apache.org/fulcrum/security/</url>
         </site>
     </distributionManagement>
-    
+
+    <developers>
+        <developer>
+          <id>epugh</id>
+          <name>Eric Pugh</name>
+          <email>epugh@upstate.com</email>
+          <url />
+          <organization />
+          <timezone />
+        </developer>
+        <developer>
+          <name>Thomas Vandahl</name>
+          <id>tv</id>
+          <email>tv@apache.org</email>
+          <organization />
+          <roles>
+            <role>Java Developer</role>
+          </roles>
+          <timezone>1</timezone>
+        </developer>
+    </developers>
     <contributors>
         <contributor>
             <name>Ben Gidley</name>
@@ -74,16 +94,11 @@
         <!--  module>ldap</module -->
         <module>torque</module>
     </modules>
-    <reporting>
-        <plugins>
-            <plugin>
-                <artifactId>maven-changes-plugin</artifactId>
-                <configuration>
-                    <xmlPath>${basedir}/xdocs/changes.xml</xmlPath>
-                </configuration>
-            </plugin>
-        </plugins>
-    </reporting>
+
+    <build>
+        <sourceDirectory>${basedir}/src/java</sourceDirectory>
+        <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
+    </build>
 
     <profiles>
         <profile>
@@ -119,7 +134,7 @@
     </profiles>
     
     <properties>
-        <maven.compile.source>1.5</maven.compile.source>
-        <maven.compile.target>1.5</maven.compile.target>
+        <turbine.site.path>fulcrum/security</turbine.site.path>
+        <turbine.scmPubCheckoutDirectory>${turbine.site.cache}/fulcrum/security</turbine.scmPubCheckoutDirectory>
     </properties>
 </project>

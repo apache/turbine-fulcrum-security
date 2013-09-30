@@ -24,6 +24,7 @@
         <artifactId>fulcrum-security-parent</artifactId>
         <groupId>org.apache.fulcrum</groupId>
         <version>1.1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.fulcrum</groupId>
@@ -34,20 +35,12 @@
       Fulcrum Security Hibernate Impl is an implementation of the Fulcrum Security API
       that uses Hibernate as a database backend.
     </description>
-    <url>http://turbine.apache.org/fulcrum/fulcrum-security-hibernate/</url>
+    <url>http://turbine.apache.org/fulcrum/security/fulcrum-security-hibernate/</url>
     <scm>
       <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/hibernate/</connection>
       <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/hibernate/</developerConnection>
       <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/security/hibernate/</url>
     </scm>
-
-    <distributionManagement>
-      <site>
-        <id>apache.website</id>
-        <name>Fulcrum Website</name>
-        <url>${turbine.deployment.protocol}://people.apache.org/www/turbine.apache.org/fulcrum/fulcrum-security-hibernate/</url>
-      </site>
-    </distributionManagement>
 
     <build>
         <sourceDirectory>${basedir}/src/java/</sourceDirectory>

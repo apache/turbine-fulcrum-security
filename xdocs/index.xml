@@ -22,7 +22,7 @@
 
   <properties>
     <title>Security Component</title>
-    <author email="epugh@upstate.com">Eric PUgh</author>
+    <author email="epugh@upstate.com">Eric Pugh</author>
   </properties>
 
   <body>
@@ -67,31 +67,45 @@
       In it, you have a set of permissions that are related in a many to many relation ship with a set or roles.
       Those roles are related
       in a many to many relationship with a set of groups.  A user is in a many to many relationship
-      with a set of groups.  <i>note: I will try and get a diagram. any suggestions on diagram tools?</i>
+      with a set of groups.
       </p>
       <p>
-      The <code>memory</code>, <code>hibernate</code> and <code>torque</code> packages currently implements this security model.
+      The <code>memory</code>, <code>hibernate</code> and <code>torque</code> packages currently implement this security model.
       </p>
     </subsection>
 
     <subsection name="Turbine">
       <p>
-    This model is based on what the Turbine application server uses, and leverages the Dynamic model.  It merely adds
-    the concept of a "global group" which is a toplevel group to the Dynamic model.
-    However, what makes this different is that instead of roles
-    being related just to groups, there instead is a many to many relationship between users and
-    groups and roles.  So you pick a user, pick their role, and their group, and that is their permissions.
-    </p>
+      This model is based on what the Turbine application server uses, and leverages the Dynamic model.  It merely adds
+      the concept of a "global group" which is a toplevel group to the Dynamic model.
+      However, what makes this different is that instead of roles
+      being related just to groups, there instead is a many to many relationship between users and
+      groups and roles.  So you pick a user, pick their role, and their group, and that is their permissions.
+      </p>
+      <p>
+      The <code>memory</code>, <code>hibernate</code> and <code>torque</code> packages currently implement this security model.
+      </p>
     </subsection>
+
     <subsection name="Basic">
       <p>
-    This model is very simple and was originally inspired by OSUser's security model.  In it, you have users, and groups, and security
-    is based on a user belonging to a group.  Users can belong to multiple groups.  So groups become
-    the equivalent of roles/permissions.
+      This model is very simple and was originally inspired by OSUser's security model.  In it, you have users, and groups, and security
+      is based on a user belonging to a group.  Users can belong to multiple groups.  So groups become
+      the equivalent of roles/permissions.
       </p>
       <p>
-      The <code>memory</code>, <code>nt</code> <code>torque</code> and <code>hibernate</code>  packages currently implements this security model.
+      The <code>memory</code>, <code>nt</code> <code>torque</code> and <code>hibernate</code>  packages currently implement this security model.
       </p>
+    </subsection>
+    
+    <subsection name="Diagrams">
+      <table>
+        <tr style="background-color: white;">
+          <td><img src="images/dynamic.png" /></td>
+          <td><img src="images/turbine.png" /></td>
+          <td><img src="images/basic.png" /></td>
+        </tr>
+      </table>
     </subsection>
   </section>
 
