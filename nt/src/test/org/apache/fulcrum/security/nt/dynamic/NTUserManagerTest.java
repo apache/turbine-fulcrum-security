@@ -19,8 +19,6 @@ package org.apache.fulcrum.security.nt.dynamic;
  * under the License.
  */
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
@@ -31,16 +29,15 @@ import org.apache.fulcrum.security.util.DataBackendException;
 import com.tagish.auth.win32.NTSystem;
 
 /**
- * 
+ *
  * Test the NT implementation of the user manager. This test traps some
  * exceptions that can be thrown if there is NO nt dll.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public class NTUserManagerTest extends AbstractUserManagerTest implements TestConstants
 {
-    private static Log log = LogFactory.getLog(NTUserManagerTest.class);
     private static final String ERROR_MSG = "Not supported by NT User Manager";
     private static final String USERNAME = "Eric Pugh";
     private static final String DOMAIN = "IQUITOS";
@@ -66,7 +63,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
 
     /**
      * Constructor for NTUserManagerTest.
-     * 
+     *
      * @param arg0
      */
     public NTUserManagerTest(String arg0)
@@ -89,7 +86,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         }
         catch (UnsatisfiedLinkError ule)
         {
-            log.info("Unit test not being run due to missing NT DLL");
+            System.out.println("Unit test not being run due to missing NT DLL");
         }
     }
 
@@ -104,7 +101,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         }
         catch (NoClassDefFoundError ule)
         {
-            log.info("Unit test not being run due to missing NT DLL");
+            System.out.println("Unit test not being run due to missing NT DLL");
         }
     }
 
@@ -120,7 +117,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         }
         catch (NoClassDefFoundError ule)
         {
-            log.info("Unit test not being run due to missing NT DLL");
+            System.out.println("Unit test not being run due to missing NT DLL");
         }
     }
 
@@ -136,7 +133,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         }
         catch (NoClassDefFoundError ule)
         {
-            log.info("Unit test not being run due to missing NT DLL");
+            System.out.println("Unit test not being run due to missing NT DLL");
         }
     }
 
@@ -162,7 +159,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         }
         catch (NoClassDefFoundError ule)
         {
-            log.info("Unit test not being run due to missing NT DLL");
+            System.out.println("Unit test not being run due to missing NT DLL");
         }
     }
 
@@ -180,7 +177,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         }
         catch (NoClassDefFoundError ule)
         {
-            log.info("Unit test not being run due to missing NT DLL");
+            System.out.println("Unit test not being run due to missing NT DLL");
         }
     }
 
@@ -194,7 +191,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         }
         catch (NoClassDefFoundError ule)
         {
-            log.info("Unit test not being run due to missing NT DLL");
+            System.out.println("Unit test not being run due to missing NT DLL");
         }
     }
 
@@ -210,7 +207,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         }
         catch (NoClassDefFoundError ule)
         {
-            log.info("Unit test not being run due to missing NT DLL");
+            System.out.println("Unit test not being run due to missing NT DLL");
         }
     }
 
@@ -276,7 +273,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         }
         catch (NoClassDefFoundError ule)
         {
-            log.info("Unit test not being run due to missing NT DLL");
+            System.out.println("Unit test not being run due to missing NT DLL");
         }
         catch (RuntimeException re)
         {
@@ -297,7 +294,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         }
         catch (NoClassDefFoundError ule)
         {
-            log.info("Unit test not being run due to missing NT DLL");
+            System.out.println("Unit test not being run due to missing NT DLL");
         }
         catch (RuntimeException re)
         {

@@ -19,8 +19,6 @@ package org.apache.fulcrum.security.nt.dynamic;
  * under the License.
  */
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
@@ -31,16 +29,15 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
- * 
+ *
  * Test the NT implementation of the user manager. This test traps some
  * exceptions that can be thrown if there is NO nt dll.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public class NTBasicACLTest extends BaseUnitTest implements TestConstants
 {
-    private static Log log = LogFactory.getLog(NTBasicACLTest.class);
     private static final String DOMAIN = "IQUITOS";
     private static final String GUESTUSER = DOMAIN + "/" + "Guest";
     private SecurityService securityService;
@@ -66,7 +63,7 @@ public class NTBasicACLTest extends BaseUnitTest implements TestConstants
 
     /**
      * Constructor for NTBasicACLTest.
-     * 
+     *
      * @param arg0
      */
     public NTBasicACLTest(String arg0)
@@ -97,7 +94,7 @@ public class NTBasicACLTest extends BaseUnitTest implements TestConstants
         }
         catch (UnsatisfiedLinkError ule)
         {
-            log.info("Unit test not being run due to missing NT DLL");
+            System.out.println("Unit test not being run due to missing NT DLL");
         }
     }
 }

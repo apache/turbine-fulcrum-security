@@ -19,8 +19,6 @@ package org.apache.fulcrum.security.nt.dynamic;
  * under the License.
  */
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.entity.Group;
@@ -31,17 +29,16 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.testcontainer.BaseUnitTest;
 
 /**
- * 
+ *
  * Test the NT implementation of the user manager. This test traps some
  * exceptions that can be thrown if there is NO nt dll.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id: NTDynamicModelManagerTest.java 1374015 2012-08-16 19:48:54Z tv
  *          $
  */
 public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConstants
 {
-    private static Log log = LogFactory.getLog(NTDynamicModelManagerTest.class);
     private DynamicModelManager modelManager;
     private SecurityService securityService;
     private UserManager userManager;
@@ -67,7 +64,7 @@ public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConst
 
     /**
      * Constructor for NTDynamicModelManagerTest.
-     * 
+     *
      * @param arg0
      */
     public NTDynamicModelManagerTest(String arg0)
@@ -94,7 +91,7 @@ public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConst
         }
         catch (UnsatisfiedLinkError ule)
         {
-            log.info("Unit test not being run due to missing NT DLL");
+            System.out.println("Unit test not being run due to missing NT DLL");
         }
     }
 
@@ -116,11 +113,11 @@ public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConst
         }
         catch (UnsatisfiedLinkError ule)
         {
-            log.info("Unit test not being run due to missing NT DLL");
+            System.out.println("Unit test not being run due to missing NT DLL");
         }
         catch (java.lang.NoClassDefFoundError ncdfe)
         {
-            log.info("Unit test not being run due to missing NT DLL");
+            System.out.println("Unit test not being run due to missing NT DLL");
         }
     }
 
@@ -142,11 +139,11 @@ public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConst
         }
         catch (UnsatisfiedLinkError ule)
         {
-            log.info("Unit test not being run due to missing NT DLL");
+            System.out.println("Unit test not being run due to missing NT DLL");
         }
         catch (java.lang.NoClassDefFoundError ncdfe)
         {
-            log.info("Unit test not being run due to missing NT DLL");
+            System.out.println("Unit test not being run due to missing NT DLL");
         }
     }
 }
