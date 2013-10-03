@@ -35,7 +35,7 @@
       Fulcrum Security Hibernate Impl is an implementation of the Fulcrum Security API
       that uses Hibernate as a database backend.
     </description>
-    <url>http://turbine.apache.org/fulcrum/security/fulcrum-security-hibernate/</url>
+    <url>http://turbine.apache.org/fulcrum/fulcrum-security/fulcrum-security-hibernate/</url>
     <scm>
       <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/hibernate/</connection>
       <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/hibernate/</developerConnection>

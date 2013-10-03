@@ -31,13 +31,13 @@
     <version>1.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Fulcrum Security Master Build</name>
-    <url>http://turbine.apache.org/fulcrum/security/</url>
+    <url>http://turbine.apache.org/fulcrum/fulcrum-security/</url>
 
     <!-- Required for staging to work -->
     <distributionManagement>
         <site>
             <id>turbine.apache.org</id>
-            <url>http://turbine.apache.org/fulcrum/security/</url>
+            <url>http://turbine.apache.org/fulcrum/fulcrum-security/</url>
         </site>
     </distributionManagement>
 

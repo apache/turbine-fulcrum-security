@@ -28,7 +28,7 @@
     <name>Fulcrum Security LDAP Impl</name>
     <version>1.1.0-SNAPSHOT</version>
     
-    <url>http://turbine.apache.org/fulcrum/security/fulcrum-security-ldap</url>
+    <url>http://turbine.apache.org/fulcrum/fulcrum-security/fulcrum-security-ldap</url>
     <scm>
         <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/ldap/</connection>
         <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/ldap/</developerConnection>

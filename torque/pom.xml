@@ -32,7 +32,7 @@
     Fulcrum Security Torque Impl is an implementation of the Fulcrum Security API
     that uses Apache DB Torque as a database backend.
   </description>
-  <url>http://turbine.apache.org/fulcrum/security/fulcrum-security-torque</url>
+  <url>http://turbine.apache.org/fulcrum/fulcrum-security/fulcrum-security-torque</url>
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/torque/</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/torque/</developerConnection>
