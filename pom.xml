@@ -98,6 +98,16 @@
     <build>
         <sourceDirectory>${basedir}/src/java</sourceDirectory>
         <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
+        <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-scm-publish-plugin</artifactId>
+              <configuration>
+                <content>${siteContent.path}</content>
+                <tryUpdate>false</tryUpdate>
+              </configuration>
+            </plugin>
+        </plugins>
     </build>
 
     <profiles>
@@ -134,7 +144,9 @@
     </profiles>
     
     <properties>
-        <turbine.site.path>fulcrum/security</turbine.site.path>
+        <turbine.site.path>fulcrum/fulcrum-security</turbine.site.path>
         <turbine.scmPubCheckoutDirectory>${turbine.site.cache}/fulcrum/security</turbine.scmPubCheckoutDirectory>
+        <turbine.site.cache>C:/dc/apache.org/turbine-sites</turbine.site.cache>
+        <siteContent.path>${project.build.directory}/staging</siteContent.path><!-- default stagingSiteURL -->
     </properties>
 </project>

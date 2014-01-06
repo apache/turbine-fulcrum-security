@@ -1,0 +1,39 @@
+$Id$
+
+The Fulcrum Website Instructions
+--------------------------------
+
+The Fulcrum web site is based on .xml files which are transformed
+into .html files using Maven.
+
+<http://maven.apache.org/>
+
+Using scm-publish Plugin, cft. http://commons.apache.org/site-publish.html for publishing and turbine-parent plugin check the following list items:
+
+* Verify turbine.site.path is matching pubScmUrl property of goal scm-publish:publish-scm (e.g. by investigating the result of mvn help:effective-pom)
+
+* Verify turbine.scmPubCheckoutDirectory is matching property checkoutDirectory of goal scm-publish:publish-scm.
+
+* Once you have the site checked out locally, cd into your fulcrum-site directory and execute, if single project
+
+  mvn site 
+
+  or if it is multi-module project (with submodules)
+
+  mvn site:stage
+
+This will build the documentation into the target/site/, resp. target/staging/ directory. The output will show you which files got re-generated.
+
+* If you would like to make modifications to the web site documents, you simply need to edit the files in the xdocs/ directory.
+
+* Once you have built your documentation and confirmed that your changes are ok, you can check your .xml files back into Subversion.
+
+* To test what files would be added, deleted or updated run:
+
+  mvn site:stage scm-publish:publish-scm -Dscmpublish.dryRun=true
+
+This prints any changes to STDOUT. 
+
+* To deploy run (add -Dusername=<username> -Dpassword=<pw>) remove scmpublish.dryRun or set to false. Check if tryUpdate is set to false to get a clean working copy again). Alternatively, if you have set scmpublish.skipCheckin=true in the previous step, you have to do a manual commit. 
+
+
