@@ -1,6 +1,6 @@
 $Id$
 
-The Fulcrum Website Instructions
+The Fulcrum Website Instructions for Multi Modules
 --------------------------------
 
 The Fulcrum web site is based on .xml files which are transformed
@@ -14,13 +14,9 @@ Using scm-publish Plugin, cft. http://commons.apache.org/site-publish.html for p
 
 * Verify turbine.scmPubCheckoutDirectory is matching property checkoutDirectory of goal scm-publish:publish-scm.
 
-* Once you have the site checked out locally, cd into your fulcrum-site directory and execute, if single project
+* Once you have the site checked out locally, as it is multi-module project (with submodules) execute
 
-  mvn site 
-
-  or if it is multi-module project (with submodules)
-
-  mvn site:stage
+  mvn site site:stage
 
 This will build the documentation into the target/site/, resp. target/staging/ directory. The output will show you which files got re-generated.
 
@@ -30,10 +26,10 @@ This will build the documentation into the target/site/, resp. target/staging/ d
 
 * To test what files would be added, deleted or updated run:
 
-  mvn site:stage scm-publish:publish-scm -Dscmpublish.dryRun=true
+  mvn site site:stage scm-publish:publish-scm -Dscmpublish.dryRun=true
 
-This prints any changes to STDOUT. 
+This will generate the site into turbine.site.cache folder (target/turbine-sites by default) and print any changes to STDOUT. 
 
-* To deploy run (add -Dusername=<username> -Dpassword=<pw>) remove scmpublish.dryRun or set to false. Check if tryUpdate is set to false to get a clean working copy again). Alternatively, if you have set scmpublish.skipCheckin=true in the previous step, you have to do a manual commit. 
+* To deploy run the same command adding -Dusername=<username> -Dpassword=<pw> and remove the argument scmpublish.dryRun or set it to false. Check if tryUpdate is set to false to get a clean working copy again). Alternatively, if you have set scmpublish.skipCheckin=true in the previous step, you have to do a manual commit. 
 
 
