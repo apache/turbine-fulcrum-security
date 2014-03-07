@@ -21,21 +21,31 @@ import java.sql.Connection;
 import java.util.List;
 
 import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.turbine.TurbineUserManager;
 import org.apache.fulcrum.security.torque.TorqueAbstractUserManager;
-import org.apache.fulcrum.security.torque.om.TorqueTurbineUser;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineUserPeer;
+import org.apache.fulcrum.security.torque.peer.Peer;
+import org.apache.fulcrum.security.torque.peer.PeerManagable;
+import org.apache.fulcrum.security.torque.peer.PeerManager;
+import org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
 /**
  * This implementation persists to a database via Torque.
+ * 
  *
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
- * @version $Id:$
+ * @version $Id$
  */
-public class TorqueTurbineUserManagerImpl extends TorqueAbstractUserManager
+public class TorqueTurbineUserManagerImpl extends TorqueAbstractUserManager implements TurbineUserManager, PeerManagable
 {
+    PeerManager peerManager;
+    private static final String ANON = "anon";
+
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractUserManager#doSelectAllUsers(java.sql.Connection)
      */
@@ -43,8 +53,19 @@ public class TorqueTurbineUserManagerImpl extends TorqueAbstractUserManager
 	protected <T extends User> List<T> doSelectAllUsers(Connection con) throws TorqueException
     {
         Criteria criteria = new Criteria(TorqueTurbineUserPeer.DATABASE_NAME);
-
-        return (List<T>)TorqueTurbineUserPeer.doSelect(criteria, con);
+        
+        if ( (getCustomPeer())) {
+            try
+            {
+                return ((TorqueTurbinePeer<T>) getPeerInstance()).doSelect( criteria, con );
+            }
+            catch ( DataBackendException e )
+            {
+                throw new TorqueException( e );
+            }
+        } else {
+            return (List<T>) TorqueTurbineUserPeer.doSelect(criteria, con);
+        }
     }
 
     /**
@@ -53,7 +74,18 @@ public class TorqueTurbineUserManagerImpl extends TorqueAbstractUserManager
     @SuppressWarnings("unchecked")
 	protected <T extends User> T doSelectById(Integer id, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
     {
-        return (T) TorqueTurbineUserPeer.retrieveByPK(id, con);
+        if ( (getCustomPeer())) {
+            try
+            {
+                return ((TorqueTurbinePeer<T>) getPeerInstance()).retrieveByPK( id, con );
+            }
+            catch ( DataBackendException e )
+            {
+                throw new TorqueException( e );
+            }
+        } else {
+            return  (T)  TorqueTurbineUserPeer.retrieveByPK(id, con);
+        }
     }
 
     /**
@@ -66,14 +98,84 @@ public class TorqueTurbineUserManagerImpl extends TorqueAbstractUserManager
         criteria.where(TorqueTurbineUserPeer.LOGIN_NAME, name);
         criteria.setIgnoreCase(true);
         criteria.setSingleRecord(true);
+        
+        List<T> users = null;
+        if ( (getCustomPeer())) {
+            try
+            {
+                users = ((TorqueTurbinePeer<T>)getPeerInstance()).doSelect( criteria, con );
+            }
+            catch ( DataBackendException e )
+            {
+                throw new TorqueException( e );
+            }
+        } else {
+            users = (List<T>) TorqueTurbineUserPeer.doSelect(criteria, con);
+        }
 
-        List<TorqueTurbineUser> users = TorqueTurbineUserPeer.doSelect(criteria, con);
 
         if (users.isEmpty())
         {
             throw new NoRowsException(name);
         }
 
-        return (T) users.get(0);
+        return users.get(0);
+    }
+
+    /**
+     * Default implementation.
+     */
+    @Override
+    public <T extends User> T getAnonymousUser()
+        throws UnknownEntityException
+    {
+        try
+        {
+            T anonUser =  getUser( ANON );
+            // add more, if needed
+            return anonUser;
+        }
+        catch ( DataBackendException e )
+        {
+            throw new UnknownEntityException( "Failed to load anonymous user",e);
+        } 
+    }
+
+    /**
+     * Default implementation.
+     */
+    @Override
+    public boolean isAnonymousUser( User u )
+    {
+        try
+        {
+            User anon = getAnonymousUser();
+            if (u.equals( anon )) 
+                {
+                 return true;
+                }
+        }
+        catch ( Exception e )
+        {
+            getLogger().error( "Failed to check user:" + e.getMessage(),e);
+        }
+        return false;
+    }
+    
+    public Peer getPeerInstance() throws DataBackendException {
+        return getPeerManager().getPeerInstance(getPeerClassName(), TorqueTurbinePeer.class, getClassName());
+    }
+    
+    /**
+     * @return Returns the persistenceHelper.
+     */
+    @Override
+    public PeerManager getPeerManager()
+    {
+        if (peerManager == null)
+        {
+            peerManager = (PeerManager) resolve(PeerManager.ROLE);
+        }
+        return peerManager;
     }
 }

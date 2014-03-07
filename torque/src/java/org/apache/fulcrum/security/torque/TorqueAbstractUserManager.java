@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.spi.AbstractUserManager;
+import org.apache.fulcrum.security.torque.peer.Peer;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
@@ -351,4 +352,5 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
 
         return user;
     }
+    
 }

@@ -57,5 +57,11 @@
         name="org.apache.fulcrum.security.model.ACLFactory"
         shorthand="aclFactory"
         default-class="org.apache.fulcrum.security.model.turbine.TurbineACLFactory"/>
+    <!--  if you watn provide your own custom peer classes: -->
+   <role
+        name="org.apache.fulcrum.security.torque.peer.PeerManager"
+        shorthand="persistenceHelper"
+        default-class="org.apache.fulcrum.security.torque.peer.PeerManagerDefaultImpl"/>
+
 </role-list>
 

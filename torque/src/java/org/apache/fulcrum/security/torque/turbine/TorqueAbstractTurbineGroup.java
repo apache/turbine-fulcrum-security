@@ -24,7 +24,6 @@ import java.util.Set;
 
 import org.apache.fulcrum.security.model.turbine.entity.TurbineGroup;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
-import org.apache.fulcrum.security.torque.om.TorqueDynamicUserGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRole;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRolePeer;

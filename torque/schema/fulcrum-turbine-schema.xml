@@ -33,7 +33,7 @@
     xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database 
         http://db.apache.org/torque/4.0/templates/database.xsd">
 
-  <table name="FULCRUM_TURBINE_PERMISSION" javaName="TorqueTurbinePermission" idMethod="idbroker"
+  <table name="FULCRUM_TURBINE_PERMISSION" javaName="TorqueTurbinePermission" idMethod="idbroker" peerInterface="org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer"
       baseClass="org.apache.fulcrum.security.torque.turbine.TorqueAbstractTurbinePermission">
     <column name="PERMISSION_ID" required="true" primaryKey="true" type="INTEGER" javaName="EntityId" javaType="object"/>
     <column name="PERMISSION_NAME" required="true" size="64" type="VARCHAR" javaName="EntityName"/>
@@ -44,7 +44,7 @@
 
   </table>
 
-  <table name="FULCRUM_TURBINE_ROLE" javaName="TorqueTurbineRole" idMethod="idbroker"
+  <table name="FULCRUM_TURBINE_ROLE" javaName="TorqueTurbineRole" idMethod="idbroker" peerInterface="org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer"
       baseClass="org.apache.fulcrum.security.torque.turbine.TorqueAbstractTurbineRole">
     <column name="ROLE_ID" required="true" primaryKey="true" type="INTEGER" javaName="EntityId" javaType="object"/>
     <column name="ROLE_NAME" required="true" size="64" type="VARCHAR" javaName="EntityName"/>
@@ -55,7 +55,7 @@
 
   </table>
 
-  <table name="FULCRUM_TURBINE_GROUP" javaName="TorqueTurbineGroup" idMethod="idbroker"
+  <table name="FULCRUM_TURBINE_GROUP" javaName="TorqueTurbineGroup" idMethod="idbroker" peerInterface="org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer"
       baseClass="org.apache.fulcrum.security.torque.turbine.TorqueAbstractTurbineGroup">
     <column name="GROUP_ID" required="true" primaryKey="true" type="INTEGER" javaName="EntityId" javaType="object"/>
     <column name="GROUP_NAME" required="true" type="VARCHAR" size="64" javaName="EntityName"/>
@@ -66,7 +66,7 @@
 
   </table>
 
-  <table name="FULCRUM_TURBINE_USER" javaName="TorqueTurbineUser" idMethod="idbroker"
+  <table name="FULCRUM_TURBINE_USER" javaName="TorqueTurbineUser" idMethod="idbroker" peerInterface="org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer"
       baseClass="org.apache.fulcrum.security.torque.turbine.TorqueAbstractTurbineUser">
     <column name="USER_ID" required="true" primaryKey="true" type="INTEGER" javaName="EntityId" javaType="object"/>
     <column name="LOGIN_NAME" required="true" size="64" type="VARCHAR" javaName="EntityName"/>

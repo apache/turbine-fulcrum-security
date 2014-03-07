@@ -22,8 +22,12 @@ import java.util.List;
 
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.torque.TorqueAbstractGroupManager;
-import org.apache.fulcrum.security.torque.om.TorqueTurbineGroup;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineGroupPeer;
+import org.apache.fulcrum.security.torque.peer.Peer;
+import org.apache.fulcrum.security.torque.peer.PeerManagable;
+import org.apache.fulcrum.security.torque.peer.PeerManager;
+import org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer;
+import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
@@ -34,8 +38,10 @@ import org.apache.torque.criteria.Criteria;
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id:$
  */
-public class TorqueTurbineGroupManagerImpl extends TorqueAbstractGroupManager
+public class TorqueTurbineGroupManagerImpl extends TorqueAbstractGroupManager implements PeerManagable
 {
+    
+    PeerManager peerManager;
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractGroupManager#doSelectAllGroups(java.sql.Connection)
      */
@@ -43,8 +49,21 @@ public class TorqueTurbineGroupManagerImpl extends TorqueAbstractGroupManager
 	protected <T extends Group> List<T> doSelectAllGroups(Connection con) throws TorqueException
     {
         Criteria criteria = new Criteria(TorqueTurbineGroupPeer.DATABASE_NAME);
+        
+        if ( (getCustomPeer())) {
+            try
+            {
+                return ((TorqueTurbinePeer<T>)getPeerInstance()).doSelect( criteria, con );
+            }
+            catch ( DataBackendException e )
+            {
+                throw new TorqueException( e );
+            }
+        } else {
+            return (List<T>) TorqueTurbineGroupPeer.doSelect(criteria, con);
+        }
 
-        return (List<T>)TorqueTurbineGroupPeer.doSelect(criteria, con);
+
     }
 
     /**
@@ -53,7 +72,19 @@ public class TorqueTurbineGroupManagerImpl extends TorqueAbstractGroupManager
     @SuppressWarnings("unchecked")
 	protected <T extends Group> T doSelectById(Integer id, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
     {
-        return (T) TorqueTurbineGroupPeer.retrieveByPK(id, con);
+        if ( (getCustomPeer())) {
+            try
+            {
+                return ((TorqueTurbinePeer<T>) getPeerInstance()).retrieveByPK( id, con );
+            }
+            catch ( DataBackendException e )
+            {
+                throw new TorqueException( e );
+            }
+        } else {
+            return  (T)  TorqueTurbineGroupPeer.retrieveByPK(id, con);
+        }
+
     }
 
     /**
@@ -66,14 +97,43 @@ public class TorqueTurbineGroupManagerImpl extends TorqueAbstractGroupManager
         criteria.where(TorqueTurbineGroupPeer.GROUP_NAME, name);
         criteria.setIgnoreCase(true);
         criteria.setSingleRecord(true);
-
-        List<TorqueTurbineGroup> groups = TorqueTurbineGroupPeer.doSelect(criteria, con);
+        List<T> groups = null;
+        
+        if ( (getCustomPeer())) {
+            try
+            {
+                
+                groups = ((TorqueTurbinePeer<T>) getPeerInstance()).doSelect( criteria, con );
+            }
+            catch ( DataBackendException e )
+            {
+                throw new TorqueException( e );
+            }
+        } else {
+            groups = (List<T>) TorqueTurbineGroupPeer.doSelect(criteria, con);
+        }
 
         if (groups.isEmpty())
         {
             throw new NoRowsException(name);
         }
 
-        return (T) groups.get(0);
+        return groups.get(0);
+    }
+    
+    public Peer getPeerInstance() throws DataBackendException {
+        return getPeerManager().getPeerInstance(getPeerClassName(), TorqueTurbinePeer.class, getClassName());
+    }
+    
+    /**
+     * @return Returns the persistenceHelper.
+     */
+    public PeerManager getPeerManager()
+    {
+        if (peerManager == null)
+        {
+            peerManager = (PeerManager) resolve(PeerManager.ROLE);
+        }
+        return peerManager;
     }
 }
