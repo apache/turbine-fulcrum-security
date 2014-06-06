@@ -146,7 +146,7 @@
     <properties>
         <turbine.site.path>fulcrum/fulcrum-security</turbine.site.path>
         <turbine.scmPubCheckoutDirectory>${turbine.site.cache}/fulcrum/security</turbine.scmPubCheckoutDirectory>
-        <turbine.site.cache>C:/dc/apache.org/turbine-sites</turbine.site.cache>
+        <turbine.site.cache>${project.build.directory}/turbine-sites</turbine.site.cache>
         <siteContent.path>${project.build.directory}/staging</siteContent.path><!-- default stagingSiteURL -->
     </properties>
 </project>
