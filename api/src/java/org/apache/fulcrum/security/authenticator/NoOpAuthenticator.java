@@ -21,16 +21,15 @@ package org.apache.fulcrum.security.authenticator;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.DataBackendException;
-import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
  * This class authenticates by returning TRUE always. Regardless of the user and
  * password data.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  * @avalon.component name="noop-authenticator"
- * @avalon.service 
+ * @avalon.service
  *                 type="org.apache.fulcrum.security.authenticator.Authenticator"
  */
 public class NoOpAuthenticator extends AbstractLogEnabled implements Authenticator
@@ -38,17 +37,16 @@ public class NoOpAuthenticator extends AbstractLogEnabled implements Authenticat
     /**
      * Authenticate an username with the specified password. Always returns
      * true.
-     * 
-     * 
+     *
+     *
      * @param user
      *            object
      * @param password
      *            the user supplied password.
-     * @exception UnknownEntityException
-     *                if the user's account does not exist in the database.
      * @exception DataBackendException
      *                if there is a problem accessing the storage.
      */
+    @Override
     public boolean authenticate(User user, String password) throws DataBackendException
     {
         return true;

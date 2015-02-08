@@ -23,7 +23,6 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.fulcrum.security.entity.Group;
-import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 import org.apache.fulcrum.security.util.GroupSet;
@@ -31,7 +30,7 @@ import org.apache.fulcrum.security.util.GroupSet;
 /**
  * Represents the "basic" model where users can be part of multiple groups
  * directly, with no roles or permissions.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id: BasicUser.java 437451 2006-08-27 20:20:44Z tv $
  */
@@ -58,9 +57,10 @@ public class BasicUserImpl extends SecurityEntityImpl implements BasicUser
      * controller) to validate it. See also
      * {@link org.apache.fulcrum.security.UserManager#authenticate(User,String)}
      * .
-     * 
+     *
      * @return A String with the password for the user.
      */
+    @Override
     public String getPassword()
     {
         return password;
@@ -71,10 +71,11 @@ public class BasicUserImpl extends SecurityEntityImpl implements BasicUser
      * {@link #getPassword()}. See also
      * {@link org.apache.fulcrum.security.UserManager#changePassword(User,String,String)}
      * .
-     * 
+     *
      * @param password
      *            The new password.
      */
+    @Override
     public void setPassword(String password)
     {
         this.password = password;
@@ -82,9 +83,10 @@ public class BasicUserImpl extends SecurityEntityImpl implements BasicUser
 
     /**
      * Get the groups this user is part of
-     * 
+     *
      * @return a set of groups
      */
+    @Override
     public GroupSet getGroups()
     {
         if (groupSet instanceof GroupSet)
@@ -100,10 +102,11 @@ public class BasicUserImpl extends SecurityEntityImpl implements BasicUser
 
     /**
      * Set the groups this user is part of
-     * 
+     *
      * @param groups
      *            the set of groups
      */
+    @Override
     public void setGroups(GroupSet groups)
     {
         if (groups != null)
@@ -118,10 +121,11 @@ public class BasicUserImpl extends SecurityEntityImpl implements BasicUser
 
     /**
      * Remove the group from the list of groups
-     * 
+     *
      * @param group
      *            the group to remove
      */
+    @Override
     public void removeGroup(Group group)
     {
         getGroups().remove(group);
@@ -129,10 +133,11 @@ public class BasicUserImpl extends SecurityEntityImpl implements BasicUser
 
     /**
      * Add the group to the list of groups
-     * 
+     *
      * @param group
      *            the group to add
      */
+    @Override
     public void addGroup(Group group)
     {
         getGroups().add(group);
@@ -140,10 +145,11 @@ public class BasicUserImpl extends SecurityEntityImpl implements BasicUser
 
     /**
      * Set the groups this user is part of as a Set
-     * 
+     *
      * @param groups
      *            the set of groups
      */
+    @Override
     public <T extends Group> void setGroupsAsSet(Set<T> groups)
     {
         this.groupSet = groups;
@@ -151,9 +157,10 @@ public class BasicUserImpl extends SecurityEntityImpl implements BasicUser
 
     /**
      * Get the groups this user is part of as a Set
-     * 
+     *
      * @return a set of groups
      */
+    @Override
     @SuppressWarnings("unchecked")
     public <T extends Group> Set<T> getGroupsAsSet()
     {
@@ -162,7 +169,7 @@ public class BasicUserImpl extends SecurityEntityImpl implements BasicUser
 
     /**
      * Calculate a hash code for this object
-     * 
+     *
      * @see org.apache.fulcrum.security.entity.impl.SecurityEntityImpl#hashCode()
      */
     @Override

@@ -32,16 +32,15 @@ import org.apache.fulcrum.crypto.CryptoAlgorithm;
 import org.apache.fulcrum.crypto.CryptoService;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.DataBackendException;
-import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
  * This class authenticates using the Fulcrum Crypto service a user and their
  * password
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  * @avalon.component name="crypto-authenticator"
- * @avalon.service 
+ * @avalon.service
  *                 type="org.apache.fulcrum.security.authenticator.Authenticator"
  */
 public class CryptoAuthenticator extends AbstractLogEnabled implements Authenticator, Serviceable, Disposable, Configurable
@@ -55,16 +54,15 @@ public class CryptoAuthenticator extends AbstractLogEnabled implements Authentic
      * Authenticate a user with the specified password. If authentication is
      * successful the method returns true. If it fails, it returns false If
      * there are any problems, an exception is thrown.
-     * 
+     *
      * @param user
      *            a User object.
      * @param password
      *            the user supplied password.
-     * @exception UnknownEntityException
-     *                if the user's account does not exist in the database.
      * @exception DataBackendException
      *                if there is a problem accessing the storage.
      */
+    @Override
     public boolean authenticate(User user, String password) throws DataBackendException
     {
         try
@@ -88,6 +86,7 @@ public class CryptoAuthenticator extends AbstractLogEnabled implements Authentic
     /**
      * Avalon component lifecycle method
      */
+    @Override
     public void configure(Configuration conf) throws ConfigurationException
     {
         algorithm = conf.getChild("algorithm").getValue();
@@ -97,6 +96,7 @@ public class CryptoAuthenticator extends AbstractLogEnabled implements Authentic
     /**
      * Avalon component lifecycle method
      */
+    @Override
     public void service(ServiceManager manager) throws ServiceException
     {
         this.cryptoService = (CryptoService) manager.lookup(CryptoService.ROLE);
@@ -105,6 +105,7 @@ public class CryptoAuthenticator extends AbstractLogEnabled implements Authentic
     /**
      * Avalon component lifecycle method
      */
+    @Override
     public void dispose()
     {
         cryptoService = null;

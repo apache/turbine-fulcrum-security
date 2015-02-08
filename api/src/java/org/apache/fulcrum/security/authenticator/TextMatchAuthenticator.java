@@ -21,16 +21,15 @@ package org.apache.fulcrum.security.authenticator;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.DataBackendException;
-import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
  * This class authenticates by doing a plain text match of the user's passwords.
  * Very insecure!
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  * @avalon.component name="textmatch-authenticator"
- * @avalon.service 
+ * @avalon.service
  *                 type="org.apache.fulcrum.security.authenticator.Authenticator"
  */
 public class TextMatchAuthenticator extends AbstractLogEnabled implements Authenticator
@@ -38,17 +37,16 @@ public class TextMatchAuthenticator extends AbstractLogEnabled implements Authen
     /**
      * Authenticate an username with the specified password. Returns true if the
      * user password plain text matches the passed in password.
-     * 
-     * 
+     *
+     *
      * @param user
      *            object
      * @param password
      *            the user supplied password.
-     * @exception UnknownEntityException
-     *                if the user's account does not exist in the database.
      * @exception DataBackendException
      *                if there is a problem accessing the storage.
      */
+    @Override
     public boolean authenticate(User user, String password) throws DataBackendException
     {
         if (user == null)
