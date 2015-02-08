@@ -92,7 +92,7 @@
         <module>memory</module>
         <module>nt</module>
         <!--  module>ldap</module -->
-        <module>torque</module>
+        <!--  module>torque</module -->
     </modules>
 
     <build>
