@@ -32,7 +32,7 @@
     <scm>
         <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/ldap/</connection>
         <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/ldap/</developerConnection>
-        <url>http://svn.apache.org/viewcvs/turbine/fulcrum/trunk/security/ldap/</url>
+        <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/security/ldap/</url>
     </scm>
 
     <build>
