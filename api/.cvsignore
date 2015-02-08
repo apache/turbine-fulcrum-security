@@ -1,6 +1,0 @@
-target
-*.classpath
-*.project
-*.log
-*pom-snapshot-version
-*.ser
