@@ -33,6 +33,8 @@ import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
 
 /**
+ * Test with @link {@link #customPeers} requires at least Torque version 4.1.
+ * 
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @author <a href="jh@byteaction.de">J&#252;rgen Hoffmann</a>
  * @version $Id$
@@ -41,6 +43,8 @@ public class TorquePeerTurbineModelManagerTest
     extends AbstractTurbineModelManagerTest
 {
     protected static HsqlDB hsqlDB = null;
+    
+    public static boolean customPeers = false;
 
     public void setUp() throws Exception
     {
@@ -53,7 +57,10 @@ public class TorquePeerTurbineModelManagerTest
 
             this.setRoleFileName("src/test/TurbineTorqueRoleConfig.xml");            
             
-            this.setConfigurationFileName("src/test/TurbineTorqueWithPeersComponentConfig.xml");
+            if (customPeers)
+                this.setConfigurationFileName("src/test/TurbineTorqueWithPeersComponentConfig.xml");
+            else
+                this.setConfigurationFileName("src/test/TurbineTorqueComponentConfig.xml");
             
             // The successful Test requires that the PeerImpl classes (in configuration file) implement the interface TorqueTurbinePeer,
             // cft. ClassCastException messages.
@@ -71,7 +78,7 @@ public class TorquePeerTurbineModelManagerTest
     
     public void testCustomPeerSet() {
         if (roleManager instanceof AbstractEntityManager) {
-            assertTrue( "As a custom Peer for RoleManager should be tested, a peerClassName element should be set in the configuration file for roleManager.", ((AbstractEntityManager)roleManager).getCustomPeer() == true);
+            assertTrue( "If a custom Peer for RoleManager should be tested, a peerClassName element should be set in the configuration file for roleManager.", ((AbstractEntityManager)roleManager).getCustomPeer() == customPeers);
         }
         if (roleManager instanceof PeerManagable) {
             assertNotNull(((PeerManagable)roleManager).getPeerManager());

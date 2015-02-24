@@ -41,7 +41,7 @@ public class PeerManagerDefaultImpl extends AbstractManager
         }
         try
         {
-            P peer = (P) Class.forName(peerClassName).newInstance();
+            P peer = (P) Class.forName(peerClassName).getConstructor().newInstance();
             getLogger().debug( " getPeerInstance():" +  peer);
             peers.put( peerClassName, peer );
             return peer;
