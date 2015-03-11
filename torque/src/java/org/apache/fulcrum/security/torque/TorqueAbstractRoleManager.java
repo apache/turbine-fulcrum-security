@@ -20,6 +20,8 @@ package org.apache.fulcrum.security.torque;
 import java.sql.Connection;
 import java.util.List;
 
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.spi.AbstractRoleManager;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -38,6 +40,44 @@ import org.apache.torque.util.Transaction;
  */
 public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
 {
+    private Boolean customPeer = false;  //  used for torque which uses per object peer classes
+    
+    private String peerClassName;
+    private static final String PEER_CLASS_NAME_KEY = "peerClassName";
+    
+    /**
+     * Avalon Service lifecycle method
+     */
+    public void configure(Configuration conf) throws ConfigurationException
+    {
+       super.configure( conf );
+       
+        peerClassName = conf.getChild( PEER_CLASS_NAME_KEY).getValue( null );
+        if (peerClassName != null) {
+            setPeerClassName( peerClassName );
+            setCustomPeer(true);
+        } 
+    }
+    
+    public Boolean getCustomPeer()
+    {
+        return customPeer;
+    }
+
+    public void setCustomPeer( Boolean customPeer )
+    {
+        this.customPeer = customPeer;
+    }
+
+    public String getPeerClassName()
+    {
+        return peerClassName;
+    }
+
+    public void setPeerClassName( String peerClassName )
+    {
+        this.peerClassName = peerClassName;
+    }
     /**
      * Get all specialized Roles
      *

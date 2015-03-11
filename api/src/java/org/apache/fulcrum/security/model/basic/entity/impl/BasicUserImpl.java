@@ -23,6 +23,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 import org.apache.fulcrum.security.util.GroupSet;

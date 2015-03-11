@@ -35,25 +35,13 @@ public abstract class AbstractEntityManager extends AbstractManager implements C
     private String className;
     private static final String CLASS_NAME_KEY = "className";
     
-    private Boolean customPeer = false;  //  used for torque which uses per object peer classes
-    
-    private String peerClassName;
-    private static final String PEER_CLASS_NAME_KEY = "peerClassName";
-
     /**
      * Avalon Service lifecycle method
      */
     public void configure(Configuration conf) throws ConfigurationException
     {
         className = conf.getChild(CLASS_NAME_KEY).getValue();
-       
-        peerClassName = conf.getChild( PEER_CLASS_NAME_KEY).getValue( null );
-        if (peerClassName != null) {
-            setPeerClassName( peerClassName );
-            setCustomPeer(true);
-        } 
     }
-
     /**
      * @return Returns the className.
      */
@@ -70,26 +58,5 @@ public abstract class AbstractEntityManager extends AbstractManager implements C
     {
         this.className = className;
     }
-
-    public Boolean getCustomPeer()
-    {
-        return customPeer;
-    }
-
-    public void setCustomPeer( Boolean customPeer )
-    {
-        this.customPeer = customPeer;
-    }
-
-    public String getPeerClassName()
-    {
-        return peerClassName;
-    }
-
-    public void setPeerClassName( String peerClassName )
-    {
-        this.peerClassName = peerClassName;
-    }
-
 
 }

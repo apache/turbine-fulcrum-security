@@ -27,7 +27,6 @@ import org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity;
 import org.apache.fulcrum.security.torque.om.TorqueTurbinePermissionPeer;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePermission;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePermissionPeer;
-import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRolePeer;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
