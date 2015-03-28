@@ -17,6 +17,7 @@ package org.apache.fulcrum.security.torque;
  * specific language governing permissions and limitations
  * under the License.
  */
+import java.io.Serializable;
 import java.sql.Connection;
 
 import org.apache.fulcrum.security.entity.SecurityEntity;
@@ -29,7 +30,7 @@ import org.apache.torque.om.Persistent;
  * @version $Id:$
  */
 public abstract class TorqueAbstractSecurityEntity
-    implements SecurityEntity, Persistent
+    implements SecurityEntity, Serializable, Persistent
 {
     /** Serial version */
 	private static final long serialVersionUID = -4052254585021044275L;
@@ -93,6 +94,7 @@ public abstract class TorqueAbstractSecurityEntity
     /**
      * @see org.apache.fulcrum.security.entity.SecurityEntity#getId()
      */
+    @Override
     public Object getId()
     {
         return getEntityId();
@@ -101,6 +103,7 @@ public abstract class TorqueAbstractSecurityEntity
     /**
      * @see org.apache.fulcrum.security.entity.SecurityEntity#setId(java.lang.Object)
      */
+    @Override
     public void setId(Object id)
     {
         try
@@ -116,6 +119,7 @@ public abstract class TorqueAbstractSecurityEntity
     /**
      * @see org.apache.fulcrum.security.entity.SecurityEntity#getName()
      */
+    @Override
     public String getName()
     {
         return getEntityName();
@@ -124,6 +128,7 @@ public abstract class TorqueAbstractSecurityEntity
     /**
      * @see org.apache.fulcrum.security.entity.SecurityEntity#setName(java.lang.String)
      */
+    @Override
     public void setName(String name)
     {
         if (name != null)
