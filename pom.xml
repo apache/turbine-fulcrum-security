@@ -23,7 +23,7 @@
    <parent>
        <artifactId>turbine-parent</artifactId>
        <groupId>org.apache.turbine</groupId>
-       <version>4-SNAPSHOT</version>
+       <version>3</version>
    </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.fulcrum</groupId>
@@ -86,15 +86,7 @@
             </roles>
         </contributor>
     </contributors>
-    <modules>
-        <module>api</module>
-        <module>hibernate</module>
-        <module>memory</module>
-        <module>nt</module>
-        <!--  module>ldap</module -->
-        <module>torque</module>
-    </modules>
-
+    
     <build>
         <sourceDirectory>${basedir}/src/java</sourceDirectory>
         <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
@@ -111,6 +103,18 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>build-modules</id>
+          
+            <modules>
+                <module>api</module>
+                <module>hibernate</module>
+                <module>memory</module>
+                <module>nt</module>
+                <!-- module>ldap</module -->
+                <module>torque</module>
+            </modules>
+        </profile>
         <profile>
             <id>apache-release</id>
             <build>
