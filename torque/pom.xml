@@ -15,18 +15,17 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
 		<artifactId>fulcrum-security</artifactId>
 		<groupId>org.apache.fulcrum</groupId>
-		<version>1.1.0-SNAPSHOT</version>
+		<version>1.1.0</version>
         <relativePath>../pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.fulcrum</groupId>
   <artifactId>fulcrum-security-torque</artifactId>
-  <version>1.1.0-SNAPSHOT</version>
+  <version>1.1.0</version>
   <name>Fulcrum Security Torque Impl</name>
   <description>
     Fulcrum Security Torque Impl is an implementation of the Fulcrum Security API
@@ -34,9 +33,9 @@
   </description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-security/fulcrum-security-torque</url>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/torque/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/torque/</developerConnection>
-    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/security/torque/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-security-1.1.0/torque</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-security-1.1.0/torque</developerConnection>
+    <url>http://svn.apache.org/viewvc/turbine/fulcrum/tags/fulcrum-security-1.1.0/torque</url>
   </scm>
   
   <build>
@@ -58,7 +57,7 @@
     <dependency>
       <groupId>org.apache.fulcrum</groupId>
       <artifactId>fulcrum-security-api</artifactId>
-      <version>1.1.0-SNAPSHOT</version>
+      <version>1.1.0</version>
     </dependency>
     <dependency>
         <groupId>org.apache.torque</groupId>
@@ -68,7 +67,7 @@
     <dependency>
         <groupId>org.apache.fulcrum</groupId>
         <artifactId>fulcrum-security-api</artifactId>
-        <version>1.1.0-SNAPSHOT</version>
+        <version>1.1.0</version>
         <type>test-jar</type>
         <scope>test</scope>
     </dependency>
