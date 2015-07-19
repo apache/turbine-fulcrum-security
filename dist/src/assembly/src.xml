@@ -20,7 +20,7 @@
 <assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3" 
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3 http://maven.apache.org/xsd/assembly-1.1.3.xsd">
-  <id>bin</id>
+  <id>src</id>
   <formats>
     <format>tar.gz</format>
     <format>zip</format>
@@ -33,19 +33,22 @@
         <include>org.apache.fulcrum:fulcrum-security-hibernate</include>
         <include>org.apache.fulcrum:fulcrum-security-memory</include>
         <include>org.apache.fulcrum:fulcrum-security-torque</include>
+        <include>org.apache.fulcrum:fulcrum-security-dist</include>
       </includes>
-      <binaries>
-        <includeDependencies>false</includeDependencies>
-        <outputDirectory>${module.basedir.name}</outputDirectory>
-        <dependencySets>
-          <dependencySet>
-            <useProjectArtifact>true</useProjectArtifact>
-            <useProjectAttachments>true</useProjectAttachments>
-            <useTransitiveDependencies>false</useTransitiveDependencies>
-          </dependencySet>
-        </dependencySets>
-        <unpack>false</unpack>
-      </binaries>
+      <sources>
+        <outputDirectoryMapping>${module.basedir.name}</outputDirectoryMapping>
+        <excludeSubModuleDirectories>false</excludeSubModuleDirectories>
+        <fileSets>
+          <fileSet>
+            <excludes>
+              <exclude>target/**</exclude>
+              <exclude>.settings/**</exclude>
+              <exclude>.classpath</exclude>
+              <exclude>.project</exclude>
+            </excludes>
+          </fileSet>
+        </fileSets>
+      </sources>
     </moduleSet>
   </moduleSets>
   <fileSets>
@@ -54,6 +57,9 @@
       <outputDirectory></outputDirectory>
       <includes>
         <include>README*</include>
+        <include>pom.xml</include>
+        <include>src/**</include>
+        <include>xdocs/**</include>
       </includes>
     </fileSet>
     <fileSet>

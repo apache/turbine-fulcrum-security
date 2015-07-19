@@ -66,6 +66,7 @@
                                     <runOnlyAtExecutionRoot>false</runOnlyAtExecutionRoot>
                                     <descriptors>
                                       <descriptor>src/assembly/bin.xml</descriptor>
+                                      <descriptor>src/assembly/src.xml</descriptor>
                                     </descriptors>
                                     <tarLongFileFormat>gnu</tarLongFileFormat>
                                 </configuration>
