@@ -18,7 +18,6 @@ package org.apache.fulcrum.security.memory.turbine;
  * specific language governing permissions and limitations
  * under the License.
  */
-import org.apache.commons.lang.StringUtils;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.memory.MemoryUserManagerImpl;
 import org.apache.fulcrum.security.model.turbine.TurbineUserManager;
@@ -45,7 +44,8 @@ public class MemoryTurbineUserManagerImpl extends MemoryUserManagerImpl implemen
      *             if the implementation of User interface could not be
      *             determined, or does not exist.
      */
-    public <T extends User> T getAnonymousUser() throws UnknownEntityException
+    @Override
+	public <T extends User> T getAnonymousUser() throws UnknownEntityException
     {
         T user;
         try
@@ -71,10 +71,11 @@ public class MemoryTurbineUserManagerImpl extends MemoryUserManagerImpl implemen
      * @return True if this is an anonymous user
      *
      */
-    public boolean isAnonymousUser(User user)
+    @Override
+	public boolean isAnonymousUser(User user)
     {
         // Either just null, the name is null or the name is the empty string
-        return (user == null) || StringUtils.isEmpty(user.getName());
+        return (user == null) || user.getName() == null || user.getName().isEmpty();
     }
 
 }
