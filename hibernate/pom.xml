@@ -25,7 +25,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.fulcrum</groupId>
     <artifactId>fulcrum-security-hibernate</artifactId>
     <version>1.1.1-SNAPSHOT</version>
     <name>Fulcrum Security Hibernate Impl</name>
@@ -69,7 +68,6 @@
         <dependency>
             <groupId>org.apache.fulcrum</groupId>
             <artifactId>fulcrum-security-api</artifactId>
-            <version>1.1.1-SNAPSHOT</version>
         </dependency>
     
         <!-- Needed for the Hibernate SPI -->
@@ -92,14 +90,7 @@
         <dependency>
             <groupId>org.apache.fulcrum</groupId>
             <artifactId>fulcrum-security-api</artifactId>
-            <version>1.1.1-SNAPSHOT</version>
             <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -111,13 +102,11 @@
         <dependency>
             <groupId>org.apache.fulcrum</groupId>
             <artifactId>fulcrum-testcontainer</artifactId>
-            <version>1.0.6</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.fulcrum</groupId>
             <artifactId>fulcrum-yaafi</artifactId>
-            <version>1.0.6</version>
             <scope>test</scope>
         </dependency>
         <dependency>
