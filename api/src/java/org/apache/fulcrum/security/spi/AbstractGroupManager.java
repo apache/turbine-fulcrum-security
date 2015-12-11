@@ -46,7 +46,8 @@ public abstract class AbstractGroupManager extends AbstractEntityManager impleme
      * @throws DataBackendException
      *             if the object could not be instantiated.
      */
-    public <T extends Group> T getGroupInstance() throws DataBackendException
+    @Override
+	public <T extends Group> T getGroupInstance() throws DataBackendException
     {
         try
         {
@@ -74,7 +75,8 @@ public abstract class AbstractGroupManager extends AbstractEntityManager impleme
      * @throws DataBackendException
      *             if the object could not be instantiated.
      */
-    public <T extends Group> T getGroupInstance(String groupName) throws DataBackendException
+    @Override
+	public <T extends Group> T getGroupInstance(String groupName) throws DataBackendException
     {
         T group = getGroupInstance();
         group.setName(groupName);
@@ -92,7 +94,8 @@ public abstract class AbstractGroupManager extends AbstractEntityManager impleme
      * @throws UnknownEntityException
      *             if the group does not exist.
      */
-    public <T extends Group> T getGroupByName(String name) throws DataBackendException, UnknownEntityException
+    @Override
+	public <T extends Group> T getGroupByName(String name) throws DataBackendException, UnknownEntityException
     {
         @SuppressWarnings("unchecked")
 		T group = (T) getAllGroups().getByName(name);
@@ -116,7 +119,8 @@ public abstract class AbstractGroupManager extends AbstractEntityManager impleme
      * @throws DataBackendException
      *             if there is a problem accessing the storage.
      */
-    public <T extends Group> T getGroupById(Object id) throws DataBackendException, UnknownEntityException
+    @Override
+	public <T extends Group> T getGroupById(Object id) throws DataBackendException, UnknownEntityException
     {
         @SuppressWarnings("unchecked")
 		T group = (T) getAllGroups().getById(id);
@@ -138,7 +142,8 @@ public abstract class AbstractGroupManager extends AbstractEntityManager impleme
      * @throws EntityExistsException
      *             if the group already exists.
      */
-    public synchronized <T extends Group> T addGroup(T group) throws DataBackendException, EntityExistsException
+    @Override
+	public synchronized <T extends Group> T addGroup(T group) throws DataBackendException, EntityExistsException
     {
         boolean groupExists = false;
         if (StringUtils.isEmpty(group.getName()))
@@ -147,7 +152,7 @@ public abstract class AbstractGroupManager extends AbstractEntityManager impleme
         }
         if (group.getId() != null)
         {
-            throw new DataBackendException("Could not create a group with an id!");
+            throw new DataBackendException("Could not create a group with an id of null!");
         }
         groupExists = checkExists(group);
         if (!groupExists)
@@ -173,7 +178,8 @@ public abstract class AbstractGroupManager extends AbstractEntityManager impleme
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      */
-    public boolean checkExists(Group group) throws DataBackendException
+    @Override
+	public boolean checkExists(Group group) throws DataBackendException
     {
         return checkExists(group.getName());
     }

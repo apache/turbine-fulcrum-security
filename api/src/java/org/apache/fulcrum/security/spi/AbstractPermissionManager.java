@@ -47,7 +47,8 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
      * @throws UnknownEntityException
      *             if the object could not be instantiated.
      */
-    public <T extends Permission> T getPermissionInstance() throws UnknownEntityException
+    @Override
+	public <T extends Permission> T getPermissionInstance() throws UnknownEntityException
     {
         try
         {
@@ -74,7 +75,8 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
      * @throws UnknownEntityException
      *             if the object could not be instantiated.
      */
-    public <T extends Permission> T getPermissionInstance(String permName) throws UnknownEntityException
+    @Override
+	public <T extends Permission> T getPermissionInstance(String permName) throws UnknownEntityException
     {
         T perm = getPermissionInstance();
         perm.setName(permName);
@@ -92,7 +94,8 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
      * @throws UnknownEntityException
      *             if the permission does not exist.
      */
-    public <T extends Permission> T getPermissionByName(String name) throws DataBackendException, UnknownEntityException
+    @Override
+	public <T extends Permission> T getPermissionByName(String name) throws DataBackendException, UnknownEntityException
     {
         @SuppressWarnings("unchecked")
 		T permission = (T) getAllPermissions().getByName(name);
@@ -116,7 +119,8 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
      * @throws DataBackendException
      *             if there is a problem accessing the storage.
      */
-    public <T extends Permission> T getPermissionById(Object id) throws DataBackendException, UnknownEntityException
+    @Override
+	public <T extends Permission> T getPermissionById(Object id) throws DataBackendException, UnknownEntityException
     {
         @SuppressWarnings("unchecked")
 		T permission = (T) getAllPermissions().getById(id);
@@ -138,7 +142,8 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
      * @throws EntityExistsException
      *             if the permission already exists.
      */
-    public synchronized <T extends Permission> T addPermission(T permission) throws DataBackendException, EntityExistsException
+    @Override
+	public synchronized <T extends Permission> T addPermission(T permission) throws DataBackendException, EntityExistsException
     {
         boolean permissionExists = false;
         if (StringUtils.isEmpty(permission.getName()))
@@ -147,7 +152,7 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
         }
         if (permission.getId() != null)
         {
-            throw new DataBackendException("Could not create a permission with an id!");
+            throw new DataBackendException("Could not create a permission with an id of null!");
         }
         try
         {
@@ -161,7 +166,7 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
         {
             throw new DataBackendException("addPermission(Permission) failed", e);
         }
-        // the only way we could get here without return/throw tirggered
+        // the only way we could get here without return/throw triggered
         // is that the permissionExists was true.
         throw new EntityExistsException("Permission '" + permission + "' already exists");
     }
@@ -177,7 +182,8 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      */
-    public boolean checkExists(Permission permission) throws DataBackendException
+    @Override
+	public boolean checkExists(Permission permission) throws DataBackendException
     {
         return checkExists(permission.getName());
     }

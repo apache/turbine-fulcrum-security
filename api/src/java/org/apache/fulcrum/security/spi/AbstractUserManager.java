@@ -44,7 +44,8 @@ public abstract class AbstractUserManager extends AbstractEntityManager implemen
     private ACLFactory aclFactory;
     private Authenticator authenticator;
 
-    public <T extends AccessControlList> T getACL(User user) throws UnknownEntityException
+    @Override
+	public <T extends AccessControlList> T getACL(User user) throws UnknownEntityException
     {
         return getACLFactory().getAccessControlList(user);
     }
@@ -60,7 +61,8 @@ public abstract class AbstractUserManager extends AbstractEntityManager implemen
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      */
-    public boolean checkExists(User user) throws DataBackendException
+    @Override
+	public boolean checkExists(User user) throws DataBackendException
     {
         return checkExists(user.getName());
     }
@@ -82,14 +84,16 @@ public abstract class AbstractUserManager extends AbstractEntityManager implemen
      * @exception DataBackendException
      *                if there is a problem accessing the storage.
      */
-    public <T extends User> T getUser(String userName, String password) throws PasswordMismatchException, UnknownEntityException, DataBackendException
+    @Override
+	public <T extends User> T getUser(String userName, String password) throws PasswordMismatchException, UnknownEntityException, DataBackendException
     {
         T user = getUser(userName);
         authenticate(user, password);
         return user;
     }
 
-    public <T extends User> T getUser(String name) throws DataBackendException, UnknownEntityException
+    @Override
+	public <T extends User> T getUser(String name) throws DataBackendException, UnknownEntityException
     {
         @SuppressWarnings("unchecked")
 		T user = (T)getAllUsers().getByName(name);
@@ -113,7 +117,8 @@ public abstract class AbstractUserManager extends AbstractEntityManager implemen
      * @throws DataBackendException
      *             if there is a problem accessing the storage.
      */
-    public <T extends User> T getUserById(Object id) throws DataBackendException, UnknownEntityException
+    @Override
+	public <T extends User> T getUserById(Object id) throws DataBackendException, UnknownEntityException
     {
         @SuppressWarnings("unchecked")
 		T user = (T)getAllUsers().getById(id);
@@ -140,7 +145,8 @@ public abstract class AbstractUserManager extends AbstractEntityManager implemen
      * @exception DataBackendException
      *                if there is a problem accessing the storage.
      */
-    public void authenticate(User user, String password) throws PasswordMismatchException, UnknownEntityException, DataBackendException
+    @Override
+	public void authenticate(User user, String password) throws PasswordMismatchException, UnknownEntityException, DataBackendException
     {
         if (authenticator == null)
         {
@@ -170,7 +176,8 @@ public abstract class AbstractUserManager extends AbstractEntityManager implemen
      * @exception DataBackendException
      *                if there is a problem accessing the storage.
      */
-    public void changePassword(User user, String oldPassword, String newPassword) throws PasswordMismatchException, UnknownEntityException,
+    @Override
+	public void changePassword(User user, String oldPassword, String newPassword) throws PasswordMismatchException, UnknownEntityException,
             DataBackendException
     {
         if (!checkExists(user))
@@ -182,7 +189,7 @@ public abstract class AbstractUserManager extends AbstractEntityManager implemen
             throw new PasswordMismatchException("The supplied old password for '" + user.getName() + "' was incorrect");
         }
         user.setPassword(newPassword);
-        // save the changes in the database imediately, to prevent the password
+        // save the changes in the database immediately, to prevent the password
         // being 'reverted' to the old value if the user data is lost somehow
         // before it is saved at session's expiry.
         saveUser(user);
@@ -205,7 +212,8 @@ public abstract class AbstractUserManager extends AbstractEntityManager implemen
      * @exception DataBackendException
      *                if there is a problem accessing the storage.
      */
-    public void forcePassword(User user, String password) throws UnknownEntityException, DataBackendException
+    @Override
+	public void forcePassword(User user, String password) throws UnknownEntityException, DataBackendException
     {
         if (!checkExists(user))
         {
@@ -228,7 +236,8 @@ public abstract class AbstractUserManager extends AbstractEntityManager implemen
      * @throws DataBackendException
      *             if the object could not be instantiated.
      */
-    public <T extends User> T getUserInstance() throws DataBackendException
+    @Override
+	public <T extends User> T getUserInstance() throws DataBackendException
     {
         try
         {
@@ -256,7 +265,8 @@ public abstract class AbstractUserManager extends AbstractEntityManager implemen
      * @throws DataBackendException
      *             if the object could not be instantiated.
      */
-    public <T extends User> T getUserInstance(String userName) throws DataBackendException
+    @Override
+	public <T extends User> T getUserInstance(String userName) throws DataBackendException
     {
         T user = getUserInstance();
         user.setName(userName);
@@ -276,7 +286,8 @@ public abstract class AbstractUserManager extends AbstractEntityManager implemen
      * @throws EntityExistsException
      *             if the user account already exists.
      */
-    public <T extends User> T addUser(T user, String password) throws DataBackendException, EntityExistsException
+    @Override
+	public <T extends User> T addUser(T user, String password) throws DataBackendException, EntityExistsException
     {
         if (StringUtils.isEmpty(user.getName()))
         {

@@ -47,7 +47,8 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
      * @throws DataBackendException
      *             if the object could not be instantiated.
      */
-    public <T extends Role> T getRoleInstance() throws DataBackendException
+    @Override
+	public <T extends Role> T getRoleInstance() throws DataBackendException
     {
         try
         {
@@ -75,7 +76,8 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
      * @throws DataBackendException
      *             if the object could not be instantiated.
      */
-    public <T extends Role> T getRoleInstance(String roleName) throws DataBackendException
+    @Override
+	public <T extends Role> T getRoleInstance(String roleName) throws DataBackendException
     {
         T role = getRoleInstance();
         role.setName(roleName);
@@ -93,7 +95,8 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
      * @throws UnknownEntityException
      *             if the role does not exist.
      */
-    public <T extends Role> T getRoleByName(String name) throws DataBackendException, UnknownEntityException
+    @Override
+	public <T extends Role> T getRoleByName(String name) throws DataBackendException, UnknownEntityException
     {
         @SuppressWarnings("unchecked")
 		T role = (T) getAllRoles().getByName(name);
@@ -117,7 +120,8 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
      * @throws DataBackendException
      *             if there is a problem accessing the storage.
      */
-    public <T extends Role> T getRoleById(Object id) throws DataBackendException, UnknownEntityException
+    @Override
+	public <T extends Role> T getRoleById(Object id) throws DataBackendException, UnknownEntityException
     {
         @SuppressWarnings("unchecked")
 		T role = (T) getAllRoles().getById(id);
@@ -139,7 +143,8 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
      * @throws EntityExistsException
      *             if the role already exists.
      */
-    public synchronized <T extends Role> T addRole(T role) throws DataBackendException, EntityExistsException
+    @Override
+	public synchronized <T extends Role> T addRole(T role) throws DataBackendException, EntityExistsException
     {
         boolean roleExists = false;
         if (StringUtils.isEmpty(role.getName()))
@@ -148,7 +153,7 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
         }
         if (role.getId() != null)
         {
-            throw new DataBackendException("Could not create a role with an id!");
+            throw new DataBackendException("Could not create a role with an id of null!");
         }
         try
         {
@@ -163,7 +168,7 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
             throw new DataBackendException("addRole(Role) failed", e);
         }
 
-        // the only way we could get here without return/throw tirggered
+        // the only way we could get here without return/throw triggered
         // is that the roleExists was true.
         throw new EntityExistsException("Role '" + role + "' already exists");
     }
@@ -179,7 +184,8 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      */
-    public boolean checkExists(Role role) throws DataBackendException
+    @Override
+	public boolean checkExists(Role role) throws DataBackendException
     {
         return checkExists(role.getName());
     }
