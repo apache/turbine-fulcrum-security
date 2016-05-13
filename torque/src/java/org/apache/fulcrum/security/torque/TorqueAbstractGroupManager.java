@@ -39,47 +39,20 @@ import org.apache.torque.util.Transaction;
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id:$
  */
-public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
+public abstract class TorqueAbstractGroupManager extends AbstractGroupManager 
 {
     
-    private Boolean customPeer = false;  //  used for torque which uses per object peer classes
-    
-    private String peerClassName;
-    private static final String PEER_CLASS_NAME_KEY = "peerClassName";
     
     /**
      * Avalon Service lifecycle method
      */
-    public void configure(Configuration conf) throws ConfigurationException
+    @Override
+	public void configure(Configuration conf) throws ConfigurationException
     {
        super.configure( conf );
-       
-        peerClassName = conf.getChild( PEER_CLASS_NAME_KEY).getValue( null );
-        if (peerClassName != null) {
-            setPeerClassName( peerClassName );
-            setCustomPeer(true);
-        } 
+
     }
     
-    public Boolean getCustomPeer()
-    {
-        return customPeer;
-    }
-
-    public void setCustomPeer( Boolean customPeer )
-    {
-        this.customPeer = customPeer;
-    }
-
-    public String getPeerClassName()
-    {
-        return peerClassName;
-    }
-
-    public void setPeerClassName( String peerClassName )
-    {
-        this.peerClassName = peerClassName;
-    }
     /**
      * Get all specialized Groups
      *
@@ -131,7 +104,8 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
     *         backend.
     * @throws EntityExistsException if the group already exists.
     */
-    protected synchronized <T extends Group> T persistNewGroup(T group) throws DataBackendException
+    @Override
+	protected synchronized <T extends Group> T persistNewGroup(T group) throws DataBackendException
     {
         try
         {
@@ -154,7 +128,8 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
     *         backend.
     * @throws UnknownEntityException if the group does not exist.
     */
-    public synchronized void renameGroup(Group group, String name) throws DataBackendException, UnknownEntityException
+    @Override
+	public synchronized void renameGroup(Group group, String name) throws DataBackendException, UnknownEntityException
     {
         if (checkExists(group))
         {
@@ -185,7 +160,8 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
     *         backend.
     * @throws UnknownEntityException if the group does not exist.
     */
-    public synchronized void removeGroup(Group group) throws DataBackendException, UnknownEntityException
+    @Override
+	public synchronized void removeGroup(Group group) throws DataBackendException, UnknownEntityException
     {
         try
         {
@@ -206,7 +182,8 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
      *         data backend.
      * @throws UnknownEntityException if the group does not exist.
      */
-    public <T extends Group> T getGroupByName(String name) throws DataBackendException, UnknownEntityException
+    @Override
+	public <T extends Group> T getGroupByName(String name) throws DataBackendException, UnknownEntityException
     {
         T group = null;
         Connection con = null;
@@ -253,7 +230,8 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
      * @throws DataBackendException if there was an error accessing the
      *         data backend.
      */
-    public GroupSet getAllGroups() throws DataBackendException
+    @Override
+	public GroupSet getAllGroups() throws DataBackendException
     {
         GroupSet groupSet = new GroupSet();
         Connection con = null;
@@ -298,7 +276,8 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
      * @throws DataBackendException when more than one Group with
      *         the same name exists.
      */
-    public boolean checkExists(String groupName) throws DataBackendException
+    @Override
+	public boolean checkExists(String groupName) throws DataBackendException
     {
         boolean exists = false;
 
@@ -350,7 +329,8 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
      * @throws UnknownEntityException
      *             if the group does not exist.
      */
-    public <T extends Group> T getGroupById(Object id) throws DataBackendException, UnknownEntityException
+    @Override
+	public <T extends Group> T getGroupById(Object id) throws DataBackendException, UnknownEntityException
     {
         T group;
 

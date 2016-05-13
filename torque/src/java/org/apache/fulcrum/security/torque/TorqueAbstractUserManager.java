@@ -40,44 +40,18 @@ import org.apache.torque.util.Transaction;
  */
 public abstract class TorqueAbstractUserManager extends AbstractUserManager
 {
-    private Boolean customPeer = false;  //  used for torque which uses per object peer classes
-    
-    private String peerClassName;
-    private static final String PEER_CLASS_NAME_KEY = "peerClassName";
     
     /**
      * Avalon Service lifecycle method
      */
-    public void configure(Configuration conf) throws ConfigurationException
+    @Override
+	public void configure(Configuration conf) throws ConfigurationException
     {
        super.configure( conf );
-       
-        peerClassName = conf.getChild( PEER_CLASS_NAME_KEY).getValue( null );
-        if (peerClassName != null) {
-            setPeerClassName( peerClassName );
-            setCustomPeer(true);
-        } 
+
     }
     
-    public Boolean getCustomPeer()
-    {
-        return customPeer;
-    }
 
-    public void setCustomPeer( Boolean customPeer )
-    {
-        this.customPeer = customPeer;
-    }
-
-    public String getPeerClassName()
-    {
-        return peerClassName;
-    }
-
-    public void setPeerClassName( String peerClassName )
-    {
-        this.peerClassName = peerClassName;
-    }
     /**
      * Get all specialized Users
      *
@@ -128,7 +102,8 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
     *         backend.
     * @throws UnknownEntityException if the user account is not present.
     */
-    public synchronized void removeUser(User user) throws DataBackendException, UnknownEntityException
+    @Override
+	public synchronized void removeUser(User user) throws DataBackendException, UnknownEntityException
     {
         try
         {
@@ -149,7 +124,8 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
        *         data backend.
        * @throws EntityExistsException if the user account already exists.
        */
-    protected synchronized <T extends User> T persistNewUser(T user) throws DataBackendException
+    @Override
+	protected synchronized <T extends User> T persistNewUser(T user) throws DataBackendException
     {
         try
         {
@@ -171,7 +147,8 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
        *         backend.
        * @throws UnknownEntityException if the role does not exist.
        */
-    public synchronized void saveUser(User user) throws DataBackendException, UnknownEntityException
+    @Override
+	public synchronized void saveUser(User user) throws DataBackendException, UnknownEntityException
     {
         if (checkExists(user))
         {
@@ -202,7 +179,8 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
      * @throws DataBackendException if there was an error accessing
      *         the data backend.
      */
-    public boolean checkExists(String userName) throws DataBackendException
+    @Override
+	public boolean checkExists(String userName) throws DataBackendException
     {
         boolean exists = false;
 
@@ -253,7 +231,8 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
      * @exception DataBackendException if there is a problem accessing the
      *            storage.
      */
-    public <T extends User> T getUser(String userName) throws UnknownEntityException, DataBackendException
+    @Override
+	public <T extends User> T getUser(String userName) throws UnknownEntityException, DataBackendException
     {
         T user = null;
         Connection con = null;
@@ -300,7 +279,8 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
        * @throws DataBackendException if there was an error accessing the data
        *         backend.
        */
-    public UserSet getAllUsers() throws DataBackendException
+    @Override
+	public UserSet getAllUsers() throws DataBackendException
     {
         UserSet userSet = new UserSet();
         Connection con = null;
@@ -348,7 +328,8 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
      * @throws UnknownEntityException
      *             if the user does not exist.
      */
-    public <T extends User> T getUserById(Object id) throws DataBackendException, UnknownEntityException
+    @Override
+	public <T extends User> T getUserById(Object id) throws DataBackendException, UnknownEntityException
     {
         T user;
 

@@ -7,6 +7,7 @@ import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
+import org.apache.torque.map.TableMap;
 
 /**
  * This extension to the marker interface {@linkplain Peer} is to allow for swappable Peer implementations 
@@ -20,7 +21,9 @@ import org.apache.torque.criteria.Criteria;
 public interface TorqueTurbinePeer<T>
     extends Peer
 {
-
+	
+	 TableMap getTableMap() throws TorqueException;
+	
      List<T> doSelect( Criteria criteria,
                          Connection connection) throws TorqueException;
      

@@ -27,6 +27,7 @@ import org.apache.fulcrum.security.torque.peer.Peer;
 import org.apache.fulcrum.security.torque.peer.PeerManagable;
 import org.apache.fulcrum.security.torque.peer.PeerManager;
 import org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer;
+import org.apache.fulcrum.security.torque.peer.managers.PeerRoleManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
@@ -38,17 +39,17 @@ import org.apache.torque.criteria.Criteria;
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id:$
  */
-public class TorqueTurbineRoleManagerImpl extends TorqueAbstractRoleManager implements PeerManagable
+public class TorqueTurbineRoleManagerImpl extends PeerRoleManager 
 {
-    PeerManager peerManager;
-    
-    /**
+
+	/**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractRoleManager#doSelectAllRoles(java.sql.Connection)
      */
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
 	protected <T extends Role> List<T> doSelectAllRoles(Connection con) throws TorqueException
     {
-        Criteria criteria = new Criteria(TorqueTurbineRolePeer.DATABASE_NAME);
+        Criteria criteria = new Criteria();
 
         if ( (getCustomPeer())) {
             try
@@ -67,7 +68,8 @@ public class TorqueTurbineRoleManagerImpl extends TorqueAbstractRoleManager impl
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractRoleManager#doSelectById(java.lang.Integer, java.sql.Connection)
      */
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
 	protected <T extends Role> T doSelectById(Integer id, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
     {
         if ( (getCustomPeer())) {
@@ -87,11 +89,11 @@ public class TorqueTurbineRoleManagerImpl extends TorqueAbstractRoleManager impl
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractRoleManager#doSelectByName(java.lang.String, java.sql.Connection)
      */
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
 	protected <T extends Role> T doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
     {
-        Criteria criteria = new Criteria(TorqueTurbineRolePeer.DATABASE_NAME);
-        criteria.where(TorqueTurbineRolePeer.ROLE_NAME, name);
+        Criteria criteria = new Criteria();
         criteria.setIgnoreCase(true);
         criteria.setSingleRecord(true);
         
@@ -99,13 +101,16 @@ public class TorqueTurbineRoleManagerImpl extends TorqueAbstractRoleManager impl
         if ( (getCustomPeer())) {
             try
             {
-                roles = ((TorqueTurbinePeer<T>)getPeerInstance()).doSelect( criteria, con );
+            	TorqueTurbinePeer<T> peerInstance = (TorqueTurbinePeer<T>)getPeerInstance();
+            	criteria.where(peerInstance.getTableMap().getColumn(getColumnName()), name);
+                roles = peerInstance.doSelect( criteria, con );
             }
             catch ( DataBackendException e )
             {
                 throw new TorqueException( e );
             }
         } else {
+            criteria.where(TorqueTurbineRolePeer.ROLE_NAME, name);
             roles =  (List<T>) TorqueTurbineRolePeer.doSelect(criteria, con);
         }
 
@@ -116,20 +121,5 @@ public class TorqueTurbineRoleManagerImpl extends TorqueAbstractRoleManager impl
 
         return roles.get(0);
     }
-    
-    public Peer getPeerInstance() throws DataBackendException {
-        return getPeerManager().getPeerInstance(getPeerClassName(), TorqueTurbinePeer.class, getClassName());
-    }
-    
-    /**
-     * @return Returns the persistenceHelper.
-     */
-    public PeerManager getPeerManager()
-    {
-        if (peerManager == null)
-        {
-            peerManager = (PeerManager) resolve(PeerManager.ROLE);
-        }
-        return peerManager;
-    }
+   
 }

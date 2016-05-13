@@ -38,46 +38,19 @@ import org.apache.torque.util.Transaction;
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id:$
  */
-public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
+public abstract class TorqueAbstractRoleManager extends AbstractRoleManager 
 {
-    private Boolean customPeer = false;  //  used for torque which uses per object peer classes
-    
-    private String peerClassName;
-    private static final String PEER_CLASS_NAME_KEY = "peerClassName";
     
     /**
      * Avalon Service lifecycle method
      */
-    public void configure(Configuration conf) throws ConfigurationException
+    @Override
+	public void configure(Configuration conf) throws ConfigurationException
     {
        super.configure( conf );
-       
-        peerClassName = conf.getChild( PEER_CLASS_NAME_KEY).getValue( null );
-        if (peerClassName != null) {
-            setPeerClassName( peerClassName );
-            setCustomPeer(true);
-        } 
+ 
     }
     
-    public Boolean getCustomPeer()
-    {
-        return customPeer;
-    }
-
-    public void setCustomPeer( Boolean customPeer )
-    {
-        this.customPeer = customPeer;
-    }
-
-    public String getPeerClassName()
-    {
-        return peerClassName;
-    }
-
-    public void setPeerClassName( String peerClassName )
-    {
-        this.peerClassName = peerClassName;
-    }
     /**
      * Get all specialized Roles
      *
@@ -130,7 +103,8 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
     *         backend.
     * @throws UnknownEntityException if the role does not exist.
     */
-    public synchronized void renameRole(Role role, String name) throws DataBackendException, UnknownEntityException
+    @Override
+	public synchronized void renameRole(Role role, String name) throws DataBackendException, UnknownEntityException
     {
         if (checkExists(role))
         {
@@ -162,7 +136,8 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
     *         backend.
     * @throws EntityExistsException if the role already exists.
     */
-    protected synchronized <T extends Role> T persistNewRole(T role) throws DataBackendException
+    @Override
+	protected synchronized <T extends Role> T persistNewRole(T role) throws DataBackendException
     {
         try
         {
@@ -184,7 +159,8 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
     *         backend.
     * @throws UnknownEntityException if the role does not exist.
     */
-    public synchronized void removeRole(Role role) throws DataBackendException, UnknownEntityException
+    @Override
+	public synchronized void removeRole(Role role) throws DataBackendException, UnknownEntityException
     {
         if (checkExists(role))
         {
@@ -211,7 +187,8 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
       * @throws DataBackendException when more than one Role with
       *         the same name exists.
       */
-    public boolean checkExists(String roleName) throws DataBackendException
+    @Override
+	public boolean checkExists(String roleName) throws DataBackendException
     {
         boolean exists = false;
 
@@ -258,7 +235,8 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
      * @throws DataBackendException if there was an error accessing the
      *         data backend.
      */
-    public RoleSet getAllRoles() throws DataBackendException
+    @Override
+	public RoleSet getAllRoles() throws DataBackendException
     {
         RoleSet roleSet = new RoleSet();
         Connection con = null;
@@ -306,7 +284,8 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
      * @throws UnknownEntityException
      *             if the role does not exist.
      */
-    public <T extends Role> T getRoleById(Object id) throws DataBackendException, UnknownEntityException
+    @Override
+	public <T extends Role> T getRoleById(Object id) throws DataBackendException, UnknownEntityException
     {
         T role;
 
@@ -359,7 +338,8 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
      *         data backend.
      * @throws UnknownEntityException if the role does not exist.
      */
-    public <T extends Role> T getRoleByName(String name) throws DataBackendException, UnknownEntityException
+    @Override
+	public <T extends Role> T getRoleByName(String name) throws DataBackendException, UnknownEntityException
     {
         T role = null;
         Connection con = null;

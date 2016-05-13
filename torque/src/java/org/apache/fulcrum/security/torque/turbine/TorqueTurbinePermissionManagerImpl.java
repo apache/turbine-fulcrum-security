@@ -27,6 +27,7 @@ import org.apache.fulcrum.security.torque.peer.Peer;
 import org.apache.fulcrum.security.torque.peer.PeerManagable;
 import org.apache.fulcrum.security.torque.peer.PeerManager;
 import org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer;
+import org.apache.fulcrum.security.torque.peer.managers.PeerPermissionManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
@@ -38,18 +39,18 @@ import org.apache.torque.criteria.Criteria;
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id:$
  */
-public class TorqueTurbinePermissionManagerImpl extends TorqueAbstractPermissionManager implements PeerManagable
+public class TorqueTurbinePermissionManagerImpl extends PeerPermissionManager 
 {
     
-    PeerManager peerManager;
     
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager#doSelectAllPermissions(java.sql.Connection)
      */
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
 	protected <T extends Permission> List<T> doSelectAllPermissions(Connection con) throws TorqueException
     {
-        Criteria criteria = new Criteria(TorqueTurbinePermissionPeer.DATABASE_NAME);
+        Criteria criteria = new Criteria();
         
         if ( (getCustomPeer())) {
             try
@@ -70,7 +71,8 @@ public class TorqueTurbinePermissionManagerImpl extends TorqueAbstractPermission
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager#doSelectById(java.lang.Integer, java.sql.Connection)
      */
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
 	protected <T extends Permission> T doSelectById(Integer id, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
     {
         if ( (getCustomPeer())) {
@@ -90,11 +92,12 @@ public class TorqueTurbinePermissionManagerImpl extends TorqueAbstractPermission
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager#doSelectByName(java.lang.String, java.sql.Connection)
      */
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
 	protected <T extends Permission> T doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
     {
-        Criteria criteria = new Criteria(TorqueTurbinePermissionPeer.DATABASE_NAME);
-        criteria.where(TorqueTurbinePermissionPeer.PERMISSION_NAME, name);
+        Criteria criteria = new Criteria();
+       
         criteria.setIgnoreCase(true);
         criteria.setSingleRecord(true);
         
@@ -102,13 +105,17 @@ public class TorqueTurbinePermissionManagerImpl extends TorqueAbstractPermission
         if ( (getCustomPeer())) {
             try
             {
-                permissions = ((TorqueTurbinePeer<T>) getPeerInstance()).doSelect(criteria, con);
+            	TorqueTurbinePeer<T> peerInstance = (TorqueTurbinePeer<T>)getPeerInstance();
+            	criteria.where(peerInstance.getTableMap().getColumn(getColumnName()), name);
+            	permissions = peerInstance.doSelect( criteria, con );
+                
             }
             catch ( DataBackendException e )
             {
                 throw new TorqueException( e );
             }
         } else {
+        	 criteria.where(TorqueTurbinePermissionPeer.PERMISSION_NAME, name);
             permissions = (List<T>) TorqueTurbinePermissionPeer.doSelect(criteria, con);
         } 
 
@@ -117,22 +124,8 @@ public class TorqueTurbinePermissionManagerImpl extends TorqueAbstractPermission
             throw new NoRowsException(name);
         }
 
-        return (T) permissions.get(0);
+        return permissions.get(0);
     }
     
-    public Peer getPeerInstance() throws DataBackendException {
-        return getPeerManager().getPeerInstance(getPeerClassName(), TorqueTurbinePeer.class, getClassName());
-    }
-    
-    /**
-     * @return Returns the persistenceHelper.
-     */
-    public PeerManager getPeerManager()
-    {
-        if (peerManager == null)
-        {
-            peerManager = (PeerManager) resolve(PeerManager.ROLE);
-        }
-        return peerManager;
-    }
+  
 }

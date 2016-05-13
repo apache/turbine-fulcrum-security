@@ -40,44 +40,17 @@ import org.apache.torque.util.Transaction;
  */
 public abstract class TorqueAbstractPermissionManager extends AbstractPermissionManager
 {
-    private Boolean customPeer = false;  //  used for torque which uses per object peer classes
-    
-    private String peerClassName;
-    private static final String PEER_CLASS_NAME_KEY = "peerClassName";
     
     /**
      * Avalon Service lifecycle method
-     */
-    public void configure(Configuration conf) throws ConfigurationException
+     */ 
+    @Override
+	public void configure(Configuration conf) throws ConfigurationException
     {
        super.configure( conf );
-       
-        peerClassName = conf.getChild( PEER_CLASS_NAME_KEY).getValue( null );
-        if (peerClassName != null) {
-            setPeerClassName( peerClassName );
-            setCustomPeer(true);
-        } 
+
     }
     
-    public Boolean getCustomPeer()
-    {
-        return customPeer;
-    }
-
-    public void setCustomPeer( Boolean customPeer )
-    {
-        this.customPeer = customPeer;
-    }
-
-    public String getPeerClassName()
-    {
-        return peerClassName;
-    }
-
-    public void setPeerClassName( String peerClassName )
-    {
-        this.peerClassName = peerClassName;
-    }
     /**
      * Get all specialized Permissions
      *
@@ -132,7 +105,8 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
      * @throws UnknownEntityException
      *             if the permission does not exist.
      */
-    public synchronized void renamePermission(Permission permission, String name) throws DataBackendException, UnknownEntityException
+    @Override
+	public synchronized void renamePermission(Permission permission, String name) throws DataBackendException, UnknownEntityException
     {
         if (checkExists(permission))
         {
@@ -165,7 +139,8 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
      * @throws UnknownEntityException
      *             if the permission does not exist.
      */
-    public synchronized void removePermission(Permission permission) throws DataBackendException, UnknownEntityException
+    @Override
+	public synchronized void removePermission(Permission permission) throws DataBackendException, UnknownEntityException
     {
         if (checkExists(permission))
         {
@@ -195,7 +170,8 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
      * @throws EntityExistsException
      *             if the permission already exists.
      */
-    protected synchronized <T extends Permission> T persistNewPermission(T permission) throws DataBackendException
+    @Override
+	protected synchronized <T extends Permission> T persistNewPermission(T permission) throws DataBackendException
     {
         try
         {
@@ -216,7 +192,8 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      */
-    public PermissionSet getAllPermissions() throws DataBackendException
+    @Override
+	public PermissionSet getAllPermissions() throws DataBackendException
     {
         PermissionSet permissionSet = new PermissionSet();
         Connection con = null;
@@ -266,7 +243,8 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
      * @throws DataBackendException
      *             when more than one Permission with the same name exists.
      */
-    public boolean checkExists(String permissionName) throws DataBackendException
+    @Override
+	public boolean checkExists(String permissionName) throws DataBackendException
     {
         boolean exists = false;
 
@@ -321,7 +299,8 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
      * @throws UnknownEntityException
      *             if the permission does not exist.
      */
-    public <T extends Permission> T getPermissionById(Object id) throws DataBackendException, UnknownEntityException
+    @Override
+	public <T extends Permission> T getPermissionById(Object id) throws DataBackendException, UnknownEntityException
     {
         T permission;
 
@@ -374,7 +353,8 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
      *         data backend.
      * @throws UnknownEntityException if the group does not exist.
      */
-    public <T extends Permission> T getPermissionByName(String name) throws DataBackendException, UnknownEntityException
+    @Override
+	public <T extends Permission> T getPermissionByName(String name) throws DataBackendException, UnknownEntityException
     {
         T permission = null;
         Connection con = null;
