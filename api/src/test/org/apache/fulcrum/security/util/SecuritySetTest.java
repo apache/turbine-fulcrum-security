@@ -25,7 +25,7 @@ import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicGroupImpl;
 
 /**
  * Test using a SecuritySet. Useing various subclasses since it is Abstract.
- * 
+ *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
@@ -34,18 +34,13 @@ public class SecuritySetTest extends TestCase
 
     /**
      * Defines the testcase name for JUnit.
-     * 
+     *
      * @param name
      *            the testcase's name.
      */
     public SecuritySetTest(String name)
     {
         super(name);
-    }
-
-    public static void main(String[] args)
-    {
-        junit.textui.TestRunner.run(SecuritySetTest.class);
     }
 
     public void testNull() throws Exception

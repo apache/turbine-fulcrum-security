@@ -35,7 +35,7 @@ import org.apache.fulcrum.security.entity.SecurityEntity;
  * UI. It wraps a TreeSet object to enforce that only relevant methods are
  * available. TreeSet's contain only unique Objects (no duplicates) based on the
  * ID. They may or may not have a name, that depends on the implementation. Want
- * to get away frm requiring an ID and a name... Nothing should force Name to be
+ * to get away from requiring an ID and a name... Nothing should force Name to be
  * unique in the basic architecture of Fulcrum Security.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
@@ -60,7 +60,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
      */
     public SecuritySet()
     {
-        nameMap = new TreeMap<String, T>();
+        nameMap = new TreeMap<String, T>(String.CASE_INSENSITIVE_ORDER);
         idMap = new TreeMap<Object, T>();
     }
 
@@ -98,6 +98,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
     /**
      * Removes all Objects from this Set.
      */
+    @Override
     public void clear()
     {
         nameMap.clear();
@@ -114,7 +115,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
      */
     public boolean containsName(String name)
     {
-        return (StringUtils.isNotEmpty(name)) ? nameMap.containsKey(name.toLowerCase()) : false;
+        return (StringUtils.isNotEmpty(name)) ? nameMap.containsKey(name) : false;
     }
 
     /**
@@ -135,6 +136,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
      *
      * @return An iterator for the Set
      */
+    @Override
     public Iterator<T> iterator()
     {
         return idMap.values().iterator();
@@ -145,6 +147,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
      *
      * @return The cardinality of this Set.
      */
+    @Override
     public int size()
     {
         return idMap.size();
@@ -181,6 +184,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
     /**
      * @see java.util.Collection#add(java.lang.Object)
      */
+    @Override
     public boolean add(T o)
     {
         if (contains(o))
@@ -214,6 +218,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
         return addAll(collection);
     }
 
+    @Override
     public boolean addAll(Collection<? extends T> collection)
     {
         boolean res = false;
@@ -226,11 +231,13 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
         return res;
     }
 
+    @Override
     public boolean isEmpty()
     {
         return idMap.isEmpty();
     }
 
+    @Override
     public boolean containsAll(Collection<?> collection)
     {
         for (Object object : collection)
@@ -243,6 +250,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
         return true;
     }
 
+    @Override
     public boolean removeAll(Collection<?> collection)
     {
         boolean changed = false;
@@ -258,6 +266,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
         return changed;
     }
 
+    @Override
     public boolean retainAll(Collection<?> collection)
     {
         throw new RuntimeException("not implemented");
@@ -268,6 +277,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
      *
      * @see java.util.Collection#toArray()
      */
+    @Override
     public Object[] toArray()
     {
         return getSet().toArray();
@@ -280,6 +290,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
      *            An entity.
      * @return True if this Set contains the entity, false otherwise.
      */
+    @Override
     public boolean contains(Object o)
     {
         if (o == null || !(o instanceof SecurityEntity))
@@ -299,6 +310,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
      *            An entity.
      * @return True if this Set contained the entity before it was removed.
      */
+    @Override
     public boolean remove(Object o)
     {
         if (o instanceof SecurityEntity)
@@ -312,11 +324,10 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
         return false;
     }
 
-    /*
-     * (non-Javadoc)
-     *
+    /**
      * @see java.util.Set#toArray(T[])
      */
+    @Override
     public <A> A[] toArray(A[] a)
     {
         return getSet().toArray(a);
@@ -333,7 +344,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
      */
     public T getByName(String name)
     {
-        return nameMap.get(name.toLowerCase());
+        return nameMap.get(name);
     }
 
     /**

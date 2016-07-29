@@ -24,6 +24,14 @@
   </properties>
 
   <body>
+    <release version="1.1.1" date="in SVN">
+      <action type="fix" dev="tv">
+        Make SecuritySet truly case-insensitive
+      </action>
+      <action type="fix" dev="tv">
+        Make sure that TurbinePermissions are populated when creating an ACL
+      </action>
+    </release>
     <release version="1.1.0" date="">
       <action type="update" dev="tv">
         Add extended user having first name, last name, email and objectdata
