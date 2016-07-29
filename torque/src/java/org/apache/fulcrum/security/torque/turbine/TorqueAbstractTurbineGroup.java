@@ -64,6 +64,7 @@ public abstract class TorqueAbstractTurbineGroup extends TorqueAbstractTurbineTu
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity#getDatabaseName()
      */
+    @Override
     public String getDatabaseName()
     {
         return TorqueTurbineGroupPeer.DATABASE_NAME;
@@ -72,6 +73,7 @@ public abstract class TorqueAbstractTurbineGroup extends TorqueAbstractTurbineTu
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)
      */
+    @Override
     public void retrieveAttachedObjects(Connection con) throws TorqueException
     {
         Set<TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
@@ -93,6 +95,7 @@ public abstract class TorqueAbstractTurbineGroup extends TorqueAbstractTurbineTu
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity#update(java.sql.Connection)
      */
+    @Override
     public void update(Connection con) throws TorqueException
     {
     	Set<TurbineUserGroupRole> userGroupRoleSet = getUserGroupRoleSet();
@@ -127,6 +130,7 @@ public abstract class TorqueAbstractTurbineGroup extends TorqueAbstractTurbineTu
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity#delete()
      */
+    @Override
     public void delete() throws TorqueException
     {
         TorqueTurbineGroupPeer.doDelete(SimpleKey.keyFor(getEntityId()));

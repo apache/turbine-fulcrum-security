@@ -17,26 +17,14 @@ package org.apache.fulcrum.security.torque.peer.managers;
  * specific language governing permissions and limitations
  * under the License.
  */
-import java.sql.Connection;
-import java.util.List;
-
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.fulcrum.security.entity.Permission;
-import org.apache.fulcrum.security.spi.AbstractPermissionManager;
 import org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager;
 import org.apache.fulcrum.security.torque.peer.Peer;
 import org.apache.fulcrum.security.torque.peer.PeerManagable;
 import org.apache.fulcrum.security.torque.peer.PeerManager;
 import org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer;
 import org.apache.fulcrum.security.util.DataBackendException;
-import org.apache.fulcrum.security.util.EntityExistsException;
-import org.apache.fulcrum.security.util.PermissionSet;
-import org.apache.fulcrum.security.util.UnknownEntityException;
-import org.apache.torque.NoRowsException;
-import org.apache.torque.TooManyRowsException;
-import org.apache.torque.TorqueException;
-import org.apache.torque.util.Transaction;
 /**
  * This implementation persists to a database via Torque.
  *

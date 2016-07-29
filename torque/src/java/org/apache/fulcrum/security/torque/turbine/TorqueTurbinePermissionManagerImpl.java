@@ -21,11 +21,7 @@ import java.sql.Connection;
 import java.util.List;
 
 import org.apache.fulcrum.security.entity.Permission;
-import org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager;
 import org.apache.fulcrum.security.torque.om.TorqueTurbinePermissionPeer;
-import org.apache.fulcrum.security.torque.peer.Peer;
-import org.apache.fulcrum.security.torque.peer.PeerManagable;
-import org.apache.fulcrum.security.torque.peer.PeerManager;
 import org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer;
 import org.apache.fulcrum.security.torque.peer.managers.PeerPermissionManager;
 import org.apache.fulcrum.security.util.DataBackendException;
