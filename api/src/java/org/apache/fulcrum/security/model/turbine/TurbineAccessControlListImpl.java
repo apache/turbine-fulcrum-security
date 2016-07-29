@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.fulcrum.security.GroupManager;
+import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
@@ -83,12 +84,13 @@ public class TurbineAccessControlListImpl
      * @param turbineUserGroupRoleSet
      *            The set of user/group/role relations that this acl is built from
      * @param groupManager the Group manager
+     * @param roleManager the Role manager
      *
      * @throws FulcrumSecurityException if the global group cannot be retrieved
      */
     public TurbineAccessControlListImpl(
     		Set<? extends TurbineUserGroupRole> turbineUserGroupRoleSet,
-    		GroupManager groupManager) throws FulcrumSecurityException
+    		GroupManager groupManager, RoleManager roleManager) throws FulcrumSecurityException
     {
         this.roleSets = new HashMap<Group, RoleSet>();
         this.permissionSets = new HashMap<Group, PermissionSet>();
@@ -100,7 +102,20 @@ public class TurbineAccessControlListImpl
             groupSet.add(group);
 
             TurbineRole role = (TurbineRole)ugr.getRole();
-            roleSet.add(role);
+            if (!roleSet.containsId(role.getId()))
+            {
+                // get fresh reference from role manager to make sure the related
+                // permissions are populated
+                if (roleManager != null)
+                {
+                    role = roleManager.getRoleById(role.getId());
+                }
+                roleSet.add(role);
+            }
+            else
+            {
+                role = (TurbineRole)roleSet.getById(role.getId());
+            }
             if (roleSets.containsKey(group))
             {
             	roleSets.get(group).add(role);
@@ -140,6 +155,7 @@ public class TurbineAccessControlListImpl
      * @param group the Group
      * @return the set of Roles this user has within the Group.
      */
+    @Override
     public RoleSet getRoles(Group group)
     {
         if (group == null)
@@ -154,6 +170,7 @@ public class TurbineAccessControlListImpl
      *
      * @return the set of Roles this user has within the global Group.
      */
+    @Override
     public RoleSet getRoles()
     {
         return getRoles(globalGroup);
@@ -165,6 +182,7 @@ public class TurbineAccessControlListImpl
      * @param group the Group
      * @return the set of Permissions this user has within the Group.
      */
+    @Override
     public PermissionSet getPermissions(Group group)
     {
         if (group == null)
@@ -179,6 +197,7 @@ public class TurbineAccessControlListImpl
      *
      * @return the set of Permissions this user has within the global Group.
      */
+    @Override
     public PermissionSet getPermissions()
     {
         return getPermissions(globalGroup);
@@ -191,6 +210,7 @@ public class TurbineAccessControlListImpl
      * @param group the Group
      * @return <code>true</code> if the user is assigned the Role in the Group.
      */
+    @Override
     public boolean hasRole(Role role, Group group)
     {
         RoleSet set = getRoles(group);
@@ -210,6 +230,7 @@ public class TurbineAccessControlListImpl
      * @return <code>true</code> if the user is assigned the Role in any of
      *         the given Groups.
      */
+    @Override
     public boolean hasRole(Role role, GroupSet groupset)
     {
         if (role == null)
@@ -236,6 +257,7 @@ public class TurbineAccessControlListImpl
      * @param groupName the Group name
      * @return <code>true</code> if the user is assigned the Role in the Group.
      */
+    @Override
     public boolean hasRole(String roleName, String groupName)
     {
         try
@@ -257,6 +279,7 @@ public class TurbineAccessControlListImpl
      * @return <code>true</code> if the user is assigned the Role in any of
      *         the given Groups.
      */
+    @Override
     public boolean hasRole(String rolename, GroupSet groupset)
     {
         try
@@ -275,6 +298,7 @@ public class TurbineAccessControlListImpl
      * @param role the Role
      * @return <code>true</code> if the user is assigned the Role in the global Group.
      */
+    @Override
     public boolean hasRole(Role role)
     {
         return hasRole(role, globalGroup);
@@ -286,6 +310,7 @@ public class TurbineAccessControlListImpl
      * @param role the Role
      * @return <code>true</code> if the user is assigned the Role in the global Group.
      */
+    @Override
     public boolean hasRole(String role)
     {
         try
@@ -305,6 +330,7 @@ public class TurbineAccessControlListImpl
      * @param group the Group
      * @return <code>true</code> if the user is assigned the Permission in the Group.
      */
+    @Override
     public boolean hasPermission(Permission permission, Group group)
     {
         PermissionSet set = getPermissions(group);
@@ -324,6 +350,7 @@ public class TurbineAccessControlListImpl
      * @return <code>true</code> if the user is assigned the Permission in any
      *         of the given Groups.
      */
+    @Override
     public boolean hasPermission(Permission permission, GroupSet groupset)
     {
         if (permission == null)
@@ -350,6 +377,7 @@ public class TurbineAccessControlListImpl
      * @param group the Group
      * @return <code>true</code> if the user is assigned the Permission in the Group.
      */
+    @Override
     public boolean hasPermission(String permission, String group)
     {
         try
@@ -369,6 +397,7 @@ public class TurbineAccessControlListImpl
      * @param group the Group
      * @return <code>true</code> if the user is assigned the Permission in the Group.
      */
+    @Override
     public boolean hasPermission(String permission, Group group)
     {
         try
@@ -390,6 +419,7 @@ public class TurbineAccessControlListImpl
      * @return <code>true</code> if the user is assigned the Permission in any
      *         of the given Groups.
      */
+    @Override
     public boolean hasPermission(String permissionName, GroupSet groupset)
     {
         Permission permission;
@@ -425,6 +455,7 @@ public class TurbineAccessControlListImpl
      * @param permission the Permission
      * @return <code>true</code> if the user is assigned the Permission in the global Group.
      */
+    @Override
     public boolean hasPermission(Permission permission)
     {
         return hasPermission(permission, globalGroup);
@@ -436,6 +467,7 @@ public class TurbineAccessControlListImpl
      * @param permission the Permission
      * @return <code>true</code> if the user is assigned the Permission in the global Group.
      */
+    @Override
     public boolean hasPermission(String permission)
     {
         try
@@ -458,6 +490,7 @@ public class TurbineAccessControlListImpl
      *
      * @return A Group [] of all groups in the system.
      */
+    @Override
     public Group[] getAllGroups()
     {
         try

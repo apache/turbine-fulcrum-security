@@ -21,6 +21,7 @@ package org.apache.fulcrum.security.model.turbine;
 import java.util.Set;
 
 import org.apache.fulcrum.security.GroupManager;
+import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.User;
@@ -30,6 +31,7 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
 import org.apache.fulcrum.security.spi.AbstractManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
+import org.apache.fulcrum.security.util.FulcrumSecurityException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
@@ -44,6 +46,7 @@ public class TurbineACLFactory extends AbstractManager implements ACLFactory
     /**
      * @see org.apache.fulcrum.security.model.ACLFactory#getAccessControlList(org.apache.fulcrum.security.entity.User)
      */
+    @Override
     public <T extends AccessControlList> T getAccessControlList(User user)
     {
     	TurbineUser tu = (TurbineUser)user;
@@ -77,9 +80,11 @@ public class TurbineACLFactory extends AbstractManager implements ACLFactory
     private TurbineAccessControlList getAclInstance(Set<? extends TurbineUserGroupRole> turbineUserGroupRoleSet) throws UnknownEntityException
     {
     	GroupManager groupManager = null;
+        RoleManager roleManager = null;
 
     	try
     	{
+    	    roleManager = getRoleManager();
 			groupManager = getGroupManager();
 
 	        // make sure the global group exists
@@ -114,9 +119,9 @@ public class TurbineACLFactory extends AbstractManager implements ACLFactory
         {
             accessControlList =
                 new TurbineAccessControlListImpl(turbineUserGroupRoleSet,
-                        groupManager);
+                        groupManager, roleManager);
         }
-        catch (Exception e)
+        catch (FulcrumSecurityException e)
         {
             throw new UnknownEntityException("Failed to instantiate an ACL implementation object", e);
         }
