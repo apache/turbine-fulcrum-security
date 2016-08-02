@@ -30,6 +30,7 @@ import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePermission;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePermissionPeer;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRole;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRolePeer;
+import org.apache.fulcrum.security.torque.security.turbine.TorqueAbstractTurbineTurbineSecurityEntity;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
@@ -40,7 +41,7 @@ import org.apache.torque.om.SimpleKey;
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id:$
  */
-public abstract class TorqueAbstractTurbineRole extends TorqueAbstractTurbineTurbineSecurityEntity
+public abstract class FulcrumAbstractTurbineRole extends TorqueAbstractTurbineTurbineSecurityEntity
     implements TurbineRole
 {
     /** Serial version */
@@ -153,7 +154,7 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractTurbineTur
     }
 
     /**
-     * @see org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity#getDatabaseName()
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#getDatabaseName()
      */
     public String getDatabaseName()
     {
@@ -161,7 +162,7 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractTurbineTur
     }
 
     /**
-     * @see org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)
      */
     public void retrieveAttachedObjects(Connection con) throws TorqueException
     {
@@ -191,7 +192,7 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractTurbineTur
     }
 
     /**
-     * @see org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity#update(java.sql.Connection)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#update(java.sql.Connection)
      */
     public void update(Connection con) throws TorqueException
     {
@@ -242,7 +243,7 @@ public abstract class TorqueAbstractTurbineRole extends TorqueAbstractTurbineTur
     }
 
     /**
-     * @see org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity#delete()
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#delete()
      */
     public void delete() throws TorqueException
     {

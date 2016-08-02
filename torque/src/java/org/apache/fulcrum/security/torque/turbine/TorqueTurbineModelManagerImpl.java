@@ -30,7 +30,7 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbinePermission;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineRole;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
-import org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.torque.TorqueException;

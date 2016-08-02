@@ -123,5 +123,4 @@ public class TorqueTurbinePermissionManagerImpl extends PeerPermissionManager
         return permissions.get(0);
     }
     
-  
 }

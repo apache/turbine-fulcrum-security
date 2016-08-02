@@ -120,6 +120,5 @@ public class TorqueTurbineGroupManagerImpl extends PeerGroupManager
 
         return groups.get(0);
     }
-    
   
 }

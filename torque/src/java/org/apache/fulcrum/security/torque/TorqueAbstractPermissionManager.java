@@ -24,6 +24,7 @@ import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.spi.AbstractPermissionManager;
+import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PermissionSet;

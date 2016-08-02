@@ -1,4 +1,4 @@
-package org.apache.fulcrum.security.torque.turbine;
+package org.apache.fulcrum.security.torque.security.turbine;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -22,7 +22,7 @@ import java.util.Set;
 
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRoleEntity;
-import org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
 /**
  * This abstract class provides the SecurityInterface to the managers.
  *

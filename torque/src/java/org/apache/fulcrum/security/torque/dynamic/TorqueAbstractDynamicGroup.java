@@ -24,12 +24,12 @@ import java.util.Set;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
-import org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupRole;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupRolePeer;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUserGroup;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUserGroupPeer;
+import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UserSet;
 import org.apache.torque.TorqueException;
@@ -222,7 +222,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
     }
 
     /**
-     * @see org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity#getDatabaseName()
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#getDatabaseName()
      */
     public String getDatabaseName()
     {
@@ -230,7 +230,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
     }
 
     /**
-     * @see org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)
      */
     public void retrieveAttachedObjects(Connection con) throws TorqueException
     {
@@ -254,7 +254,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
     }
 
     /**
-     * @see org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity#update(java.sql.Connection)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#update(java.sql.Connection)
      */
     public void update(Connection con) throws TorqueException
     {
@@ -303,7 +303,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
     }
 
     /**
-     * @see org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity#delete()
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#delete()
      */
     public void delete() throws TorqueException
     {

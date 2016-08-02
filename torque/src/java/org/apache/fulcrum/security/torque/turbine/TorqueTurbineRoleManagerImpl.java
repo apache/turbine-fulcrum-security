@@ -114,7 +114,6 @@ public class TorqueTurbineRoleManagerImpl extends PeerRoleManager
         {
             throw new NoRowsException(name);
         }
-
         return roles.get(0);
     }
    

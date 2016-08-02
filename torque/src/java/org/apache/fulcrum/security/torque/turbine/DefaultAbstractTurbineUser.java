@@ -24,9 +24,9 @@ import java.util.Set;
 
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
-import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRole;
-import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRolePeer;
-import org.apache.fulcrum.security.torque.om.TorqueTurbineUserPeer;
+import org.apache.fulcrum.security.torque.om.TurbineUserGroupRolePeer;
+import org.apache.fulcrum.security.torque.om.TurbineUserPeer;
+import org.apache.fulcrum.security.torque.security.turbine.TorqueAbstractTurbineTurbineSecurityEntity;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
 import org.apache.torque.om.SimpleKey;
@@ -36,7 +36,7 @@ import org.apache.torque.om.SimpleKey;
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id:$
  */
-public abstract class TorqueAbstractTurbineUser extends TorqueAbstractTurbineTurbineSecurityEntity
+public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTurbineSecurityEntity
     implements TurbineUser
 {
     /** Serial version */
@@ -45,7 +45,7 @@ public abstract class TorqueAbstractTurbineUser extends TorqueAbstractTurbineTur
     /**
      * Forward reference to generated code
      *
-     * Get a list of association objects, pre-populated with their TorqueTurbineRole
+     * Get a list of association objects, pre-populated with their TurbineRole
      * objects.
      *
      * @param criteria Criteria to define the selection of records
@@ -54,36 +54,41 @@ public abstract class TorqueAbstractTurbineUser extends TorqueAbstractTurbineTur
      *
      * @return a list of User/Group/Role relations
      */
-    protected List<TorqueTurbineUserGroupRole> getTorqueTurbineUserGroupRolesJoinTorqueTurbineRole(Criteria criteria, Connection con)
+    protected List<org.apache.fulcrum.security.torque.om.TurbineUserGroupRole> getTurbineUserGroupRolesJoinTurbineRole(Criteria criteria, Connection con)
         throws TorqueException
     {
-        criteria.and(TorqueTurbineUserGroupRolePeer.USER_ID, getEntityId() );
-        return TorqueTurbineUserGroupRolePeer.doSelectJoinTorqueTurbineRole(criteria, con);
+        criteria.and(TurbineUserGroupRolePeer.USER_ID, getEntityId() );
+        return TurbineUserGroupRolePeer.doSelectJoinTurbineRole(criteria, con);
     }
 
     /**
-     * @see org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity#getDatabaseName()
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#getDatabaseName()
      */
-    public String getDatabaseName()
+    @Override
+	public String getDatabaseName()
     {
-        return TorqueTurbineUserPeer.DATABASE_NAME;
+        return TurbineUserPeer.DATABASE_NAME;
     }
 
     /**
-     * @see org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)
      */
-    public void retrieveAttachedObjects(Connection con) throws TorqueException
+    @Override
+	public void retrieveAttachedObjects(Connection con) throws TorqueException
     {
         Set<TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
 
-        List<TorqueTurbineUserGroupRole> ugrs = getTorqueTurbineUserGroupRolesJoinTorqueTurbineRole(new Criteria(), con);
+        List<org.apache.fulcrum.security.torque.om.TurbineUserGroupRole> ugrs = getTurbineUserGroupRolesJoinTurbineRole(new Criteria(), con);
 
-        for (TorqueTurbineUserGroupRole ttugr : ugrs)
+        for (org.apache.fulcrum.security.torque.om.TurbineUserGroupRole ttugr : ugrs)
         {
             TurbineUserGroupRole ugr = new TurbineUserGroupRole();
             ugr.setUser(this);
-            ugr.setRole(ttugr.getTorqueTurbineRole());
-            ugr.setGroup(ttugr.getTorqueTurbineGroup(con));
+            ugr.setRole(ttugr.getTurbineRole());
+            // org.apache.fulcrum.security.torque.om.TurbineGroup implements 
+            // org.apache.fulcrum.security.model.turbine.entity.TurbineGroup
+            // but may be hides it? 
+            ugr.setGroup(ttugr.getTurbineGroup(con));
             userGroupRoleSet.add(ugr);
         }
 
@@ -91,9 +96,10 @@ public abstract class TorqueAbstractTurbineUser extends TorqueAbstractTurbineTur
     }
 
     /**
-     * @see org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity#update(java.sql.Connection)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#update(java.sql.Connection)
      */
-    public void update(Connection con) throws TorqueException
+    @Override
+	public void update(Connection con) throws TorqueException
     {
     	Set<TurbineUserGroupRole> userGroupRoleSet = getUserGroupRoleSet();
         if (userGroupRoleSet != null)
@@ -101,12 +107,12 @@ public abstract class TorqueAbstractTurbineUser extends TorqueAbstractTurbineTur
             Criteria criteria = new Criteria();
 
             /* remove old entries */
-            criteria.where(TorqueTurbineUserGroupRolePeer.USER_ID, getEntityId());
-            TorqueTurbineUserGroupRolePeer.doDelete(criteria, con);
+            criteria.where(TurbineUserGroupRolePeer.USER_ID, getEntityId());
+            TurbineUserGroupRolePeer.doDelete(criteria, con);
 
             for (TurbineUserGroupRole ugr : userGroupRoleSet)
             {
-                TorqueTurbineUserGroupRole ttugr = new TorqueTurbineUserGroupRole();
+                org.apache.fulcrum.security.torque.om.TurbineUserGroupRole ttugr = new org.apache.fulcrum.security.torque.om.TurbineUserGroupRole();
                 ttugr.setGroupId((Integer)ugr.getGroup().getId());
                 ttugr.setUserId((Integer)ugr.getUser().getId());
                 ttugr.setRoleId((Integer)ugr.getRole().getId());
@@ -125,10 +131,11 @@ public abstract class TorqueAbstractTurbineUser extends TorqueAbstractTurbineTur
     }
 
     /**
-     * @see org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity#delete()
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#delete()
      */
-    public void delete() throws TorqueException
+    @Override
+	public void delete() throws TorqueException
     {
-        TorqueTurbineUserPeer.doDelete(SimpleKey.keyFor(getEntityId()));
+        TurbineUserPeer.doDelete(SimpleKey.keyFor(getEntityId()));
     }
 }

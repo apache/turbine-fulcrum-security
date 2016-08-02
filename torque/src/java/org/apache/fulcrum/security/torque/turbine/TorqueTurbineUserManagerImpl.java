@@ -162,7 +162,7 @@ public class TorqueTurbineUserManagerImpl extends PeerUserManager implements Tur
         {
             throw new NoRowsException(name);
         }
-
+        
         return users.get(0);
     }
 

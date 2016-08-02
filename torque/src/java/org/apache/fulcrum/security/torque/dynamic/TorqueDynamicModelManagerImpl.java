@@ -29,7 +29,7 @@ import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
-import org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.torque.TorqueException;

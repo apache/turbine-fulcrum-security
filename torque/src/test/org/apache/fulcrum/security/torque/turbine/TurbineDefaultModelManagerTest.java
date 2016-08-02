@@ -21,12 +21,12 @@ package org.apache.fulcrum.security.torque.turbine;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.turbine.test.AbstractTurbineModelManagerTest;
 import org.apache.fulcrum.security.torque.HsqlDB;
-import org.apache.fulcrum.security.torque.om.TorqueTurbineGroupPeer;
-import org.apache.fulcrum.security.torque.om.TorqueTurbinePermissionPeer;
-import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePeer;
-import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePermissionPeer;
-import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRolePeer;
-import org.apache.fulcrum.security.torque.om.TorqueTurbineUserPeer;
+import org.apache.fulcrum.security.torque.om.TurbineGroupPeer;
+import org.apache.fulcrum.security.torque.om.TurbinePermissionPeer;
+import org.apache.fulcrum.security.torque.om.TurbineRolePeer;
+import org.apache.fulcrum.security.torque.om.TurbineRolePermissionPeer;
+import org.apache.fulcrum.security.torque.om.TurbineUserGroupRolePeer;
+import org.apache.fulcrum.security.torque.om.TurbineUserPeer;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
 
@@ -35,7 +35,7 @@ import org.apache.torque.criteria.Criteria;
  * @author <a href="jh@byteaction.de">J&#252;rgen Hoffmann</a>
  * @version $Id:$
  */
-public class TorqueTurbineModelManagerTest
+public class TurbineDefaultModelManagerTest
     extends AbstractTurbineModelManagerTest
 {
     protected static HsqlDB hsqlDB = null;
@@ -46,12 +46,12 @@ public class TorqueTurbineModelManagerTest
 
         try
         {
-            hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-turbine-schema.sql");
-            hsqlDB.addSQL("src/test/id-table-schema.sql");
-            hsqlDB.addSQL("src/test/fulcrum-turbine-schema-idtable-init.sql");
-
+            hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-turbine-default-schema.sql");
+            // we do not need id-broker,set native in schema and added identity in hsql
+            // same for both flavors
             this.setRoleFileName("src/test/TurbineTorqueRoleConfig.xml");
-            this.setConfigurationFileName("src/test/TurbineTorqueComponentConfig.xml");
+            // we have to use declared peers 
+            this.setConfigurationFileName("src/test/TurbineDefaultWithPeersComponentConfig.xml");
             securityService = (SecurityService) lookup(SecurityService.ROLE);
             super.setUp();
         }
@@ -70,28 +70,28 @@ public class TorqueTurbineModelManagerTest
         try
         {
             Criteria criteria = new Criteria();
-            criteria.where(TorqueTurbineUserGroupRolePeer.USER_ID, 0, Criteria.GREATER_THAN);
-            TorqueTurbineUserGroupRolePeer.doDelete(criteria);
+            criteria.where(TurbineUserGroupRolePeer.USER_ID, 0, Criteria.GREATER_THAN);
+            TurbineUserGroupRolePeer.doDelete(criteria);
 
             criteria = new Criteria();
-            criteria.where(TorqueTurbineRolePermissionPeer.ROLE_ID, 0, Criteria.GREATER_THAN);
-            TorqueTurbineRolePermissionPeer.doDelete(criteria);
+            criteria.where(TurbineRolePermissionPeer.ROLE_ID, 0, Criteria.GREATER_THAN);
+            TurbineRolePermissionPeer.doDelete(criteria);
 
             criteria = new Criteria();
-            criteria.where(TorqueTurbineUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
-            TorqueTurbineUserPeer.doDelete(criteria);
+            criteria.where(TurbineUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
+            TurbineUserPeer.doDelete(criteria);
 
             criteria = new Criteria();
-            criteria.where(TorqueTurbineGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
-            TorqueTurbineGroupPeer.doDelete(criteria);
+            criteria.where(TurbineGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
+            TurbineGroupPeer.doDelete(criteria);
 
             criteria = new Criteria();
-            criteria.where(TorqueTurbineRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN);
-            TorqueTurbineRolePeer.doDelete(criteria);
+            criteria.where(TurbineRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN);
+            TurbineRolePeer.doDelete(criteria);
 
             criteria = new Criteria();
-            criteria.where(TorqueTurbinePermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN);
-            TorqueTurbinePermissionPeer.doDelete(criteria);
+            criteria.where(TurbinePermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN);
+            TurbinePermissionPeer.doDelete(criteria);
         }
         catch (TorqueException e)
         {
@@ -103,10 +103,10 @@ public class TorqueTurbineModelManagerTest
     }
 
     /**
- 	 * Constructor for TorqueTurbineModelManagerTest.
+ 	 * Constructor for TurbineDefaultModelManagerTest.
 	 * @param arg0
 	 */
-    public TorqueTurbineModelManagerTest(String arg0)
+    public TurbineDefaultModelManagerTest(String arg0)
     {
         super(arg0);
     }

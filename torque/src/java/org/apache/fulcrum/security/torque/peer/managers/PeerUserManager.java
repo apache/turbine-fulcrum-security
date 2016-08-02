@@ -52,6 +52,7 @@ public abstract class PeerUserManager extends TorqueAbstractUserManager implemen
     {
        super.configure( conf );
        
+//        peerClassName = conf.getChild( PEER_CLASS_NAME_KEY).getValue( "org.apache.fulcrum.security.torque.om.TorqueTurbineUserPeer" );
         peerClassName = conf.getChild( PEER_CLASS_NAME_KEY).getValue( null );
         if (peerClassName != null) {
             setPeerClassName( peerClassName );

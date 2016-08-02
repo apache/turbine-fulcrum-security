@@ -23,10 +23,10 @@ import java.util.Set;
 
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
-import org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroup;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserPeer;
+import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
@@ -190,7 +190,7 @@ public abstract class TorqueAbstractBasicUser extends TorqueAbstractSecurityEnti
     }
 
     /**
-     * @see org.apache.fulcrum.security.torque.TorqueAbstractSecurityEntity#delete()
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#delete()
      */
     public void delete() throws TorqueException
     {

@@ -19,15 +19,15 @@
 -->
 <!-- ====================================================================     -->
 <!--                                                                          -->
-<!-- F U L C R U M  T U R B I N E  S E C U R I T Y  S C H E M A               -->
+<!-- F U L C R U M  D E F A U L T  T U R B I N E  S E C U R I T Y  S C H E M A   -->
 <!--                                                                          -->
 <!-- ====================================================================     -->
 <!-- @author: <a href="mailto:tv@apache.org">Thomas Vandahl</a> -->
-<!-- @version $Id: torque-security-schema.xml,v 1.1 2005/09/26 14:10:04 tvan Exp $ -->
+<!-- @version $Id$ -->
 <!-- ====================================================================     -->
 
-<database name="fulcrum"
-    defaultIdMethod="none"
+<database name="default"
+    defaultIdMethod="none" defaultJavaType="object"
     xmlns="http://db.apache.org/torque/4.0/templates/database"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database 
@@ -35,9 +35,9 @@
 
 <!--   
    after Torque 4.1 is released, add attribute peerInterface="org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer" 
-   to tables FULCRUM_TURBINE_PERMISSION,FULCRUM_TURBINE_ROLE,FULCRUM_TURBINE_GROUP,FULCRUM_TURBINE_USER, cft. https://issues.apache.org/jira/browse/TRB-92 and https://issues.apache.org/jira/browse/TORQUE-309.
+   to tables TURBINE_PERMISSION,TURBINE_ROLE,TURBINE_GROUP,TURBINE_USER, cft. https://issues.apache.org/jira/browse/TRB-92 and https://issues.apache.org/jira/browse/TORQUE-309.
    -->
-  <table name="FULCRUM_TURBINE_PERMISSION" javaName="TorqueTurbinePermission" idMethod="idbroker"  baseClass="org.apache.fulcrum.security.torque.turbine.FulcrumAbstractTurbinePermission">
+  <table name="TURBINE_PERMISSION" javaName="TurbinePermission" idMethod="native"  baseClass="org.apache.fulcrum.security.torque.turbine.DefaultAbstractTurbinePermission">
     <column name="PERMISSION_ID" required="true" primaryKey="true" type="INTEGER" javaName="EntityId" javaType="object"/>
     <column name="PERMISSION_NAME" required="true" size="64" type="VARCHAR" javaName="EntityName"/>
 
@@ -47,8 +47,8 @@
 
   </table>
 
-  <table name="FULCRUM_TURBINE_ROLE" javaName="TorqueTurbineRole" idMethod="idbroker" 
-      baseClass="org.apache.fulcrum.security.torque.turbine.FulcrumAbstractTurbineRole">
+  <table name="TURBINE_ROLE" javaName="TurbineRole" idMethod="native" 
+      baseClass="org.apache.fulcrum.security.torque.turbine.DefaultAbstractTurbineRole">
     <column name="ROLE_ID" required="true" primaryKey="true" type="INTEGER" javaName="EntityId" javaType="object"/>
     <column name="ROLE_NAME" required="true" size="64" type="VARCHAR" javaName="EntityName"/>
 
@@ -58,8 +58,8 @@
 
   </table>
 
-  <table name="FULCRUM_TURBINE_GROUP" javaName="TorqueTurbineGroup" idMethod="idbroker" 
-      baseClass="org.apache.fulcrum.security.torque.turbine.FulcrumAbstractTurbineGroup">
+  <table name="TURBINE_GROUP" javaName="TurbineGroup" idMethod="native" 
+      baseClass="org.apache.fulcrum.security.torque.turbine.DefaultAbstractTurbineGroup">
     <column name="GROUP_ID" required="true" primaryKey="true" type="INTEGER" javaName="EntityId" javaType="object"/>
     <column name="GROUP_NAME" required="true" type="VARCHAR" size="64" javaName="EntityName"/>
 
@@ -69,8 +69,8 @@
 
   </table>
 
-  <table name="FULCRUM_TURBINE_USER" javaName="TorqueTurbineUser" idMethod="idbroker" 
-        baseClass="org.apache.fulcrum.security.torque.turbine.FulcrumAbstractTurbineUser">
+  <table name="TURBINE_USER" javaName="TurbineUser" idMethod="native" 
+        baseClass="org.apache.fulcrum.security.torque.turbine.DefaultAbstractTurbineUser">
     <column name="USER_ID" required="true" primaryKey="true" type="INTEGER" javaName="EntityId" javaType="object"/>
     <column name="LOGIN_NAME" required="true" size="64" type="VARCHAR" javaName="EntityName"/>
     <column name="PASSWORD_VALUE" required="true" size="16" type="VARCHAR" javaName="Password"/>
@@ -85,33 +85,33 @@
   </table>
 
   <!-- Turbine Security Model -->
-  <table name="TURBINE_ROLE_PERMISSION" javaName="TorqueTurbineRolePermission">
+  <table name="TURBINE_ROLE_PERMISSION" javaName="TurbineRolePermission" idMethod="none">
     <column name="ROLE_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
     <column name="PERMISSION_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
 
-    <foreign-key foreignTable="FULCRUM_TURBINE_ROLE">
+    <foreign-key foreignTable="TURBINE_ROLE">
       <reference local="ROLE_ID" foreign="ROLE_ID"/>
     </foreign-key>
 
-    <foreign-key foreignTable="FULCRUM_TURBINE_PERMISSION">
+    <foreign-key foreignTable="TURBINE_PERMISSION">
       <reference local="PERMISSION_ID" foreign="PERMISSION_ID"/>
     </foreign-key>
   </table>
 
-  <table name="TURBINE_USER_GROUP_ROLE" javaName="TorqueTurbineUserGroupRole">
+  <table name="TURBINE_USER_GROUP_ROLE" javaName="TurbineUserGroupRole" idMethod="none">
     <column name="USER_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
     <column name="GROUP_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
     <column name="ROLE_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
 
-    <foreign-key foreignTable="FULCRUM_TURBINE_USER">
+    <foreign-key foreignTable="TURBINE_USER">
       <reference local="USER_ID" foreign="USER_ID"/>
     </foreign-key>
 
-    <foreign-key foreignTable="FULCRUM_TURBINE_GROUP">
+    <foreign-key foreignTable="TURBINE_GROUP">
       <reference local="GROUP_ID" foreign="GROUP_ID"/>
     </foreign-key>
 
-    <foreign-key foreignTable="FULCRUM_TURBINE_ROLE">
+    <foreign-key foreignTable="TURBINE_ROLE">
       <reference local="ROLE_ID" foreign="ROLE_ID"/>
     </foreign-key>
   </table>

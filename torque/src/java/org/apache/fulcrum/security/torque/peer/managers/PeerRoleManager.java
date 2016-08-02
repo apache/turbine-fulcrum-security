@@ -49,6 +49,7 @@ public abstract class PeerRoleManager extends TorqueAbstractRoleManager implemen
     {
        super.configure( conf );
        
+//       peerClassName = conf.getChild( PEER_CLASS_NAME_KEY).getValue( "org.apache.fulcrum.security.torque.om.TorqueTurbineRolePeer" );
         peerClassName = conf.getChild( PEER_CLASS_NAME_KEY).getValue( null );
         if (peerClassName != null) {
             setPeerClassName( peerClassName );
