@@ -60,16 +60,7 @@ public abstract class DefaultAbstractTurbineGroup extends TorqueAbstractTurbineT
         criteria.and(TurbineUserGroupRolePeer.GROUP_ID, getEntityId() );
         return TurbineUserGroupRolePeer.doSelectJoinTurbineRole(criteria, con);
     }
-
-    /**
-     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#getDatabaseName()
-     */
-    @Override
-    public String getDatabaseName()
-    {
-        return TurbineGroupPeer.DATABASE_NAME;
-    }
-
+    
     /**
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)
      */

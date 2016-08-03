@@ -51,7 +51,8 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if role or permission is not present.
      */
-    public synchronized void grant(Role role, Permission permission)
+    @Override
+	public synchronized void grant(Role role, Permission permission)
         throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = getRoleManager().checkExists(role);
@@ -66,7 +67,7 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
 
             try
             {
-                con = Transaction.begin(((TorqueAbstractSecurityEntity)role).getDatabaseName());
+                con = Transaction.begin();
 
                 ((TorqueAbstractSecurityEntity)role).update(con);
                 ((TorqueAbstractSecurityEntity)permission).update(con);
@@ -108,7 +109,8 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if role or permission is not present.
      */
-    public synchronized void revoke(Role role, Permission permission)
+    @Override
+	public synchronized void revoke(Role role, Permission permission)
         throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = getRoleManager().checkExists(role);
@@ -123,7 +125,7 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
 
             try
             {
-                con = Transaction.begin(((TorqueAbstractSecurityEntity)role).getDatabaseName());
+                con = Transaction.begin();
 
                 ((TorqueAbstractSecurityEntity)role).update(con);
                 ((TorqueAbstractSecurityEntity)permission).update(con);
@@ -157,7 +159,8 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
         }
     }
 
-    public synchronized void grant(User user, Group group, Role role) throws DataBackendException, UnknownEntityException
+    @Override
+	public synchronized void grant(User user, Group group, Role role) throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = getRoleManager().checkExists(role);
         boolean userExists = getUserManager().checkExists(user);
@@ -177,7 +180,7 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
 
             try
             {
-                con = Transaction.begin(((TorqueAbstractSecurityEntity)user).getDatabaseName());
+                con = Transaction.begin();
 
                 ((TorqueAbstractSecurityEntity)user).update(con);
                 ((TorqueAbstractSecurityEntity)group).update(con);
@@ -220,7 +223,8 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
         }
     }
 
-    public synchronized void revoke(User user, Group group, Role role)
+    @Override
+	public synchronized void revoke(User user, Group group, Role role)
         throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = getRoleManager().checkExists(role);
@@ -254,7 +258,7 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
 
             try
             {
-                con = Transaction.begin(((TorqueAbstractSecurityEntity)user).getDatabaseName());
+                con = Transaction.begin();
 
                 ((TorqueAbstractSecurityEntity)user).update(con);
                 ((TorqueAbstractSecurityEntity)group).update(con);

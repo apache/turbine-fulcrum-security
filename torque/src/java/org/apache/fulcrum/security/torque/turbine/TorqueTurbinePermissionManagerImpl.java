@@ -51,7 +51,8 @@ public class TorqueTurbinePermissionManagerImpl extends PeerPermissionManager
         if ( (getCustomPeer())) {
             try
             {
-                return ((TorqueTurbinePeer<T>) getPeerInstance()).doSelect( criteria, con );
+            	TorqueTurbinePeer<T> peerInstance = (TorqueTurbinePeer<T>)getPeerInstance();
+                return peerInstance.doSelect( criteria, con );
             }
             catch ( DataBackendException e )
             {
@@ -74,7 +75,8 @@ public class TorqueTurbinePermissionManagerImpl extends PeerPermissionManager
         if ( (getCustomPeer())) {
             try
             {
-                return ((TorqueTurbinePeer<T>) getPeerInstance()).retrieveByPK(id, con);
+            	TorqueTurbinePeer<T> peerInstance = (TorqueTurbinePeer<T>)getPeerInstance();
+                return peerInstance.retrieveByPK(id, con);
             }
             catch ( DataBackendException e )
             {

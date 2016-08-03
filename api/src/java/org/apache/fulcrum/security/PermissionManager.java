@@ -52,8 +52,9 @@ public interface PermissionManager
      * @return an object implementing Permission interface.
      * @throws UnknownEntityException
      *             if the object could not be instantiated.
+     * @throws DataBackendException 
      */
-    <T extends Permission> T getPermissionInstance() throws UnknownEntityException;
+    <T extends Permission> T getPermissionInstance() throws DataBackendException;
 
     /**
      * Construct a blank Permission object.
@@ -68,7 +69,7 @@ public interface PermissionManager
      * @throws UnknownEntityException
      *             if the object could not be instantiated.
      */
-    <T extends Permission> T getPermissionInstance(String permName) throws UnknownEntityException;
+    <T extends Permission> T getPermissionInstance(String permName) throws DataBackendException;
 
     /**
      * Retrieve a Permission object with specified name.

@@ -62,14 +62,6 @@ public abstract class FulcrumAbstractTurbineUser extends TorqueAbstractTurbineTu
         return TorqueTurbineUserGroupRolePeer.doSelectJoinTorqueTurbineRole(criteria, con);
     }
 
-    /**
-     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#getDatabaseName()
-     */
-    @Override
-	public String getDatabaseName()
-    {
-        return TorqueTurbineUserPeer.DATABASE_NAME;
-    }
 
     /**
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)

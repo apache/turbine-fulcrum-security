@@ -78,13 +78,6 @@ public abstract class TorqueAbstractSecurityEntity
     public abstract void update(Connection con) throws TorqueException;
 
     /**
-     * Get the name of the connection pool associated to this object
-     *
-     * @return the logical Torque database name
-     */
-    public abstract String getDatabaseName();
-
-    /**
      * Delete this entity
      *
      * @throws TorqueException if any database operation fails

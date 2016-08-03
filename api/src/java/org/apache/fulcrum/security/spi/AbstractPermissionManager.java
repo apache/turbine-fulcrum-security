@@ -44,11 +44,11 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
      * the default constructor.
      *
      * @return an object implementing Permission interface.
-     * @throws UnknownEntityException
+     * @throws DataBackendException
      *             if the object could not be instantiated.
      */
     @Override
-	public <T extends Permission> T getPermissionInstance() throws UnknownEntityException
+	public <T extends Permission> T getPermissionInstance() throws DataBackendException
     {
         try
         {
@@ -58,7 +58,7 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
         }
         catch (Exception e)
         {
-            throw new UnknownEntityException("Failed to instantiate a Permission implementation object", e);
+            throw new DataBackendException("Failed to instantiate a Permission implementation object", e);
         }
     }
 
@@ -72,11 +72,11 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
      *            The name of the permission.
      *
      * @return an object implementing Permission interface.
-     * @throws UnknownEntityException
+     * @throws DataBackendException
      *             if the object could not be instantiated.
      */
     @Override
-	public <T extends Permission> T getPermissionInstance(String permName) throws UnknownEntityException
+	public <T extends Permission> T getPermissionInstance(String permName) throws DataBackendException
     {
         T perm = getPermissionInstance();
         perm.setName(permName);

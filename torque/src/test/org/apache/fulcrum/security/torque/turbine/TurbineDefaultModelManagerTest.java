@@ -18,6 +18,9 @@ package org.apache.fulcrum.security.torque.turbine;
  * under the License.
  */
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.turbine.test.AbstractTurbineModelManagerTest;
 import org.apache.fulcrum.security.torque.HsqlDB;
@@ -27,8 +30,10 @@ import org.apache.fulcrum.security.torque.om.TurbineRolePeer;
 import org.apache.fulcrum.security.torque.om.TurbineRolePermissionPeer;
 import org.apache.fulcrum.security.torque.om.TurbineUserGroupRolePeer;
 import org.apache.fulcrum.security.torque.om.TurbineUserPeer;
+import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
+import org.apache.torque.util.Transaction;
 
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
@@ -67,36 +72,49 @@ public class TurbineDefaultModelManagerTest
 	public void tearDown()
     {
         // cleanup tables
+    	Connection con = null;
         try
         {
-            Criteria criteria = new Criteria();
+        	con = Transaction.begin();// "default"
+
+        	Criteria criteria = new Criteria();
             criteria.where(TurbineUserGroupRolePeer.USER_ID, 0, Criteria.GREATER_THAN);
-            TurbineUserGroupRolePeer.doDelete(criteria);
+            
+            TurbineUserGroupRolePeer.doDelete(criteria,con);
 
             criteria = new Criteria();
             criteria.where(TurbineRolePermissionPeer.ROLE_ID, 0, Criteria.GREATER_THAN);
-            TurbineRolePermissionPeer.doDelete(criteria);
+            TurbineRolePermissionPeer.doDelete(criteria,con);
 
             criteria = new Criteria();
             criteria.where(TurbineUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
-            TurbineUserPeer.doDelete(criteria);
-
+            TurbineUserPeer.doDelete(criteria,con);
+ 
             criteria = new Criteria();
             criteria.where(TurbineGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
-            TurbineGroupPeer.doDelete(criteria);
+            TurbineGroupPeer.doDelete(criteria,con);
 
             criteria = new Criteria();
             criteria.where(TurbineRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN);
-            TurbineRolePeer.doDelete(criteria);
+            TurbineRolePeer.doDelete(criteria,con);
 
             criteria = new Criteria();
             criteria.where(TurbinePermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN);
-            TurbinePermissionPeer.doDelete(criteria);
+            TurbinePermissionPeer.doDelete(criteria,con);
+            
+            con.commit();
+            con = null;
         }
         catch (TorqueException e)
         {
             fail(e.toString());
-        }
+        } catch (SQLException e) {
+        	 if (con != null)
+             {
+                 Transaction.safeRollback(con);
+             }
+        	 fail(e.toString());
+		}
 
         modelManager = null;
         securityService = null;

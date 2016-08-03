@@ -50,7 +50,8 @@ public class TorqueTurbineGroupManagerImpl extends PeerGroupManager
         if ( (getCustomPeer())) {
             try
             {
-                return ((TorqueTurbinePeer<T>)getPeerInstance()).doSelect( criteria, con );
+            	TorqueTurbinePeer<T> peerInstance = (TorqueTurbinePeer<T>)getPeerInstance();
+                return peerInstance.doSelect( criteria, con );
             }
             catch ( DataBackendException e )
             {
@@ -73,7 +74,8 @@ public class TorqueTurbineGroupManagerImpl extends PeerGroupManager
         if ( (getCustomPeer())) {
             try
             {
-                return ((TorqueTurbinePeer<T>) getPeerInstance()).retrieveByPK( id, con );
+            	TorqueTurbinePeer<T> peerInstance = (TorqueTurbinePeer<T>)getPeerInstance();
+                return peerInstance.retrieveByPK( id, con );
             }
             catch ( DataBackendException e )
             {
@@ -101,6 +103,7 @@ public class TorqueTurbineGroupManagerImpl extends PeerGroupManager
             try
             {
             	TorqueTurbinePeer<T> peerInstance = (TorqueTurbinePeer<T>)getPeerInstance();
+            	
                 criteria.where(peerInstance.getTableMap().getColumn(getColumnName()), name);
                 groups = peerInstance.doSelect( criteria, con );
             }

@@ -49,7 +49,8 @@ public class TorqueBasicModelManagerImpl extends AbstractManager implements Basi
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the account is not present.
      */
-    public synchronized void grant(User user, Group group) throws DataBackendException, UnknownEntityException
+    @Override
+	public synchronized void grant(User user, Group group) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = getGroupManager().checkExists(group);
         boolean userExists = getUserManager().checkExists(user);
@@ -63,7 +64,7 @@ public class TorqueBasicModelManagerImpl extends AbstractManager implements Basi
 
             try
             {
-                con = Transaction.begin(((TorqueAbstractSecurityEntity)user).getDatabaseName());
+            	con = Transaction.begin();
 
                 ((TorqueAbstractSecurityEntity)user).update(con);
                 ((TorqueAbstractSecurityEntity)group).update(con);
@@ -106,7 +107,8 @@ public class TorqueBasicModelManagerImpl extends AbstractManager implements Basi
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the user or group is not present.
      */
-    public synchronized void revoke(User user, Group group) throws DataBackendException, UnknownEntityException
+    @Override
+	public synchronized void revoke(User user, Group group) throws DataBackendException, UnknownEntityException
     {
         boolean groupExists = getGroupManager().checkExists(group);
         boolean userExists = getUserManager().checkExists(user);
@@ -120,7 +122,7 @@ public class TorqueBasicModelManagerImpl extends AbstractManager implements Basi
 
             try
             {
-                con = Transaction.begin(((TorqueAbstractSecurityEntity)user).getDatabaseName());
+            	con = Transaction.begin();
 
                 ((TorqueAbstractSecurityEntity)user).update(con);
                 ((TorqueAbstractSecurityEntity)group).update(con);
@@ -163,7 +165,8 @@ public class TorqueBasicModelManagerImpl extends AbstractManager implements Basi
      * @throws DataBackendException if there was an error accessing the data backend.
      * @throws UnknownEntityException if the account is not present.
      */
-    public synchronized void revokeAll(User user)
+    @Override
+	public synchronized void revokeAll(User user)
         throws DataBackendException, UnknownEntityException
     {
         boolean userExists = getUserManager().checkExists(user);
@@ -184,7 +187,7 @@ public class TorqueBasicModelManagerImpl extends AbstractManager implements Basi
 
             try
             {
-                con = Transaction.begin(((TorqueAbstractSecurityEntity)user).getDatabaseName());
+            	con = Transaction.begin();
 
                 ((TorqueAbstractSecurityEntity)user).update(con);
 

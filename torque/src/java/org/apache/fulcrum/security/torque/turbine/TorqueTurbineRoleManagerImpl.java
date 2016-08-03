@@ -50,7 +50,9 @@ public class TorqueTurbineRoleManagerImpl extends PeerRoleManager
         if ( (getCustomPeer())) {
             try
             {
-                return ((TorqueTurbinePeer<T>) getPeerInstance()).doSelect( criteria, con );
+            	TorqueTurbinePeer<T> peerInstance = (TorqueTurbinePeer<T>)getPeerInstance();
+            	
+                return peerInstance.doSelect( criteria, con );
             }
             catch ( DataBackendException e )
             {
@@ -71,7 +73,9 @@ public class TorqueTurbineRoleManagerImpl extends PeerRoleManager
         if ( (getCustomPeer())) {
             try
             {
-                return ((TorqueTurbinePeer<T>) getPeerInstance()).retrieveByPK( id, con );
+            	TorqueTurbinePeer<T> peerInstance = (TorqueTurbinePeer<T>)getPeerInstance();
+            	
+                return peerInstance.retrieveByPK( id, con );
             }
             catch ( DataBackendException e )
             {
@@ -98,6 +102,7 @@ public class TorqueTurbineRoleManagerImpl extends PeerRoleManager
             try
             {
             	TorqueTurbinePeer<T> peerInstance = (TorqueTurbinePeer<T>)getPeerInstance();
+            	
             	criteria.where(peerInstance.getTableMap().getColumn(getColumnName()), name);
                 roles = peerInstance.doSelect( criteria, con );
             }

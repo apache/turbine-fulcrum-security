@@ -130,7 +130,8 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
     {
         try
         {
-            ((TorqueAbstractSecurityEntity)user).save();
+        	TorqueAbstractSecurityEntity u = (TorqueAbstractSecurityEntity)user;
+            u.save();
         }
         catch (Exception e)
         {
@@ -189,7 +190,7 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
 
         try
         {
-            con = Transaction.begin(((TorqueAbstractSecurityEntity)getUserInstance()).getDatabaseName());
+            con = Transaction.begin();
 
             doSelectByName(userName, con);
 
@@ -240,7 +241,7 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
 
         try
         {
-            con = Transaction.begin(((TorqueAbstractSecurityEntity)getUserInstance()).getDatabaseName());
+            con = Transaction.begin();
 
             user = doSelectByName(userName.toLowerCase(), con);
 
@@ -288,7 +289,7 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
 
         try
         {
-            con = Transaction.begin(((TorqueAbstractSecurityEntity)getUserInstance()).getDatabaseName());
+            con = Transaction.begin();
 
             List<User> users = doSelectAllUsers(con);
 
@@ -340,7 +341,7 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
 
             try
             {
-                con = Transaction.begin(((TorqueAbstractSecurityEntity)getUserInstance()).getDatabaseName());
+                con = Transaction.begin();
 
                 user = doSelectById((Integer)id, con);
 

@@ -197,7 +197,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
 
         try
         {
-            con = Transaction.begin(((TorqueAbstractSecurityEntity)getRoleInstance()).getDatabaseName());
+            con = Transaction.begin();
 
             doSelectByName(roleName, con);
 
@@ -244,7 +244,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
 
         try
         {
-            con = Transaction.begin(((TorqueAbstractSecurityEntity)getRoleInstance()).getDatabaseName());
+            con = Transaction.begin();
 
             List<Role> roles = doSelectAllRoles(con);
 
@@ -296,7 +296,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
 
             try
             {
-                con = Transaction.begin(((TorqueAbstractSecurityEntity)getRoleInstance()).getDatabaseName());
+                con = Transaction.begin();
 
                 role = doSelectById((Integer)id, con);
 
@@ -347,7 +347,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
 
         try
         {
-            con = Transaction.begin(((TorqueAbstractSecurityEntity)getRoleInstance()).getDatabaseName());
+            con = Transaction.begin();
 
             role = doSelectByName(name, con);
 

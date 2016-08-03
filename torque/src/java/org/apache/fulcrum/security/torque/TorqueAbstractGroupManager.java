@@ -110,6 +110,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
     {
         try
         {
+        	
             ((TorqueAbstractSecurityEntity)group).save();
         }
         catch (Exception e)
@@ -191,7 +192,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
 
         try
         {
-            con = Transaction.begin(((TorqueAbstractSecurityEntity)getGroupInstance()).getDatabaseName());
+            con = Transaction.begin();
 
             group = doSelectByName(name, con);
 
@@ -239,7 +240,8 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
 
         try
         {
-            con = Transaction.begin(((TorqueAbstractSecurityEntity)getGroupInstance()).getDatabaseName());
+        
+            con = Transaction.begin();
 
             List<Group> groups = doSelectAllGroups(con);
 
@@ -286,7 +288,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
 
         try
         {
-            con = Transaction.begin(((TorqueAbstractSecurityEntity)getGroupInstance()).getDatabaseName());
+            con = Transaction.begin();
 
             doSelectByName(groupName, con);
 
@@ -341,7 +343,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
 
             try
             {
-                con = Transaction.begin(((TorqueAbstractSecurityEntity)getGroupInstance()).getDatabaseName());
+                con = Transaction.begin();
 
                 group = doSelectById((Integer)id, con);
 

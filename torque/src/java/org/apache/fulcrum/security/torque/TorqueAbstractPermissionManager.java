@@ -147,6 +147,7 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
         {
             try
             {
+
                 ((TorqueAbstractSecurityEntity)permission).delete();
             }
             catch (TorqueException e)
@@ -201,7 +202,7 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
 
         try
         {
-            con = Transaction.begin(((TorqueAbstractSecurityEntity)getPermissionInstance()).getDatabaseName());
+            con = Transaction.begin();
 
             List<Permission> permissions = doSelectAllPermissions(con);
 
@@ -216,10 +217,6 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
             con = null;
         }
         catch (TorqueException e)
-        {
-            throw new DataBackendException("Error retrieving permission information", e);
-        }
-        catch (UnknownEntityException e)
         {
             throw new DataBackendException("Error retrieving permission information", e);
         }
@@ -253,7 +250,7 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
 
         try
         {
-            con = Transaction.begin(((TorqueAbstractSecurityEntity)getPermissionInstance()).getDatabaseName());
+            con = Transaction.begin();
 
             doSelectByName(permissionName, con);
 
@@ -271,10 +268,6 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
             throw new DataBackendException("Multiple permissions with same name '" + permissionName + "'");
         }
         catch (TorqueException e)
-        {
-            throw new DataBackendException("Error retrieving permission information", e);
-        }
-        catch (UnknownEntityException e)
         {
             throw new DataBackendException("Error retrieving permission information", e);
         }
@@ -311,7 +304,7 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
 
             try
             {
-                con = Transaction.begin(((TorqueAbstractSecurityEntity)getPermissionInstance()).getDatabaseName());
+                con = Transaction.begin();
 
                 permission = doSelectById((Integer)id, con);
 
@@ -362,7 +355,7 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
 
         try
         {
-            con = Transaction.begin(((TorqueAbstractSecurityEntity)getPermissionInstance()).getDatabaseName());
+            con = Transaction.begin();
 
             permission = doSelectByName(name, con);
 

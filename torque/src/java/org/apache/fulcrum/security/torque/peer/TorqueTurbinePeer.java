@@ -29,4 +29,5 @@ public interface TorqueTurbinePeer<T>
      
      T retrieveByPK(Integer pk, Connection con)
                      throws TorqueException, NoRowsException, TooManyRowsException;
+
 }
