@@ -19,18 +19,21 @@ package org.apache.fulcrum.security.authenticator;
  * under the License.
  */
 
-import junit.framework.TestCase;
 
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
+
+import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class NoOpAuthenticatorTest extends TestCase
+public class NoOpAuthenticatorTest 
 {
+	@Test
     public void testAuthenticate() throws Exception
     {
         User user = new DynamicUserImpl();

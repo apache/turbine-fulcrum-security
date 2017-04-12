@@ -17,6 +17,11 @@ package org.apache.fulcrum.security.ldap.acl;
  * specific language governing permissions and limitations
  * under the License.
  */
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -36,13 +41,14 @@ import org.apache.fulcrum.security.model.dynamic.DynamicAccessControlListImpl;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
-import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.RoleSet;
-import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.UserSet;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit4Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Test that we can generate AccessControlLists from the Factory
@@ -50,7 +56,7 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id:AccessControlListTest.java 535465 2007-05-05 06:58:06Z tv $
  */
-public class AccessControlListTest extends BaseUnitTest
+public class AccessControlListTest extends BaseUnit4Test
 {
 
     private UserManager userManager;
@@ -61,22 +67,10 @@ public class AccessControlListTest extends BaseUnitTest
     private DynamicAccessControlList acl;
     private static int counter = 1;
     private User user;
-    /**
-     * Defines the testcase name for JUnit.
-     *
-     * @param name the testcase's name.
-     */
-    public AccessControlListTest(String name)
-    {
-        super(name);
-    }
-    public static void main(String[] args)
-    {
-        junit.textui.TestRunner.run(AccessControlListTest.class);
-    }
+
+    @Before
     public void setUp() throws Exception
     {
-        super.setUp();
 
         this.setRoleFileName("src/test/DynamicLDAPRoleConfig.xml");
         this.setConfigurationFileName("src/test/DynamicLDAPComponentConfig.xml");
@@ -96,7 +90,9 @@ public class AccessControlListTest extends BaseUnitTest
      * 
      * @see org.apache.fulcrum.testcontainer.BaseUnitTest#tearDown()
      */
-    protected void tearDown()
+    @Override
+	@After
+	public void tearDown()
     {
         try
         {
@@ -117,6 +113,7 @@ public class AccessControlListTest extends BaseUnitTest
         super.tearDown();
     }
 
+    @Test
     public void testCreatingDefaultAccessControlListViaFactory()
         throws Exception
     {
@@ -142,7 +139,7 @@ public class AccessControlListTest extends BaseUnitTest
         assertTrue(dacl.hasRole(role));
         assertTrue(dacl.hasPermission(permission));
 
-    }
+    } @Test
     public void testGetRolesGroup() throws Exception
     {
         Group group = getGroup();
@@ -163,6 +160,7 @@ public class AccessControlListTest extends BaseUnitTest
     /*
      * Class to test for RoleSet getRoles()
      */
+    @Test
     public void testGetRoles() throws Exception
     {
         Group group = getGroup();
@@ -188,6 +186,7 @@ public class AccessControlListTest extends BaseUnitTest
     /*
      * Class to test for PermissionSet getPermissions(Group)
      */
+    @Test
     public void testGetPermissionsGroup() throws Exception
     {
         Group group = getGroup();
@@ -222,6 +221,7 @@ public class AccessControlListTest extends BaseUnitTest
     /*
      * Class to test for PermissionSet getPermissions()
      */
+    @Test
     public void testGetPermissions() throws Exception
     {
         Group group = getGroup();
@@ -254,6 +254,7 @@ public class AccessControlListTest extends BaseUnitTest
     /*
      * Class to test for boolean hasRole(Role, Group)
      */
+    @Test
     public void testHasRoleRoleGroup() throws Exception
     {
         Group group = getGroup();
@@ -281,6 +282,7 @@ public class AccessControlListTest extends BaseUnitTest
     /*
      * Class to test for boolean hasRole(Role, GroupSet)
      */
+    @Test
     public void testHasRoleRoleGroupSet() throws Exception
     {
         Group group = getGroup();
@@ -311,6 +313,7 @@ public class AccessControlListTest extends BaseUnitTest
     /*
      * Class to test for boolean hasRole(String, String)
      */
+    @Test
     public void testHasRoleStringString() throws Exception
     {
         Group group = getGroup();
@@ -338,6 +341,7 @@ public class AccessControlListTest extends BaseUnitTest
     /*
      * Class to test for boolean hasPermission(Permission, Group)
      */
+    @Test
     public void testHasPermissionPermissionGroup() throws Exception
     {
         Group group = getGroup();
@@ -376,6 +380,7 @@ public class AccessControlListTest extends BaseUnitTest
     /*
      * Class to test for boolean hasPermission(Permission, GroupSet)
      */
+    @Test
     public void testHasPermissionPermissionGroupSet() throws Exception
     {
         Group group = getGroup();
@@ -422,6 +427,7 @@ public class AccessControlListTest extends BaseUnitTest
     /*
      * Class to test for boolean hasPermission(Permission)
      */
+    @Test
     public void testHasPermissionPermission() throws Exception
     {
         Group group = getGroup();

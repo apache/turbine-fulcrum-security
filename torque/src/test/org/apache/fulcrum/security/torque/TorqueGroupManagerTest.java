@@ -18,8 +18,12 @@ package org.apache.fulcrum.security.torque;
  * under the License.
  */
 
+import static org.junit.Assert.fail;
+
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractGroupManagerTest;
+import org.junit.After;
+import org.junit.Before;
 
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
@@ -29,6 +33,7 @@ public class TorqueGroupManagerTest extends AbstractGroupManagerTest
 {
     protected static HsqlDB hsqlDB = null;
 
+    @Before
     public void setUp()
     {
         try
@@ -52,7 +57,9 @@ public class TorqueGroupManagerTest extends AbstractGroupManagerTest
         }
     }
 
-    public void tearDown()
+    @Override
+    @After
+	public void tearDown()
     {
 /*        // cleanup tables
         try
@@ -99,12 +106,4 @@ public class TorqueGroupManagerTest extends AbstractGroupManagerTest
         securityService = null;
     }
 
-    /**
-     * Constructor for TorqueGroupManagerTest.
-     * @param arg0
-     */
-    public TorqueGroupManagerTest(String arg0)
-    {
-        super(arg0);
-    }
 }

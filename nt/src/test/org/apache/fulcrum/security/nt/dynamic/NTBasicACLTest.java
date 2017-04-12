@@ -19,6 +19,9 @@ package org.apache.fulcrum.security.nt.dynamic;
  * under the License.
  */
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
@@ -26,7 +29,10 @@ import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.basic.BasicAccessControlList;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit4Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  *
@@ -36,7 +42,7 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class NTBasicACLTest extends BaseUnitTest implements TestConstants
+public class NTBasicACLTest extends BaseUnit4Test implements TestConstants
 {
     private static final String DOMAIN = "IQUITOS";
     private static final String GUESTUSER = DOMAIN + "/" + "Guest";
@@ -44,7 +50,7 @@ public class NTBasicACLTest extends BaseUnitTest implements TestConstants
     private UserManager userManager;
     private User user;
 
-    @Override
+    @Before
     public void setUp() throws Exception
     {
         this.setRoleFileName("src/test/BasicNTRoleConfig.xml");
@@ -54,23 +60,15 @@ public class NTBasicACLTest extends BaseUnitTest implements TestConstants
     }
 
     @Override
+    @After
     public void tearDown()
     {
         user = null;
         userManager = null;
         securityService = null;
     }
-
-    /**
-     * Constructor for NTBasicACLTest.
-     *
-     * @param arg0
-     */
-    public NTBasicACLTest(String arg0)
-    {
-        super(arg0);
-    }
-
+    
+    @Test
     public void testLoadingUpGroupsForBasicModelACL() throws Exception
     {
         try

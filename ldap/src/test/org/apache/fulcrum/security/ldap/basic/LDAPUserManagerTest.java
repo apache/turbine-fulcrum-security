@@ -24,6 +24,11 @@ import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.test.AbstractUserManagerTest;
 import org.apache.fulcrum.security.util.UserSet;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 /**
  * @author Eric Pugh
  *
@@ -32,6 +37,7 @@ import org.apache.fulcrum.security.util.UserSet;
 public class LDAPUserManagerTest extends AbstractUserManagerTest
 {
 
+	@Before
     public void setUp()
     {
         try
@@ -52,7 +58,9 @@ public class LDAPUserManagerTest extends AbstractUserManagerTest
      * 
      * @see org.apache.fulcrum.testcontainer.BaseUnitTest#tearDown()
      */
-    protected void tearDown()
+	@Override
+	@After
+    public void tearDown()
     {
         try
         {
@@ -73,19 +81,14 @@ public class LDAPUserManagerTest extends AbstractUserManagerTest
         super.tearDown();
     }
 
-    /**
-    	* Constructor for MemoryPermissionManagerTest.
-    	* @param arg0
-    	*/
-    public LDAPUserManagerTest(String arg0)
-    {
-        super(arg0);
-    }
+
 
     /**
      * @see org.apache.fulcrum.security.model.test.AbstractUserManagerTest#testChangePassword()
      */
-    public void testChangePassword() throws Exception
+    @Override
+    @Test
+	public void testChangePassword() throws Exception
     {
         // Not supported
     }
@@ -93,7 +96,9 @@ public class LDAPUserManagerTest extends AbstractUserManagerTest
     /**
      * @see org.apache.fulcrum.security.model.test.AbstractUserManagerTest#testForcePassword()
      */
-    public void testForcePassword() throws Exception
+    @Override
+    @Test
+	public void testForcePassword() throws Exception
     {
         // Not supported
     }

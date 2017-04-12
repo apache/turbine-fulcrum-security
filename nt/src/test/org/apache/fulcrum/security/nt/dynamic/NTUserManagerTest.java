@@ -19,12 +19,20 @@ package org.apache.fulcrum.security.nt.dynamic;
  * under the License.
  */
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
 import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
 import org.apache.fulcrum.security.model.test.AbstractUserManagerTest;
 import org.apache.fulcrum.security.util.DataBackendException;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.tagish.auth.win32.NTSystem;
 
@@ -44,7 +52,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     private static final String PASSWORD = "";
     private static final String GUESTUSER = DOMAIN + "/" + "Guest";
 
-    @Override
+    @Before
     public void setUp() throws Exception
     {
         this.setRoleFileName("src/test/DynamicNTRoleConfig.xml");
@@ -54,6 +62,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     }
 
     @Override
+    @After
     public void tearDown()
     {
         user = null;
@@ -61,17 +70,8 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
         securityService = null;
     }
 
-    /**
-     * Constructor for NTUserManagerTest.
-     *
-     * @param arg0
-     */
-    public NTUserManagerTest(String arg0)
-    {
-        super(arg0);
-    }
-
     @Override
+    @Test
     public void testCheckExists() throws Exception
     {
         try
@@ -89,7 +89,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
             System.out.println("Unit test not being run due to missing NT DLL");
         }
     }
-
+    @Test
     public void testCheckExistsFails() throws Exception
     {
         try
@@ -108,6 +108,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     /**
      * tests getting an NT username
      */
+    @Test
     public void testNTGetName() throws Exception
     {
         try
@@ -140,6 +141,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     /**
      * tests logging on a different user
      */
+    @Test
     public void OFFtestLoginAsUser() throws Exception
     {
         try
@@ -182,6 +184,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     }
 
     @Override
+    @Test
     public void testAuthenticate() throws Exception
     {
         try
@@ -196,6 +199,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
     }
 
     @Override
+    @Test
     public void testGetACL() throws Exception
     {
         try
@@ -216,6 +220,7 @@ public class NTUserManagerTest extends AbstractUserManagerTest implements TestCo
      * test for User retrieve(String, String)
      */
     @Override
+    @Test
     public void testGetAllUsers() throws Exception
     {
         try

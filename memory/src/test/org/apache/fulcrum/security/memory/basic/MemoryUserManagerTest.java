@@ -19,8 +19,11 @@ package org.apache.fulcrum.security.memory.basic;
  * under the License.
  */
 
+import static org.junit.Assert.fail;
+
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractUserManagerTest;
+import org.junit.Before;
 
 /**
  * @author Eric Pugh
@@ -30,7 +33,7 @@ import org.apache.fulcrum.security.model.test.AbstractUserManagerTest;
 public class MemoryUserManagerTest extends AbstractUserManagerTest
 {
 
-    @Override
+    @Before
     public void setUp()
     {
         try
@@ -46,13 +49,4 @@ public class MemoryUserManagerTest extends AbstractUserManagerTest
         }
     }
 
-    /**
-     * Constructor for MemoryPermissionManagerTest.
-     * 
-     * @param arg0
-     */
-    public MemoryUserManagerTest(String arg0)
-    {
-        super(arg0);
-    }
 }

@@ -19,28 +19,23 @@ package org.apache.fulcrum.security.hibernate;
  * under the License.
  */
 
+import static org.junit.Assert.assertTrue;
+
 import org.apache.fulcrum.security.SecurityService;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit4Test;
 import org.hibernate.Session;
+import org.junit.Test;
 
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id: PersistenceHelperDefaultImplTest.java 1374014 2012-08-16
  *          19:47:27Z tv $
  */
-public class PersistenceHelperDefaultImplTest extends BaseUnitTest
+public class PersistenceHelperDefaultImplTest extends BaseUnit4Test
 {
-    /**
-     * Constructor for PersistenceHelperDefaultImplTest.
-     * 
-     * @param arg0
-     */
-    public PersistenceHelperDefaultImplTest(String arg0)
-    {
-        super(arg0);
-    }
 
     @SuppressWarnings("unused")
+    @Test
     public void testPassingInExternalHibernateService() throws Exception
     {
         this.setRoleFileName("src/test/PersistenceHelperDefaultImplRoleConfig.xml");

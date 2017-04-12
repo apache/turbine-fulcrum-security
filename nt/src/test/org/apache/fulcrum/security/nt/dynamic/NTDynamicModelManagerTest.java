@@ -26,7 +26,13 @@ import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+import org.apache.fulcrum.testcontainer.BaseUnit4Test;
 
 /**
  *
@@ -37,14 +43,14 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  * @version $Id: NTDynamicModelManagerTest.java 1374015 2012-08-16 19:48:54Z tv
  *          $
  */
-public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConstants
+public class NTDynamicModelManagerTest extends BaseUnit4Test implements TestConstants
 {
     private DynamicModelManager modelManager;
     private SecurityService securityService;
     private UserManager userManager;
     private User user;
 
-    @Override
+    @Before
     public void setUp() throws Exception
     {
         this.setRoleFileName("src/test/DynamicNTRoleConfig.xml");
@@ -55,6 +61,7 @@ public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConst
     }
 
     @Override
+    @After
     public void tearDown()
     {
         user = null;
@@ -62,16 +69,8 @@ public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConst
         securityService = null;
     }
 
-    /**
-     * Constructor for NTDynamicModelManagerTest.
-     *
-     * @param arg0
-     */
-    public NTDynamicModelManagerTest(String arg0)
-    {
-        super(arg0);
-    }
 
+    @Test
     public void testRevokeAll() throws Exception
     {
         try
@@ -95,6 +94,7 @@ public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConst
         }
     }
 
+    @Test
     public void testGrantUserGroup() throws Exception
     {
         user = userManager.getUserInstance("domain/BOB");
@@ -121,6 +121,7 @@ public class NTDynamicModelManagerTest extends BaseUnitTest implements TestConst
         }
     }
 
+    @Test
     public void testRevokeUserGroup() throws Exception
     {
         try

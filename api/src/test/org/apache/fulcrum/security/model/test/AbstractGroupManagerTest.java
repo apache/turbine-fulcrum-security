@@ -26,7 +26,9 @@ import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit4Test;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * @author Eric Pugh
@@ -34,25 +36,17 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  *         To change the template for this generated type comment go to
  *         Window>Preferences>Java>Code Generation>Code and Comments
  */
-public abstract class AbstractGroupManagerTest extends BaseUnitTest
+public abstract class AbstractGroupManagerTest extends BaseUnit4Test
 {
     protected Group group;
     protected GroupManager groupManager;
     protected SecurityService securityService;
 
-    /**
-     * Constructor for AbstractTurbineModelManagerTest.
-     * 
-     * @param arg0
-     */
-    public AbstractGroupManagerTest(String arg0)
-    {
-        super(arg0);
-    }
 
     /*
      * Class to test for Group getGroupInstance()
      */
+    @Test
     public void testGetGroupInstance() throws Exception
     {
         group = groupManager.getGroupInstance();
@@ -63,12 +57,13 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
     /*
      * Class to test for Group getGroupInstance(String)
      */
+    @Test
     public void testGetGroupInstanceString() throws Exception
     {
         group = groupManager.getGroupInstance("DOG_CATCHER");
         assertEquals("DOG_CATCHER".toLowerCase(), group.getName());
     }
-
+    @Test
     public void testGetGroup() throws Exception
     {
         group = groupManager.getGroupInstance("DOG_CATCHER2");
@@ -76,7 +71,7 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         Group group2 = groupManager.getGroupByName("DOG_CATCHER2");
         assertEquals(group.getName(), group2.getName());
     }
-
+    @Test
     public void testGetGroupByName() throws Exception
     {
         group = groupManager.getGroupInstance("CLEAN_KENNEL");
@@ -86,7 +81,7 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         group2 = groupManager.getGroupByName("Clean_KeNNel");
         assertEquals(group.getName(), group2.getName());
     }
-
+    @Test
     public void testGetGroupById() throws Exception
     {
         group = groupManager.getGroupInstance("CLEAN_KENNEL_A");
@@ -94,7 +89,7 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         Group group2 = groupManager.getGroupById(group.getId());
         assertEquals(group.getName(), group2.getName());
     }
-
+    @Test
     public void testGetAllGroups() throws Exception
     {
         int size = groupManager.getAllGroups().size();
@@ -103,7 +98,7 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         GroupSet groupSet = groupManager.getAllGroups();
         assertEquals(size + 1, groupSet.size());
     }
-
+    @Test
     public void testRemoveGroup() throws Exception
     {
         group = groupManager.getGroupInstance("CLEAN_KENNEL_K");
@@ -126,7 +121,7 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         }
         assertEquals(size - 1, groupManager.getAllGroups().size());
     }
-
+    @Test
     public void testRenameGroup() throws Exception
     {
         group = groupManager.getGroupInstance("CLEAN_KENNEL_X");
@@ -137,7 +132,7 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         assertEquals("CLEAN_GROOMING_ROOM".toLowerCase(), group2.getName());
         assertEquals(size, groupManager.getAllGroups().size());
     }
-
+    @Test
     public void testCheckExists() throws Exception
     {
         group = groupManager.getGroupInstance("GREET_PEOPLE");
@@ -146,7 +141,7 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
         Group group2 = groupManager.getGroupInstance("WALK_DOGS");
         assertFalse(groupManager.checkExists(group2));
     }
-
+    @Test
     public void testCheckExistsWithString() throws Exception
     {
         group = groupManager.getGroupInstance("GREET_PEOPLE2");
@@ -159,6 +154,7 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
     /*
      * Class to test for boolean checkExists(string)
      */
+    @Test
     public void testAddGroupTwiceFails() throws Exception
     {
         group = groupManager.getGroupInstance("EATLUNCH");
@@ -174,7 +170,7 @@ public abstract class AbstractGroupManagerTest extends BaseUnitTest
             // good
         }
     }
-
+    @Test
     public void testAddGroup() throws Exception
     {
         group = groupManager.getGroupInstance("CLEAN_RABBIT_HUTCHES");

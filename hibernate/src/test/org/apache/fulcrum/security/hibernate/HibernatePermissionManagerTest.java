@@ -21,7 +21,8 @@ package org.apache.fulcrum.security.hibernate;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractPermissionManagerTest;
-
+import org.junit.After;
+import org.junit.Before;
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id: HibernatePermissionManagerTest.java 1169862 2011-09-12
@@ -29,7 +30,7 @@ import org.apache.fulcrum.security.model.test.AbstractPermissionManagerTest;
  */
 public class HibernatePermissionManagerTest extends AbstractPermissionManagerTest
 {
-    @Override
+    @Before
     public void setUp() throws Exception
     {
 
@@ -43,6 +44,7 @@ public class HibernatePermissionManagerTest extends AbstractPermissionManagerTes
     }
 
     @Override
+    @After
     public void tearDown()
     {
         permission = null;
@@ -50,13 +52,4 @@ public class HibernatePermissionManagerTest extends AbstractPermissionManagerTes
         securityService = null;
     }
 
-    /**
-     * Constructor for HibernatePermissionManagerTest.
-     * 
-     * @param arg0
-     */
-    public HibernatePermissionManagerTest(String arg0)
-    {
-        super(arg0);
-    }
 }

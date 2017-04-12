@@ -19,6 +19,11 @@ package org.apache.fulcrum.security.model.turbine.test;
  * under the License.
  */
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Set;
 
 import org.apache.fulcrum.security.GroupManager;
@@ -36,13 +41,15 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbineRole;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
 import org.apache.fulcrum.security.util.PermissionSet;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit4Test;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Eric Pugh
  * 
  */
-public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
+public abstract class AbstractTurbineModelManagerTest extends BaseUnit4Test
 {
     protected Role role;
 
@@ -58,34 +65,26 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
 
     protected SecurityService securityService;
 
-    @Override
+    @Before
     public void setUp() throws Exception
     {
-        super.setUp();
+    	securityService  = (SecurityService) lookup(SecurityService.ROLE);
         roleManager = securityService.getRoleManager();
         userManager = securityService.getUserManager();
         groupManager = securityService.getGroupManager();
         permissionManager = securityService.getPermissionManager();
-        modelManager = (TurbineModelManager) securityService.getModelManager();
+        modelManager = (TurbineModelManager) securityService.getModelManager();  
     }
 
-    /**
-     * Constructor for AbstractTurbineModelManagerTest.
-     * 
-     * @param arg0
-     */
-    public AbstractTurbineModelManagerTest(String arg0)
-    {
-        super(arg0);
-    }
 
+    @Test
     public void testGetGlobalGroup() throws Exception
     {
         Group global = modelManager.getGlobalGroup();
         assertNotNull(global);
-        assertEquals(global.getName(), TurbineModelManager.GLOBAL_GROUP_NAME);
+        assertEquals(global.getName(), modelManager.getGlobalGroupName());
     }
-
+    @Test
     public void testGrantRolePermission() throws Exception
     {
         Permission permission = permissionManager.getPermissionInstance();
@@ -99,7 +98,7 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
         assertEquals(1, permissions.size());
         assertTrue(((TurbineRole) role).getPermissions().contains(permission));
     }
-
+    @Test
     public void testRevokeRolePermission() throws Exception
     {
         Permission permission = securityService.getPermissionManager().getPermissionInstance();
@@ -117,7 +116,7 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
         assertEquals(0, permissions.size());
         assertFalse(((TurbineRole) role).getPermissions().contains(permission));
     }
-
+    @Test
     public void testRevokeAllRole() throws Exception
     {
         Permission permission = securityService.getPermissionManager().getPermissionInstance();
@@ -138,7 +137,7 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
         permissions = ((TurbineRole) role).getPermissions();
         assertEquals(0, permissions.size());
     }
-
+    @Test
     public void testRevokeAllUser() throws Exception
     {
         Group group = securityService.getGroupManager().getGroupInstance();
@@ -166,7 +165,7 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
         // assertFalse(((TurbineRole) role).getGroups().contains(group));
 
     }
-
+    @Test
     public void testGrantUserGroupRole() throws Exception
     {
         Group group = securityService.getGroupManager().getGroupInstance();
@@ -194,7 +193,7 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnitTest
         assertTrue(ugrTest.getUser().equals(user));
 
     }
-
+    @Test
     public void testRevokeUserGroupRole() throws Exception
     {
         Group group = securityService.getGroupManager().getGroupInstance();

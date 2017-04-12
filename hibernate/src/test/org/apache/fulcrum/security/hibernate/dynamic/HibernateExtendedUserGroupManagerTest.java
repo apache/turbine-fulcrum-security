@@ -24,6 +24,12 @@ import org.apache.fulcrum.security.hibernate.HibernateHelper;
 import org.apache.fulcrum.security.hibernate.PersistenceHelper;
 import org.apache.fulcrum.security.model.test.AbstractGroupManagerTest;
 
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id: HibernateExtendedUserGroupManagerTest.java 1169862 2011-09-12
@@ -31,7 +37,7 @@ import org.apache.fulcrum.security.model.test.AbstractGroupManagerTest;
  */
 public class HibernateExtendedUserGroupManagerTest extends AbstractGroupManagerTest
 {
-    @Override
+    @Before
     public void setUp()
     {
         try
@@ -50,6 +56,7 @@ public class HibernateExtendedUserGroupManagerTest extends AbstractGroupManagerT
     }
 
     @Override
+    @After
     public void tearDown()
     {
         try
@@ -66,13 +73,4 @@ public class HibernateExtendedUserGroupManagerTest extends AbstractGroupManagerT
         securityService = null;
     }
 
-    /**
-     * Constructor for HibernatePermissionManagerTest.
-     * 
-     * @param arg0
-     */
-    public HibernateExtendedUserGroupManagerTest(String arg0)
-    {
-        super(arg0);
-    }
 }

@@ -32,6 +32,11 @@ import org.apache.fulcrum.security.torque.om.TorqueDynamicUserGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUserPeer;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
+import org.junit.After;
+import org.junit.Before;
+
+import static org.junit.Assert.*;
+
 
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
@@ -42,6 +47,8 @@ public class TorqueDynamicModelManagerTest extends AbstractDynamicModelManagerTe
 {
     protected static HsqlDB hsqlDB = null;
 
+    @Override
+	@Before
     public void setUp()
     {
         try
@@ -61,7 +68,9 @@ public class TorqueDynamicModelManagerTest extends AbstractDynamicModelManagerTe
         }
     }
 
-    public void tearDown()
+    @Override
+    @After
+	public void tearDown()
     {
         // cleanup tables
         try
@@ -106,13 +115,4 @@ public class TorqueDynamicModelManagerTest extends AbstractDynamicModelManagerTe
         securityService = null;
     }
 
-    /**
-     * Constructor for TorqueDynamicModelManagerTest.
-     *
-     * @param arg0
-     */
-    public TorqueDynamicModelManagerTest(String arg0)
-    {
-        super(arg0);
-    }
 }

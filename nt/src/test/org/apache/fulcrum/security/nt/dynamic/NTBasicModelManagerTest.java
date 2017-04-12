@@ -19,6 +19,9 @@ package org.apache.fulcrum.security.nt.dynamic;
  * under the License.
  */
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.entity.Group;
@@ -26,7 +29,11 @@ import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.basic.BasicModelManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit4Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 
 /**
  *
@@ -36,14 +43,14 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class NTBasicModelManagerTest extends BaseUnitTest implements TestConstants
+public class NTBasicModelManagerTest extends BaseUnit4Test implements TestConstants
 {
     private BasicModelManager modelManager;
     private SecurityService securityService;
     private UserManager userManager;
     private User user;
 
-    @Override
+    @Before
     public void setUp() throws Exception
     {
         this.setRoleFileName("src/test/BasicNTRoleConfig.xml");
@@ -54,23 +61,16 @@ public class NTBasicModelManagerTest extends BaseUnitTest implements TestConstan
     }
 
     @Override
+    @After
     public void tearDown()
     {
         user = null;
         userManager = null;
         securityService = null;
     }
+    
 
-    /**
-     * Constructor for NTBasicModelManagerTest.
-     *
-     * @param arg0
-     */
-    public NTBasicModelManagerTest(String arg0)
-    {
-        super(arg0);
-    }
-
+    @Test
     public void testRevokeAll() throws Exception
     {
         try
@@ -93,7 +93,7 @@ public class NTBasicModelManagerTest extends BaseUnitTest implements TestConstan
             System.out.println("Unit test not being run due to missing NT DLL");
         }
     }
-
+    @Test
     public void testGrantUserGroup() throws Exception
     {
         user = userManager.getUserInstance("domain/BOB");
@@ -119,7 +119,7 @@ public class NTBasicModelManagerTest extends BaseUnitTest implements TestConstan
             System.out.println("Unit test not being run due to missing NT DLL");
         }
     }
-
+    @Test
     public void testRevokeUserGroup() throws Exception
     {
         try

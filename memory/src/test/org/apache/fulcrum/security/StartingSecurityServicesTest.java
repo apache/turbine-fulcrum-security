@@ -18,6 +18,9 @@ package org.apache.fulcrum.security;
  * specific language governing permissions and limitations
  * under the License.
  */
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.fulcrum.security.memory.MemoryGroupManagerImpl;
 import org.apache.fulcrum.security.memory.MemoryPermissionManagerImpl;
@@ -26,7 +29,8 @@ import org.apache.fulcrum.security.memory.MemoryUserManagerImpl;
 import org.apache.fulcrum.security.model.basic.BasicModelManager;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.model.turbine.TurbineModelManager;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit4Test;
+import org.junit.Test;
 
 /**
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
@@ -34,15 +38,13 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  *          tv $
  */
 
-public class StartingSecurityServicesTest extends BaseUnitTest
+public class StartingSecurityServicesTest extends BaseUnit4Test
 {
     private SecurityService securityService = null;
 
-    public StartingSecurityServicesTest(String name)
-    {
-        super(name);
-    }
 
+
+    @Test
     public void testStartingDynamicModel() throws Exception
     {
         this.setRoleFileName("src/test/DynamicMemoryRoleConfig.xml");
@@ -54,7 +56,7 @@ public class StartingSecurityServicesTest extends BaseUnitTest
         assertTrue(securityService.getGroupManager() instanceof MemoryGroupManagerImpl);
         assertTrue(securityService.getModelManager() instanceof DynamicModelManager);
     }
-
+    @Test
     public void testStartingTurbineModel() throws Exception
     {
         this.setRoleFileName("src/test/TurbineMemoryRoleConfig.xml");
@@ -68,7 +70,7 @@ public class StartingSecurityServicesTest extends BaseUnitTest
         assertTrue(securityService.getModelManager() instanceof org.apache.fulcrum.security.memory.turbine.MemoryTurbineModelManagerImpl);
         assertTrue(securityService.getModelManager() instanceof TurbineModelManager);
     }
-
+    @Test
     public void testStartingBasicModel() throws Exception
     {
 
@@ -79,7 +81,7 @@ public class StartingSecurityServicesTest extends BaseUnitTest
         assertTrue(securityService.getGroupManager() instanceof MemoryGroupManagerImpl);
         assertTrue(securityService.getModelManager() instanceof BasicModelManager);
     }
-
+    @Test
     public void testLazyLoadingOfServices() throws Exception
     {
         this.setRoleFileName("src/test/LazyLoadRoleConfig.xml");

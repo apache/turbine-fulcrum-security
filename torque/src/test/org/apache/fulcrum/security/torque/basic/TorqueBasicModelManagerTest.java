@@ -19,6 +19,9 @@ package org.apache.fulcrum.security.torque.basic;
  * under the License.
  */
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
@@ -29,6 +32,9 @@ import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserPeer;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
@@ -39,6 +45,8 @@ public class TorqueBasicModelManagerTest extends AbstractModelManagerTest
 {
     protected static HsqlDB hsqlDB = null;
 
+    @Override
+	@Before
     public void setUp() throws Exception
     {
         if(hsqlDB == null)
@@ -54,14 +62,18 @@ public class TorqueBasicModelManagerTest extends AbstractModelManagerTest
         super.setUp();
     }
 
-    public void testRevokeAllUser() throws Exception
+    @Override
+    @Test
+	public void testRevokeAllUser() throws Exception
     {
         super.testRevokeAllUser();
         User user = userManager.getUserInstance("Clint2");
         assertEquals(0, ((BasicUser) user).getGroups().size());
     }
 
-    public void tearDown()
+    @Override
+    @After
+	public void tearDown()
     {
         // cleanup tables
         try
@@ -88,13 +100,5 @@ public class TorqueBasicModelManagerTest extends AbstractModelManagerTest
         securityService = null;
     }
 
-    /**
-     * Constructor for TorqueBasicModelManagerTest.
-     *
-     * @param arg0
-     */
-    public TorqueBasicModelManagerTest(String arg0)
-    {
-        super(arg0);
-    }
+
 }

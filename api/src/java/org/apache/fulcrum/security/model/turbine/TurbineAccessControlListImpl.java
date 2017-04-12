@@ -85,12 +85,13 @@ public class TurbineAccessControlListImpl
      *            The set of user/group/role relations that this acl is built from
      * @param groupManager the Group manager
      * @param roleManager the Role manager
+     * @param modelManager he model Manager
      *
      * @throws FulcrumSecurityException if the global group cannot be retrieved
      */
     public TurbineAccessControlListImpl(
     		Set<? extends TurbineUserGroupRole> turbineUserGroupRoleSet,
-    		GroupManager groupManager, RoleManager roleManager) throws FulcrumSecurityException
+    		GroupManager groupManager, RoleManager roleManager, TurbineModelManager modelManager) throws FulcrumSecurityException
     {
         this.roleSets = new HashMap<Group, RoleSet>();
         this.permissionSets = new HashMap<Group, PermissionSet>();
@@ -101,7 +102,7 @@ public class TurbineAccessControlListImpl
             Group group = ugr.getGroup();
             groupSet.add(group);
 
-            TurbineRole role = (TurbineRole)ugr.getRole();
+            Role role = ugr.getRole();
             if (!roleSet.containsId(role.getId()))
             {
                 // get fresh reference from role manager to make sure the related
@@ -114,7 +115,7 @@ public class TurbineAccessControlListImpl
             }
             else
             {
-                role = (TurbineRole)roleSet.getById(role.getId());
+                role = roleSet.getById(role.getId());
             }
             if (roleSets.containsKey(group))
             {
@@ -126,22 +127,24 @@ public class TurbineAccessControlListImpl
             	rs.add(role);
             	roleSets.put(group, rs);
             }
-
-            PermissionSet ps = role.getPermissions();
-            permissionSet.add(ps);
-            if (permissionSets.containsKey(group))
-            {
-            	permissionSets.get(group).add(ps);
-            }
-            else
-            {
-            	permissionSets.put(group, ps);
+            // if required, otherwise skip
+            if (role instanceof TurbineRole) {
+	            PermissionSet ps = ((TurbineRole) role).getPermissions();
+	            permissionSet.add(ps);
+	            if (permissionSets.containsKey(group))
+	            {
+	            	permissionSets.get(group).add(ps);
+	            }
+	            else
+	            {
+	            	permissionSets.put(group, ps);
+	            }
             }
         }
 
         if (groupManager != null)
         {
-        	this.globalGroup = groupManager.getGroupByName(TurbineModelManager.GLOBAL_GROUP_NAME);
+        	this.globalGroup = groupManager.getGroupByName(modelManager.getGlobalGroupName());
         }
         else
         {

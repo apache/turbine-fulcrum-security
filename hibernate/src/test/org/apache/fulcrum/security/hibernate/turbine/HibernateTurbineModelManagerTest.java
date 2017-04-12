@@ -23,6 +23,10 @@ import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.hibernate.HibernateHelper;
 import org.apache.fulcrum.security.hibernate.PersistenceHelper;
 import org.apache.fulcrum.security.model.turbine.test.AbstractTurbineModelManagerTest;
+import org.junit.After;
+import org.junit.Before;
+
+import static org.junit.Assert.fail;
 
 /**
  * @author Eric Pugh
@@ -33,6 +37,7 @@ public class HibernateTurbineModelManagerTest extends AbstractTurbineModelManage
 {
 
     @Override
+    @Before
     public void setUp() throws Exception
     {
 
@@ -52,6 +57,7 @@ public class HibernateTurbineModelManagerTest extends AbstractTurbineModelManage
     }
 
     @Override
+    @After
     public void tearDown()
     {
         super.tearDown();
@@ -59,13 +65,4 @@ public class HibernateTurbineModelManagerTest extends AbstractTurbineModelManage
         securityService = null;
     }
 
-    /**
-     * Constructor for MemoryPermissionManagerTest.
-     * 
-     * @param arg0
-     */
-    public HibernateTurbineModelManagerTest(String arg0)
-    {
-        super(arg0);
-    }
 }

@@ -60,9 +60,13 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
 
         if (roleExists && permissionExists)
         {
-            ((TurbineRole)role).addPermission(permission);
-            ((TurbinePermission)permission).addRole(role);
-
+            if (role instanceof TurbineRole ) {
+            	((TurbineRole)role).addPermission(permission);	
+            }
+            if (permission instanceof TurbinePermission) {
+                ((TurbinePermission)permission).addRole(role);
+            }
+        
             Connection con = null;
 
             try
@@ -118,9 +122,13 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
 
         if (roleExists && permissionExists)
         {
-            ((TurbineRole)role).removePermission(permission);
-            ((TurbinePermission)permission).removeRole(role);
-
+        	if (role instanceof TurbineRole ) {
+        		 ((TurbineRole)role).removePermission(permission);
+            }
+            if (permission instanceof TurbinePermission) {
+            	 ((TurbinePermission)permission).removeRole(role);
+            }
+            
             Connection con = null;
 
             try
@@ -173,8 +181,12 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
             user_group_role.setGroup(group);
             user_group_role.setRole(role);
             ((TurbineUser) user).addUserGroupRole(user_group_role);
-            ((TurbineGroup) group).addUserGroupRole(user_group_role);
-            ((TurbineRole) role).addUserGroupRole(user_group_role);
+            if (group instanceof TurbineGroup ) {
+            	((TurbineGroup) group).addUserGroupRole(user_group_role);
+            }
+            if (role instanceof TurbineRole ) {
+            	((TurbineRole) role).addUserGroupRole(user_group_role);
+            }
 
             Connection con = null;
 
@@ -243,8 +255,12 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
                 {
                     ugrFound = true;
                     ((TurbineUser)user).removeUserGroupRole(user_group_role);
-                    ((TurbineGroup)group).removeUserGroupRole(user_group_role);
-                    ((TurbineRole)role).removeUserGroupRole(user_group_role);
+                    if (group instanceof TurbineGroup ) {
+                    	((TurbineGroup)group).removeUserGroupRole(user_group_role);
+                    }
+                    if (role instanceof TurbineRole ) {
+                    	((TurbineRole)role).removeUserGroupRole(user_group_role);
+                    }
                     break;
                 }
             }

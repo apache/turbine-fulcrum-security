@@ -20,7 +20,9 @@ package org.apache.fulcrum.security.model.turbine;
  */
 import java.util.Set;
 
+import org.apache.avalon.framework.service.ServiceException;
 import org.apache.fulcrum.security.GroupManager;
+import org.apache.fulcrum.security.ModelManager;
 import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.Group;
@@ -43,6 +45,29 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public class TurbineACLFactory extends AbstractManager implements ACLFactory
 {
+	
+    private TurbineModelManager modelManager;
+    
+    /**
+     * @return
+     */
+    protected TurbineModelManager getTurbineModelManager() throws DataBackendException
+    {
+        if (modelManager == null)
+        {
+            try
+            {
+            	modelManager = (TurbineModelManager) manager.lookup(ModelManager.ROLE);
+
+            }
+            catch (ServiceException ce)
+            {
+                throw new DataBackendException(ce.getMessage(), ce);
+            }
+        }
+        return modelManager;
+    }
+	
     /**
      * @see org.apache.fulcrum.security.model.ACLFactory#getAccessControlList(org.apache.fulcrum.security.entity.User)
      */
@@ -81,11 +106,13 @@ public class TurbineACLFactory extends AbstractManager implements ACLFactory
     {
     	GroupManager groupManager = null;
         RoleManager roleManager = null;
+        TurbineModelManager modelManager = null;
 
     	try
     	{
     	    roleManager = getRoleManager();
 			groupManager = getGroupManager();
+			modelManager = getTurbineModelManager();
 
 	        // make sure the global group exists
 	        if (groupManager != null)
@@ -93,11 +120,11 @@ public class TurbineACLFactory extends AbstractManager implements ACLFactory
 	            Group g = null;
 	            try
 	            {
-	                g = groupManager.getGroupByName(TurbineModelManager.GLOBAL_GROUP_NAME);
+	                g = groupManager.getGroupByName(modelManager.getGlobalGroupName());
 	            }
 	            catch (UnknownEntityException uee)
 	            {
-	                g = groupManager.getGroupInstance(TurbineModelManager.GLOBAL_GROUP_NAME);
+	                g = groupManager.getGroupInstance(modelManager.getGlobalGroupName());
 	                try
 	                {
 	                    groupManager.addGroup(g);
@@ -119,7 +146,7 @@ public class TurbineACLFactory extends AbstractManager implements ACLFactory
         {
             accessControlList =
                 new TurbineAccessControlListImpl(turbineUserGroupRoleSet,
-                        groupManager, roleManager);
+                        groupManager, roleManager, modelManager);
         }
         catch (FulcrumSecurityException e)
         {
@@ -127,4 +154,5 @@ public class TurbineACLFactory extends AbstractManager implements ACLFactory
         }
         return accessControlList;
     }
+    
 }

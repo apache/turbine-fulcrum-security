@@ -18,6 +18,8 @@ package org.apache.fulcrum.security.torque.turbine;
  * under the License.
  */
 
+import static org.junit.Assert.*;
+
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.turbine.test.AbstractTurbineModelManagerTest;
 import org.apache.fulcrum.security.torque.HsqlDB;
@@ -56,7 +58,6 @@ public class TorquePeerTurbineModelManagerTest
     @Override
 	public void setUp() throws Exception
     {
-
         try
         {
             hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-turbine-schema.sql");
@@ -79,7 +80,7 @@ public class TorquePeerTurbineModelManagerTest
         }
         catch (Exception e)
         {
-            fail(e.toString());
+        	fail(e.toString());
         }
 
     }
@@ -143,19 +144,11 @@ public class TorquePeerTurbineModelManagerTest
         }
         catch (TorqueException e)
         {
-            fail(e.toString());
+        	fail(e.toString());
         }
 
         modelManager = null;
         securityService = null;
     }
 
-    /**
- 	 * Constructor for TorqueTurbineModelManagerTest.
-	 * @param arg0
-	 */
-    public TorquePeerTurbineModelManagerTest(String arg0)
-    {
-        super(arg0);
-    }
 }

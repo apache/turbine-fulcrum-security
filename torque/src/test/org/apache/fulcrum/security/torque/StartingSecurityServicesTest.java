@@ -18,28 +18,27 @@ package org.apache.fulcrum.security.torque;
  * under the License.
  */
 
+import static org.junit.Assert.assertTrue;
+
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.torque.dynamic.TorqueDynamicGroupManagerImpl;
 import org.apache.fulcrum.security.torque.dynamic.TorqueDynamicPermissionManagerImpl;
 import org.apache.fulcrum.security.torque.dynamic.TorqueDynamicRoleManagerImpl;
 import org.apache.fulcrum.security.torque.dynamic.TorqueDynamicUserManagerImpl;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit4Test;
+import org.junit.Test;
 
 /**
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @version $Id: StartingSecurityServicesTest.java 223140 2004-11-01 13:29:25Z epugh $
  */
 
-public class StartingSecurityServicesTest extends BaseUnitTest
+public class StartingSecurityServicesTest extends BaseUnit4Test
 {
     private SecurityService securityService = null;
-    public StartingSecurityServicesTest(String name)
-    {
-        super(name);
-    }
 
-
+    @Test
     public void testStartingTorqueSecurity() throws Exception
     {
         this.setRoleFileName("src/test/DynamicTorqueRoleConfig.xml");

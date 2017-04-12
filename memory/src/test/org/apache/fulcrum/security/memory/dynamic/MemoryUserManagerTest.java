@@ -19,8 +19,14 @@ package org.apache.fulcrum.security.memory.dynamic;
  * under the License.
  */
 
+import static org.junit.Assert.fail;
+
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractUserManagerTest;
+import org.junit.After;
+import org.junit.Before;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Eric Pugh
@@ -29,8 +35,7 @@ import org.apache.fulcrum.security.model.test.AbstractUserManagerTest;
  */
 public class MemoryUserManagerTest extends AbstractUserManagerTest
 {
-
-    @Override
+    @Before
     public void setUp()
     {
         try
@@ -47,6 +52,7 @@ public class MemoryUserManagerTest extends AbstractUserManagerTest
     }
 
     @Override
+    @After
     public void tearDown()
     {
         user = null;
@@ -54,13 +60,4 @@ public class MemoryUserManagerTest extends AbstractUserManagerTest
         securityService = null;
     }
 
-    /**
-     * Constructor for MemoryPermissionManagerTest.
-     * 
-     * @param arg0
-     */
-    public MemoryUserManagerTest(String arg0)
-    {
-        super(arg0);
-    }
 }

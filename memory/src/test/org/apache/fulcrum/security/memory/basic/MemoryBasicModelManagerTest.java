@@ -22,6 +22,12 @@ package org.apache.fulcrum.security.memory.basic;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.basic.test.AbstractModelManagerTest;
 
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id: MemoryBasicModelManagerTest.java 535465 2007-05-05 06:58:06Z tv
@@ -29,15 +35,10 @@ import org.apache.fulcrum.security.model.basic.test.AbstractModelManagerTest;
  */
 public class MemoryBasicModelManagerTest extends AbstractModelManagerTest
 {
-    /**
-     * @param arg0
-     */
-    public MemoryBasicModelManagerTest(String arg0)
-    {
-        super(arg0);
-    }
+
 
     @Override
+    @Before
     public void setUp()
     {
         try
@@ -55,6 +56,7 @@ public class MemoryBasicModelManagerTest extends AbstractModelManagerTest
     }
 
     @Override
+    @After
     public void tearDown()
     {
         super.tearDown();

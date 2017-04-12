@@ -20,6 +20,9 @@ package org.apache.fulcrum.security.memory.dynamic;
  */
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractPermissionManagerTest;
+import org.junit.After;
+import org.junit.Before;
+import static org.junit.Assert.*;
 
 /**
  * @author Eric Pugh
@@ -29,7 +32,8 @@ import org.apache.fulcrum.security.model.test.AbstractPermissionManagerTest;
 public class MemoryPermissionManagerTest extends AbstractPermissionManagerTest
 {
 
-    @Override
+
+    @Before
     public void setUp()
     {
         try
@@ -46,6 +50,7 @@ public class MemoryPermissionManagerTest extends AbstractPermissionManagerTest
     }
 
     @Override
+    @After
     public void tearDown()
     {
         permission = null;
@@ -53,13 +58,4 @@ public class MemoryPermissionManagerTest extends AbstractPermissionManagerTest
         securityService = null;
     }
 
-    /**
-     * Constructor for MemoryPermissionManagerTest.
-     * 
-     * @param arg0
-     */
-    public MemoryPermissionManagerTest(String arg0)
-    {
-        super(arg0);
-    }
 }

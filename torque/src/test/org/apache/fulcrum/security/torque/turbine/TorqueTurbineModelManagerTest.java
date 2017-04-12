@@ -18,6 +18,8 @@ package org.apache.fulcrum.security.torque.turbine;
  * under the License.
  */
 
+import static org.junit.Assert.fail;
+
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.turbine.test.AbstractTurbineModelManagerTest;
 import org.apache.fulcrum.security.torque.HsqlDB;
@@ -29,6 +31,9 @@ import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRolePeer;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineUserPeer;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
 
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
@@ -40,10 +45,10 @@ public class TorqueTurbineModelManagerTest
 {
     protected static HsqlDB hsqlDB = null;
 
-    @Override
+	@Override
+	@Before
 	public void setUp() throws Exception
     {
-
         try
         {
             hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-turbine-schema.sql");
@@ -57,13 +62,13 @@ public class TorqueTurbineModelManagerTest
         }
         catch (Exception e)
         {
-            fail(e.toString());
+        	Assert.fail(e.toString());
         }
 
     }
    
-
-    @Override
+	@Override
+	@After
 	public void tearDown()
     {
         // cleanup tables
@@ -95,19 +100,11 @@ public class TorqueTurbineModelManagerTest
         }
         catch (TorqueException e)
         {
-            fail(e.toString());
+        	fail(e.toString());
         }
 
         modelManager = null;
         securityService = null;
     }
 
-    /**
- 	 * Constructor for TorqueTurbineModelManagerTest.
-	 * @param arg0
-	 */
-    public TorqueTurbineModelManagerTest(String arg0)
-    {
-        super(arg0);
-    }
 }

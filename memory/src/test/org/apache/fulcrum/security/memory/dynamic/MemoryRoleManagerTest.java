@@ -21,6 +21,10 @@ package org.apache.fulcrum.security.memory.dynamic;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractRoleManagerTest;
+import org.junit.After;
+import org.junit.Before;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Eric Pugh
@@ -30,7 +34,7 @@ import org.apache.fulcrum.security.model.test.AbstractRoleManagerTest;
 public class MemoryRoleManagerTest extends AbstractRoleManagerTest
 {
 
-    @Override
+    @Before
     public void setUp()
     {
         try
@@ -47,6 +51,7 @@ public class MemoryRoleManagerTest extends AbstractRoleManagerTest
     }
 
     @Override
+    @After
     public void tearDown()
     {
         role = null;
@@ -54,13 +59,4 @@ public class MemoryRoleManagerTest extends AbstractRoleManagerTest
         securityService = null;
     }
 
-    /**
-     * Constructor for MemoryPermissionManagerTest.
-     * 
-     * @param arg0
-     */
-    public MemoryRoleManagerTest(String arg0)
-    {
-        super(arg0);
-    }
 }

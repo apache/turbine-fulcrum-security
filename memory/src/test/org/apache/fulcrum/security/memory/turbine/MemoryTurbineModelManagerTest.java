@@ -21,6 +21,8 @@ package org.apache.fulcrum.security.memory.turbine;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.turbine.test.AbstractTurbineModelManagerTest;
+import org.junit.After;
+import org.junit.Before;
 
 /**
  * @author Eric Pugh
@@ -31,6 +33,7 @@ public class MemoryTurbineModelManagerTest extends AbstractTurbineModelManagerTe
 {
 
     @Override
+    @Before
     public void setUp() throws Exception
     {
 
@@ -42,6 +45,7 @@ public class MemoryTurbineModelManagerTest extends AbstractTurbineModelManagerTe
     }
 
     @Override
+    @After
     public void tearDown()
     {
         super.tearDown();
@@ -49,13 +53,5 @@ public class MemoryTurbineModelManagerTest extends AbstractTurbineModelManagerTe
         securityService = null;
     }
 
-    /**
-     * Constructor for MemoryPermissionManagerTest.
-     * 
-     * @param arg0
-     */
-    public MemoryTurbineModelManagerTest(String arg0)
-    {
-        super(arg0);
-    }
+
 }

@@ -18,6 +18,8 @@ package org.apache.fulcrum.security.torque.turbine;
  * under the License.
  */
 
+import static org.junit.Assert.fail;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -30,10 +32,11 @@ import org.apache.fulcrum.security.torque.om.TurbineRolePeer;
 import org.apache.fulcrum.security.torque.om.TurbineRolePermissionPeer;
 import org.apache.fulcrum.security.torque.om.TurbineUserGroupRolePeer;
 import org.apache.fulcrum.security.torque.om.TurbineUserPeer;
-import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
 import org.apache.torque.util.Transaction;
+import org.junit.After;
+import org.junit.Before;
 
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
@@ -46,6 +49,7 @@ public class TurbineDefaultModelManagerTest
     protected static HsqlDB hsqlDB = null;
 
     @Override
+	@Before
 	public void setUp() throws Exception
     {
 
@@ -69,6 +73,7 @@ public class TurbineDefaultModelManagerTest
    
 
     @Override
+    @After
 	public void tearDown()
     {
         // cleanup tables
@@ -107,7 +112,7 @@ public class TurbineDefaultModelManagerTest
         }
         catch (TorqueException e)
         {
-            fail(e.toString());
+        	fail(e.toString());
         } catch (SQLException e) {
         	 if (con != null)
              {
@@ -120,12 +125,4 @@ public class TurbineDefaultModelManagerTest
         securityService = null;
     }
 
-    /**
- 	 * Constructor for TurbineDefaultModelManagerTest.
-	 * @param arg0
-	 */
-    public TurbineDefaultModelManagerTest(String arg0)
-    {
-        super(arg0);
-    }
 }

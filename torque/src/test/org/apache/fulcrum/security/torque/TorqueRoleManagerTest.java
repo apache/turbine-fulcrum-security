@@ -18,9 +18,13 @@ package org.apache.fulcrum.security.torque;
  * under the License.
  */
 
+import static org.junit.Assert.fail;
+
 import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractRoleManagerTest;
+import org.junit.After;
+import org.junit.Before;
 
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
@@ -31,6 +35,7 @@ public class TorqueRoleManagerTest extends AbstractRoleManagerTest
 {
     protected static HsqlDB hsqlDB = null;
 
+    @Before
     public void setUp()
     {
         try
@@ -44,7 +49,7 @@ public class TorqueRoleManagerTest extends AbstractRoleManagerTest
             this.setRoleFileName("src/test/DynamicTorqueRoleConfig.xml");
             this.setConfigurationFileName("src/test/DynamicTorqueComponentConfig.xml");
             securityService = (SecurityService) lookup(SecurityService.ROLE);
-            roleManager = (RoleManager) securityService.getRoleManager();
+            roleManager = securityService.getRoleManager();
         }
         catch (Exception e)
         {
@@ -52,7 +57,9 @@ public class TorqueRoleManagerTest extends AbstractRoleManagerTest
         }
     }
 
-    public void tearDown()
+    @Override
+    @After
+	public void tearDown()
     {
 /*
  *        // cleanup tables
@@ -100,12 +107,4 @@ public class TorqueRoleManagerTest extends AbstractRoleManagerTest
         securityService = null;
     }
 
-    /**
-     * Constructor for TorqueRoleManagerTest.
-     * @param arg0
-     */
-    public TorqueRoleManagerTest(String arg0)
-    {
-        super(arg0);
-    }
 }

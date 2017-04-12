@@ -28,6 +28,12 @@ import org.apache.fulcrum.security.model.basic.entity.BasicUser;
 import org.apache.fulcrum.security.model.basic.test.AbstractModelManagerTest;
 import org.hibernate.Transaction;
 
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id: HibernateBasicModelManagerTest.java 1169862 2011-09-12
@@ -36,6 +42,7 @@ import org.hibernate.Transaction;
 public class HibernateBasicModelManagerTest extends AbstractModelManagerTest
 {
     @Override
+    @Before
     public void setUp() throws Exception
     {
         this.setRoleFileName("src/test/BasicHibernateRoleConfig.xml");
@@ -47,6 +54,7 @@ public class HibernateBasicModelManagerTest extends AbstractModelManagerTest
     }
 
     @Override
+    @Test
     public void testRevokeAllUser() throws Exception
     {
         super.testRevokeAllUser();
@@ -59,6 +67,7 @@ public class HibernateBasicModelManagerTest extends AbstractModelManagerTest
     }
 
     @Override
+    @After
     public void tearDown()
     {
         try
@@ -74,13 +83,4 @@ public class HibernateBasicModelManagerTest extends AbstractModelManagerTest
         securityService = null;
     }
 
-    /**
-     * Constructor for HibernatePermissionManagerTest.
-     * 
-     * @param arg0
-     */
-    public HibernateBasicModelManagerTest(String arg0)
-    {
-        super(arg0);
-    }
 }

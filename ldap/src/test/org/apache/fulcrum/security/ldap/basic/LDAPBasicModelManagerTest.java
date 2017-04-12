@@ -26,6 +26,11 @@ import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.basic.test.AbstractModelManagerTest;
 import org.apache.fulcrum.security.util.UserSet;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
@@ -33,13 +38,9 @@ import org.apache.fulcrum.security.util.UserSet;
  */
 public class LDAPBasicModelManagerTest extends AbstractModelManagerTest
 {
-	/**
-     * @param arg0
-     */
-    public LDAPBasicModelManagerTest(String arg0)
-    {
-        super(arg0);
-    }
+
+	@Override
+	@Before
     public void setUp()
 	 {
 		 try
@@ -55,7 +56,9 @@ public class LDAPBasicModelManagerTest extends AbstractModelManagerTest
 			 fail(e.toString());
 		 }
 	 }
-	 public void tearDown()
+	 @Override
+	 @After
+	public void tearDown()
 	 {
          try
          {

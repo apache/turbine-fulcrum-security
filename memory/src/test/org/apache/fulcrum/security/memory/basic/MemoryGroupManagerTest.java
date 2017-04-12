@@ -21,6 +21,11 @@ package org.apache.fulcrum.security.memory.basic;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractGroupManagerTest;
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Eric Pugh
@@ -29,12 +34,9 @@ import org.apache.fulcrum.security.model.test.AbstractGroupManagerTest;
  */
 public class MemoryGroupManagerTest extends AbstractGroupManagerTest
 {
-    public static void main(String[] args)
-    {
-        junit.textui.TestRunner.run(MemoryGroupManagerTest.class);
-    }
 
-    @Override
+
+    @Before
     public void setUp()
     {
         try
@@ -51,6 +53,7 @@ public class MemoryGroupManagerTest extends AbstractGroupManagerTest
     }
 
     @Override
+    @After
     public void tearDown()
     {
         group = null;
@@ -58,13 +61,5 @@ public class MemoryGroupManagerTest extends AbstractGroupManagerTest
         securityService = null;
     }
 
-    /**
-     * Constructor for MemoryPermissionManagerTest.
-     * 
-     * @param arg0
-     */
-    public MemoryGroupManagerTest(String arg0)
-    {
-        super(arg0);
-    }
+
 }

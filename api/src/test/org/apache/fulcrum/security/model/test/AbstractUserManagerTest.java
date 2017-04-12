@@ -19,6 +19,13 @@ package org.apache.fulcrum.security.model.test;
  * under the License.
  */
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
@@ -27,7 +34,8 @@ import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.UserSet;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit4Test;
+import org.junit.Test;
 
 /**
  * @author Eric Pugh
@@ -35,22 +43,13 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  *         To change the template for this generated type comment go to
  *         Window>Preferences>Java>Code Generation>Code and Comments
  */
-public abstract class AbstractUserManagerTest extends BaseUnitTest
+public abstract class AbstractUserManagerTest extends BaseUnit4Test
 {
     protected User user;
     protected UserManager userManager;
     protected SecurityService securityService;
 
-    /**
-     * Constructor for AbstractUserManagerTest.
-     * 
-     * @param arg0
-     */
-    public AbstractUserManagerTest(String arg0)
-    {
-        super(arg0);
-    }
-
+    @Test
     public void testCheckExists() throws Exception
     {
         user = userManager.getUserInstance("Philip");
@@ -61,7 +60,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
         user = userManager.getUserInstance("ImaginaryFriend");
         assertFalse(userManager.checkExists(user));
     }
-
+    @Test
     public void testCheckExistsWithString() throws Exception
     {
         user = userManager.getUserInstance("Philip2");
@@ -76,6 +75,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
     /*
      * Class to test for User retrieve(String)
      */
+    @Test
     public void testGetUserString() throws Exception
     {
         user = userManager.getUserInstance("QuietMike");
@@ -83,7 +83,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
         user = userManager.getUser("QuietMike");
         assertNotNull(user);
     }
-
+    @Test
     public void testGetUserById() throws Exception
     {
         user = userManager.getUserInstance("QuietMike2");
@@ -96,6 +96,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
     /*
      * Class to test for User retrieve(String, String)
      */
+    @Test
     public void testGetUserStringString() throws Exception
     {
         user = userManager.getUserInstance("Richard");
@@ -114,7 +115,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
             // good
         }
     }
-
+    @Test
     public void testGetAllUsers() throws Exception
     {
         int size = userManager.getAllUsers().size();
@@ -123,7 +124,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
         UserSet userSet = userManager.getAllUsers();
         assertEquals(size + 1, userSet.size());
     }
-
+    @Test
     public void testAuthenticate() throws Exception
     {
         user = userManager.getUserInstance("Kay");
@@ -139,7 +140,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
             // good
         }
     }
-
+    @Test
     public void testChangePassword() throws Exception
     {
         user = userManager.getUserInstance("Jonathan");
@@ -156,7 +157,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
         userManager.changePassword(user, "jc", "JC");
         userManager.authenticate(user, "JC");
     }
-
+    @Test
     public void testForcePassword() throws Exception
     {
         user = userManager.getUserInstance("Connor");
@@ -168,6 +169,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
     /*
      * Class to test for User getUserInstance()
      */
+    @Test
     public void testGetUserInstance() throws Exception
     {
         user = userManager.getUserInstance();
@@ -178,6 +180,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
     /*
      * Class to test for User getUserInstance(String)
      */
+    @Test
     public void testGetUserInstanceString() throws Exception
     {
         user = userManager.getUserInstance("Philip");
@@ -191,6 +194,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
      * @todo figur out what to do here...
      * @throws Exception
      */
+    @Test
     public void testSaveUser() throws Exception
     {
         user = userManager.getUserInstance("Kate");
@@ -224,7 +228,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
             // good
         }
     }
-
+    @Test
     public void testAddUser() throws Exception
     {
         user = userManager.getUserInstance("Joe1");
@@ -263,7 +267,7 @@ public abstract class AbstractUserManagerTest extends BaseUnitTest
             // good
         }
     }
-
+    @Test
     public void testCheckUserCaseSensitiveExists() throws Exception
     {
         user = userManager.getUserInstance("borrisJohnson");

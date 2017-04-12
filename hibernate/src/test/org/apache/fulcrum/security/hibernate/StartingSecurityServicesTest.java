@@ -19,25 +19,24 @@ package org.apache.fulcrum.security.hibernate;
  * under the License.
  */
 
+import static org.junit.Assert.assertTrue;
+
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
-
+import org.apache.fulcrum.testcontainer.BaseUnit4Test;
+import org.junit.Test;
 /**
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @version $Id: StartingSecurityServicesTest.java 535465 2007-05-05 06:58:06Z
  *          tv $
  */
 
-public class StartingSecurityServicesTest extends BaseUnitTest
+public class StartingSecurityServicesTest extends BaseUnit4Test
 {
     private SecurityService securityService = null;
 
-    public StartingSecurityServicesTest(String name)
-    {
-        super(name);
-    }
 
+    @Test
     public void testStartingHibernateSecurity() throws Exception
     {
         this.setRoleFileName("src/test/DynamicHibernateRoleConfig.xml");

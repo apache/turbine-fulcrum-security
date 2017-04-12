@@ -19,6 +19,7 @@ package org.apache.fulcrum.security.model;
  * under the License.
  */
 
+import org.apache.fulcrum.security.ModelManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.model.basic.BasicAccessControlList;
 import org.apache.fulcrum.security.model.basic.entity.BasicGroup;
@@ -35,6 +36,7 @@ import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicPermissionIm
 import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicRoleImpl;
 import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
 import org.apache.fulcrum.security.model.turbine.TurbineAccessControlList;
+import org.apache.fulcrum.security.model.turbine.TurbineModelManager;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineGroup;
 import org.apache.fulcrum.security.model.turbine.entity.TurbinePermission;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineRole;
@@ -59,12 +61,17 @@ public class ACLFactoryTest extends BaseUnitTest
         super(arg0);
     }
 
-    public void testCreatingTurbineACL() throws Exception
+    public void testCreatingTurbineACLandModel() throws Exception
     {
-        this.setRoleFileName("src/test/TurbineACLRoleConfig.xml");
-        this.setConfigurationFileName("src/test/ACLComponentConfig.xml");
+        this.setRoleFileName("src/test/TurbineACLRoleModelConfig.xml");
+        this.setConfigurationFileName("src/test/ACLModelComponentConfig.xml");
 
         ACLFactory factory = (ACLFactory) lookup(ACLFactory.ROLE);
+        
+        TurbineModelManager modelManager  = (TurbineModelManager) lookup(TurbineModelManager.ROLE);
+        assertTrue(modelManager.getGlobalGroupName().equals("dumb"));
+        
+        //factory.ge
         TurbineUser user = new TurbineUserImpl();
         user.setName("bob");
         user.setId(new Integer(1));
@@ -92,9 +99,13 @@ public class ACLFactoryTest extends BaseUnitTest
     public void testCreatingDynamicACL() throws Exception
     {
         this.setRoleFileName("src/test/DynamicACLRoleConfig.xml");
-        this.setConfigurationFileName("src/test/ACLComponentConfig.xml");
-
+        this.setConfigurationFileName("src/test/ACLModelComponentConfig.xml");
+        
+        ModelManager modelManager  = (ModelManager) lookup(ModelManager.ROLE);
+        assertTrue(modelManager != null);
+        
         ACLFactory factory = (ACLFactory) lookup(ACLFactory.ROLE);
+        
         DynamicUser user = new DynamicUserImpl();
         user.setName("bob");
         user.setId(new Integer(1));
@@ -119,7 +130,7 @@ public class ACLFactoryTest extends BaseUnitTest
     public void testCreatingBasicACL() throws Exception
     {
         this.setRoleFileName("src/test/BasicACLRoleConfig.xml");
-        this.setConfigurationFileName("src/test/ACLComponentConfig.xml");
+        this.setConfigurationFileName("src/test/ACLModelComponentConfig.xml");
 
         ACLFactory factory = (ACLFactory) lookup(ACLFactory.ROLE);
         BasicUser user = new BasicUserImpl();

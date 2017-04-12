@@ -21,6 +21,12 @@ package org.apache.fulcrum.security.memory.dynamic;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.dynamic.test.AbstractDynamicModelManagerTest;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
 
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
@@ -29,15 +35,10 @@ import org.apache.fulcrum.security.model.dynamic.test.AbstractDynamicModelManage
  */
 public class MemoryDynamicModelManagerTest extends AbstractDynamicModelManagerTest
 {
-    /**
-     * @param arg0
-     */
-    public MemoryDynamicModelManagerTest(String arg0)
-    {
-        super(arg0);
-    }
+
 
     @Override
+    @Before
     public void setUp()
     {
         try
@@ -55,6 +56,7 @@ public class MemoryDynamicModelManagerTest extends AbstractDynamicModelManagerTe
     }
 
     @Override
+    @After
     public void tearDown()
     {
         super.tearDown();

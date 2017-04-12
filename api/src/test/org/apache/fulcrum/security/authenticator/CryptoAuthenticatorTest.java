@@ -19,31 +19,27 @@ package org.apache.fulcrum.security.authenticator;
  * under the License.
  */
 
+import static org.junit.Assert.*;
+
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit4Test;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class CryptoAuthenticatorTest extends BaseUnitTest
+public class CryptoAuthenticatorTest extends BaseUnit4Test
+
 {
     private static final String preDefinedInput = "Oeltanks";
     private static final String preDefinedResult = "uVDiJHaavRYX8oWt5ctkaa7j1cw=";
 
-    /**
-     * Constructor for CryptoAuthenticatorTest.
-     * 
-     * @param arg0
-     */
-    public CryptoAuthenticatorTest(String arg0)
-    {
-        super(arg0);
-    }
 
-    @Override
+    @Before
     public void setUp()
     {
         try
@@ -57,6 +53,7 @@ public class CryptoAuthenticatorTest extends BaseUnitTest
         }
     }
 
+    @Test
     public void testAuthenticate() throws Exception
     {
         User user = new DynamicUserImpl();

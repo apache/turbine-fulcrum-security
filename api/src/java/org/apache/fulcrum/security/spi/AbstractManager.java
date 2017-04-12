@@ -25,6 +25,7 @@ import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 import org.apache.avalon.framework.thread.ThreadSafe;
 import org.apache.fulcrum.security.GroupManager;
+import org.apache.fulcrum.security.ModelManager;
 import org.apache.fulcrum.security.PermissionManager;
 import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.UserManager;
@@ -42,7 +43,7 @@ public abstract class AbstractManager extends AbstractLogEnabled implements Serv
 {
     boolean composed = false;
 
-    private ServiceManager manager = null;
+    protected ServiceManager manager = null;
     private PermissionManager permissionManager;
     private RoleManager roleManager;
     private GroupManager groupManager;
@@ -139,13 +140,15 @@ public abstract class AbstractManager extends AbstractLogEnabled implements Serv
     /**
      * Avalon Service lifecycle method
      */
-    public void service(ServiceManager manager) throws ServiceException
+    @Override
+	public void service(ServiceManager manager) throws ServiceException
     {
         this.manager = manager;
 
     }
 
-    public void dispose()
+    @Override
+	public void dispose()
     {
         release(roleManager);
         release(permissionManager);

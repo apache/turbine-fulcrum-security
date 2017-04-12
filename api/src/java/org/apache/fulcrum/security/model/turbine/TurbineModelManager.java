@@ -35,10 +35,17 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public interface TurbineModelManager extends ModelManager
 {
+
+
+	/**
+	 * attribute where global group name could be set 
+	 */
+    String GLOBAL_GROUP_ATTR_NAME = "globalGroup";
+    
     /**
-     * The name of the <a href="#global">global group</a>
+     * The name of the <a href="#global">global group</a>, if no global group name is set in model manager
      */
-    String GLOBAL_GROUP_NAME = "global";
+    public String GLOBAL_GROUP_NAME = "global";
 
     /**
      * Provides a reference to the Group object that represents the <a
@@ -47,6 +54,12 @@ public interface TurbineModelManager extends ModelManager
      * @return A Group object that represents the global group.
      */
     Group getGlobalGroup() throws DataBackendException;
+    
+    /**
+     * 
+     * @return the configured global group name, by default {@link #GLOBAL_GROUP_ATTR_NAME}
+     */
+    public String getGlobalGroupName();
 
     /**
      * Puts a permission in a role

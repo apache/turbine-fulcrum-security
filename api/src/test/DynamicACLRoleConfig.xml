@@ -23,4 +23,8 @@
         name="org.apache.fulcrum.security.model.ACLFactory"
         shorthand="acl"
         default-class="org.apache.fulcrum.security.model.dynamic.DynamicACLFactory"/>
+          <role
+        name="org.apache.fulcrum.security.ModelManager"
+        shorthand="modelManager"
+        default-class="org.apache.fulcrum.security.model.dynamic.test.ModelManagerDummyImpl"/>
 </role-list>

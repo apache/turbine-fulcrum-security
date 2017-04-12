@@ -22,13 +22,19 @@ package org.apache.fulcrum.security.hibernate;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractUserManagerTest;
 
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public class HibernateUserManagerTest extends AbstractUserManagerTest
 {
-    @Override
+    @Before
     public void setUp()
     {
         try
@@ -47,6 +53,7 @@ public class HibernateUserManagerTest extends AbstractUserManagerTest
     }
 
     @Override
+    @After
     public void tearDown()
     {
         try
@@ -63,13 +70,4 @@ public class HibernateUserManagerTest extends AbstractUserManagerTest
         securityService = null;
     }
 
-    /**
-     * Constructor for HibernatePermissionManagerTest.
-     * 
-     * @param arg0
-     */
-    public HibernateUserManagerTest(String arg0)
-    {
-        super(arg0);
-    }
 }

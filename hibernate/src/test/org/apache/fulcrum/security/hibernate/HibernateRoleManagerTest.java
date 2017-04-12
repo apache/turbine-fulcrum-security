@@ -22,13 +22,19 @@ package org.apache.fulcrum.security.hibernate;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractRoleManagerTest;
 
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
 public class HibernateRoleManagerTest extends AbstractRoleManagerTest
 {
-    @Override
+    @Before
     public void setUp()
     {
         try
@@ -47,6 +53,7 @@ public class HibernateRoleManagerTest extends AbstractRoleManagerTest
     }
 
     @Override
+    @After
     public void tearDown()
     {
         try
@@ -63,13 +70,5 @@ public class HibernateRoleManagerTest extends AbstractRoleManagerTest
         securityService = null;
     }
 
-    /**
-     * Constructor for HibernatePermissionManagerTest.
-     * 
-     * @param arg0
-     */
-    public HibernateRoleManagerTest(String arg0)
-    {
-        super(arg0);
-    }
+
 }

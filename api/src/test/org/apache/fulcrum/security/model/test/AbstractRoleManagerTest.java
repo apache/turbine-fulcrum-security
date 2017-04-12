@@ -19,13 +19,21 @@ package org.apache.fulcrum.security.model.test;
  * under the License.
  */
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit4Test;
+import org.junit.Test;
 
 /**
  * @author Eric Pugh
@@ -33,26 +41,16 @@ import org.apache.fulcrum.testcontainer.BaseUnitTest;
  *         To change the template for this generated type comment go to
  *         Window>Preferences>Java>Code Generation>Code and Comments
  */
-public abstract class AbstractRoleManagerTest extends BaseUnitTest
+public abstract class AbstractRoleManagerTest extends BaseUnit4Test
 {
     protected Role role;
     protected RoleManager roleManager;
     protected SecurityService securityService;
 
-    /**
-     * Constructor for AbstractRoleManagerTest.
-     * 
-     * @param arg0
-     */
-    public AbstractRoleManagerTest(String arg0)
-
-    {
-        super(arg0);
-    }
-
     /*
      * Class to test for Role getRoleInstance()
      */
+    @Test
     public void testGetRoleInstance() throws Exception
     {
         role = roleManager.getRoleInstance();
@@ -63,12 +61,13 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
     /*
      * Class to test for Role getRoleInstance(String)
      */
+    @Test
     public void testGetRoleInstanceString() throws Exception
     {
         role = roleManager.getRoleInstance("DOG_CATCHER");
         assertEquals("dog_catcher", role.getName());
     }
-
+    @Test
     public void testGetRoleByName() throws Exception
     {
         role = roleManager.getRoleInstance("DOG_CATCHERd");
@@ -76,7 +75,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         Role role2 = roleManager.getRoleByName("DOG_CATCHERd");
         assertEquals(role.getName(), role2.getName());
     }
-
+    @Test
     public void testGetRoleById() throws Exception
     {
         role = roleManager.getRoleInstance("CLEAN_KENNEL_A");
@@ -84,7 +83,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         Role role2 = roleManager.getRoleById(role.getId());
         assertEquals(role.getName(), role2.getName());
     }
-
+    @Test
     public void testRenameRole() throws Exception
     {
         role = roleManager.getRoleInstance("CLEAN_KENNEL_X");
@@ -95,7 +94,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         assertEquals("clean_grooming_room", role2.getName());
         assertEquals(size, roleManager.getAllRoles().size());
     }
-
+    @Test
     public void testGetAllRoles() throws Exception
     {
         int size = roleManager.getAllRoles().size();
@@ -104,7 +103,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         RoleSet roleSet = roleManager.getAllRoles();
         assertEquals(size + 1, roleSet.size());
     }
-
+    @Test
     public void testAddRole() throws Exception
     {
         role = roleManager.getRoleInstance("DOG_NAPPER");
@@ -113,7 +112,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         assertNotNull(role.getId());
         assertNotNull(roleManager.getRoleById(role.getId()));
     }
-
+    @Test
     public void testRemoveRole() throws Exception
     {
         role = roleManager.getRoleInstance("CLEAN_KENNEL_K");
@@ -131,7 +130,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         }
         assertEquals(size - 1, roleManager.getAllRoles().size());
     }
-
+    @Test
     public void testCheckExists() throws Exception
     {
         role = roleManager.getRoleInstance("GREET_PEOPLE");
@@ -140,7 +139,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
         Role role2 = roleManager.getRoleInstance("WALK_DOGS");
         assertFalse(roleManager.checkExists(role2));
     }
-
+    @Test
     public void testCheckExistsWithString() throws Exception
     {
         role = roleManager.getRoleInstance("GREET_PEOPLE2");
@@ -153,6 +152,7 @@ public abstract class AbstractRoleManagerTest extends BaseUnitTest
     /*
      * Class to test for boolean checkExists(string)
      */
+    @Test
     public void testAddRoleTwiceFails() throws Exception
     {
         role = roleManager.getRoleInstance("EATLUNCH");

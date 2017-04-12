@@ -19,10 +19,12 @@ package org.apache.fulcrum.security.authenticator;
  * under the License.
  */
 
-import junit.framework.TestCase;
 
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
+
+import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * 
@@ -30,8 +32,9 @@ import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
  * @version $Id: TextMatchAuthenticatorTest.java 535465 2007-05-05 06:58:06Z tv
  *          $
  */
-public class TextMatchAuthenticatorTest extends TestCase
+public class TextMatchAuthenticatorTest 
 {
+	@Test
     public void testAuthenticate() throws Exception
     {
         User user = new DynamicUserImpl();

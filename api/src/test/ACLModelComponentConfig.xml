@@ -19,4 +19,5 @@
 -->
 <componentConfig>
     <acl/>
+    <modelManager globalGroup="dumb"/>
 </componentConfig>

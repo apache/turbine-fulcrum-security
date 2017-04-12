@@ -42,14 +42,18 @@ import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.UserSet;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit4Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * @author Eric Pugh
  * @author <a href="mailto:ben@gidley.co.uk">Ben Gidley </a>
  *
  */
-public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
+public abstract class AbstractDynamicModelManagerTest extends BaseUnit4Test
 {
     private static final String ONLY_BORRIS_PERMISSION = "ONLY_BORRIS_PERMISSION";
 
@@ -75,10 +79,9 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
 
     protected SecurityService securityService;
 
-    @Override
+    @Before
     public void setUp() throws Exception
     {
-        super.setUp();
         roleManager = securityService.getRoleManager();
         userManager = securityService.getUserManager();
         groupManager = securityService.getGroupManager();
@@ -86,7 +89,9 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
         modelManager = (DynamicModelManager) securityService.getModelManager();
     }
 
-    @Override
+
+	@Override
+	@After
     public void tearDown()
     {
         this.release(roleManager);
@@ -96,16 +101,8 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
         this.release(modelManager);
     }
 
-    /**
-     * Constructor for AbstractRoleManagerTest.
-     *
-     * @param arg0
-     */
-    public AbstractDynamicModelManagerTest(String arg0)
-    {
-        super(arg0);
-    }
 
+	@Test
     public void testGrantRolePermission() throws Exception
     {
         Permission permission = permissionManager.getPermissionInstance();
@@ -119,7 +116,7 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
         assertEquals(1, permissions.size());
         assertTrue(((DynamicRole) role).getPermissions().contains(permission));
     }
-
+	@Test
     public void testRevokeRolePermission() throws Exception
     {
         Permission permission = securityService.getPermissionManager().getPermissionInstance();
@@ -137,7 +134,7 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
         assertEquals(0, permissions.size());
         assertFalse(((DynamicRole) role).getPermissions().contains(permission));
     }
-
+	@Test
     public void testRevokeAllRole() throws Exception
     {
         Permission permission = securityService.getPermissionManager().getPermissionInstance();
@@ -158,7 +155,7 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
         permissions = ((DynamicRole) role).getPermissions();
         assertEquals(0, permissions.size());
     }
-
+	@Test
     public void testRevokeAllGroup() throws Exception
     {
         Permission permission = securityService.getPermissionManager().getPermissionInstance();
@@ -179,7 +176,7 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
         permissions = ((DynamicRole) role).getPermissions();
         assertEquals(0, permissions.size());
     }
-
+	@Test
     public void testRevokeAllUser() throws Exception
     {
         Group group = securityService.getGroupManager().getGroupInstance();
@@ -205,7 +202,7 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
         assertFalse(((DynamicRole) role).getGroups().contains(group));
 
     }
-
+	@Test
     public void testRevokeAllPermission() throws Exception
     {
         Role role = securityService.getRoleManager().getRoleInstance();
@@ -226,7 +223,7 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
         roles = ((DynamicPermission) permission).getRoles();
         assertEquals(0, roles.size());
     }
-
+	@Test
     public void testGrantUserGroup() throws Exception
     {
         Group group = securityService.getGroupManager().getGroupInstance();
@@ -238,7 +235,7 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
         assertTrue(((DynamicUser) user).getGroups().contains(group));
         assertTrue(((DynamicGroup) group).getUsers().contains(user));
     }
-
+	@Test
     public void testRevokeUserGroup() throws Exception
     {
         Group group = securityService.getGroupManager().getGroupInstance();
@@ -252,7 +249,7 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
         user = userManager.getUser("Lima");
         assertFalse(((DynamicUser) user).getGroups().contains(group));
     }
-
+	@Test
     public void testGrantGroupRole() throws Exception
     {
         Role role = securityService.getRoleManager().getRoleInstance();
@@ -266,7 +263,7 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
         assertTrue(((DynamicRole) role).getGroups().contains(group));
 
     }
-
+    @Test
     public void testRevokeGroupRole() throws Exception
     {
         Role role = securityService.getRoleManager().getRoleInstance();
@@ -280,7 +277,7 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
         assertFalse(((DynamicGroup) group).getRoles().contains(role));
         assertFalse(((DynamicRole) role).getGroups().contains(group));
     }
-
+    @Test
     public void testRetrieveingUsersByGroup() throws Exception
     {
         User user = userManager.getUserInstance("Joe3");
@@ -322,7 +319,7 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnitTest
         assertTrue(found);
         assertTrue(users.contains(user));
     }
-
+    @Test
     public void testAddRemoveDelegate() throws Exception
     {
         DynamicUser borris = (DynamicUser) userManager.getUserInstance(USERNAME_BORRIS);

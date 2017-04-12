@@ -22,15 +22,13 @@ import java.util.Iterator;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.entity.User;
-import org
-    .apache
-    .fulcrum
-    .security
-    .model
-    .turbine
-    .test
+import org.apache.fulcrum.security.model.turbine.test
     .AbstractTurbineModelManagerTest;
 import org.apache.fulcrum.security.util.UserSet;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * @author Eric Pugh
@@ -41,7 +39,9 @@ public class LDAPTurbineModelManagerTest
     extends AbstractTurbineModelManagerTest
 {
 
-    public void setUp() throws Exception
+    @Override
+    @Before
+	public void setUp() throws Exception
     {
 
         this.setRoleFileName("src/test/TurbineLDAPRoleConfig.xml");
@@ -50,7 +50,9 @@ public class LDAPTurbineModelManagerTest
         super.setUp();
 
     }
-    public void tearDown()
+    @Override
+    @After
+	public void tearDown()
     {
         try
         {
@@ -72,12 +74,5 @@ public class LDAPTurbineModelManagerTest
 		modelManager = null;
         securityService = null;
     }
-    /**
-    	* Constructor for LDAPPermissionManagerTest.
-    	* @param arg0
-    	*/
-    public LDAPTurbineModelManagerTest(String arg0)
-    {
-        super(arg0);
-    }
+
 }

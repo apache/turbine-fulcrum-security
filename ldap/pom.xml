@@ -16,17 +16,17 @@
    limitations under the License.
 -->
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <parent>
-        <artifactId>fulcrum-security-parent</artifactId>
+        <parent>
+        <artifactId>fulcrum-security</artifactId>
         <groupId>org.apache.fulcrum</groupId>
-        <version>1.1.0-SNAPSHOT</version>
+        <version>1.1.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.fulcrum</groupId>
     <artifactId>fulcrum-security-ldap</artifactId>
     <name>Fulcrum Security LDAP Impl</name>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.1-SNAPSHOT</version>
     
     <url>http://turbine.apache.org/fulcrum/fulcrum-security/fulcrum-security-ldap</url>
     <scm>
@@ -74,38 +74,32 @@
         <dependency>
             <groupId>org.apache.fulcrum</groupId>
             <artifactId>fulcrum-security-api</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
+            <version>1.1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.fulcrum</groupId>
             <artifactId>fulcrum-security-api</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
+            <version>1.1.1-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.fulcrum</groupId>
             <artifactId>fulcrum-security-memory</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.2</version>
+            <version>1.1.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.fulcrum</groupId>
             <artifactId>fulcrum-testcontainer</artifactId>
-            <version>1.0.6</version>
+            <version>1.0.7</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.fulcrum</groupId>
-            <artifactId>fulcrum-yaafi</artifactId>
-            <version>1.0.6</version>
-            <scope>test</scope>
+          <groupId>org.apache.turbine</groupId>
+          <artifactId>fulcrum-yaafi</artifactId>
+          <version>1.0.7</version>
+          <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

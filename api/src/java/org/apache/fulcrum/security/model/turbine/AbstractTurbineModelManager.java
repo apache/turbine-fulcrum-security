@@ -19,6 +19,8 @@ package org.apache.fulcrum.security.model.turbine;
  * under the License.
  */
 
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
@@ -39,24 +41,40 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @version $Id: AbstractDynamicModelManager.java,v 1.2 2004/07/07 18:18:09
  *          epugh Exp $
  */
-public abstract class AbstractTurbineModelManager extends AbstractManager implements TurbineModelManager
+public abstract class AbstractTurbineModelManager extends AbstractManager implements TurbineModelManager, Configurable
 {
+	
+    
+	private String globalGroupName;
+	// ---------------- Avalon Lifecycle Methods ---------------------
+    /**
+     * Avalon component lifecycle method
+     */
+    @Override
+	public void configure(Configuration conf)
+    {
+    	globalGroupName = conf.getAttribute(
+    			TurbineModelManager.GLOBAL_GROUP_ATTR_NAME,
+    			TurbineModelManager.GLOBAL_GROUP_NAME);
+    }
+    
     /**
      * Provides a reference to the Group object that represents the <a
      * href="#global">global group </a>.
      * 
      * @return A Group object that represents the global group.
      */
-    public Group getGlobalGroup() throws DataBackendException
+    @Override
+	public Group getGlobalGroup() throws DataBackendException
     {
         Group g = null;
         try
         {
-            g = getGroupManager().getGroupByName(GLOBAL_GROUP_NAME);
+            g = getGroupManager().getGroupByName(globalGroupName);
         }
         catch (UnknownEntityException uee)
         {
-            g = getGroupManager().getGroupInstance(GLOBAL_GROUP_NAME);
+            g = getGroupManager().getGroupInstance(globalGroupName);
             try
             {
                 getGroupManager().addGroup(g);
@@ -82,7 +100,8 @@ public abstract class AbstractTurbineModelManager extends AbstractManager implem
      * @throws UnknownEntityException
      *             if the Role is not present.
      */
-    public synchronized void revokeAll(Role role) throws DataBackendException, UnknownEntityException
+    @Override
+	public synchronized void revokeAll(Role role) throws DataBackendException, UnknownEntityException
     {
         boolean roleExists = false;
         roleExists = getRoleManager().checkExists(role);
@@ -114,7 +133,8 @@ public abstract class AbstractTurbineModelManager extends AbstractManager implem
      * @throws UnknownEntityException
      *             if the Role is not present.
      */
-    public synchronized void revokeAll(User user) throws DataBackendException, UnknownEntityException
+    @Override
+	public synchronized void revokeAll(User user) throws DataBackendException, UnknownEntityException
     {
         boolean userExists = false;
         userExists = getUserManager().checkExists(user);
@@ -134,4 +154,9 @@ public abstract class AbstractTurbineModelManager extends AbstractManager implem
         }
 
     }
+
+	@Override
+	public String getGlobalGroupName() {
+		return globalGroupName;
+	}
 }

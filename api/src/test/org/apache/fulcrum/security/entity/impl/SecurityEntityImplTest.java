@@ -18,9 +18,10 @@ package org.apache.fulcrum.security.entity.impl;
  * specific language governing permissions and limitations
  * under the License.
  */
-import junit.framework.TestCase;
 
 import org.apache.fulcrum.security.entity.SecurityEntity;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * Test the SecurityEntityImple
@@ -28,24 +29,15 @@ import org.apache.fulcrum.security.entity.SecurityEntity;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class SecurityEntityImplTest extends TestCase
+public class SecurityEntityImplTest
 {
-
-    /**
-     * Constructor for SecurityEntityImplTest.
-     * 
-     * @param arg0
-     */
-    public SecurityEntityImplTest(String arg0)
-    {
-        super(arg0);
-    }
 
     /**
      * Make sure lowercasing logic works properly.
      * 
      * @throws Exception
      */
+    @Test
     public void testSettingGettingName() throws Exception
     {
         SecurityEntity se = new SecurityEntityImpl();
