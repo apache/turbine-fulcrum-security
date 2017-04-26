@@ -1,5 +1,7 @@
 package org.apache.fulcrum.security.torque.peer;
 
+import java.io.Serializable;
+
 import org.apache.fulcrum.security.spi.AbstractEntityManager;
 import org.apache.fulcrum.security.util.DataBackendException;
 
@@ -17,7 +19,7 @@ import org.apache.fulcrum.security.util.DataBackendException;
  * @author <a href="mailto:gk@apache.org">Georg Kallidis</a>
  * @version $Id$
  */
-public interface PeerManager
+public interface PeerManager extends Serializable
 {
 
     String ROLE = PeerManager.class.getName(); 

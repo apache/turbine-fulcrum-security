@@ -11,6 +11,11 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 public class ModelManagerDummyImpl extends AbstractTurbineModelManager  
 {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public void grant(Role role, Permission permission)
 			throws DataBackendException, UnknownEntityException {

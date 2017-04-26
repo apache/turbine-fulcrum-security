@@ -42,7 +42,10 @@ import org.apache.torque.util.Transaction;
 public abstract class TorqueAbstractPermissionManager extends AbstractPermissionManager
 {
     
-    /**
+	/** Serial version */
+	private static final long serialVersionUID = 194503017446833485L;
+
+	/**
      * Avalon Service lifecycle method
      */ 
     @Override

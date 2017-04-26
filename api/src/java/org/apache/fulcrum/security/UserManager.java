@@ -18,6 +18,8 @@ package org.apache.fulcrum.security;
  * specific language governing permissions and limitations
  * under the License.
  */
+import java.io.Serializable;
+
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -40,7 +42,7 @@ import org.apache.fulcrum.security.util.UserSet;
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @version $Id$
  */
-public interface UserManager
+public interface UserManager extends Serializable
 {
     /** Avalon role - used to id the component within the manager */
     String ROLE = UserManager.class.getName();

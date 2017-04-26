@@ -35,10 +35,14 @@ import org.apache.torque.criteria.Criteria;
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id:$
  */
-public class TorqueTurbineGroupManagerImpl extends PeerGroupManager 
+public class TorqueTurbineGroupManagerImpl extends PeerGroupManager
 {
     
-    /**
+
+	/** Serial version */
+	private static final long serialVersionUID = -5583297428186549693L;
+
+	/**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractGroupManager#doSelectAllGroups(java.sql.Connection)
      */
     @Override

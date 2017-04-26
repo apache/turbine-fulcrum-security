@@ -18,6 +18,8 @@ package org.apache.fulcrum.security;
  * specific language governing permissions and limitations
  * under the License.
  */
+import java.io.Serializable;
+
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
@@ -37,7 +39,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public interface PermissionManager
+public interface PermissionManager extends Serializable
 {
 
     /** Avalon role - used to id the component within the manager */

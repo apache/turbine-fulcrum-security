@@ -39,7 +39,10 @@ public class TorqueTurbinePermissionManagerImpl extends PeerPermissionManager
 {
     
     
-    /**
+	/** Serial version */
+	private static final long serialVersionUID = 1L;
+
+	/**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager#doSelectAllPermissions(java.sql.Connection)
      */
     @Override

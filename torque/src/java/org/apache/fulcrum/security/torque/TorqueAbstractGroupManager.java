@@ -43,8 +43,10 @@ import org.apache.torque.util.Transaction;
 public abstract class TorqueAbstractGroupManager extends AbstractGroupManager 
 {
     
-    
-    /**
+	/** Serial version */
+	private static final long serialVersionUID = -3735730556110100621L;
+
+	/**
      * Avalon Service lifecycle method
      */
     @Override
@@ -204,7 +206,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
         }
         catch (NoRowsException e)
         {
-            throw new UnknownEntityException("Could not find group" + name);
+            throw new UnknownEntityException("Could not find group " + name);
         }
         catch (TooManyRowsException e)
         {

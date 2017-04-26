@@ -41,7 +41,9 @@ import org.apache.torque.criteria.Criteria;
 public class TorqueTurbineUserManagerImpl extends PeerUserManager implements TurbineUserManager
 {
 
-    private static final String ANON = "anon";
+	/** Serial version */
+	private static final long serialVersionUID = 1L;
+	private static final String ANON = "anon";
 
     /**
      * Default implementation.

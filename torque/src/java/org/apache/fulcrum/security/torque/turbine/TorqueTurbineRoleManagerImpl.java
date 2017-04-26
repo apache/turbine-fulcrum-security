@@ -38,6 +38,9 @@ import org.apache.torque.criteria.Criteria;
 public class TorqueTurbineRoleManagerImpl extends PeerRoleManager 
 {
 
+	/** Serial version */
+	private static final long serialVersionUID = 1L;
+
 	/**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractRoleManager#doSelectAllRoles(java.sql.Connection)
      */

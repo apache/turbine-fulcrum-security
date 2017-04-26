@@ -34,7 +34,12 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public abstract class AbstractGroupManager extends AbstractEntityManager implements GroupManager
 {
-    protected abstract <T extends Group> T persistNewGroup(T group) throws DataBackendException;
+    /**
+	 * serial id
+	 */
+	private static final long serialVersionUID = 1L;
+
+	protected abstract <T extends Group> T persistNewGroup(T group) throws DataBackendException;
 
     /**
      * Construct a blank Group object.

@@ -23,7 +23,9 @@ public class PeerManagerDefaultImpl extends AbstractManager
     implements PeerManager, Disposable
 {
       
-    private Map<String,Peer> peers = new ConcurrentHashMap<String,Peer>(4,0.75f,4);
+	 /** Serial version */
+	private static final long serialVersionUID = -3891813089694207441L;
+	private Map<String,Peer> peers = new ConcurrentHashMap<String,Peer>(4,0.75f,4);
 
     @Override
     public <P extends Peer> P getPeerInstance(String peerClassName) throws DataBackendException

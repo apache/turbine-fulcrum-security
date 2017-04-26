@@ -43,7 +43,10 @@ import org.apache.torque.util.Transaction;
  */
 public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager implements TurbineModelManager
 {
-    /**
+	/** Serial version */
+	private static final long serialVersionUID = -306753988209612899L;
+
+	/**
      * Grants a Role a Permission
      *
      * @param role the Role.

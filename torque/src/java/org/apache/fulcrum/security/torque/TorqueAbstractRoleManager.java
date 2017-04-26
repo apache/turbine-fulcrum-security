@@ -42,7 +42,10 @@ import org.apache.torque.util.Transaction;
 public abstract class TorqueAbstractRoleManager extends AbstractRoleManager 
 {
     
-    /**
+	/** Serial version */
+	private static final long serialVersionUID = 4258137881250800204L;
+
+	/**
      * Avalon Service lifecycle method
      */
     @Override

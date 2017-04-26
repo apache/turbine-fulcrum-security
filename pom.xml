@@ -111,12 +111,12 @@
               <version>1.0.7</version>
 		      <scope>test</scope>
 		    </dependency>
-            <dependency>
-                <groupId>org.apache.fulcrum</groupId>
-                <artifactId>fulcrum-yaafi</artifactId>
-                <version>1.0.6</version>
-                <scope>test</scope>
-            </dependency>
+        <dependency>
+            <groupId>org.apache.fulcrum</groupId>
+            <artifactId>fulcrum-yaafi</artifactId>
+            <version>1.0.6</version>
+            <scope>test</scope>
+        </dependency>
 		    <dependency>
 		      <groupId>org.apache.fulcrum</groupId>
 		      <artifactId>fulcrum-security-memory</artifactId>

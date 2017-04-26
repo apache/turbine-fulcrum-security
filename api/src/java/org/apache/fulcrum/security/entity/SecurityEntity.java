@@ -1,5 +1,7 @@
 package org.apache.fulcrum.security.entity;
 
+import java.io.Serializable;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -31,7 +33,7 @@ package org.apache.fulcrum.security.entity;
  * @version $Id$
  */
 
-public interface SecurityEntity
+public interface SecurityEntity extends Serializable
 {
     /**
      * Get the Name of the SecurityEntity.

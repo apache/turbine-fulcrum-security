@@ -1,5 +1,7 @@
 package org.apache.fulcrum.security;
 
+import java.io.Serializable;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -26,7 +28,7 @@ package org.apache.fulcrum.security;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public interface ModelManager
+public interface ModelManager extends Serializable
 {
     /** Avalon role - used to id the component within the manager */
     String ROLE = ModelManager.class.getName();
