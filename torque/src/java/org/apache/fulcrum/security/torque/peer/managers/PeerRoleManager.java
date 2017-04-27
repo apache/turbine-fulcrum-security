@@ -37,7 +37,7 @@ public abstract class PeerRoleManager extends TorqueAbstractRoleManager implemen
     
     private String peerClassName;
     private static final String PEER_CLASS_NAME_KEY = "peerClassName";
-    PeerManager peerManager;
+    transient PeerManager peerManager;
     
     private String columnName = "ROLE_NAME";
     

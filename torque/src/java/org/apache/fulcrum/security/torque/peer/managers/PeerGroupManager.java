@@ -37,7 +37,7 @@ public abstract class PeerGroupManager extends TorqueAbstractGroupManager implem
     
     private Boolean customPeer = false;  //  used for torque which uses per object peer classes
     private String peerClassName;
-    PeerManager peerManager;
+    transient PeerManager peerManager;
     private static final String PEER_CLASS_NAME_KEY = "peerClassName";
     
     private String columnName = "GROUP_NAME";

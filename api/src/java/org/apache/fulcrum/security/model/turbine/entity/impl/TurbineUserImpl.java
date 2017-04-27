@@ -41,14 +41,15 @@ public class TurbineUserImpl extends AbstractTurbineSecurityEntityImpl implement
     private String firstName;
     private String lastName;
     private String email;
-    private byte[] objectData;
+    private transient byte[] objectData;
 
     /**
      * Get the password
      *
      * @return the password
      */
-    public String getPassword()
+    @Override
+	public String getPassword()
     {
         return password;
     }
@@ -58,7 +59,8 @@ public class TurbineUserImpl extends AbstractTurbineSecurityEntityImpl implement
      *
      * @param password the new password
      */
-    public void setPassword(String password)
+    @Override
+	public void setPassword(String password)
     {
         this.password = password;
     }
@@ -68,7 +70,8 @@ public class TurbineUserImpl extends AbstractTurbineSecurityEntityImpl implement
      *
      * @return The first name of the User
      */
-    public String getFirstName()
+    @Override
+	public String getFirstName()
     {
         return this.firstName;
     }
@@ -78,7 +81,8 @@ public class TurbineUserImpl extends AbstractTurbineSecurityEntityImpl implement
      *
      * @param firstName The new first name of the User
      */
-    public void setFirstName(String firstName)
+    @Override
+	public void setFirstName(String firstName)
     {
         this.firstName = firstName;
     }
@@ -88,7 +92,8 @@ public class TurbineUserImpl extends AbstractTurbineSecurityEntityImpl implement
      *
      * @return The last name of the User
      */
-    public String getLastName()
+    @Override
+	public String getLastName()
     {
         return this.lastName;
     }
@@ -98,7 +103,8 @@ public class TurbineUserImpl extends AbstractTurbineSecurityEntityImpl implement
      *
      * @param lastName The new last name of the User
      */
-    public void setLastName(String lastName)
+    @Override
+	public void setLastName(String lastName)
     {
         this.lastName = lastName;
     }
@@ -108,7 +114,8 @@ public class TurbineUserImpl extends AbstractTurbineSecurityEntityImpl implement
      *
      * @return The email address of the user
      */
-    public String getEmail()
+    @Override
+	public String getEmail()
     {
         return this.email;
     }
@@ -118,7 +125,8 @@ public class TurbineUserImpl extends AbstractTurbineSecurityEntityImpl implement
      *
      * @param email The new email address of the user
      */
-    public void setEmail(String email)
+    @Override
+	public void setEmail(String email)
     {
         this.email = email;
     }
@@ -131,7 +139,8 @@ public class TurbineUserImpl extends AbstractTurbineSecurityEntityImpl implement
      *
      * @return The bytes in the objectdata for this user
      */
-    public byte[] getObjectdata()
+    @Override
+	public byte[] getObjectdata()
     {
         return this.objectData;
     }
@@ -141,7 +150,8 @@ public class TurbineUserImpl extends AbstractTurbineSecurityEntityImpl implement
      *
      * @param objectdata The new permanent storage for the user
      */
-    public void setObjectdata(byte[] objectdata)
+    @Override
+	public void setObjectdata(byte[] objectdata)
     {
         this.objectData = objectdata;
     }

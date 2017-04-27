@@ -40,7 +40,7 @@ public abstract class PeerUserManager extends TorqueAbstractUserManager implemen
     
     private String peerClassName;
     private static final String PEER_CLASS_NAME_KEY = "peerClassName";
-    PeerManager peerManager;
+    transient PeerManager peerManager;
     
 	private String columnName = "LOGIN_NAME";
     
