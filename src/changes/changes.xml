@@ -30,6 +30,9 @@
         Configurable global group in Turbine and dynamic model
         Optional second level permission check, i.e. TurbineRole and TurbineGroup impl are optional in Turbine ACL and Torque Manager, only TurbineUser interface implementation is required 
       </action>
+      <action type="update" dev="gk">
+        Torque Fulcrum and Default schema, support for Peer interface, global group name configurable in model manager
+      </action>
     </release>
     <release version="1.1.0" date="">
       <action type="update" dev="tv">

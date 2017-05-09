@@ -31,7 +31,7 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * The user &lt;T extends {@link User}&gt; is wrapped using an extended user model, 
  * which includes at least {@link TurbineUser} interface.
  *  
- * This interface´s methods are wrapped in Turbine user manager (org.apache.turbine.services.security.UserManager) either in a method with the same name (and very similar signature) 
+ * This interface's methods are wrapped in Turbine user manager (org.apache.turbine.services.security.UserManager) either in a method with the same name (and very similar signature) 
  * or mapped to method names as listed below:
  * 
  * <ul>
