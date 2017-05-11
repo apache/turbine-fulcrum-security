@@ -25,6 +25,19 @@
 
   <body>
     <release version="1.1.1" date="in SVN">
+      <action type="fix" dev="gk">
+        Make objectData and peers (manager) transient
+        Make managers serializable
+        Resolve TRB-98
+        consistent Permission managers exceptions
+      </action>
+      <action type="update" dev="gk">
+         Update to Junit 4 Tests
+         Update commons lang to 2.6, 
+         Use commons lang3 in Fulcrum Memory Tests serializing
+         Javadoc Update
+         Extract configurable Peer managers 
+      </action>
       <action type="fix" dev="tv">
         Make SecuritySet truly case-insensitive
       </action>
