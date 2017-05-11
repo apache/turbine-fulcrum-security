@@ -22,6 +22,7 @@
        <artifactId>turbine-parent</artifactId>
        <groupId>org.apache.turbine</groupId>
        <version>4</version>
+       <relativePath></relativePath>
    </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.fulcrum</groupId>

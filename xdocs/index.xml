@@ -77,10 +77,10 @@
     <subsection name="Turbine">
       <p>
       This model is based on what the Turbine application server uses, and leverages the Dynamic model.  It merely adds
-      the concept of a "global group" which is a toplevel group to the Dynamic model.
+      the concept of a "global group" which is a toplevel group to the Dynamic model (which allows user - role assignments with or without a group).
       However, what makes this different is that instead of roles
       being related just to groups, there instead is a many to many relationship between users and
-      groups and roles.  So you pick a user, pick their role, and their group, and that is their permissions.
+      groups and roles.  So you pick a user, pick their role, and their group, and that is their permissions.  </p> <p>Put it in another way, a simple example would be that a user has just a (global) role assigned (global group) and only optionally is assigned to a group. This allows to have flexible groups assignments and even cascaded security controls: check user's (global) role (this is the default)  - no group assignment required; check group assignment(s); check role assignment of each (non global) group. Permissions are handled like in dynamic model and are as non global group role assignments optional.
       </p>
       <p>
       The <code>memory</code>, <code>hibernate</code> and <code>torque</code> packages currently implement this security model.
@@ -170,7 +170,8 @@
 <section name="Adapters">
   <subsection name="Turbine">
     <p>
-    In <code>org.apache.fulcrum.security.adapter.turbine</code> is an implementation of the Turbine Security Service.
+    For Turbine 4.x or above use the common Security Turbine. 
+    </p><p>In <code>org.apache.fulcrum.security.adapter.turbine</code> is an implementation of the Turbine Security Service.
     This is designed to allow you to run the Fulcrum Security Service, but have Turbine 2.3's be able to query, through
     the adapter the Fulcrum Security service.
     </p>
@@ -211,9 +212,9 @@
   </subsection>
   <subsection name="Torque">
     <p>
-    The Torque SPI provides three different schema mappings for the different security models (in the schema directory). You can easily adjust these to your
+    The Torque SPI provides four different (basic, dynamic type and two turbine schemata) schema mappings for the different security models (in the schema directory). You can easily adjust these to your
     needs. If adjustments are needed, set up the <code>project.properties</code> file according to your database environment (see the
-    <a href="http://db.apache.org/torque/releases/torque-3.3/maven-plugin/index.html">Torque Maven Plugin Documentation</a> for reference) and use Maven to
+    <a href="http://db.apache.org/torque/torque-4.0/documentation/modules/maven-plugin/index.html">Torque 4.x Maven Plugin Documentation</a> for reference) and use Maven to
     generate the Torque-OM-classes and to re-built the JAR.
     </p>
     <p>
@@ -237,8 +238,23 @@
     </p>
     <p>
     As a default, the Torque Security Service uses <code>fulcrum</code> as the name of the connection pool for the tables used. This should be considered
-    in the Torque configuration when the service is deployed.
+    in the Torque configuration when the service is deployed. 
+    Another mapping <code>default</code> is provided for the Turbine models. 
+    Additionally Torque-OM peer classes could be made configurable by using a <a href="http://turbine.apache.org/fulcrum/fulcrum-security/apidocs/org/apache/fulcrum/security/torque/peer/TorqueTurbinePeer.html">(marker) interface</a>. 
+    This will be supported out of the box in schema configuration in <a href="http://db.apache.org/torque">Torque 4.1</a> release. 
+    Until then class annotation has to be done manually, check examples in <a href="http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/torque/src/test/">Fulcrum Security Torque</a>!
+    and for background cft. <a href="https://issues.apache.org/jira/browse/TORQUE-309">Torque-309</a>.
     </p>
+    <p>Check out the Turbine Web App from the maven archetype catalog to test a web app with example code. Find the archetype with <source> 
+      // filter archeype catalog by groupid:artefactid = org.apache.turbine:turbine-webapp-4.0
+      mvn archetype:generate
+    </source> or checkout and build turbine-webapp-4.0 based on Turbine 4 trunk:
+    <source>
+      svn co https://svn.apache.org/repos/asf/turbine/maven/archetypes/trunk/turbine-webapp-4.0
+      mvn clean install
+    </source>
+    If you check out the trunk, you may have to build other sources as well (any dependeny resource with a SNAPSHOT version).
+    </p>   
   </subsection>
   <subsection name="NT">
     <p>

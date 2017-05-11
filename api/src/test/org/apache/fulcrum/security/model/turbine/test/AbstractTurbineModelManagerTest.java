@@ -46,6 +46,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Initialization of services in implementing tests
  * @author Eric Pugh
  * 
  */
