@@ -21,12 +21,12 @@
     <parent>
         <artifactId>fulcrum-security</artifactId>
         <groupId>org.apache.fulcrum</groupId>
-        <version>1.1.1-SNAPSHOT</version>
+        <version>1.1.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>fulcrum-security-hibernate</artifactId>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.1.1</version>
     <name>Fulcrum Security Hibernate Impl</name>
     <description>
       Fulcrum Security Hibernate Impl is an implementation of the Fulcrum Security API
@@ -34,9 +34,9 @@
     </description>
     <url>http://turbine.apache.org/fulcrum/fulcrum-security/fulcrum-security-hibernate/</url>
     <scm>
-      <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/hibernate/</connection>
-      <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/hibernate/</developerConnection>
-      <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/security/hibernate/</url>
+      <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-security-1.1.1/hibernate</connection>
+      <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-security-1.1.1/hibernate</developerConnection>
+      <url>http://svn.apache.org/viewvc/turbine/fulcrum/tags/fulcrum-security-1.1.1/hibernate</url>
     </scm>
 
     <build>

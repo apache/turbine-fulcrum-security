@@ -9,17 +9,16 @@
   License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
   OF ANY KIND, either express or implied. See the License for the specific 
   language governing permissions and limitations under the License. -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <artifactId>fulcrum-security</artifactId>
     <groupId>org.apache.fulcrum</groupId>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.1.1</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fulcrum-security-torque</artifactId>
-  <version>1.1.1-SNAPSHOT</version>
+  <version>1.1.1</version>
   <name>Fulcrum Security Torque Impl</name>
   <description>
     Fulcrum Security Torque Impl is an implementation of the Fulcrum Security API
@@ -27,9 +26,9 @@
   </description>
   <url>http://turbine.apache.org/fulcrum/fulcrum-security/fulcrum-security-torque</url>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/torque/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/torque/</developerConnection>
-    <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/security/torque/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-security-1.1.1/torque</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-security-1.1.1/torque</developerConnection>
+    <url>http://svn.apache.org/viewvc/turbine/fulcrum/tags/fulcrum-security-1.1.1/torque</url>
   </scm>
 
   <build>
