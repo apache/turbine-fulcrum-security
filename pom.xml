@@ -94,37 +94,43 @@
     
     <dependencyManagement>
         <dependencies>
-		    <dependency>
-		      <groupId>org.apache.fulcrum</groupId>
-		      <artifactId>fulcrum-security-api</artifactId>
-		      <version>1.1.1-SNAPSHOT</version>
-		    </dependency>
-		    <dependency>
-		      <groupId>org.apache.fulcrum</groupId>
-		      <artifactId>fulcrum-security-api</artifactId>
-		      <version>1.1.1-SNAPSHOT</version>
-		      <type>test-jar</type>
-		      <scope>test</scope>
-		    </dependency>
-		    <dependency>
-		      <groupId>org.apache.fulcrum</groupId>
-		      <artifactId>fulcrum-testcontainer</artifactId>
-              <version>1.0.7</version>
-		      <scope>test</scope>
-		    </dependency>
         <dependency>
-            <groupId>org.apache.fulcrum</groupId>
-            <artifactId>fulcrum-yaafi</artifactId>
-            <version>1.0.6</version>
-            <scope>test</scope>
+          <groupId>org.apache.fulcrum</groupId>
+          <artifactId>fulcrum-security-api</artifactId>
+          <version>1.1.1-SNAPSHOT</version>
         </dependency>
-		    <dependency>
-		      <groupId>org.apache.fulcrum</groupId>
-		      <artifactId>fulcrum-security-memory</artifactId>
-		      <version>1.1.1-SNAPSHOT</version>
-		      <scope>test</scope>
-		    </dependency>
-        </dependencies>
+        <dependency>
+          <groupId>org.apache.fulcrum</groupId>
+          <artifactId>fulcrum-security-api</artifactId>
+          <version>1.1.1-SNAPSHOT</version>
+          <type>test-jar</type>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.fulcrum</groupId>
+          <artifactId>fulcrum-testcontainer</artifactId>
+          <version>1.0.7</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.turbine</groupId>
+          <artifactId>fulcrum-yaafi</artifactId>
+          <version>1.0.7</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.fulcrum</groupId>
+          <artifactId>fulcrum-security-memory</artifactId>
+          <version>1.1.1-SNAPSHOT</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <version>4.12</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
     </dependencyManagement>
     
     <build>
