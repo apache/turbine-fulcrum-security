@@ -14,7 +14,11 @@ Using scm-publish Plugin, cft. http://commons.apache.org/site-publish.html for p
 
 * Verify turbine.scmPubCheckoutDirectory is matching property checkoutDirectory of goal scm-publish:publish-scm.
 
-* Once you have the site checked out locally, as it is multi-module project (with submodules) execute
+* Once you have the site checked out locally, as it is multi-module project (with submodules) execute first 
+  
+  mvn clean install
+  
+*  then
 
   mvn site site:stage
 
@@ -30,6 +34,6 @@ This will build the documentation into the target/site/, resp. target/staging/ d
 
 This will generate the site into turbine.site.cache folder (target/turbine-sites by default) and print any changes to STDOUT. 
 
-* To deploy run the same command adding -Dusername=<username> -Dpassword=<pw> and remove the argument scmpublish.dryRun or set it to false. Check if tryUpdate is set to false to get a clean working copy again). Alternatively, if you have set scmpublish.skipCheckin=true in the previous step, you have to do a manual commit. 
+* To deploy run the same command (adding -Dusername=<username> -Dpassword=<pw>) remove the argument scmpublish.dryRun or set it to false. Check if tryUpdate is set to false to get a clean working copy again). Alternatively, if you have set scmpublish.skipCheckin=true in the previous step, you have to do a manual commit. 
 
 

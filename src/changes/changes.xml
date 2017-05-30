@@ -26,15 +26,19 @@
   <body>
     <release version="1.1.1" date="in Subversion">
       <action type="update" dev="gk">
-        Update to JUnit4
+        Updated to JUnit 4
         Configurable global group in Turbine and dynamic model
-        Optional second level permission check, i.e. TurbineRole and TurbineGroup impl are optional in Turbine ACL and Torque Manager, only TurbineUser interface implementation is required 
+        Optional second level permission check, i.e. TurbineRole and TurbineGroup impl are optional in Turbine ACL and Torque Manager, only TurbineUser interface implementation is required.
+        Resolve TRB-98
       </action>
       <action type="update" dev="gk">
         Torque Fulcrum and Default schema, support for Peer interface, global group name configurable in model manager
       </action>
     </release>
     <release version="1.1.0" date="">
+      <action type="update" dev="gk">
+        Updated to Torque 4.0
+      </action>
       <action type="update" dev="tv">
         Updated to Hibernate 3.6.7
       </action>
