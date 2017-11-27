@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRole;
@@ -33,12 +34,13 @@ import org.apache.torque.criteria.Criteria;
 import org.apache.torque.om.SimpleKey;
 /**
  * This abstract class provides the SecurityInterface to the managers.
+ * 
+ * An implementing class is required to implement {@link User} at least. Most probably the OM classes allow to implement {@link TurbineUser}, which includes User.
  *
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id:$
  */
 public abstract class FulcrumAbstractTurbineUser extends TorqueAbstractTurbineTurbineSecurityEntity
-    implements TurbineUser
 {
     /** Serial version */
 	private static final long serialVersionUID = -7255623655281852566L;
@@ -76,7 +78,7 @@ public abstract class FulcrumAbstractTurbineUser extends TorqueAbstractTurbineTu
         for (TorqueTurbineUserGroupRole ttugr : ugrs)
         {
             TurbineUserGroupRole ugr = new TurbineUserGroupRole();
-            ugr.setUser(this);
+            ugr.setUser((User) this);
             ugr.setRole(ttugr.getTorqueTurbineRole());
             ugr.setGroup(ttugr.getTorqueTurbineGroup(con));
             userGroupRoleSet.add(ugr);

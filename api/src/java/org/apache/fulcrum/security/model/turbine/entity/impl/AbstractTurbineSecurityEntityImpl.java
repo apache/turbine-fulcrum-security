@@ -24,6 +24,7 @@ import java.util.Set;
 
 import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRoleEntity;
 
 /**
  * Represents the "turbine" model where permissions are in a many to many
@@ -33,7 +34,7 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @version $Id: TurbineGroup.java 223081 2004-10-07 15:11:58Z epugh $
  */
-public abstract class AbstractTurbineSecurityEntityImpl extends SecurityEntityImpl
+public abstract class AbstractTurbineSecurityEntityImpl extends SecurityEntityImpl implements TurbineUserGroupRoleEntity
 {
     private Set<? extends TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
 

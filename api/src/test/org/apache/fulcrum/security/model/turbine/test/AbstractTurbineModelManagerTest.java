@@ -74,7 +74,7 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit4Test
         userManager = securityService.getUserManager();
         groupManager = securityService.getGroupManager();
         permissionManager = securityService.getPermissionManager();
-        modelManager = (TurbineModelManager) securityService.getModelManager();  
+        modelManager = (TurbineModelManager) securityService.getModelManager();
     }
 
 

@@ -25,12 +25,14 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRoleEnti
 import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
 /**
  * This abstract class provides the SecurityInterface to the managers.
+ * 
+ * Additional Torque contract
  *
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id:$
  */
 public abstract class TorqueAbstractTurbineTurbineSecurityEntity extends TorqueAbstractSecurityEntity
-    implements TurbineUserGroupRoleEntity
+    implements TurbineUserGroupRoleEntity // not in group and role but already in TurbineUser interface 
 {
     /** Serial version */
 	private static final long serialVersionUID = -6230312046016785990L;
