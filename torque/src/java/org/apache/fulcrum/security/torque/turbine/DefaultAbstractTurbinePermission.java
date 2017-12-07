@@ -159,7 +159,7 @@ public abstract class DefaultAbstractTurbinePermission extends TorqueAbstractSec
     @Override
 	public void update(Connection con) throws TorqueException
     {
-        if (roleSet != null)
+        if (roleSet != null && !roleSet.isEmpty())
         {
             Criteria criteria = new Criteria();
 

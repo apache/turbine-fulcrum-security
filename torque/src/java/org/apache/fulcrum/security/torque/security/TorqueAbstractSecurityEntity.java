@@ -76,7 +76,7 @@ public abstract class TorqueAbstractSecurityEntity
      * @param con A database connection
      */
     public abstract void update(Connection con) throws TorqueException;
-
+    
     /**
      * Delete this entity
      *
@@ -129,4 +129,5 @@ public abstract class TorqueAbstractSecurityEntity
             setEntityName(name.toLowerCase());
         }
     }
+
 }

@@ -118,6 +118,33 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit4Test
         assertFalse(((TurbineRole) role).getPermissions().contains(permission));
     }
     @Test
+    public void testRevokeRolePermissionOneOfTwo() throws Exception
+    {
+        Permission permission = securityService.getPermissionManager().getPermissionInstance();
+        Permission permission2 = securityService.getPermissionManager().getPermissionInstance();
+        permission.setName("ANOTHER_SEND_SPAM"); // otherwise memory complains "does already exist
+        permission2.setName("ANOTHER_ANSWER_EMAIL");
+        // assign new db entities
+        permission = securityService.getPermissionManager().addPermission(permission);
+        permission2 =  securityService.getPermissionManager().addPermission(permission2);
+        role = roleManager.getRoleInstance("ANOTHERSECRETARY");
+        role = roleManager.addRole(role);
+        modelManager.grant(role, permission);
+        modelManager.grant(role, permission2);
+        role = roleManager.getRoleById(role.getId());
+        PermissionSet permissions = ((TurbineRole) role).getPermissions();
+        assertEquals(2, permissions.size());
+        modelManager.revoke(role, permission);
+        role = roleManager.getRoleById(role.getId());
+        permissions = ((TurbineRole) role).getPermissions();
+        assertEquals(1, permissions.size());
+        assertFalse(((TurbineRole) role).getPermissions().contains(permission));
+        assertTrue(((TurbineRole) role).getPermissions().contains(permission2));
+        // to cleanup
+        modelManager.revoke(role, permission2);
+        assertFalse(((TurbineRole) role).getPermissions().contains(permission2));
+    }
+    @Test
     public void testRevokeAllRole() throws Exception
     {
         Permission permission = securityService.getPermissionManager().getPermissionInstance();
@@ -146,10 +173,10 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit4Test
         securityService.getGroupManager().addGroup(group);
         Role role = securityService.getRoleManager().getRoleInstance();
         role.setName("TEST_REVOKEALLUSER_ROLE");
-        securityService.getRoleManager().addRole(role);
+        role = securityService.getRoleManager().addRole(role);
 
         User user = userManager.getUserInstance("calvin");
-        userManager.addUser(user, "calvin");
+        user = userManager.addUser(user, "calvin");
         modelManager.grant(user, group, role);
 
         group = groupManager.getGroupById(group.getId());
@@ -163,8 +190,15 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit4Test
         assertEquals(0, ((TurbineGroup) group).getUserGroupRoleSet().size());
         role = securityService.getRoleManager().getRoleByName("TEST_REVOKEALLUSER_ROLE");
 
-        // assertFalse(((TurbineRole) role).getGroups().contains(group));
+        assertEquals(0,((TurbineRole) role).getUserGroupRoleSet().size());
+        
+        assertTrue(((TurbineRole) role).getUserGroupRoleSet().isEmpty());
+        
+        modelManager.grant(user, group, role);
+        assertEquals(1,((TurbineRole) role).getUserGroupRoleSet().size());
+        assertTrue(((TurbineRole) role).getUserGroupRoleSet().iterator().next().getGroup().equals( group ));
 
+        
     }
     @Test
     public void testGrantUserGroupRole() throws Exception

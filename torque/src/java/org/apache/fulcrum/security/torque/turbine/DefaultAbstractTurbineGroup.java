@@ -90,7 +90,7 @@ public abstract class DefaultAbstractTurbineGroup extends TorqueAbstractTurbineT
     public void update(Connection con) throws TorqueException
     {
     	Set<TurbineUserGroupRole> userGroupRoleSet = getUserGroupRoleSet();
-        if (userGroupRoleSet != null)
+        if (userGroupRoleSet != null && !userGroupRoleSet.isEmpty())
         {
             Criteria criteria = new Criteria();
 

@@ -30,10 +30,13 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbinePermission;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineRole;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
+import org.apache.fulcrum.security.torque.om.TurbineRolePermissionPeer;
+import org.apache.fulcrum.security.torque.om.TurbineUserGroupRolePeer;
 import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.torque.TorqueException;
+import org.apache.torque.criteria.Criteria;
 import org.apache.torque.util.Transaction;
 /**
  * This implementation persists to a database via Torque.
@@ -132,28 +135,16 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
             	 ((TurbinePermission)permission).removeRole(role);
             }
             
-            Connection con = null;
-
             try
             {
-                con = Transaction.begin();
-
-                ((TorqueAbstractSecurityEntity)role).update(con);
-                ((TorqueAbstractSecurityEntity)permission).update(con);
-
-                Transaction.commit(con);
-                con = null;
+                Criteria criteria = new Criteria();
+                criteria.where(TurbineRolePermissionPeer.ROLE_ID, role.getId());
+                criteria.where(TurbineRolePermissionPeer.PERMISSION_ID, (Integer)permission.getId());
+                TurbineRolePermissionPeer.doDelete(criteria);
             }
             catch (TorqueException e)
             {
                 throw new DataBackendException("revoke('" + role.getName() + "', '" + permission.getName() + "') failed", e);
-            }
-            finally
-            {
-                if (con != null)
-                {
-                    Transaction.safeRollback(con);
-                }
             }
 
             return;
@@ -279,9 +270,11 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
             {
                 con = Transaction.begin();
 
-                ((TorqueAbstractSecurityEntity)user).update(con);
-                ((TorqueAbstractSecurityEntity)group).update(con);
-                ((TorqueAbstractSecurityEntity)role).update(con);
+                Criteria criteria = new Criteria();
+                criteria.where(TurbineUserGroupRolePeer.ROLE_ID, role.getId());
+                criteria.where(TurbineUserGroupRolePeer.GROUP_ID, group.getId());
+                criteria.where(TurbineUserGroupRolePeer.USER_ID, user.getId());
+                TurbineUserGroupRolePeer.doDelete(criteria, con);
 
                 Transaction.commit(con);
                 con = null;

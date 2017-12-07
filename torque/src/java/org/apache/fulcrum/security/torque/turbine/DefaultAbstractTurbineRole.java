@@ -188,14 +188,16 @@ public abstract class DefaultAbstractTurbineRole extends TorqueAbstractTurbineTu
 
         setUserGroupRoleSet(userGroupRoleSet);
     }
-
+    
     /**
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#update(java.sql.Connection)
+     * 
+     * use for grants only!
      */
     @Override
 	public void update(Connection con) throws TorqueException
     {
-        if (permissionSet != null)
+        if (permissionSet != null && !permissionSet.isEmpty())
         {
             Criteria criteria = new Criteria();
 
@@ -213,7 +215,7 @@ public abstract class DefaultAbstractTurbineRole extends TorqueAbstractTurbineTu
         }
 
     	Set<TurbineUserGroupRole> userGroupRoleSet = getUserGroupRoleSet();
-        if (userGroupRoleSet != null)
+        if (userGroupRoleSet != null && !userGroupRoleSet.isEmpty())
         {
             Criteria criteria = new Criteria();
 
