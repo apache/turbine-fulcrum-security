@@ -19,16 +19,21 @@ package org.apache.fulcrum.security.torque.turbine;
  */
 import java.sql.Connection;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineGroup;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineGroupPeer;
 import org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer;
 import org.apache.fulcrum.security.torque.peer.managers.PeerGroupManager;
+import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
+import org.apache.torque.util.Transaction;
 /**
  * This implementation persists to a database via Torque.
  *
@@ -126,6 +131,37 @@ public class TorqueTurbineGroupManagerImpl extends PeerGroupManager
         }
 
         return groups.get(0);
+    }
+
+    
+    public Set<TurbineUserGroupRole> getUserGroupRoleSet(Group group) throws DataBackendException {
+        Connection con = null;
+
+        if (getLazyLoading()) {
+            try
+            {
+                con = Transaction.begin();
+                // Add all dependent objects if they exist
+                ((TorqueAbstractSecurityEntity)group).retrieveAttachedObjects(con, false);
+    
+                Transaction.commit(con);
+                con = null;
+            }
+            catch (TorqueException e)
+            {
+                throw new DataBackendException("Error retrieving group information", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
+            }
+        } 
+        return ((TurbineGroup)group).getUserGroupRoleSet();
+
+        
     }
   
 }

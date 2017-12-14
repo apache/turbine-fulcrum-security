@@ -67,8 +67,9 @@ public abstract class TorqueAbstractSecurityEntity
      * Retrieve attached objects such as users, permissions, ...
      *
      * @param con A database connection
+     * @param lazy if <code>true</code>, may load some or all relationships later
      */
-    public abstract void retrieveAttachedObjects(Connection con) throws TorqueException;
+    public abstract void retrieveAttachedObjects(Connection con, Boolean lazy) throws TorqueException;
 
     /**
      * Update this instance to the database with all dependent objects

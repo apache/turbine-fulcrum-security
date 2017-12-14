@@ -160,6 +160,7 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
             throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
         }
     }
+    
 
     @Override
 	public synchronized void grant(User user, Group group, Role role) throws DataBackendException, UnknownEntityException
@@ -189,8 +190,8 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
                 con = Transaction.begin();
 
                 ((TorqueAbstractSecurityEntity)user).update(con);
-                ((TorqueAbstractSecurityEntity)group).update(con);
-                ((TorqueAbstractSecurityEntity)role).update(con);
+                //((TorqueAbstractSecurityEntity)group).update(con);
+                //((TorqueAbstractSecurityEntity)role).update(con);
 
                 Transaction.commit(con);
                 con = null;

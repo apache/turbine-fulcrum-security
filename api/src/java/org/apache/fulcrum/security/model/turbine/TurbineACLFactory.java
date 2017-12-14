@@ -74,11 +74,11 @@ public class TurbineACLFactory extends AbstractManager implements ACLFactory
     @Override
     public <T extends AccessControlList> T getAccessControlList(User user)
     {
-    	TurbineUser tu = (TurbineUser)user;
-    	Set<TurbineUserGroupRole> tugr = tu.getUserGroupRoleSet();
-
         try
         {
+            TurbineUser tu = (TurbineUser)user;
+            Set<TurbineUserGroupRole> tugr = tu.getUserGroupRoleSet();
+            
             @SuppressWarnings("unchecked")
 			T aclInstance = (T) getAclInstance(tugr);
 			return aclInstance;
@@ -86,6 +86,10 @@ public class TurbineACLFactory extends AbstractManager implements ACLFactory
         catch (UnknownEntityException uue)
         {
             throw new RuntimeException(uue.getMessage(), uue);
+        }
+        catch ( DataBackendException e )
+        {
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 

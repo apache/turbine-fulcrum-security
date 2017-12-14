@@ -180,8 +180,10 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit4Test
         modelManager.grant(user, group, role);
 
         group = groupManager.getGroupById(group.getId());
-        Set<TurbineUserGroupRole> userGroupRoleSet = ((TurbineGroup) group).getUserGroupRoleSet();
+        Set<TurbineUserGroupRole> userGroupRoleSet =  ((TurbineUser)user).getUserGroupRoleSet();
         assertEquals(1, userGroupRoleSet.size());
+//        Set<TurbineUserGroupRole> userGroupRoleSet = ((TurbineGroup) group).getUserGroupRoleSet();
+//        assertEquals(1, userGroupRoleSet.size());
         Set<TurbineUserGroupRole> userGroupRoleSet2 = ((TurbineGroup) group).getUserGroupRoleSet();
         assertEquals(1, userGroupRoleSet2.size());
 

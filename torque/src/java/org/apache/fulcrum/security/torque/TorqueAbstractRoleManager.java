@@ -44,16 +44,20 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
     
 	/** Serial version */
 	private static final long serialVersionUID = 4258137881250800204L;
-
-	/**
+	
+	private static final String LAZY_LOADING = "lazy";
+    protected Boolean lazyLoading = false;
+    
+    /**
      * Avalon Service lifecycle method
      */
     @Override
-	public void configure(Configuration conf) throws ConfigurationException
+    public void configure(Configuration conf) throws ConfigurationException
     {
        super.configure( conf );
- 
+       lazyLoading = conf.getAttributeAsBoolean( LAZY_LOADING, false);
     }
+
     
     /**
      * Get all specialized Roles
@@ -253,8 +257,8 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
 
             for (Role role : roles)
             {
-                // Add attached objects if they exist
-                ((TorqueAbstractSecurityEntity)role).retrieveAttachedObjects(con);
+               // Add attached objects if they exist
+               ((TorqueAbstractSecurityEntity)role).retrieveAttachedObjects(con, getLazyLoading());
 
                 roleSet.add(role);
             }
@@ -304,7 +308,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
                 role = doSelectById((Integer)id, con);
 
                 // Add attached objects if they exist
-                ((TorqueAbstractSecurityEntity)role).retrieveAttachedObjects(con);
+                ((TorqueAbstractSecurityEntity)role).retrieveAttachedObjects(con, getLazyLoading());
 
                 Transaction.commit(con);
                 con = null;
@@ -355,7 +359,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
             role = doSelectByName(name, con);
 
             // Add attached objects if they exist
-            ((TorqueAbstractSecurityEntity)role).retrieveAttachedObjects(con);
+            ((TorqueAbstractSecurityEntity)role).retrieveAttachedObjects(con, getLazyLoading());
 
             Transaction.commit(con);
             con = null;
@@ -381,5 +385,17 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
         }
 
         return role;
+    }
+
+
+    public Boolean getLazyLoading()
+    {
+        return lazyLoading;
+    }
+
+
+    public void setLazyLoading( Boolean lazyLoading )
+    {
+        this.lazyLoading = lazyLoading;
     }
 }

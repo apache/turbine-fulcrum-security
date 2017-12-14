@@ -28,9 +28,11 @@ import org.apache.fulcrum.security.torque.om.TorqueTurbineGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRole;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRolePeer;
 import org.apache.fulcrum.security.torque.security.turbine.TorqueAbstractTurbineTurbineSecurityEntity;
+import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
 import org.apache.torque.om.SimpleKey;
+import org.apache.torque.util.Transaction;
 /**
  * This abstract class provides the SecurityInterface to the managers.
  *
@@ -62,27 +64,57 @@ public abstract class FulcrumAbstractTurbineGroup extends TorqueAbstractTurbineT
         return TorqueTurbineUserGroupRolePeer.doSelectJoinTorqueTurbineRole(criteria, con);
     }
 
-
     /**
-     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(Connection, Boolean)
      */
     @Override
-    public void retrieveAttachedObjects(Connection con) throws TorqueException
+    public void retrieveAttachedObjects( Connection con, Boolean lazy ) throws TorqueException
     {
-        Set<TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
-
-        List<TorqueTurbineUserGroupRole> ugrs = getTorqueTurbineUserGroupRolesJoinTorqueTurbineRole(new Criteria(), con);
-
-        for (TorqueTurbineUserGroupRole ttugr : ugrs)
-        {
-            TurbineUserGroupRole ugr = new TurbineUserGroupRole();
-            ugr.setGroup(this);
-            ugr.setRole(ttugr.getTorqueTurbineRole());
-            ugr.setUser(ttugr.getTorqueTurbineUser(con));
-            userGroupRoleSet.add(ugr);
+        if (!lazy) {
+            Set<TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
+            List<TorqueTurbineUserGroupRole> ugrs = getTorqueTurbineUserGroupRolesJoinTorqueTurbineRole(new Criteria(), con);
+    
+            for (TorqueTurbineUserGroupRole ttugr : ugrs)
+            {
+                TurbineUserGroupRole ugr = new TurbineUserGroupRole();
+                ugr.setGroup(this);
+                ugr.setRole(ttugr.getTorqueTurbineRole());
+                ugr.setUser(ttugr.getTorqueTurbineUser(con));
+                userGroupRoleSet.add(ugr);
+            }
+    
+            setUserGroupRoleSet(userGroupRoleSet);
         }
-
-        setUserGroupRoleSet(userGroupRoleSet);
+    }
+    
+    @Override
+    public <T extends TurbineUserGroupRole> Set<T> getUserGroupRoleSet() throws DataBackendException
+    {
+        if (super.getUserGroupRoleSet() == null || super.getUserGroupRoleSet().isEmpty()) {
+            Connection con = null;
+            try
+            {
+                con = Transaction.begin();
+               
+                retrieveAttachedObjects( con, false ); // not configurable, we set it
+    
+                Transaction.commit(con);
+                con = null;
+            }
+            catch (TorqueException e)
+            {
+                throw new DataBackendException("Error retrieving group information", e);
+            }
+            finally
+            {
+                if (con != null)
+                {
+                    Transaction.safeRollback(con);
+                }
+            }
+        }
+        
+        return super.getUserGroupRoleSet();
     }
 
     /**
@@ -91,27 +123,26 @@ public abstract class FulcrumAbstractTurbineGroup extends TorqueAbstractTurbineT
     @Override
     public void update(Connection con) throws TorqueException
     {
-    	Set<TurbineUserGroupRole> userGroupRoleSet = getUserGroupRoleSet();
-        if (userGroupRoleSet != null)
-        {
-            Criteria criteria = new Criteria();
-
-            /* remove old entries */
-            criteria.where(TorqueTurbineUserGroupRolePeer.GROUP_ID, getEntityId());
-            TorqueTurbineUserGroupRolePeer.doDelete(criteria, con);
-
-            for (TurbineUserGroupRole ugr : userGroupRoleSet)
-            {
-                TorqueTurbineUserGroupRole ttugr = new TorqueTurbineUserGroupRole();
-                ttugr.setGroupId((Integer)ugr.getGroup().getId());
-                ttugr.setUserId((Integer)ugr.getUser().getId());
-                ttugr.setRoleId((Integer)ugr.getRole().getId());
-                ttugr.save(con);
-            }
-        }
-
         try
         {
+        	Set<TurbineUserGroupRole> userGroupRoleSet = getUserGroupRoleSet();
+            if (userGroupRoleSet != null)
+            {
+                Criteria criteria = new Criteria();
+    
+                /* remove old entries */
+                criteria.where(TorqueTurbineUserGroupRolePeer.GROUP_ID, getEntityId());
+                TorqueTurbineUserGroupRolePeer.doDelete(criteria, con);
+    
+                for (TurbineUserGroupRole ugr : userGroupRoleSet)
+                {
+                    TorqueTurbineUserGroupRole ttugr = new TorqueTurbineUserGroupRole();
+                    ttugr.setGroupId((Integer)ugr.getGroup().getId());
+                    ttugr.setUserId((Integer)ugr.getUser().getId());
+                    ttugr.setRoleId((Integer)ugr.getRole().getId());
+                    ttugr.save(con);
+                }
+            }
             save(con);
         }
         catch (Exception e)

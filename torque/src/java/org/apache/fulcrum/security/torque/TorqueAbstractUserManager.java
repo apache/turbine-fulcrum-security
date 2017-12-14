@@ -44,15 +44,14 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
     
 	/** Serial version */
 	private static final long serialVersionUID = 2050218990148719292L;
-
-	/**
+    
+    /**
      * Avalon Service lifecycle method
      */
     @Override
-	public void configure(Configuration conf) throws ConfigurationException
+    public void configure(Configuration conf) throws ConfigurationException
     {
        super.configure( conf );
-
     }
     
 
@@ -249,7 +248,7 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
             user = doSelectByName(userName.toLowerCase(), con);
 
             // Add attached objects if they exist
-            ((TorqueAbstractSecurityEntity)user).retrieveAttachedObjects(con);
+            ((TorqueAbstractSecurityEntity)user).retrieveAttachedObjects(con, false );
 
             Transaction.commit(con);
             con = null;
@@ -299,7 +298,7 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
             for (User user : users)
             {
                 // Add attached objects if they exist
-                ((TorqueAbstractSecurityEntity)user).retrieveAttachedObjects(con);
+                ((TorqueAbstractSecurityEntity)user).retrieveAttachedObjects(con, false);
 
                 userSet.add(user);
             }
@@ -349,7 +348,7 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
                 user = doSelectById((Integer)id, con);
 
                 // Add attached objects if they exist
-                ((TorqueAbstractSecurityEntity)user).retrieveAttachedObjects(con);
+                ((TorqueAbstractSecurityEntity)user).retrieveAttachedObjects(con, false); // 
 
                 Transaction.commit(con);
                 con = null;
@@ -377,5 +376,6 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
 
         return user;
     }
+
     
 }

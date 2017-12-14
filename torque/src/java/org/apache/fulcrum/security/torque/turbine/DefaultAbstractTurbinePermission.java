@@ -138,10 +138,11 @@ public abstract class DefaultAbstractTurbinePermission extends TorqueAbstractSec
 
 
     /**
-     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(Connection, Boolean)
      */
     @Override
-	public void retrieveAttachedObjects(Connection con) throws TorqueException
+	public void retrieveAttachedObjects( Connection con, Boolean lazy )
+	    throws TorqueException
     {
         this.roleSet = new RoleSet();
 

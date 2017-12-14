@@ -134,7 +134,9 @@ public abstract class TorqueAbstractBasicGroup extends TorqueAbstractSecurityEnt
     /**
      * Retrieve attached objects such as users, permissions,....
      */
-    public void retrieveAttachedObjects(Connection con) throws TorqueException
+    @Override
+    public void retrieveAttachedObjects( Connection con, Boolean lazy )
+        throws TorqueException
     {
         this.userSet = new UserSet();
 

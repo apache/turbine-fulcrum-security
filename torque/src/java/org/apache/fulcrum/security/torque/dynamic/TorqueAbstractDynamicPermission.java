@@ -138,9 +138,11 @@ public abstract class TorqueAbstractDynamicPermission extends TorqueAbstractSecu
     }
 
     /**
-     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(Connection, Boolean)
      */
-    public void retrieveAttachedObjects(Connection con) throws TorqueException
+    @Override
+    public void retrieveAttachedObjects( Connection con, Boolean lazy )
+        throws TorqueException
     {
         this.roleSet = new RoleSet();
 

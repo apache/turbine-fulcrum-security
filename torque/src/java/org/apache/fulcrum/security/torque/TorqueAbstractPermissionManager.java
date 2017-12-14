@@ -44,6 +44,8 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
     
 	/** Serial version */
 	private static final long serialVersionUID = 194503017446833485L;
+	
+	// no lazyLoading
 
 	/**
      * Avalon Service lifecycle method
@@ -212,7 +214,7 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
             for (Permission p : permissions)
             {
                 // Add attached objects if they exist
-                ((TorqueAbstractSecurityEntity)p).retrieveAttachedObjects(con);
+                ((TorqueAbstractSecurityEntity)p).retrieveAttachedObjects(con, false);
                 permissionSet.add(p);
             }
 
@@ -312,7 +314,7 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
                 permission = doSelectById((Integer)id, con);
 
                 // Add attached objects if they exist
-                ((TorqueAbstractSecurityEntity)permission).retrieveAttachedObjects(con);
+                ((TorqueAbstractSecurityEntity)permission).retrieveAttachedObjects(con, false);
 
                 Transaction.commit(con);
                 con = null;
@@ -363,7 +365,7 @@ public abstract class TorqueAbstractPermissionManager extends AbstractPermission
             permission = doSelectByName(name, con);
 
             // Add attached objects if they exist
-            ((TorqueAbstractSecurityEntity)permission).retrieveAttachedObjects(con);
+            ((TorqueAbstractSecurityEntity)permission).retrieveAttachedObjects(con, false);
 
             Transaction.commit(con);
             con = null;

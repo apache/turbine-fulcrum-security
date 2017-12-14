@@ -23,6 +23,7 @@ import java.util.Set;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRoleEntity;
 import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.util.DataBackendException;
 /**
  * This abstract class provides the SecurityInterface to the managers.
  * 
@@ -41,18 +42,20 @@ public abstract class TorqueAbstractTurbineTurbineSecurityEntity extends TorqueA
     private Set<? extends TurbineUserGroupRole> userGroupRoleSet = null;
 
     /**
+     * @throws DataBackendException 
      * @see org.apache.fulcrum.security.model.turbine.entity.TurbineGroup#addUserGroupRole(org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole)
      */
-    public void addUserGroupRole(TurbineUserGroupRole userGroupRole)
+    public void addUserGroupRole(TurbineUserGroupRole userGroupRole) throws DataBackendException
     {
         getUserGroupRoleSet().add(userGroupRole);
     }
 
     /**
+     * @throws DataBackendException if loaded lazily
      * @see org.apache.fulcrum.security.model.turbine.entity.TurbineGroup#getUserGroupRoleSet()
      */
     @SuppressWarnings("unchecked")
-	public <T extends TurbineUserGroupRole> Set<T> getUserGroupRoleSet()
+	public <T extends TurbineUserGroupRole> Set<T> getUserGroupRoleSet() throws DataBackendException
     {
         if (userGroupRoleSet == null)
         {
@@ -63,9 +66,10 @@ public abstract class TorqueAbstractTurbineTurbineSecurityEntity extends TorqueA
     }
 
     /**
+     * @throws DataBackendException 
      * @see org.apache.fulcrum.security.model.turbine.entity.TurbineGroup#removeUserGroupRole(org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole)
      */
-    public void removeUserGroupRole(TurbineUserGroupRole userGroupRole)
+    public void removeUserGroupRole(TurbineUserGroupRole userGroupRole) throws DataBackendException
     {
         getUserGroupRoleSet().remove(userGroupRole);
     }
@@ -84,4 +88,12 @@ public abstract class TorqueAbstractTurbineTurbineSecurityEntity extends TorqueA
             this.userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
         }
     }
+    
+//    /**
+//     * Retrieve attached objects 
+//     *
+//     * @param con A database connection
+//     * @param lazy if <code>true</code>, does not retrieve user group role relationships
+//     */
+//    public abstract void retrieveAttachedObjects(Connection con, boolean lazy) throws TorqueException;
 }

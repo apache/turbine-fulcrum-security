@@ -25,6 +25,7 @@ import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineGroup;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineRole;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
@@ -45,7 +46,12 @@ public abstract class AbstractTurbineModelManager extends AbstractManager implem
 {
 	
     
-	private String globalGroupName;
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    
+    private String globalGroupName;
 	// ---------------- Avalon Lifecycle Methods ---------------------
     /**
      * Avalon component lifecycle method
@@ -89,7 +95,7 @@ public abstract class AbstractTurbineModelManager extends AbstractManager implem
     }
 
     /**
-     * Revokes all permissions and groups from a Role.
+     * Revokes all permissions from a Role.
      * 
      * This method is used when deleting a Role.
      * 
@@ -152,7 +158,39 @@ public abstract class AbstractTurbineModelManager extends AbstractManager implem
         {
             throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
         }
+    }
+    
+    /**
+     * Revokes all roles and users from a Group.
+     * 
+     * This method is used when deleting a User.
+     * 
+     * @param group
+     *            the Group
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the Group is not present.
+     */
+    @Override
+    public synchronized void revokeAll(Group group) throws DataBackendException, UnknownEntityException
+    {
+        boolean groupExists = false;
+        groupExists = getGroupManager().checkExists(group);
+        if (groupExists)
+        {
 
+            Object userGroupRoles[] = ((TurbineGroup) group).getUserGroupRoleSet().toArray();
+            for (Object userGroupRole : userGroupRoles)
+            {
+                TurbineUserGroupRole ugr = (TurbineUserGroupRole) userGroupRole;
+                revoke(ugr.getUser(), group, ugr.getRole());
+            }
+        }
+        else
+        {
+            throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
+        }
     }
 
 	@Override

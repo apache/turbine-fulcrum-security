@@ -124,5 +124,4 @@ public class TorqueTurbineRoleManagerImpl extends PeerRoleManager
         }
         return roles.get(0);
     }
-   
 }

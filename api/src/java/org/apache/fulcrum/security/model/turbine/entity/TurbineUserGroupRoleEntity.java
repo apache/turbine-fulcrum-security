@@ -21,6 +21,8 @@ package org.apache.fulcrum.security.model.turbine.entity;
 
 import java.util.Set;
 
+import org.apache.fulcrum.security.util.DataBackendException;
+
 /**
  * Represents the "turbine" model where permissions are in a many to many
  * relationship to roles, roles are related to groups are related to users, all
@@ -35,8 +37,9 @@ public interface TurbineUserGroupRoleEntity
      * Get the User/Group/Role set associated with this entity
      *
      * @return a set of User/Group/Role relations
+     * @throws DataBackendException 
      */
-    public <T extends TurbineUserGroupRole> Set<T> getUserGroupRoleSet();
+    public <T extends TurbineUserGroupRole> Set<T> getUserGroupRoleSet() throws DataBackendException;
 
     /**
      * Set the User/Group/Role set associated with this entity
@@ -51,14 +54,16 @@ public interface TurbineUserGroupRoleEntity
      *
      * @param userGroupRole
      *            a User/Group/Role relation to add
+     * @throws DataBackendException 
      */
-    public void addUserGroupRole(TurbineUserGroupRole userGroupRole);
+    public void addUserGroupRole(TurbineUserGroupRole userGroupRole) throws DataBackendException;
 
     /**
      * Remove a User/Group/Role relation from this entity
      *
      * @param userGroupRole
      *            a User/Group/Role relation to remove
+     * @throws DataBackendException 
      */
-    public void removeUserGroupRole(TurbineUserGroupRole userGroupRole);
+    public void removeUserGroupRole(TurbineUserGroupRole userGroupRole) throws DataBackendException;
 }

@@ -45,15 +45,18 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
     
 	/** Serial version */
 	private static final long serialVersionUID = -3735730556110100621L;
-
-	/**
+	
+    private static final String LAZY_LOADING = "lazy";
+    protected Boolean lazyLoading = false;
+	
+    /**
      * Avalon Service lifecycle method
      */
     @Override
-	public void configure(Configuration conf) throws ConfigurationException
+    public void configure(Configuration conf) throws ConfigurationException
     {
        super.configure( conf );
-
+       lazyLoading = conf.getAttributeAsBoolean( LAZY_LOADING, false);
     }
     
     /**
@@ -199,7 +202,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
             group = doSelectByName(name, con);
 
             // Add dependent objects if they exist
-            ((TorqueAbstractSecurityEntity)group).retrieveAttachedObjects(con);
+            ((TorqueAbstractSecurityEntity)group).retrieveAttachedObjects(con, getLazyLoading());
 
             Transaction.commit(con);
             con = null;
@@ -250,7 +253,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
             for (Group group : groups)
             {
                 // Add dependent objects if they exist
-                ((TorqueAbstractSecurityEntity)group).retrieveAttachedObjects(con);
+                ((TorqueAbstractSecurityEntity)group).retrieveAttachedObjects(con, getLazyLoading());
 
                 groupSet.add(group);
             }
@@ -350,7 +353,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
                 group = doSelectById((Integer)id, con);
 
                 // Add dependent objects if they exist
-                ((TorqueAbstractSecurityEntity)group).retrieveAttachedObjects(con);
+                ((TorqueAbstractSecurityEntity)group).retrieveAttachedObjects(con, getLazyLoading());
 
                 Transaction.commit(con);
                 con = null;
@@ -377,5 +380,15 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
         }
 
         return group;
+    }
+
+    public Boolean getLazyLoading()
+    {
+        return lazyLoading;
+    }
+
+    public void setLazyLoading( Boolean lazyLoading )
+    {
+        this.lazyLoading = lazyLoading;
     }
 }
