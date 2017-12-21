@@ -91,7 +91,13 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
             setUserGroupRoleSet(userGroupRoleSet);
         }
     }
-    
+
+    @Override
+    public void retrieveAttachedObjects( Connection con )
+        throws TorqueException
+    {
+        retrieveAttachedObjects( con, false );
+    }
 
     /**
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#update(java.sql.Connection)

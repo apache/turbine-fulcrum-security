@@ -137,6 +137,13 @@ public abstract class FulcrumAbstractTurbinePermission extends TorqueAbstractSec
     {
         return TorqueTurbinePermissionPeer.DATABASE_NAME;
     }
+    
+    @Override
+    public void retrieveAttachedObjects( Connection con )
+        throws TorqueException
+    {
+        retrieveAttachedObjects( con, false );
+    }
 
     /**
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)

@@ -63,6 +63,13 @@ public abstract class FulcrumAbstractTurbineGroup extends TorqueAbstractTurbineT
         criteria.and(TorqueTurbineUserGroupRolePeer.GROUP_ID, getEntityId() );
         return TorqueTurbineUserGroupRolePeer.doSelectJoinTorqueTurbineRole(criteria, con);
     }
+    
+    @Override
+    public void retrieveAttachedObjects( Connection con )
+        throws TorqueException
+    {
+        retrieveAttachedObjects( con, false );
+    }
 
     /**
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(Connection, Boolean)

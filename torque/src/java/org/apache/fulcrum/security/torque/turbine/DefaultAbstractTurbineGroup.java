@@ -63,6 +63,12 @@ public abstract class DefaultAbstractTurbineGroup extends TorqueAbstractTurbineT
         return TurbineUserGroupRolePeer.doSelectJoinTurbineRole(criteria, con);
     }
     
+    @Override
+    public void retrieveAttachedObjects( Connection con )
+        throws TorqueException
+    {
+        retrieveAttachedObjects( con, false );
+    }    
     
     /**
      * @see TorqueAbstractTurbineTurbineSecurityEntity#retrieveAttachedObjects(Connection, boolean)

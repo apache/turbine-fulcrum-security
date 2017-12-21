@@ -163,6 +163,13 @@ public abstract class FulcrumAbstractTurbineRole extends TorqueAbstractTurbineTu
         return TorqueTurbineRolePeer.DATABASE_NAME;
     }
     
+    @Override
+    public void retrieveAttachedObjects( Connection con )
+        throws TorqueException
+    {
+        retrieveAttachedObjects( con, false );
+    }
+    
     /**
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(Connection, Boolean)
      */

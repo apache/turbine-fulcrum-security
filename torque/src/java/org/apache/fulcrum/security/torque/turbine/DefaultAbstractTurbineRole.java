@@ -159,6 +159,13 @@ public abstract class DefaultAbstractTurbineRole extends TorqueAbstractTurbineTu
     {
         setPermissions(new PermissionSet(permissions));
     }
+    
+    @Override
+    public void retrieveAttachedObjects( Connection con )
+        throws TorqueException
+    {
+        retrieveAttachedObjects( con, false );
+    }
 
     
     /**

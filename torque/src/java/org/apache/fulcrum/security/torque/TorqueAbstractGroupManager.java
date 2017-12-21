@@ -57,6 +57,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager
     {
        super.configure( conf );
        lazyLoading = conf.getAttributeAsBoolean( LAZY_LOADING, false);
+       getLogger().debug("setting lazyLoading: " + lazyLoading);
     }
     
     /**

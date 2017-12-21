@@ -136,6 +136,12 @@ public abstract class DefaultAbstractTurbinePermission extends TorqueAbstractSec
         setRoles(new RoleSet(roles));
     }
 
+    @Override
+    public void retrieveAttachedObjects( Connection con )
+        throws TorqueException
+    {
+        retrieveAttachedObjects( con, false );
+    }
 
     /**
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(Connection, Boolean)

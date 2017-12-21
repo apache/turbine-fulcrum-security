@@ -70,6 +70,13 @@ public abstract class TorqueAbstractSecurityEntity
      * @param lazy if <code>true</code>, may load some or all relationships later
      */
     public abstract void retrieveAttachedObjects(Connection con, Boolean lazy) throws TorqueException;
+    
+    /**
+     * old contract, lazy is set to <code>false</code>.
+     *
+     * @param con A database connection
+     */
+    public abstract void retrieveAttachedObjects(Connection con) throws TorqueException;
 
     /**
      * Update this instance to the database with all dependent objects

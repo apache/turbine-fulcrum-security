@@ -229,6 +229,13 @@ public abstract class TorqueAbstractDynamicRole extends TorqueAbstractSecurityEn
     {
         return TorqueDynamicPermissionPeer.DATABASE_NAME;
     }
+    
+    @Override
+    public void retrieveAttachedObjects( Connection con )
+        throws TorqueException
+    {
+        retrieveAttachedObjects( con, false );
+    }
 
     /**
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(Connection, Boolean)

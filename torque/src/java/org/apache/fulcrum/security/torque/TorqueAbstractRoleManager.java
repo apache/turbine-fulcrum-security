@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.logger.Loggable;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.spi.AbstractRoleManager;
 import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
@@ -56,6 +57,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
     {
        super.configure( conf );
        lazyLoading = conf.getAttributeAsBoolean( LAZY_LOADING, false);
+       getLogger().debug("setting lazyLoading: " + lazyLoading);
     }
 
     
