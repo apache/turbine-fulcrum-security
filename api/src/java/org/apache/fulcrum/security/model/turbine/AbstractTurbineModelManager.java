@@ -52,6 +52,8 @@ public abstract class AbstractTurbineModelManager extends AbstractManager implem
     private static final long serialVersionUID = 1L;
     
     private String globalGroupName;
+    
+    //private boolean cascadeDelete;
 	// ---------------- Avalon Lifecycle Methods ---------------------
     /**
      * Avalon component lifecycle method
@@ -62,6 +64,7 @@ public abstract class AbstractTurbineModelManager extends AbstractManager implem
     	globalGroupName = conf.getAttribute(
     			TurbineModelManager.GLOBAL_GROUP_ATTR_NAME,
     			TurbineModelManager.GLOBAL_GROUP_NAME);
+    	//cascadeDelete = conf.getAttributeAsBoolean( TurbineModelManager.CASCADE_DELETE_ATTR_NAME, false );
     }
     
     /**
@@ -109,6 +112,27 @@ public abstract class AbstractTurbineModelManager extends AbstractManager implem
     @Override
 	public synchronized void revokeAll(Role role) throws DataBackendException, UnknownEntityException
     {
+        revokeAll( role, false );
+    }
+    
+    /**
+     * Revokes by default all permissions from a Role and if flag is set
+     * all groups and users for this role
+     * 
+     * This method is used when deleting a Role.
+     * 
+     * @param role
+     *            the Role
+     * @param cascadeDelete
+     *             if <code>true </code> removes all groups and user for this role.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the Role is not present.
+     */
+    @Override
+    public synchronized void revokeAll(Role role, boolean cascadeDelete) throws DataBackendException, UnknownEntityException
+    {
         boolean roleExists = false;
         roleExists = getRoleManager().checkExists(role);
         if (roleExists)
@@ -118,6 +142,14 @@ public abstract class AbstractTurbineModelManager extends AbstractManager implem
             for (Object permission : permissions)
             {
                 revoke(role, (Permission) permission);
+            }
+            if (cascadeDelete) {
+                Object userGroupRoles[] = ((TurbineRole) role).getUserGroupRoleSet().toArray();
+                for (Object userGroupRole : userGroupRoles)
+                {
+                    TurbineUserGroupRole ugr = (TurbineUserGroupRole) userGroupRole;
+                    revoke(ugr.getUser(), ugr.getGroup(), role);
+                }
             }
         }
         else

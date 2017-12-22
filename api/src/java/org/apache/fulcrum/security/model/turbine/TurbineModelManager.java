@@ -161,4 +161,22 @@ public interface TurbineModelManager extends ModelManager
      *             if user account, group or role is not present.
      */
     void revoke(User user, Group group, Role role) throws DataBackendException, UnknownEntityException;
+
+    /**
+     * Revokes by default all permissions from a Role and if flag is set
+     * all groups and users for this role
+     * 
+     * This method is used when deleting a Role.
+     * 
+     * @param role
+     *            the Role
+     * @param cascadeDelete
+     *             if <code>true </code> removes all groups and user for this role.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the Role is not present.
+     */
+    void revokeAll( Role role, boolean cascadeDelete )
+        throws DataBackendException, UnknownEntityException;
 }
