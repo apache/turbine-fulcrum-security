@@ -152,7 +152,7 @@ public interface UserManager extends Serializable
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      */
-    UserSet getAllUsers() throws DataBackendException;
+    <T extends User> UserSet<T> getAllUsers() throws DataBackendException;
 
     /**
      * Saves User's data in the permanent storage. The user account is required

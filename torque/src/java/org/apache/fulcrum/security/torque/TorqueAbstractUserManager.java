@@ -284,7 +284,7 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager
        *         backend.
        */
     @Override
-	public UserSet getAllUsers() throws DataBackendException
+	public <T extends User> UserSet<T> getAllUsers() throws DataBackendException
     {
         UserSet userSet = new UserSet();
         Connection con = null;

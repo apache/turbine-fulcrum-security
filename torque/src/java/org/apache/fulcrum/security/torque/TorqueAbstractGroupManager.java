@@ -40,7 +40,7 @@ import org.apache.torque.util.Transaction;
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id:$
  */
-public abstract class TorqueAbstractGroupManager extends AbstractGroupManager 
+public abstract class TorqueAbstractGroupManager extends AbstractGroupManager implements LazyLoadable 
 {
     
 	/** Serial version */

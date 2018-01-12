@@ -24,6 +24,7 @@ import org.apache.fulcrum.security.torque.peer.Peer;
 import org.apache.fulcrum.security.torque.peer.PeerManagable;
 import org.apache.fulcrum.security.torque.peer.PeerManager;
 import org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer;
+import org.apache.fulcrum.security.torque.peer.TorqueTurbineUserGroupRolePeer;
 import org.apache.fulcrum.security.util.DataBackendException;
 /**
  * This implementation persists to a database via Torque.
@@ -34,6 +35,11 @@ import org.apache.fulcrum.security.util.DataBackendException;
 public abstract class PeerUserManager extends TorqueAbstractUserManager implements PeerManagable
 {
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
 	 * if set, the generic implementation is used (by setting @link {@link #PEER_CLASS_NAME_KEY} in configuration file.
 	 */
     private Boolean customPeer = false;  //  used for torque which uses per object peer classes
@@ -43,6 +49,10 @@ public abstract class PeerUserManager extends TorqueAbstractUserManager implemen
     transient PeerManager peerManager;
     
 	private String columnName = "LOGIN_NAME";
+	
+	private String columnName4UserGroupRole = "USER_ID";
+
+    private String userGroupRolePeerClassName;
     
     /**
      * Avalon Service lifecycle method
@@ -58,12 +68,34 @@ public abstract class PeerUserManager extends TorqueAbstractUserManager implemen
             setPeerClassName( peerClassName );
             setCustomPeer(true);
         } 
+        
+        Configuration[]  userGroupRoleConf = conf.getChild( "userGroupRoleManager").getChildren();
+        for ( int i = 0; i < userGroupRoleConf.length; i++ )
+        {
+            Configuration configuration = userGroupRoleConf[i];
+            if ( configuration.getName().equals(PEER_CLASS_NAME_KEY) ) {
+                userGroupRolePeerClassName = configuration.getValue( null );
+                if (userGroupRolePeerClassName != null) {
+                    setUserGroupRolePeerClassName( userGroupRolePeerClassName );
+                    setCustomPeer(true);
+                } 
+            }  
+        }
+        if (peerClassName != null && userGroupRolePeerClassName == null) {
+            //peerClassName.replace( "TurbineUserPeerImpl", "TurbineUserPeerImpl )
+            throw new ConfigurationException("If using peers in component configuration (xml) the element userManager expects to have a userGroupRoleManager child element with peerClassName child element.");
+        }
+
     }
   
     
     @Override
 	public Peer getPeerInstance() throws DataBackendException {
         return getPeerManager().getPeerInstance(getPeerClassName(), TorqueTurbinePeer.class, getClassName());
+    }
+    
+    public Peer getUserGroupRolePeerInstance() throws DataBackendException {
+        return getPeerManager().getPeerInstance(getUserGroupRolePeerClassName(), TorqueTurbineUserGroupRolePeer.class, getClassName());
     }
     
     /**
@@ -113,6 +145,30 @@ public abstract class PeerUserManager extends TorqueAbstractUserManager implemen
 	public void setPeerClassName( String peerClassName )
     {
         this.peerClassName = peerClassName;
+    }
+
+
+    public String getUserGroupRolePeerClassName()
+    {
+        return userGroupRolePeerClassName;
+    }
+
+
+    public void setUserGroupRolePeerClassName( String userGroupRolePeerClassName )
+    {
+        this.userGroupRolePeerClassName = userGroupRolePeerClassName;
+    }
+
+
+    public String getColumnName4UserGroupRole()
+    {
+        return columnName4UserGroupRole;
+    }
+
+
+    public void setColumnName4UserGroupRole( String columnName4UserGroupRole )
+    {
+        this.columnName4UserGroupRole = columnName4UserGroupRole;
     }
    
     

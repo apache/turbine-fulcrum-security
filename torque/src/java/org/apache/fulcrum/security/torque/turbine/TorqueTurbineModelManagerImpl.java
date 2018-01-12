@@ -30,9 +30,11 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbinePermission;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineRole;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
+import org.apache.fulcrum.security.torque.LazyLoadable;
 import org.apache.fulcrum.security.torque.om.TurbineRolePermissionPeer;
 import org.apache.fulcrum.security.torque.om.TurbineUserGroupRolePeer;
 import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.torque.security.turbine.TorqueAbstractTurbineTurbineSecurityEntity;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.torque.TorqueException;
@@ -177,10 +179,20 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
             user_group_role.setRole(role);
             ((TurbineUser) user).addUserGroupRole(user_group_role);
             if (group instanceof TurbineGroup ) {
-            	((TurbineGroup) group).addUserGroupRole(user_group_role);
+                if (getGroupManager() instanceof LazyLoadable) {
+                    ((TorqueAbstractTurbineTurbineSecurityEntity) group).addUserGroupRole(user_group_role, 
+                                                                                          ((LazyLoadable)getGroupManager()).getLazyLoading());
+                } else {
+                    ((TurbineGroup) group).addUserGroupRole(user_group_role);                    
+                }
             }
             if (role instanceof TurbineRole ) {
-            	((TurbineRole) role).addUserGroupRole(user_group_role);
+                if (getRoleManager() instanceof LazyLoadable) {
+                    ((TorqueAbstractTurbineTurbineSecurityEntity) role).addUserGroupRole(user_group_role,
+                                                                                         ((LazyLoadable)getRoleManager()).getLazyLoading());
+                } else {
+                    ((TurbineRole) role).addUserGroupRole(user_group_role);                    
+                }
             }
 
             Connection con = null;
@@ -188,7 +200,10 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
             try
             {
                 con = Transaction.begin();
-
+                // save only the new user group may be the better contract, but this would 
+                //  require/add a dependency to initTurbineUserGroupRoles()
+                //((TorqueAbstractSecurityEntity)user).save( con );
+                
                 ((TorqueAbstractSecurityEntity)user).update(con);
                 //((TorqueAbstractSecurityEntity)group).update(con);
                 //((TorqueAbstractSecurityEntity)role).update(con);
@@ -202,6 +217,13 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
                         + user.getName() + "', '"
                         + group.getName() + "', '"
                         + role.getName() + "') failed", e);
+            }
+            catch ( Exception e )
+            {
+                throw new DataBackendException("grant('"
+                                + user.getName() + "', '"
+                                + group.getName() + "', '"
+                                + role.getName() + "') failed", e);
             }
             finally
             {
@@ -251,10 +273,20 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
                     ugrFound = true;
                     ((TurbineUser)user).removeUserGroupRole(user_group_role);
                     if (group instanceof TurbineGroup ) {
-                    	((TurbineGroup)group).removeUserGroupRole(user_group_role);
+                        if (getGroupManager() instanceof LazyLoadable) {
+                            ((TorqueAbstractTurbineTurbineSecurityEntity) group).removeUserGroupRole(user_group_role, 
+                                                                                                     ((LazyLoadable)getGroupManager()).getLazyLoading());
+                        } else {
+                            ((TurbineGroup) group).removeUserGroupRole(user_group_role); 
+                        }
                     }
                     if (role instanceof TurbineRole ) {
-                    	((TurbineRole)role).removeUserGroupRole(user_group_role);
+                        if (getRoleManager() instanceof LazyLoadable) {
+                            ((TorqueAbstractTurbineTurbineSecurityEntity) role).removeUserGroupRole(user_group_role, 
+                                                                                                    ((LazyLoadable)getGroupManager()).getLazyLoading());
+                        } else {
+                            ((TurbineRole) role).removeUserGroupRole(user_group_role);
+                        }
                     }
                     break;
                 }

@@ -27,6 +27,11 @@
     <userManager>
         <className>org.apache.fulcrum.security.torque.om.TurbineUser</className>
         <peerClassName>org.apache.fulcrum.security.torque.om.TurbineUserPeerImpl</peerClassName>
+        <!--  required for acl custom mapping -->
+        <userGroupRoleManager>
+            <!-- className>org.apache.fulcrum.security.torque.om.TurbineUserGroupRole</className-->
+            <peerClassName>org.apache.fulcrum.security.torque.om.TurbineUserGroupRolePeerImpl</peerClassName>
+        </userGroupRoleManager>
     </userManager>
     <groupManager lazy="true">
         <className>org.apache.fulcrum.security.torque.om.TurbineGroup</className>

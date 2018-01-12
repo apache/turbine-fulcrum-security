@@ -41,6 +41,7 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbineRole;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
 import org.apache.fulcrum.security.util.PermissionSet;
+import org.apache.fulcrum.security.util.UserSet;
 import org.apache.fulcrum.testcontainer.BaseUnit4Test;
 import org.junit.Before;
 import org.junit.Test;
@@ -174,17 +175,32 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit4Test
         Role role = securityService.getRoleManager().getRoleInstance();
         role.setName("TEST_REVOKEALLUSER_ROLE");
         role = securityService.getRoleManager().addRole(role);
-
-        User user = userManager.getUserInstance("calvin");
-        user = userManager.addUser(user, "calvin");
+        String username = "calvin";
+        User user = userManager.getUserInstance(username);
+        user = userManager.addUser(user, username);
         modelManager.grant(user, group, role);
-
-        group = groupManager.getGroupById(group.getId());
+        // original objects have relationship attached
         Set<TurbineUserGroupRole> userGroupRoleSet =  ((TurbineUser)user).getUserGroupRoleSet();
         assertEquals(1, userGroupRoleSet.size());
-//        Set<TurbineUserGroupRole> userGroupRoleSet = ((TurbineGroup) group).getUserGroupRoleSet();
-//        assertEquals(1, userGroupRoleSet.size());
+        Set<TurbineUserGroupRole> userGroupRoleSet1 = ((TurbineRole) role).getUserGroupRoleSet();
+        assertEquals(1, userGroupRoleSet1.size());
         Set<TurbineUserGroupRole> userGroupRoleSet2 = ((TurbineGroup) group).getUserGroupRoleSet();
+        assertEquals(1, userGroupRoleSet2.size());
+        // retrieve objects again, which have as lazily loaded no usergroupset yet
+        group = groupManager.getGroupById(group.getId());
+        user = userManager.getUser( username );
+        role = roleManager.getRoleById( role.getId() );
+        
+        UserSet<User> userSet = userManager.getAllUsers();
+        User user2 = userManager.getUserById( user.getId() );
+        assertEquals( user, user2 );
+        
+        // retrieve usergroupset now
+        userGroupRoleSet =  ((TurbineUser)user).getUserGroupRoleSet();
+        assertEquals(1, userGroupRoleSet.size());
+        userGroupRoleSet1 = ((TurbineRole) role).getUserGroupRoleSet();
+        assertEquals(1, userGroupRoleSet1.size());
+        userGroupRoleSet2 = ((TurbineGroup) group).getUserGroupRoleSet();
         assertEquals(1, userGroupRoleSet2.size());
 
         modelManager.revokeAll(user);

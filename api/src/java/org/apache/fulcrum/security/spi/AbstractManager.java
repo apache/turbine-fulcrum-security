@@ -25,7 +25,6 @@ import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 import org.apache.avalon.framework.thread.ThreadSafe;
 import org.apache.fulcrum.security.GroupManager;
-import org.apache.fulcrum.security.ModelManager;
 import org.apache.fulcrum.security.PermissionManager;
 import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.UserManager;

@@ -41,7 +41,7 @@ import org.junit.Before;
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @author <a href="jh@byteaction.de">J&#252;rgen Hoffmann</a>
- * @version $Id:$
+ * @version $Id$
  */
 public class TurbineDefaultModelManagerTest
     extends AbstractTurbineModelManagerTest

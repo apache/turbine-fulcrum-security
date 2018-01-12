@@ -27,13 +27,13 @@ import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
- * An GroupManager performs {@link org.apache.fulcrum.security.entity.Group}
+ * A RoleManager performs {@link org.apache.fulcrum.security.entity.Role}
  * objects related tasks on behalf of the
  * {@link org.apache.fulcrum.security.BaseSecurityService}.
  *
- * The responsibilities of this class include loading data of an group from the
+ * The responsibilities of this class include loading data of a role from the
  * storage and putting them into the
- * {@link org.apache.fulcrum.security.entity.Group} objects, saving those data
+ * {@link org.apache.fulcrum.security.entity.Role} objects, saving those data
  * to the permanent storage.
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>

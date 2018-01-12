@@ -39,6 +39,11 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public abstract class AbstractUserManager extends AbstractEntityManager implements UserManager
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     protected abstract <T extends User> T persistNewUser(T user) throws DataBackendException;
 
     private ACLFactory aclFactory;

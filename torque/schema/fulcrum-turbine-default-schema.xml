@@ -99,7 +99,8 @@
     </foreign-key>
   </table>
 
-  <table name="TURBINE_USER_GROUP_ROLE" javaName="TurbineUserGroupRole" idMethod="none">
+  <table name="TURBINE_USER_GROUP_ROLE" javaName="TurbineUserGroupRole" idMethod="none" 
+  interface="org.apache.fulcrum.security.torque.peer.TurbineUserGroupRoleModelPeerMapper">
     <column name="USER_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
     <column name="GROUP_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
     <column name="ROLE_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>

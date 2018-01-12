@@ -141,7 +141,7 @@ public class TurbineAccessControlListImpl
 	            }
             }
         }
-
+        // this check might be not needed any more, required for custom group
         if (groupManager != null)
         {
         	this.globalGroup = groupManager.getGroupByName(modelManager.getGlobalGroupName());

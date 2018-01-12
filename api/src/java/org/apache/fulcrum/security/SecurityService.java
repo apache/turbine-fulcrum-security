@@ -72,6 +72,6 @@ public interface SecurityService
      *
      * @return An ModelManager object
      */
-    ModelManager getModelManager();
+    <T extends ModelManager> T getModelManager();
 
 }

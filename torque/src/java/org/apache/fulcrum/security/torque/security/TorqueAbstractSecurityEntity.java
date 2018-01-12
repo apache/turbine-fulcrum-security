@@ -62,14 +62,15 @@ public abstract class TorqueAbstractSecurityEntity
      * @param name the name of the entity
      */
     public abstract void setEntityName(String name);
-
+     
     /**
      * Retrieve attached objects such as users, permissions, ...
-     *
+     * 
      * @param con A database connection
-     * @param lazy if <code>true</code>, may load some or all relationships later
+     * * @param lazy if <code>true</code>, may load some or all relationships later
      */
     public abstract void retrieveAttachedObjects(Connection con, Boolean lazy) throws TorqueException;
+    
     
     /**
      * old contract, lazy is set to <code>false</code>.

@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.logger.Loggable;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.spi.AbstractRoleManager;
 import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
@@ -40,7 +39,7 @@ import org.apache.torque.util.Transaction;
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id:$
  */
-public abstract class TorqueAbstractRoleManager extends AbstractRoleManager 
+public abstract class TorqueAbstractRoleManager extends AbstractRoleManager implements LazyLoadable 
 {
     
 	/** Serial version */
@@ -390,12 +389,20 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager
     }
 
 
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.LazyLoadable#getLazyLoading()
+     */
+    @Override
     public Boolean getLazyLoading()
     {
         return lazyLoading;
     }
 
 
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.LazyLoadable#setLazyLoading(java.lang.Boolean)
+     */
+    @Override
     public void setLazyLoading( Boolean lazyLoading )
     {
         this.lazyLoading = lazyLoading;

@@ -27,7 +27,7 @@ import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
 /**
- * An GroupManager performs {@link org.apache.fulcrum.security.entity.Group}
+ * A GroupManager performs {@link org.apache.fulcrum.security.entity.Group}
  * objects related tasks on behalf of the
  * {@link org.apache.fulcrum.security.BaseSecurityService}.
  *

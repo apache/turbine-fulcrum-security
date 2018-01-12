@@ -17,19 +17,28 @@ package org.apache.fulcrum.security.torque.peer;
  * specific language governing permissions and limitations
  * under the License.
  */
-import org.apache.fulcrum.security.util.DataBackendException;
+import java.sql.Connection;
+import java.util.List;
 
-public interface PeerManagable
+import org.apache.torque.TorqueException;
+import org.apache.torque.criteria.Criteria;
+import org.apache.torque.map.TableMap;
+
+/**
+ * This extension to the marker interface {@linkplain Peer} is to allow for swappable Peer implementations 
+ * in Turbine Torque Manager Implementations.  
+ * 
+ * @param <T>  The data object type used by the Torque PeerImpl class.
+ * 
+ * @author <a href="mailto:gk@apache.org">Georg Kallidis</a>
+ * @version $Id$
+ */
+public interface TorqueTurbineUserGroupRolePeer<T extends TurbineUserGroupRoleModelPeerMapper>
+    extends Peer
 {
-
-    public abstract PeerManager getPeerManager();
+	
+    List<T> doSelectJoinTurbineRole( Criteria criteria, Connection con ) throws TorqueException;
     
-    public Peer getPeerInstance() throws DataBackendException;
-    
-    public Boolean getCustomPeer();
-    public void setCustomPeer( Boolean customPeer );
+    TableMap getTableMap() throws TorqueException;
 
-    public String getPeerClassName();
-
-    public void setPeerClassName( String peerClassName );
 }

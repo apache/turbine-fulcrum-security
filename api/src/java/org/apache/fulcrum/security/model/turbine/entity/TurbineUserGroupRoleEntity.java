@@ -33,6 +33,7 @@ import org.apache.fulcrum.security.util.DataBackendException;
  */
 public interface TurbineUserGroupRoleEntity
 {
+    
     /**
      * Get the User/Group/Role set associated with this entity
      *

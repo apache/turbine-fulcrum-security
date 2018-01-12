@@ -36,6 +36,10 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRoleEnti
  */
 public abstract class AbstractTurbineSecurityEntityImpl extends SecurityEntityImpl implements TurbineUserGroupRoleEntity
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private Set<? extends TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
 
     /**

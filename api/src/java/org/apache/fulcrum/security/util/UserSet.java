@@ -31,7 +31,7 @@ import org.apache.fulcrum.security.entity.User;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class UserSet extends SecuritySet<User>
+public class UserSet<T extends User> extends SecuritySet<User>
 {
     /**
      * Serial number

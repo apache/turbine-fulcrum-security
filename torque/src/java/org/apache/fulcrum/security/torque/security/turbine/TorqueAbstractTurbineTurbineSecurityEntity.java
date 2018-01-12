@@ -40,7 +40,7 @@ public abstract class TorqueAbstractTurbineTurbineSecurityEntity extends TorqueA
 
 	/** a cache of user_group_role objects */
     private Set<? extends TurbineUserGroupRole> userGroupRoleSet = null;
-
+    
     /**
      * @throws DataBackendException 
      * @see org.apache.fulcrum.security.model.turbine.entity.TurbineGroup#addUserGroupRole(org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole)
@@ -49,20 +49,36 @@ public abstract class TorqueAbstractTurbineTurbineSecurityEntity extends TorqueA
     {
         getUserGroupRoleSet().add(userGroupRole);
     }
-
-    /**
-     * @throws DataBackendException if loaded lazily
-     * @see org.apache.fulcrum.security.model.turbine.entity.TurbineGroup#getUserGroupRoleSet()
-     */
+    
+    public void addUserGroupRole( TurbineUserGroupRole user_group_role, boolean isLazilyLoaded ) throws DataBackendException {
+        if (isLazilyLoaded) 
+        {
+            getDefaultUserGroupRoleSet().add( user_group_role ); 
+        } 
+        else  
+        { 
+            getUserGroupRoleSet().add( user_group_role );
+        }
+    }
+    
     @SuppressWarnings("unchecked")
-	public <T extends TurbineUserGroupRole> Set<T> getUserGroupRoleSet() throws DataBackendException
+    private <T extends TurbineUserGroupRole> Set<T> getDefaultUserGroupRoleSet() throws DataBackendException
     {
         if (userGroupRoleSet == null)
         {
             userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
         }
 
-        return (Set<T>)userGroupRoleSet;
+        return (Set<T>) userGroupRoleSet;
+    }
+
+    /**
+     * @throws DataBackendException if loaded lazily
+     * @see org.apache.fulcrum.security.model.turbine.entity.TurbineGroup#getUserGroupRoleSet()
+     */
+	public <T extends TurbineUserGroupRole> Set<T> getUserGroupRoleSet() throws DataBackendException
+    {
+        return getDefaultUserGroupRoleSet();
     }
 
     /**
@@ -72,6 +88,17 @@ public abstract class TorqueAbstractTurbineTurbineSecurityEntity extends TorqueA
     public void removeUserGroupRole(TurbineUserGroupRole userGroupRole) throws DataBackendException
     {
         getUserGroupRoleSet().remove(userGroupRole);
+    }
+    
+    public void removeUserGroupRole( TurbineUserGroupRole user_group_role, boolean isLazilyLoaded ) throws DataBackendException {
+        if (isLazilyLoaded) 
+        {
+            getDefaultUserGroupRoleSet().remove( user_group_role ); 
+        } 
+        else  
+        { 
+            getUserGroupRoleSet().remove( user_group_role );
+        }
     }
 
     /**
@@ -88,12 +115,5 @@ public abstract class TorqueAbstractTurbineTurbineSecurityEntity extends TorqueA
             this.userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
         }
     }
-    
-//    /**
-//     * Retrieve attached objects 
-//     *
-//     * @param con A database connection
-//     * @param lazy if <code>true</code>, does not retrieve user group role relationships
-//     */
-//    public abstract void retrieveAttachedObjects(Connection con, boolean lazy) throws TorqueException;
+
 }
