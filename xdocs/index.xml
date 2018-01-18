@@ -124,7 +124,7 @@
     </subsection>
     <subsection name="Configuration">
     <p>
-    This uses the integrated role and component config XML.  Check the /src/test directory for the most uptodate
+    This uses the integrated role and component config XML.  Check the /src/test directory for the most up-to-date
     examples of the configuration files used in unit testing!
     </p>
     <p>
@@ -217,6 +217,7 @@
     <a href="http://db.apache.org/torque/torque-4.0/documentation/modules/maven-plugin/index.html">Torque 4.x Maven Plugin Documentation</a> for reference) and use Maven to
     generate the Torque-OM-classes and to re-built the JAR.
     </p>
+    <subsection name="Torque Dynamic Model">
     <p>
     The component configuration must refer to the correct Torque-OM-classes as in the following example for the Dynamic model:
     <source>
@@ -236,6 +237,7 @@
 ]]>
     </source>
     </p>
+    </subsection>
     <p>
     As a default, the Torque Security Service uses <code>fulcrum</code> as the name of the connection pool for the tables used. This should be considered
     in the Torque configuration when the service is deployed. 
@@ -245,16 +247,50 @@
     Until then class annotation has to be done manually, check examples in <a href="http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/torque/src/test/">Fulcrum Security Torque</a>!
     and for background cft. <a href="https://issues.apache.org/jira/browse/TORQUE-309">Torque-309</a>.
     </p>
-    <p>Check out the Turbine Web App from the maven archetype catalog to test a web app with example code. Find the archetype with <source> 
-      // filter archeype catalog by groupid:artefactid = org.apache.turbine:turbine-webapp-4.0
-      mvn archetype:generate
-    </source> or checkout and build turbine-webapp-4.0 based on Turbine 4 trunk:
-    <source>
-      svn co https://svn.apache.org/repos/asf/turbine/maven/archetypes/trunk/turbine-webapp-4.0
-      mvn clean install
-    </source>
-    If you check out the trunk, you may have to build other sources as well (any dependeny resource with a SNAPSHOT version).
-    </p>   
+    
+     <subsection name="Torque Turbine Model">
+      <p>
+      The Turbine model may be as simple as the Dynamic Model, but this is the most expanded configuration: 
+      <source>
+  <![CDATA[
+      <userManager>
+          <className>org.apache.fulcrum.security.torque.om.TurbineUser</className>
+          <peerClassName>org.apache.fulcrum.security.torque.om.TurbineUserPeerImpl</peerClassName>
+          <!--  required for acl custom mapping -->
+          <userGroupRoleManager>
+              <peerClassName>org.apache.fulcrum.security.torque.om.TurbineUserGroupRolePeerImpl</peerClassName>
+            </userGroupRoleManager>
+      </userManager>
+      <groupManager lazy="true">
+          <className>org.apache.fulcrum.security.torque.om.TurbineGroup</className>
+          <peerClassName>org.apache.fulcrum.security.torque.om.TurbineGroupPeerImpl</peerClassName>
+      </groupManager>
+      <roleManager lazy="true">
+          <className>org.apache.fulcrum.security.torque.om.TurbineRole</className>
+          <peerClassName>org.apache.fulcrum.security.torque.om.TurbineRolePeerImpl</peerClassName>
+      </roleManager>
+      <permissionManager>
+          <className>org.apache.fulcrum.security.torque.om.TurbinePermission</className>
+          <peerClassName>org.apache.fulcrum.security.torque.om.TurbinePermissionPeerImpl</peerClassName>
+      </permissionManager>
+  ]]>
+      </source>
+       All managers now show custom peer classes and the <code>userManager</code> has sub-element <code>userGroupRoleManager</code> to get the ACM (Access Control List) with correct (custom) relationships. Additionally the attribute <code>lazy</code> may be set for <code>groupManager</code> and <code>roleManager</code>, which indicates retrieval of dependent relationships occurs only if explicitely requested.
+      </p>
+     </subsection>
+     <subsection name="Torque Turbine Model Web App">
+          <p>Check out the Turbine Web App from the maven archetype catalog to test a web app with example code. Find the archetype with 
+          <source> 
+            // filter archeype catalog by groupid:artefactid = org.apache.turbine:turbine-webapp-4.0
+            mvn archetype:generate
+          </source> or checkout and build turbine-webapp-4.0 based on Turbine 4 trunk:
+          <source>
+            svn co https://svn.apache.org/repos/asf/turbine/maven/archetypes/trunk/turbine-webapp-4.0
+            mvn clean install
+          </source>
+          If you check out from the trunk, you may have to build other sources as well (any dependeny resource with a SNAPSHOT version).
+          </p>  
+      </subsection>    
   </subsection>
   <subsection name="NT">
     <p>

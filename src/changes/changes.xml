@@ -22,9 +22,19 @@
     <title>Changes</title>
     <author email="epugh@upstate.com">Eric Pugh</author>
   </properties>
-  
   <body>
-    <release version="1.1.1" date="in Subversion">
+    <release version="1.1.2" date="in Subversion">
+      <action type="update" dev="gk">
+         Torque Turbine Relationships in ACL (Access Control List, which is immutable) with custom relationships: If not using the provided OM classes two approaches exist to get proper ACL user/role/groups. Either overriding or by configuration: Overriding the method retrieveAttachedObjects is done in custom User OM class or use xml configuration and proper schema interface settings (Torque OM), cft. test example. 
+         Added lazy loading flag if retrieving attachedObjects, i.e. related user role or user group associations are loaded only if requested. If, where and how lazy loading occurs depends on the the manager classes. Currently only group and role manager use it. Configurable with attribute lazy per manager. As a consequence some more methods may now throw DataBackendException.
+         Added revokeAll(Group) method in model manager.
+         Add interfaces for OM mapping.
+      </action>
+      <action type="update" dev="gk">
+        Torque Fulcrum and Default schema, support for Peer interface, global group name configurable in model manager
+      </action>
+    </release>
+    <release version="1.1.1" date="2017-05-12">
       <action type="update" dev="gk">
         Updated to JUnit 4
         Configurable global group in Turbine and dynamic model
