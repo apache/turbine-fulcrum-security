@@ -106,11 +106,11 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
     {
         if (userSet == null)
         {
-            userSet = new UserSet();
+            userSet = new UserSet<User>();
         }
         else if(!(userSet instanceof UserSet))
         {
-            userSet = new UserSet(userSet);
+            userSet = new UserSet<User>(userSet);
         }
 
         return (UserSet)userSet;
@@ -140,11 +140,11 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
     {
         if(userSet != null)
         {
-            this.userSet = userSet;
+            this.userSet = (UserSet<User>) userSet;
         }
         else
         {
-            this.userSet = new UserSet();
+            this.userSet = new UserSet<User>();
         }
     }
 
@@ -153,7 +153,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
      */
     public <T extends User> void setUsersAsSet(Set<T> users)
     {
-        setUsers(new UserSet(users));
+        setUsers(new UserSet<User>(users));
     }
 
     /**
@@ -243,7 +243,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
     public void retrieveAttachedObjects( Connection con, Boolean lazy )
         throws TorqueException
     {
-        this.userSet = new UserSet();
+        this.userSet = new UserSet<User>();
 
         List<TorqueDynamicUserGroup> usergroups = getTorqueDynamicUserGroupsJoinTorqueDynamicUser(new Criteria(), con);
 

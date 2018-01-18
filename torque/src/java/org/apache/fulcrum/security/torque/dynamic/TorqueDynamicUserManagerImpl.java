@@ -37,6 +37,11 @@ import org.apache.torque.criteria.Criteria;
 public class TorqueDynamicUserManagerImpl extends TorqueAbstractUserManager
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractUserManager#doSelectAllUsers(java.sql.Connection)
      */
     @SuppressWarnings("unchecked")

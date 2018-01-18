@@ -25,10 +25,11 @@
   <body>
     <release version="1.1.2" date="in Subversion">
       <action type="update" dev="gk">
-         Torque Turbine Relationships in ACL (Access Control List, which is immutable) with custom relationships: If not using the provided OM classes two approaches exist to get proper ACL user/role/groups. Either overriding or by configuration: Overriding the method retrieveAttachedObjects is done in custom User OM class or use xml configuration and proper schema interface settings (Torque OM), cft. test example. 
+         - Torque Turbine Relationships in ACL (Access Control List, which is immutable) with custom relationships: If not using the provided OM classes two approaches exist to get proper ACL user/role/groups. Either overriding or by configuration: Overriding the method retrieveAttachedObjects is done in custom User OM class or use xml configuration and proper schema interface settings (Torque OM), cft. test example. 
+        - Added interfaces (TorqueTurbineUserGroupRolePeer, TurbineUserGroupRoleModelPeerMapper) and abstract class (TorqueAbstractTurbineTurbineSecurityEntityDefault) for OM mapping.
+         - retrieveAttachedObjects with lazy parameter
          Added lazy loading flag if retrieving attachedObjects, i.e. related user role or user group associations are loaded only if requested. If, where and how lazy loading occurs depends on the the manager classes. Currently only group and role manager use it. Configurable with attribute lazy per manager. As a consequence some more methods may now throw DataBackendException.
-         Added revokeAll(Group) method in model manager.
-         Add interfaces for OM mapping.
+         - Implement revokeAll(Group) method in model manager.
       </action>
       <action type="update" dev="gk">
         Torque Fulcrum and Default schema, support for Peer interface, global group name configurable in model manager

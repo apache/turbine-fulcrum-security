@@ -186,7 +186,7 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
     {
         if (delegatees == null)
         {
-            delegatees = new UserSet();
+            delegatees = new UserSet<T>();
         }
 
         return (Set<T>)delegatees;
@@ -200,7 +200,7 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
     {
         if (delegators == null)
         {
-            delegators = new UserSet();
+            delegators = new UserSet<T>();
         }
 
         return (Set<T>)delegators;
@@ -213,11 +213,11 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
     {
         if (delegatees != null)
         {
-            this.delegatees = new UserSet(delegatees);
+            this.delegatees = new UserSet<T>(delegatees);
         }
         else
         {
-            this.delegatees = new UserSet();
+            this.delegatees = new UserSet<T>();
         }
     }
 
@@ -228,11 +228,11 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
     {
         if (delegators != null)
         {
-            this.delegators = new UserSet(delegates);
+            this.delegators = new UserSet<T>(delegates);
         }
         else
         {
-            this.delegators = new UserSet();
+            this.delegators = new UserSet<T>();
         }
     }
 
@@ -267,7 +267,7 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
             groupSet.add(tdug.getTorqueDynamicGroup());
         }
 
-        this.delegators = new UserSet();
+        this.delegators = new UserSet<User>();
 
         List<TorqueDynamicUserDelegates> delegatorlist = getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(new Criteria(), con);
 
@@ -276,7 +276,7 @@ public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEn
             delegators.add(tdud.getTorqueDynamicUserRelatedByDelegatorUserId());
         }
 
-        this.delegatees = new UserSet();
+        this.delegatees = new UserSet<User>();
 
         List<TorqueDynamicUserDelegates> delegateelist = getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(new Criteria(), con);
 

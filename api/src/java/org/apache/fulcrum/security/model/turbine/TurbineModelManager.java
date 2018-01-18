@@ -46,6 +46,13 @@ public interface TurbineModelManager extends ModelManager
      * The name of the <a href="#global">global group</a>, if no global group name is set in model manager
      */
     public String GLOBAL_GROUP_NAME = "global";
+    
+    /**
+     * TODO 
+     * <li>transactional revoke/grant = replace for global group/role? 
+     * <li>may allow user - group assignments without role, i.e. with default role. Requires adding/defining default/zero role for group, you have then to the global role additionally a global group. 
+     * This may be relevant, if just only one group is sufficient (or at least one). 
+     */
 
     /**
      * Provides a reference to the Group object that represents the <a

@@ -18,7 +18,6 @@ package org.apache.fulcrum.security.torque.turbine;
  * under the License.
  */
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.sql.Connection;
@@ -31,7 +30,6 @@ import org.apache.fulcrum.security.torque.om.TurbineGroupPeer;
 import org.apache.fulcrum.security.torque.om.TurbinePermissionPeer;
 import org.apache.fulcrum.security.torque.om.TurbineRolePeer;
 import org.apache.fulcrum.security.torque.om.TurbineRolePermissionPeer;
-import org.apache.fulcrum.security.torque.om.TurbineUserGroupRolePeer;
 import org.apache.fulcrum.security.torque.om.TurbineUserPeer;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
