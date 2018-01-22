@@ -218,7 +218,7 @@ public abstract class AbstractTurbineUserManagerTest extends BaseUnit4Test
 
     /**
      * Need to figure out if save is something we want.. right now it just bloes
-     * up if you actually cahnge anything.
+     * up if you actually change anything.
      * 
      * @todo figur out what to do here...
      * @throws Exception

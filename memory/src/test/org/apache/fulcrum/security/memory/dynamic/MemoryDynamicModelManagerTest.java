@@ -1,5 +1,7 @@
 package org.apache.fulcrum.security.memory.dynamic;
 
+import static org.junit.Assert.fail;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -23,9 +25,6 @@ import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.dynamic.test.AbstractDynamicModelManagerTest;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 
 /**

@@ -254,33 +254,33 @@ public abstract class FulcrumAbstractTurbineRole extends TorqueAbstractTurbineTu
                 rp.save(con);
             }
         }
-        
-        try
-        {
-        	Set<TurbineUserGroupRole> userGroupRoleSet = getUserGroupRoleSet();
-            if (userGroupRoleSet != null)
-            {
-                Criteria criteria = new Criteria();
-    
-                /* remove old entries */
-                criteria.where(TorqueTurbineUserGroupRolePeer.ROLE_ID, getEntityId());
-                TorqueTurbineUserGroupRolePeer.doDelete(criteria, con);
-    
-                for (TurbineUserGroupRole ugr : userGroupRoleSet)
-                {
-                    TorqueTurbineUserGroupRole ttugr = new TorqueTurbineUserGroupRole();
-                    ttugr.setGroupId((Integer)ugr.getGroup().getId());
-                    ttugr.setUserId((Integer)ugr.getUser().getId());
-                    ttugr.setRoleId((Integer)ugr.getRole().getId());
-                    ttugr.save(con);
-                }
-            }
-            save(con);
-        }
-        catch (Exception e)
-        {
-            throw new TorqueException(e);
-        }
+        // not needed 
+//        try
+//        {
+//        	Set<TurbineUserGroupRole> userGroupRoleSet = getUserGroupRoleSet();
+//            if (userGroupRoleSet != null)
+//            {
+//                Criteria criteria = new Criteria();
+//    
+//                /* remove old entries */
+//                criteria.where(TorqueTurbineUserGroupRolePeer.ROLE_ID, getEntityId());
+//                TorqueTurbineUserGroupRolePeer.doDelete(criteria, con);
+//    
+//                for (TurbineUserGroupRole ugr : userGroupRoleSet)
+//                {
+//                    TorqueTurbineUserGroupRole ttugr = new TorqueTurbineUserGroupRole();
+//                    ttugr.setGroupId((Integer)ugr.getGroup().getId());
+//                    ttugr.setUserId((Integer)ugr.getUser().getId());
+//                    ttugr.setRoleId((Integer)ugr.getRole().getId());
+//                    ttugr.save(con);
+//                }
+//            }
+//            save(con);
+//        }
+//        catch (Exception e)
+//        {
+//            throw new TorqueException(e);
+//        }
     }
 
     /**

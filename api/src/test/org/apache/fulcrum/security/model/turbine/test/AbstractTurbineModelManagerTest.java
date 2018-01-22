@@ -175,13 +175,22 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit4Test
         Role role = securityService.getRoleManager().getRoleInstance();
         role.setName("TEST_REVOKEALLUSER_ROLE");
         role = securityService.getRoleManager().addRole(role);
+        
+        Group group2 = securityService.getGroupManager().getGroupInstance();
+        group2.setName("TEST_REVOKEALLUSER_GROUP2");
+        securityService.getGroupManager().addGroup(group2);
+        Role role2 = securityService.getRoleManager().getRoleInstance();
+        role2.setName("TEST_REVOKEALLUSER_ROLE2");
+        role2 = securityService.getRoleManager().addRole(role2);
+        
         String username = "calvin";
         User user = userManager.getUserInstance(username);
         user = userManager.addUser(user, username);
         modelManager.grant(user, group, role);
+        modelManager.grant(user, group2, role2);
         // original objects have relationship attached
         Set<TurbineUserGroupRole> userGroupRoleSet =  ((TurbineUser)user).getUserGroupRoleSet();
-        assertEquals(1, userGroupRoleSet.size());
+        assertEquals(2, userGroupRoleSet.size());
         Set<TurbineUserGroupRole> userGroupRoleSet1 = ((TurbineRole) role).getUserGroupRoleSet();
         assertEquals(1, userGroupRoleSet1.size());
         Set<TurbineUserGroupRole> userGroupRoleSet2 = ((TurbineGroup) group).getUserGroupRoleSet();
@@ -197,7 +206,7 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit4Test
         
         // retrieve usergroupset now
         userGroupRoleSet =  ((TurbineUser)user).getUserGroupRoleSet();
-        assertEquals(1, userGroupRoleSet.size());
+        assertEquals(2, userGroupRoleSet.size());
         userGroupRoleSet1 = ((TurbineRole) role).getUserGroupRoleSet();
         assertEquals(1, userGroupRoleSet1.size());
         userGroupRoleSet2 = ((TurbineGroup) group).getUserGroupRoleSet();
@@ -207,9 +216,7 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit4Test
         group = groupManager.getGroupById(group.getId());
         assertEquals(0, ((TurbineGroup) group).getUserGroupRoleSet().size());
         role = securityService.getRoleManager().getRoleByName("TEST_REVOKEALLUSER_ROLE");
-
         assertEquals(0,((TurbineRole) role).getUserGroupRoleSet().size());
-        
         assertTrue(((TurbineRole) role).getUserGroupRoleSet().isEmpty());
         
         modelManager.grant(user, group, role);
@@ -244,7 +251,6 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit4Test
         assertTrue(ugrFound);
         assertTrue(ugrTest.getGroup().equals(group));
         assertTrue(ugrTest.getUser().equals(user));
-
     }
     @Test
     public void testRevokeUserGroupRole() throws Exception
@@ -269,5 +275,99 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit4Test
             }
         }
         assertFalse(ugrFound);
+    }
+    
+    @Test
+    public void testUserGroupGrantRolePermission() throws Exception
+    {
+        Permission permission = permissionManager.getPermissionInstance();
+        permission.setName("ANSWER_PHONE__");
+        permissionManager.addPermission(permission);
+        
+        Permission permission2 = permissionManager.getPermissionInstance();
+        permission2.setName("ANSWER_PHONE__2");
+        permissionManager.addPermission(permission2);
+        
+        role = roleManager.getRoleInstance("RECEPTIONIST__");
+        roleManager.addRole(role);
+        
+        Group group = securityService.getGroupManager().getGroupInstance();
+        group.setName("TEST_GROUP__");
+        securityService.getGroupManager().addGroup(group);
+        Role role = roleManager.getRoleInstance();
+        role.setName("TEST_Role__");
+        roleManager.addRole(role);
+        User user = userManager.getUserInstance("Clint__");
+        userManager.addUser(user, "clint");
+        // this is required
+        modelManager.grant(user, group, role);
+        
+        modelManager.grant(role, permission);
+        modelManager.grant(role, permission2);
+        role = roleManager.getRoleById(role.getId());
+        PermissionSet permissions = ((TurbineRole) role).getPermissions();
+        assertEquals(2, permissions.size());
+        assertTrue(((TurbineRole) role).getPermissions().contains(permission));
+        assertTrue(((TurbineRole) role).getPermissions().contains(permission2));
+        
+        modelManager.revoke( role, permission2 );
+        permissions = ((TurbineRole) role).getPermissions();
+        assertEquals(1, permissions.size());
+        assertTrue(((TurbineRole) role).getPermissions().contains(permission));
+        
+        modelManager.revoke(role, permission);
+        permissions = ((TurbineRole) role).getPermissions();
+        assertEquals(0, permissions.size());
+        assertFalse(((TurbineRole) role).getPermissions().contains(permission));
+ 
+    }
+    
+    
+    @Test
+    public void testReplaceUserGroupRole() throws Exception
+    {
+        Group global = modelManager.getGlobalGroup();
+        
+        Role role = roleManager.getRoleInstance();
+        role.setName("TEST_REPLACE_ROLE");
+        if (!roleManager.checkExists( role ) ) {
+            roleManager.addRole(role);
+        }
+
+        
+        
+        Role newRole = roleManager.getRoleInstance();
+        newRole.setName("TEST_NEW_ROLE");
+        roleManager.addRole(newRole);
+        User user = userManager.getUserInstance("Dave");
+        userManager.addUser(user, "dave");
+        
+        modelManager.grant(user, global, role);
+        
+        modelManager.replace(user, role, newRole);
+        
+
+        
+        boolean ugrFound = false;
+        boolean ugrNotFound = true;
+        TurbineUserGroupRole ugrTest = null;
+        for (TurbineUserGroupRole ugr : ((TurbineUser) user).getUserGroupRoleSet())
+        {
+            if (ugr.getUser().equals(user) && ugr.getGroup().equals(global) && ugr.getRole().equals(newRole))
+            {
+                ugrFound = true;
+                ugrTest = ugr;
+            }
+            if (ugr.getUser().equals(user) && ugr.getGroup().equals(global) && ugr.getRole().equals(role))
+            {
+                ugrNotFound = false;
+                ugrTest = ugr;
+            }
+        }
+        assertTrue(ugrFound);
+        assertTrue(ugrNotFound);
+        assertTrue(ugrTest.getGroup().equals(global));
+        assertTrue(ugrTest.getUser().equals(user));
+
     }
 }

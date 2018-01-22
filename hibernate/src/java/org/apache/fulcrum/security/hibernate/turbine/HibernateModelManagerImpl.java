@@ -267,4 +267,13 @@ public class HibernateModelManagerImpl extends AbstractTurbineModelManager imple
             throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
         }
     }
+
+    @Override
+    public void replace( User user, Role oldRole, Role newRole )
+        throws DataBackendException, UnknownEntityException
+    {
+        Group group = getGlobalGroup();
+        revoke( user, group, oldRole );
+        grant( user, group, newRole );
+    }
 }

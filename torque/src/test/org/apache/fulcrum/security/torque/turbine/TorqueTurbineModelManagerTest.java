@@ -75,7 +75,7 @@ public class TorqueTurbineModelManagerTest
         try
         {
             Criteria criteria = new Criteria();
-            criteria.where(TorqueTurbineUserGroupRolePeer.USER_ID, 0, Criteria.GREATER_THAN);
+            criteria.where(TorqueTurbineUserGroupRolePeer.USER_ID, -1, Criteria.GREATER_THAN);
             TorqueTurbineUserGroupRolePeer.doDelete(criteria);
 
             criteria = new Criteria();

@@ -85,7 +85,7 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
                 ugrs = getTurbineUserGroupRolesJoinTurbineRole(new Criteria(), con);
             } 
     
-            maptoModel( con, userGroupRoleSet, (List<TurbineUserGroupRoleModelPeerMapper>) ugrs );
+            maptoModel( con, userGroupRoleSet, ugrs );
             
             setUserGroupRoleSet(userGroupRoleSet);
         }
@@ -117,6 +117,8 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
     }
 
     /**
+     * Removes all entries, then inserts, what is found in {@link #getUserGroupRoleSet()}.
+     * 
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#update(java.sql.Connection)
      */
     @Override
@@ -125,7 +127,7 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
         try
         {
             Set<TurbineUserGroupRole> userGroupRoleSet = getUserGroupRoleSet();
-            if (userGroupRoleSet != null && !userGroupRoleSet.isEmpty())
+            if ( userGroupRoleSet != null ) //&& !userGroupRoleSet.isEmpty() commented allow delete/empty 
             {
                 Criteria criteria = new Criteria();
 
@@ -159,8 +161,8 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
         TurbineUserPeer.doDelete(SimpleKey.keyFor(getEntityId()));
     }
     
-    private void maptoModel( Connection con, Set<TurbineUserGroupRole> userGroupRoleSet,
-                             List<TurbineUserGroupRoleModelPeerMapper> ugrs )
+    private <T extends TurbineUserGroupRoleModelPeerMapper> void maptoModel( Connection con, Set<TurbineUserGroupRole> userGroupRoleSet,
+                             List<T> ugrs )
         throws TorqueException
     {
         for (TurbineUserGroupRoleModelPeerMapper ttugr : ugrs)

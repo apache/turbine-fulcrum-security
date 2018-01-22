@@ -48,6 +48,14 @@ public interface TurbineModelManager extends ModelManager
     public String GLOBAL_GROUP_NAME = "global";
     
     /**
+     * may be used in implementations
+     *
+     */
+    public enum Privilege {
+        GRANT, REVOKE, REPLACE_ROLE;
+    }
+    
+    /**
      * TODO 
      * <li>transactional revoke/grant = replace for global group/role? 
      * <li>may allow user - group assignments without role, i.e. with default role. Requires adding/defining default/zero role for group, you have then to the global role additionally a global group. 
@@ -67,14 +75,28 @@ public interface TurbineModelManager extends ModelManager
      * @return the configured global group name, by default {@link #GLOBAL_GROUP_ATTR_NAME}
      */
     public String getGlobalGroupName();
+    
+    /**
+     * Replaces the assigned old Role to new role in the #global group for User user.
+     *  
+     * @param user
+     *            the User.
+     * @param oldRole
+     *              the old Role
+     * @param newRole
+     *              the new Role
+     */
+    void replace(User user, Role oldRole, Role newRole)  throws DataBackendException, UnknownEntityException;
 
     /**
      * Puts a permission in a role
      * 
      * This method is used when adding a permission to a role
      * 
-     * @param user
-     *            the User.
+     * @param role
+     *            the Role.
+     * @param permission
+     *             the Permission
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      * @throws UnknownEntityException
@@ -87,6 +109,8 @@ public interface TurbineModelManager extends ModelManager
      * 
      * @param role
      *            the Role.
+     * @param permission
+     *             the Permission
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      * @throws UnknownEntityException

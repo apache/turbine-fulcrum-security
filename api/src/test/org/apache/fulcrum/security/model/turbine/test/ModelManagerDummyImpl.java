@@ -40,4 +40,10 @@ public class ModelManagerDummyImpl extends AbstractTurbineModelManager
 		throw new DataBackendException("not yet implemented, just a test ");
 	}
 
+    @Override
+    public void replace( User user, Role oldRole, Role newRole ) throws DataBackendException
+    {
+        throw new DataBackendException("not yet implemented, just a test ");
+    }
+
 }

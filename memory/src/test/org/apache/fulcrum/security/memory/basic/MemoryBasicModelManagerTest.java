@@ -1,5 +1,7 @@
 package org.apache.fulcrum.security.memory.basic;
 
+import static org.junit.Assert.fail;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,12 +23,8 @@ package org.apache.fulcrum.security.memory.basic;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.basic.test.AbstractModelManagerTest;
-
-import static org.junit.Assert.*;
-
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>

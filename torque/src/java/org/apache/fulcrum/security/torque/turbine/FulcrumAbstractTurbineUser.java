@@ -94,6 +94,8 @@ public abstract class FulcrumAbstractTurbineUser extends TorqueAbstractTurbineTu
     }
 
     /**
+     * Removes all entries, then inserts, what is found in {@link #getUserGroupRoleSet()}.
+     * 
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#update(java.sql.Connection)
      */
     @Override

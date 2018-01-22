@@ -32,7 +32,6 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
 import org.apache.fulcrum.security.torque.LazyLoadable;
 import org.apache.fulcrum.security.torque.om.TurbineRolePermissionPeer;
-import org.apache.fulcrum.security.torque.om.TurbineUserGroupRolePeer;
 import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
 import org.apache.fulcrum.security.torque.security.turbine.TorqueAbstractTurbineTurbineSecurityEntity;
 import org.apache.fulcrum.security.util.DataBackendException;
@@ -50,6 +49,7 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
 {
 	/** Serial version */
 	private static final long serialVersionUID = -306753988209612899L;
+	
 
 	/**
      * Grants a Role a Permission
@@ -82,7 +82,7 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
                 con = Transaction.begin();
 
                 ((TorqueAbstractSecurityEntity)role).update(con);
-                ((TorqueAbstractSecurityEntity)permission).update(con);
+                ((TorqueAbstractSecurityEntity)permission).update(con);// this updates all permission
 
                 Transaction.commit(con);
                 con = null;
@@ -167,94 +167,92 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
     @Override
 	public synchronized void grant(User user, Group group, Role role) throws DataBackendException, UnknownEntityException
     {
-        boolean roleExists = getRoleManager().checkExists(role);
-        boolean userExists = getUserManager().checkExists(user);
-        boolean groupExists = getGroupManager().checkExists(group);
-
-        if (roleExists && groupExists && userExists)
-        {
-            TurbineUserGroupRole user_group_role = new TurbineUserGroupRole();
-            user_group_role.setUser(user);
-            user_group_role.setGroup(group);
-            user_group_role.setRole(role);
-            ((TurbineUser) user).addUserGroupRole(user_group_role);
-            if (group instanceof TurbineGroup ) {
-                if (getGroupManager() instanceof LazyLoadable) {
-                    ((TorqueAbstractTurbineTurbineSecurityEntity) group).addUserGroupRole(user_group_role, 
-                                                                                          ((LazyLoadable)getGroupManager()).getLazyLoading());
-                } else {
-                    ((TurbineGroup) group).addUserGroupRole(user_group_role);                    
-                }
-            }
-            if (role instanceof TurbineRole ) {
-                if (getRoleManager() instanceof LazyLoadable) {
-                    ((TorqueAbstractTurbineTurbineSecurityEntity) role).addUserGroupRole(user_group_role,
-                                                                                         ((LazyLoadable)getRoleManager()).getLazyLoading());
-                } else {
-                    ((TurbineRole) role).addUserGroupRole(user_group_role);                    
-                }
-            }
-
-            Connection con = null;
-
-            try
-            {
-                con = Transaction.begin();
-                // save only the new user group may be the better contract, but this would 
-                //  require/add a dependency to initTurbineUserGroupRoles()
-                //((TorqueAbstractSecurityEntity)user).save( con );
-                
-                ((TorqueAbstractSecurityEntity)user).update(con);
-                //((TorqueAbstractSecurityEntity)group).update(con);
-                //((TorqueAbstractSecurityEntity)role).update(con);
-
-                Transaction.commit(con);
-                con = null;
-            }
-            catch (TorqueException e)
-            {
-                throw new DataBackendException("grant('"
-                        + user.getName() + "', '"
-                        + group.getName() + "', '"
-                        + role.getName() + "') failed", e);
-            }
-            catch ( Exception e )
-            {
-                throw new DataBackendException("grant('"
-                                + user.getName() + "', '"
-                                + group.getName() + "', '"
-                                + role.getName() + "') failed", e);
-            }
-            finally
-            {
-                if (con != null)
-                {
-                    Transaction.safeRollback(con);
-                }
-            }
-
-            return;
-        }
-
-        if (!roleExists)
-        {
-            throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
-        }
-
-        if (!groupExists)
-        {
-            throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
-        }
-
-        if (!userExists)
-        {
-            throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
-        }
+        handlePrivileges(Privilege.GRANT, user, group, role );
     }
 
     @Override
 	public synchronized void revoke(User user, Group group, Role role)
         throws DataBackendException, UnknownEntityException
+    {
+        if (checkExists(user, group, role)) 
+            handlePrivileges( Privilege.REVOKE, user, group, role );
+    }
+
+    @Override
+    public void replace( User user,  Role oldRole, Role newRole )
+        throws DataBackendException, UnknownEntityException
+    {
+        Group group = ((TurbineModelManager)this).getGlobalGroup();
+        if (checkExists(user, oldRole, newRole, group) ) {
+            handlePrivileges( Privilege.REPLACE_ROLE, user, group, oldRole, newRole );
+        }
+    }
+
+    private void addUserGroupRole( User user, Role role, Group group )
+        throws DataBackendException
+    {
+        TurbineUserGroupRole new_user_group_role = new TurbineUserGroupRole();
+        new_user_group_role.setUser(user);
+        new_user_group_role.setGroup(group);
+        new_user_group_role.setRole(role);
+        ((TurbineUser) user).addUserGroupRole(new_user_group_role);
+        
+        if (group instanceof TurbineGroup ) {
+            if (getGroupManager() instanceof LazyLoadable) {
+                ((TorqueAbstractTurbineTurbineSecurityEntity) group).addUserGroupRole(new_user_group_role, 
+                                                                                      ((LazyLoadable)getGroupManager()).getLazyLoading());
+            } else {
+                ((TurbineGroup) group).addUserGroupRole(new_user_group_role);                    
+            }
+        }
+        if (role instanceof TurbineRole ) {
+            if (getRoleManager() instanceof LazyLoadable) {
+                ((TorqueAbstractTurbineTurbineSecurityEntity) role).addUserGroupRole(new_user_group_role,
+                                                                                     ((LazyLoadable)getRoleManager()).getLazyLoading());
+            } else {
+                ((TurbineRole) role).addUserGroupRole(new_user_group_role);                    
+            }
+        }
+    }
+
+    private void removeUserGroupRole( User user, Role role, Group group )
+        throws DataBackendException, UnknownEntityException
+    {
+        boolean ugrFound = false;
+        for (TurbineUserGroupRole user_group_role : ((TurbineUser) user).getUserGroupRoleSet())
+        {
+            if (user_group_role.getUser().equals(user)
+                && user_group_role.getGroup().equals(group)
+                && user_group_role.getRole().equals(role))
+            {
+                ugrFound = true;
+                ((TurbineUser)user).removeUserGroupRole(user_group_role);
+                if (group instanceof TurbineGroup ) {
+                    if (getGroupManager() instanceof LazyLoadable) {
+                        ((TorqueAbstractTurbineTurbineSecurityEntity) group).removeUserGroupRole(user_group_role, 
+                                                                                                 ((LazyLoadable)getGroupManager()).getLazyLoading());
+                    } else {
+                        ((TurbineGroup) group).removeUserGroupRole(user_group_role); 
+                    }
+                }
+                if (role instanceof TurbineRole ) {
+                    if (getRoleManager() instanceof LazyLoadable) {
+                        ((TorqueAbstractTurbineTurbineSecurityEntity) role).removeUserGroupRole(user_group_role, 
+                                                                                                ((LazyLoadable)getGroupManager()).getLazyLoading());
+                    } else {
+                        ((TurbineRole) role).removeUserGroupRole(user_group_role);
+                    }
+                }
+                break;
+            }
+        }
+        if (!ugrFound)
+        {
+            throw new UnknownEntityException("Could not find User/Group/Role for Role "+ role.getName());
+        }
+    }
+    
+    private boolean checkExists( User user, Group group, Role role ) throws UnknownEntityException, DataBackendException
     {
         boolean roleExists = getRoleManager().checkExists(role);
         boolean userExists = getUserManager().checkExists(user);
@@ -262,85 +260,117 @@ public class TorqueTurbineModelManagerImpl extends AbstractTurbineModelManager i
 
         if (roleExists && groupExists && userExists)
         {
-            boolean ugrFound = false;
-
-            for (TurbineUserGroupRole user_group_role : ((TurbineUser) user).getUserGroupRoleSet())
-            {
-                if (user_group_role.getUser().equals(user)
-                    && user_group_role.getGroup().equals(group)
-                    && user_group_role.getRole().equals(role))
-                {
-                    ugrFound = true;
-                    ((TurbineUser)user).removeUserGroupRole(user_group_role);
-                    if (group instanceof TurbineGroup ) {
-                        if (getGroupManager() instanceof LazyLoadable) {
-                            ((TorqueAbstractTurbineTurbineSecurityEntity) group).removeUserGroupRole(user_group_role, 
-                                                                                                     ((LazyLoadable)getGroupManager()).getLazyLoading());
-                        } else {
-                            ((TurbineGroup) group).removeUserGroupRole(user_group_role); 
-                        }
-                    }
-                    if (role instanceof TurbineRole ) {
-                        if (getRoleManager() instanceof LazyLoadable) {
-                            ((TorqueAbstractTurbineTurbineSecurityEntity) role).removeUserGroupRole(user_group_role, 
-                                                                                                    ((LazyLoadable)getGroupManager()).getLazyLoading());
-                        } else {
-                            ((TurbineRole) role).removeUserGroupRole(user_group_role);
-                        }
-                    }
-                    break;
-                }
-            }
-
-            if (!ugrFound)
-            {
-                throw new UnknownEntityException("Could not find User/Group/Role");
-            }
-
-            Connection con = null;
-
-            try
-            {
-                con = Transaction.begin();
-
-                Criteria criteria = new Criteria();
-                criteria.where(TurbineUserGroupRolePeer.ROLE_ID, role.getId());
-                criteria.where(TurbineUserGroupRolePeer.GROUP_ID, group.getId());
-                criteria.where(TurbineUserGroupRolePeer.USER_ID, user.getId());
-                TurbineUserGroupRolePeer.doDelete(criteria, con);
-
-                Transaction.commit(con);
-                con = null;
-            }
-            catch (TorqueException e)
-            {
-                throw new DataBackendException("revoke('"
-                        + user.getName() + "', '"
-                        + group.getName() + "', '"
-                        + role.getName() + "') failed", e);
-            }
-            finally
-            {
-                if (con != null)
-                {
-                    Transaction.safeRollback(con);
-                }
-            }
-
-            return;
+            return true;
         }
 
         if (!roleExists)
         {
             throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
         }
+
         if (!groupExists)
         {
             throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
         }
+
         if (!userExists)
         {
             throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
+        }
+        return false;
+    }
+    
+    private boolean checkExists( User user, Role oldRole, Role newRole, Group globalGroup ) throws UnknownEntityException, DataBackendException
+    {
+        boolean userExists = getUserManager().checkExists(user);
+        boolean oldRoleExists = getRoleManager().checkExists(oldRole);
+        boolean newRoleExists = getRoleManager().checkExists(newRole);
+
+        if (userExists && oldRoleExists && newRoleExists && globalGroup != null)
+        {
+            return true;
+        }
+
+        if (!oldRoleExists)
+        {
+            throw new UnknownEntityException("Unknown role '" + oldRole.getName() + "'");
+        }
+        
+        if (!newRoleExists)
+        {
+            throw new UnknownEntityException("Unknown role '" + newRole.getName() + "'");
+        }
+        if (!userExists)
+        {
+            throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
+        }
+        return false;
+    }
+    
+    private void handlePrivileges( Privilege privilege, User user, Group group, Role role, Role newRole )
+                    throws DataBackendException, UnknownEntityException
+    {
+            String logChars = privilege.toString()+ "('"
+                            + user.getName() + "', '"
+                            + group.getName() + "', '"
+                            + role.getName() + "')";
+            switch (privilege) {
+                case GRANT:
+                    addUserGroupRole( user, role, group );break;
+                case REVOKE:
+                    removeUserGroupRole( user, role, group );break;
+                case REPLACE_ROLE:
+                    addUserGroupRole( user, newRole, group );
+                    removeUserGroupRole( user, role, group );
+                    // the user's user-group-role set is updated, i.e. the old one is removed and the new one added -
+                    // no need to do an additional delete in the database
+                    logChars = Privilege.REPLACE_ROLE.toString()+"('"
+                                    + user.getName() + "', '"
+                                    + role.getName() + "', '"
+                                    + newRole.getName() + "')";
+                    break; 
+            }
+            syncPrivilegeWithDatabase( user, logChars );
+    }
+    
+    private void handlePrivileges( Privilege privilege, User user, Group group, Role role )
+                    throws DataBackendException, UnknownEntityException
+    {
+        handlePrivileges( privilege, user, group, role, null );    
+    }
+
+    private void syncPrivilegeWithDatabase( User user, String logChars)
+        throws DataBackendException
+    {
+        Connection con = null;
+
+        try
+        {
+            con = Transaction.begin();
+            // save only the new user group may be the better contract, but this would 
+            //  require/add a dependency to initTurbineUserGroupRoles()
+            //((TorqueAbstractSecurityEntity)user).save( con );
+            // update only user
+            ((TorqueAbstractSecurityEntity)user).update(con);
+            //((TorqueAbstractSecurityEntity)group).update(con);
+            //((TorqueAbstractSecurityEntity)role).update(con);
+            Transaction.commit(con);
+            con = null;
+        }
+        catch (TorqueException e)
+        {
+            throw new DataBackendException(logChars +" failed", e);
+        }
+        catch ( Exception e )
+        {
+            throw new DataBackendException(logChars +" failed", e);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
         }
     }
 }

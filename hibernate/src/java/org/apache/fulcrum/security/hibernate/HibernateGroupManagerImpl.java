@@ -38,6 +38,10 @@ import org.hibernate.HibernateException;
 @SuppressWarnings("unchecked")
 public class HibernateGroupManagerImpl extends AbstractGroupManager
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private PersistenceHelper persistenceHelper;
 
     /**

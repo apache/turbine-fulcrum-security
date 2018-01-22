@@ -84,12 +84,12 @@ public class TurbineDefaultModelManagerLazyTest
         	con = Transaction.begin();// "default"
 
         	Criteria criteria = new Criteria();
-            criteria.where(TurbineUserGroupRolePeer.USER_ID, 0, Criteria.GREATER_THAN);
+            criteria.where(TurbineUserGroupRolePeer.USER_ID, -1, Criteria.GREATER_THAN);
             
             TurbineUserGroupRolePeer.doDelete(criteria,con);
 
             criteria = new Criteria();
-            criteria.where(TurbineRolePermissionPeer.ROLE_ID, 0, Criteria.GREATER_THAN);
+            criteria.where(TurbineRolePermissionPeer.ROLE_ID, -1, Criteria.GREATER_THAN);
             TurbineRolePermissionPeer.doDelete(criteria,con);
 
             criteria = new Criteria();

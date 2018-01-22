@@ -83,7 +83,7 @@ public class TurbineDefaultModelManagerTest
         	con = Transaction.begin();// "default"
 
         	Criteria criteria = new Criteria();
-            criteria.where(TurbineUserGroupRolePeer.USER_ID, 0, Criteria.GREATER_THAN);
+            criteria.where(TurbineUserGroupRolePeer.USER_ID, -1, Criteria.GREATER_THAN);
             
             TurbineUserGroupRolePeer.doDelete(criteria,con);
 
@@ -112,7 +112,8 @@ public class TurbineDefaultModelManagerTest
         }
         catch (TorqueException e)
         {
-        	fail(e.toString());
+            e.printStackTrace();
+            fail(e.getMessage());
         } catch (SQLException e) {
         	 if (con != null)
              {

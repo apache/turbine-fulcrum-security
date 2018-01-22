@@ -259,32 +259,32 @@ public abstract class DefaultAbstractTurbineRole extends TorqueAbstractTurbineTu
             }
         }
 
-        try
-        {
-            Set<TurbineUserGroupRole> userGroupRoleSet = getUserGroupRoleSet();
-            if (userGroupRoleSet != null && !userGroupRoleSet.isEmpty())
-            {
-                Criteria criteria = new Criteria();
-
-                /* remove old entries */
-                criteria.where(TurbineUserGroupRolePeer.ROLE_ID, getEntityId());
-                TurbineUserGroupRolePeer.doDelete(criteria, con);
-
-                for (TurbineUserGroupRole ugr : userGroupRoleSet)
-                {
-                    org.apache.fulcrum.security.torque.om.TurbineUserGroupRole ttugr = new org.apache.fulcrum.security.torque.om.TurbineUserGroupRole();
-                    ttugr.setGroupId((Integer)ugr.getGroup().getId());
-                    ttugr.setUserId((Integer)ugr.getUser().getId());
-                    ttugr.setRoleId((Integer)ugr.getRole().getId());
-                    ttugr.save(con);
-                }
-            }
-            save(con);
-        }
-        catch (Exception e)
-        {
-            throw new TorqueException(e);
-        }
+        // role permission change does not require reassignment of user-group-roles? commented for now   
+//        try
+//        {
+//            Set<TurbineUserGroupRole> userGroupRoleSet = getUserGroupRoleSet();
+//            if (userGroupRoleSet != null && !userGroupRoleSet.isEmpty())
+//            {
+//                Criteria criteria = new Criteria();
+//
+//                criteria.where(TurbineUserGroupRolePeer.ROLE_ID, getEntityId());
+//                TurbineUserGroupRolePeer.doDelete(criteria, con);
+//
+//                for (TurbineUserGroupRole ugr : userGroupRoleSet)
+//                {
+//                    org.apache.fulcrum.security.torque.om.TurbineUserGroupRole ttugr = new org.apache.fulcrum.security.torque.om.TurbineUserGroupRole();
+//                    ttugr.setGroupId((Integer)ugr.getGroup().getId());
+//                    ttugr.setUserId((Integer)ugr.getUser().getId());
+//                    ttugr.setRoleId((Integer)ugr.getRole().getId());
+//                    ttugr.save(con);
+//                }
+//            }
+//            save(con);
+//        }
+//        catch (Exception e)
+//        {
+//            throw new TorqueException(e);
+//        }
     }
 
     /**
