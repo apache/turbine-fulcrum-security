@@ -26,8 +26,8 @@
   <body>
       <release version="1.1.2" date="in Subversion">
       <action type="update" dev="gk">
-         - added revokeAll group/role method in model manager
-         - method getUserGroupRoleSet, addUserGroupRole, removeUserGroupRole now throws DataBackendException, changed interface TurbineUserGroupRoleEntity
+         - added replace role and revokeAll group/role methods in model manager.
+         - method getUserGroupRoleSet, addUserGroupRole, removeUserGroupRole now throws DataBackendException, changed interface TurbineUserGroupRoleEntity.
       </action>
     </release>
      <release version="1.1.1" date="2017-05-12">
