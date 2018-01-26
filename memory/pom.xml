@@ -19,12 +19,12 @@
     <parent>
         <artifactId>fulcrum-security</artifactId>
         <groupId>org.apache.fulcrum</groupId>
-        <version>1.1.2</version>
+        <version>1.1.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>fulcrum-security-memory</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3-SNAPSHOT</version>
     <name>Fulcrum Security Memory Impl</name>
     <description>
       Fulcrum Security Memory Impl is an implementation of the Fulcrum Security API
@@ -32,9 +32,9 @@
     </description>
     <url>http://turbine.apache.org/fulcrum/fulcrum-security/fulcrum-security-memory</url>
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-security-1.1.2/memory</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-security-1.1.2/memory</developerConnection>
-        <url>http://svn.apache.org/viewvc/turbine/fulcrum/tags/fulcrum-security-1.1.2/memory</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/memory/</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/memory/</developerConnection>
+        <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/security/memory/</url>
     </scm>
 
     <build>
