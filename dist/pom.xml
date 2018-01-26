@@ -21,19 +21,19 @@
     <parent>
         <artifactId>fulcrum-security</artifactId>
         <groupId>org.apache.fulcrum</groupId>
-        <version>1.1.2-SNAPSHOT</version>
+        <version>1.1.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>fulcrum-security-dist</artifactId>
-    <version>1.1.2-SNAPSHOT</version>
+    <version>1.1.2</version>
     <packaging>pom</packaging>
     <name>Fulcrum Security Distribution Build</name>
     
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/dist/</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/dist/</developerConnection>
-        <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/security/dist/</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-security-1.1.2/dist</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-security-1.1.2/dist</developerConnection>
+        <url>http://svn.apache.org/viewvc/turbine/fulcrum/tags/fulcrum-security-1.1.2/dist</url>
     </scm>
     
     <!-- NOTE: These dependency declarations are only required to sort this project to the 
