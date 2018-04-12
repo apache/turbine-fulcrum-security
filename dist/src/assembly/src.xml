@@ -45,6 +45,7 @@
               <exclude>.settings/**</exclude>
               <exclude>.classpath</exclude>
               <exclude>.project</exclude>
+              <exclude>pom.xml.releaseBackup</exclude>
             </excludes>
           </fileSet>
         </fileSets>
