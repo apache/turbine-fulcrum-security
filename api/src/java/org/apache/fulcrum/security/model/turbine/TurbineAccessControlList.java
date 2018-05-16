@@ -44,7 +44,7 @@ import org.apache.fulcrum.security.util.RoleSet;
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id: AccessControlList.java 615328 2008-01-25 20:25:05Z tv $
  */
-public interface TurbineAccessControlList extends Serializable, AccessControlList
+public interface TurbineAccessControlList<T extends TurbineAccessControlList<T>> extends Serializable, AccessControlList 
 {
     /**
      * Retrieves a set of Roles an user is assigned in a Group.
