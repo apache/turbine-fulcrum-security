@@ -31,6 +31,10 @@
     <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/security/torque/</url>
   </scm>
 
+   <properties>
+        <torque.om>org.apache.fulcrum.security.torque.om</torque.om>
+        <torque.om.path>org/apache/fulcrum/security/torque/om</torque.om.path>
+   </properties>
   <build>
     <sourceDirectory>src/java</sourceDirectory>
     <testSourceDirectory>src/test</testSourceDirectory>
@@ -109,7 +113,7 @@
                   <loglevel>error</loglevel>
                   <options>
                     <torque.database>mysql</torque.database>
-                    <torque.om.package>org.apache.fulcrum.security.torque.om</torque.om.package>
+                    <torque.om.package>${torque.om}</torque.om.package>
                     <torque.om.addGetByNameMethods>false</torque.om.addGetByNameMethods>
                     <torque.om.save.saveException>TorqueException</torque.om.save.saveException>
                     <torque.om.useIsForBooleanGetters>true</torque.om.useIsForBooleanGetters>
@@ -345,6 +349,24 @@
               </dependency>
             </dependencies>
           </plugin>
+          <plugin><!-- clean up for torque-generate sources mysql  -->
+              <artifactId>maven-clean-plugin</artifactId>
+              <version>3.1.0</version>
+              <configuration>
+                  <filesets>
+                       <fileSet>
+                          <directory>${project.build.sourceDirectory}/${torque.om.path}</directory>
+                          <excludes><!-- no peer interface configurable in Torque 4.0 --> 
+                            <exclude>TurbineUserPeerImpl.java</exclude>
+                            <exclude>TurbineGroupPeerImpl.java</exclude>
+                            <exclude>TurbineRolePeerImpl.java</exclude>
+                            <exclude>TurbinePermissionPeerImpl.java</exclude>
+                            <exclude>TurbineUserGroupRolePeerImpl.java</exclude>
+                          </excludes>
+                        </fileSet>
+                  </filesets>
+              </configuration>
+           </plugin>
         </plugins>
       </build>
     </profile>
