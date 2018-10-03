@@ -78,7 +78,7 @@
     <column name="FIRST_NAME" size="64" type="VARCHAR" javaName="FirstName"/>
     <column name="LAST_NAME" size="64" type="VARCHAR" javaName="LastName"/>
     <column name="EMAIL" size="64" type="VARCHAR" javaName="Email"/>
-    <column name="OBJECTDATA" type="VARBINARY" javaName="Objectdata"/>
+    <column name="OBJECTDATA" size="800" type="VARBINARY" javaName="Objectdata"/>
     <unique>
         <unique-column name="LOGIN_NAME"/>
     </unique>
