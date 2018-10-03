@@ -190,7 +190,7 @@ public class TurbineUserGroupRole implements Serializable
     @Override
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         sb.append(null != getUser() ? getUser().toString() : "null");
         sb.append('\n');

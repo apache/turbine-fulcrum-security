@@ -103,7 +103,7 @@ public class RoleSet extends SecuritySet<Role>
     @Override
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("RoleSet: ");
         sb.append(super.toString());
 

@@ -161,7 +161,7 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
     @Override
     public String toString()
     {
-        StringBuffer sbuf = new StringBuffer(12 * size());
+        StringBuilder sbuf = new StringBuilder(12 * size());
 
         for (Iterator<T> it = iterator(); it.hasNext();)
         {

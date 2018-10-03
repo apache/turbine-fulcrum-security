@@ -37,7 +37,7 @@ public class ActiveDirectoryUserManagerImpl extends LDAPUserManagerImpl
      */
     protected String getDN(LDAPUser user)
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         sb.append("CN=");
         sb.append(user.getFirstName()).append(' ').append(user.getLastName());

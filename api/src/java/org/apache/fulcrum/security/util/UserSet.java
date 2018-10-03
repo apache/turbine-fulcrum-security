@@ -100,7 +100,7 @@ public class UserSet<T extends User> extends SecuritySet<User>
     @Override
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("UserSet: ");
         sb.append(super.toString());
 

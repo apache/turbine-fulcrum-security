@@ -114,7 +114,7 @@ public class HsqlDB
         FileReader fr = new FileReader(fileName);
 
         char fileBuf[] = new char[1024];
-        StringBuffer sb = new StringBuffer(1000);
+        StringBuilder sb = new StringBuilder(1000);
         int res = -1;
 
         while ((res = fr.read(fileBuf, 0, 1024)) > -1)
