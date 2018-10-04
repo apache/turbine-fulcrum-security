@@ -52,7 +52,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.turbine</groupId>
+      <groupId>org.apache.fulcrum</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
       <scope>test</scope>
     </dependency>

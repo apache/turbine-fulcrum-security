@@ -79,14 +79,23 @@
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
+        <!-- testing dependencies -->
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <version>3.1.0</version>
+		    <scope>test</scope>
+		</dependency>        
         <dependency>
             <groupId>org.apache.fulcrum</groupId>
             <artifactId>fulcrum-testcontainer</artifactId>
+            <version>1.0.8-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.turbine</groupId>
+            <groupId>org.apache.fulcrum</groupId>
             <artifactId>fulcrum-yaafi</artifactId>
+            <version>1.0.8-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
