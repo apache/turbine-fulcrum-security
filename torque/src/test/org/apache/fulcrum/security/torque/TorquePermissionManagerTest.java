@@ -35,7 +35,7 @@ public class TorquePermissionManagerTest extends AbstractPermissionManagerTest
     @Before
     public void setUp() throws Exception
     {
-        hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-dynamic-schema.sql");
+        hsqlDB = new HsqlDB("src/test/fulcrum-dynamic-schema.sql");
         hsqlDB.addSQL("src/test/fulcrum-turbine-schema.sql");
         hsqlDB.addSQL("src/test/id-table-schema.sql");
         hsqlDB.addSQL("src/test/fulcrum-dynamic-schema-idtable-init.sql");

@@ -51,7 +51,7 @@ public class TorqueBasicModelManagerTest extends AbstractModelManagerTest
     {
         if(hsqlDB == null)
         {
-            hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-basic-schema.sql");
+            hsqlDB = new HsqlDB("src/test/fulcrum-basic-schema.sql");
             hsqlDB.addSQL("src/test/id-table-schema.sql");
             hsqlDB.addSQL("src/test/fulcrum-basic-schema-idtable-init.sql");
         }

@@ -20,121 +20,119 @@ package org.apache.fulcrum.security.torque;
  */
 
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 import org.apache.commons.lang.StringUtils;
 import org.hsqldb.jdbcDriver;
 
 /**
- * This Class provides a nice Setup for a Hypersonic SQL Server,
- * which will only be held in Memory.
+ * This Class provides a nice Setup for a Hypersonic SQL Server, which will only
+ * be held in Memory.
  *
  * It allows loading of .sql Files, to setup Tests easily.
  *
  * @author <a href="jh@byteaction.de">J&#252;rgen Hoffmann</a>
  */
-public class HsqlDB
-{
-    private Connection connection = null;
+public class HsqlDB {
+	private Connection connection = null;
+	private static String URI = "jdbc:hsqldb:.";
 
-    public HsqlDB(String uri, String loadFile) throws Exception
-    {
-        Class.forName(jdbcDriver.class.getName());
+	public HsqlDB(String loadFile) throws Exception {
+		Class.forName(jdbcDriver.class.getName());
+		this.connection = DriverManager.getConnection(URI, "SA", "");
+		if (StringUtils.isNotEmpty(loadFile)) {
+			loadSqlFile(loadFile);
+		}
+	}
 
-        this.connection = DriverManager.getConnection(uri, "sa", "");
+	public HsqlDB(File loadFile) throws Exception {
+		this(loadFile.getAbsolutePath());
+	}
 
-        if(StringUtils.isNotEmpty(loadFile))
-        {
-            loadSqlFile(loadFile);
-        }
-    }
+	public Connection getConnection() {
+		return connection;
+	}
 
-    public HsqlDB(String uri, File loadFile) throws Exception
-    {
-        this(uri, loadFile.getAbsolutePath());
-    }
+	public void close() {
+		try {
+			connection.close();
+		} catch (Exception e) {
+		}
+	}
 
-    public Connection getConnection()
-    {
-        return connection;
-    }
+	/**
+	 * Load a sql file and process its statements
+	 */
+	private void loadSqlFile(String fileName) throws Exception {
+		Statement statement = null;
+		try {
+			statement = connection.createStatement();
+			// execute each statement on its own
+			List<String> commands = getFileContents(fileName);
+			for (String cmd : commands)
+				statement.executeUpdate(cmd);
 
-    public void close()
-    {
-        try
-        {
-            connection.close();
-        }
-        catch (Exception e)
-        {
-        }
-    }
+		} finally {
+			if (statement != null) {
+				statement.close();
+			}
+		}
+	}
 
-    private void loadSqlFile(String fileName) throws Exception
-    {
-        Statement statement = null;
-        try
-        {
-            statement = connection.createStatement();
-            String commands = getFileContents(fileName);
-            statement.execute(commands);
+	private List<String> getFileContents(String fileName) throws Exception {
 
-/*            
-            for (int targetPos = commands.indexOf(';'); targetPos > -1; targetPos = commands.indexOf(';'))
-            {
-                String cmd = commands.substring(0, targetPos + 1);
-                try
-                {
-                    statement.execute(cmd);
-                }
-                catch (SQLException sqle)
-                {
-                    log.warn("Statement: " + cmd + ": " + sqle.getMessage());
-                }
+		StringBuilder sb = new StringBuilder(1000);
+		Scanner s = null;
+		try {
+			InputStream is = new FileInputStream(new File(fileName));
+			s = new Scanner(is);
+			s.useDelimiter("(\r?\n)");
 
-                commands = commands.substring(targetPos + 2);
-            }
-*/
-        }
-        finally
-        {
-            if(statement != null)
-            {
-                statement.close();
-            }
-        }
-    }
+			boolean inComment = false;
+			while (s.hasNext()) {
+				String line = s.next();
 
-    private String getFileContents(String fileName) throws Exception
-    {
-        System.out.println(fileName);
-        FileReader fr = new FileReader(fileName);
+				if (inComment == true) {
+					if (line.endsWith("*/"))
+						inComment = false;
+				} else {
+					// test for comments
+					if (!line.startsWith("--")) {
+						if (line.trim().length() > 0) {
+							sb.append(line);
+						}
+					}
+				}
+			}
+		} finally {
+			if (s != null)
+				s.close();
+		}
 
-        char fileBuf[] = new char[1024];
-        StringBuilder sb = new StringBuilder(1000);
-        int res = -1;
+		String sql = sb.toString();
+		sb = new StringBuilder();
+		String[] commands = sql.split(";");
+		List<String> sqlCmds = new ArrayList<>();
+		for (String cmd : commands)
+			sqlCmds.add(cmd + ";\n");
 
-        while ((res = fr.read(fileBuf, 0, 1024)) > -1)
-        {
-            sb.append(fileBuf, 0, res);
-        }
-        fr.close();
-        return sb.toString();
-    }
+		return sqlCmds;
+	}
 
-    public void addSQL(String sqlFile) throws Exception
-    {
-        if(StringUtils.isNotEmpty(sqlFile))
-        {
-            loadSqlFile(sqlFile);
-        }
-    }
+	public void addSQL(String sqlFile) throws Exception {
+		if (StringUtils.isNotEmpty(sqlFile)) {
+			loadSqlFile(sqlFile);
+		}
+	}
 
-    public void addSQL(File sqlFile) throws Exception
-    {
-        this.addSQL(sqlFile.getAbsolutePath());
-    }
+	public void addSQL(File sqlFile) throws Exception {
+		this.addSQL(sqlFile.getAbsolutePath());
+	}
 }

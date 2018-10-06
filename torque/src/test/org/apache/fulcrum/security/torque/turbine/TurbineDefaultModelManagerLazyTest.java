@@ -55,7 +55,7 @@ public class TurbineDefaultModelManagerLazyTest
 
         try
         {
-            hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-turbine-default-schema.sql");
+            hsqlDB = new HsqlDB("src/test/fulcrum-turbine-default-schema.sql");
             // we do not need id-broker,set native in schema and added identity in hsql
             // same for both flavors
             this.setRoleFileName("src/test/TurbineTorqueRoleConfig.xml");

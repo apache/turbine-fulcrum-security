@@ -54,7 +54,7 @@ public class TurbineUserManagerDefaultPeerLazyTest extends AbstractTurbineUserMa
     {
         try
         {
-            hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-turbine-default-schema.sql");
+            hsqlDB = new HsqlDB("src/test/fulcrum-turbine-default-schema.sql");
             
             this.setRoleFileName("src/test/TurbineTorqueRoleConfig.xml");
             // we have to use declared peers 

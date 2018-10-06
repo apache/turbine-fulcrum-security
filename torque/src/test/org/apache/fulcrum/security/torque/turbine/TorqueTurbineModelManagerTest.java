@@ -51,7 +51,7 @@ public class TorqueTurbineModelManagerTest
     {
         try
         {
-            hsqlDB = new HsqlDB("jdbc:hsqldb:.", "src/test/fulcrum-turbine-schema.sql");
+            hsqlDB = new HsqlDB("src/test/fulcrum-turbine-schema.sql");
             hsqlDB.addSQL("src/test/id-table-schema.sql");
             hsqlDB.addSQL("src/test/fulcrum-turbine-schema-idtable-init.sql");
 
