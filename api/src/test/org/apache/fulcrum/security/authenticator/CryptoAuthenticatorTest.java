@@ -36,7 +36,7 @@ public class CryptoAuthenticatorTest extends BaseUnit4Test
 
 {
     private static final String preDefinedInput = "Oeltanks";
-    private static final String preDefinedResult = "uVDiJHaavRYX8oWt5ctkaa7j1cw=";
+    private static final String preDefinedResult = "XBSqev4ilv7P7852G2rL5WgX3FLy8VzfOY+tVq+xjek=";
 
 
     @Before
@@ -63,4 +63,5 @@ public class CryptoAuthenticatorTest extends BaseUnit4Test
         assertTrue(authenticator.authenticate(user, preDefinedInput));
         assertFalse(authenticator.authenticate(user, "mypassword"));
     }
+    
 }

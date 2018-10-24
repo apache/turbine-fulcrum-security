@@ -22,7 +22,7 @@
 
   <authenticator>
       <algorithm>java</algorithm>
-      <cipher>SHA1</cipher>
+      <cipher>SHA-256</cipher>
 </authenticator>
 
    <crypto>
