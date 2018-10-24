@@ -21,7 +21,7 @@ package org.apache.fulcrum.security.model.basic.entity.impl;
 
 import java.util.Set;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;

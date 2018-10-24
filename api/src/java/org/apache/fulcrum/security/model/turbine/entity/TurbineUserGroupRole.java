@@ -21,7 +21,7 @@ package org.apache.fulcrum.security.model.turbine.entity;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.entity.User;

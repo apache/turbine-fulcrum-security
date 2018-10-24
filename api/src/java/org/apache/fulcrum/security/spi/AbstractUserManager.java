@@ -18,7 +18,7 @@ package org.apache.fulcrum.security.spi;
  * specific language governing permissions and limitations
  * under the License.
  */
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
 import org.apache.fulcrum.security.authenticator.Authenticator;
