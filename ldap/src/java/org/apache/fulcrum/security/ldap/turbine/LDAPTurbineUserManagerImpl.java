@@ -18,7 +18,7 @@ package org.apache.fulcrum.security.ldap.turbine;
  * specific language governing permissions and limitations
  * under the License.
  */
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.ldap.LDAPUserManagerImpl;
 import org.apache.fulcrum.security.model.turbine.TurbineUserManager;
