@@ -73,8 +73,9 @@ public interface DynamicModelManager extends ModelManager
      * 
      * This method is used when adding a permission to a role
      * 
-     * @param user
-     *            the User.
+     * @param role the Role
+     * @param permission the Permission
+     *
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      * @throws UnknownEntityException
@@ -84,9 +85,10 @@ public interface DynamicModelManager extends ModelManager
 
     /**
      * Removes a permission from a role
+     *
+     * @param role the Role
+     * @param permission the Permission
      * 
-     * @param role
-     *            the Role.
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      * @throws UnknownEntityException
@@ -99,8 +101,9 @@ public interface DynamicModelManager extends ModelManager
      * 
      * This method is used when adding a user to a group
      * 
-     * @param user
-     *            the User.
+     * @param user the User
+     * @param group the Group
+	 *
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      * @throws UnknownEntityException
@@ -111,8 +114,9 @@ public interface DynamicModelManager extends ModelManager
     /**
      * Removes a user from a group
      * 
-     * @param user
-     *            the User.
+     * @param user the User
+     * @param group the Group
+     * 
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      * @throws UnknownEntityException
@@ -125,8 +129,8 @@ public interface DynamicModelManager extends ModelManager
      * 
      * This method is typically used when deleting an account.
      * 
-     * @param user
-     *            the User.
+     * @param user the User
+     * 
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      * @throws UnknownEntityException
@@ -183,16 +187,26 @@ public interface DynamicModelManager extends ModelManager
      *            A
      * @param delegatee
      *            B
+     *            
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the Group is not present.
      */
     void addDelegate(User delegator, User delegatee) throws DataBackendException, UnknownEntityException;
 
     /**
      * Stop A having B's roles, groups and permissions
      * 
-     * @param delegate
+     * @param delegator
      *            A
      * @param delegatee
      *            B
+     *            
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the Group is not present.
      */
     void removeDelegate(User delegator, User delegatee) throws DataBackendException, UnknownEntityException;
 }

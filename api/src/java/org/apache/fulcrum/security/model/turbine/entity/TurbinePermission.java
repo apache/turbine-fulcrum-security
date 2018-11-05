@@ -71,6 +71,7 @@ public interface TurbinePermission extends Permission
      * 
      * @param roles
      *            a set of roles
+     * @param <T> Role
      */
     public <T extends Role> void setRolesAsSet(Set<T> roles);
 

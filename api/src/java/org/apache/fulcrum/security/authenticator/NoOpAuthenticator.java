@@ -25,30 +25,22 @@ import org.apache.fulcrum.security.util.DataBackendException;
 /**
  * This class authenticates by returning TRUE always. Regardless of the user and
  * password data.
+ * 
+ * 
+ * avalon.component name="noop-authenticator" avalon.service
+ * type="org.apache.fulcrum.security.authenticator.Authenticator"
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
- * @avalon.component name="noop-authenticator"
- * @avalon.service
- *                 type="org.apache.fulcrum.security.authenticator.Authenticator"
+ * 
  */
-public class NoOpAuthenticator extends AbstractLogEnabled implements Authenticator
-{
-    /**
-     * Authenticate an username with the specified password. Always returns
-     * true.
-     *
-     *
-     * @param user
-     *            object
-     * @param password
-     *            the user supplied password.
-     * @exception DataBackendException
-     *                if there is a problem accessing the storage.
-     */
-    @Override
-    public boolean authenticate(User user, String password) throws DataBackendException
-    {
-        return true;
-    }
+public class NoOpAuthenticator extends AbstractLogEnabled implements Authenticator {
+
+	/* (non-Javadoc)
+	 * @see org.apache.fulcrum.security.authenticator.Authenticator#authenticate(org.apache.fulcrum.security.entity.User, java.lang.String)
+	 */
+	@Override
+	public boolean authenticate(User user, String password) throws DataBackendException {
+		return true;
+	}
 }

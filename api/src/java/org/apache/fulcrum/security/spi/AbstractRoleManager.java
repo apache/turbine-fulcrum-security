@@ -35,7 +35,15 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public abstract class AbstractRoleManager extends AbstractEntityManager implements RoleManager
 {
-    protected abstract <T extends Role> T persistNewRole(T role) throws DataBackendException;
+    /** default serial id */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * @param role to persist
+	 * @return the Role object
+	 * @throws DataBackendException if fail to connect to datasource
+	 */
+	protected abstract <T extends Role> T persistNewRole(T role) throws DataBackendException;
 
     /**
      * Construct a blank Role object.
@@ -87,6 +95,8 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
     /**
      * Retrieve a Role object with specified name.
      *
+     * @see org.apache.fulcrum.security.RoleManager#getRoleByName(java.lang.String)
+     *
      * @param name
      *            the name of the Role.
      * @return an object representing the Role with specified name.
@@ -94,6 +104,7 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
      *             if there was an error accessing the data backend.
      * @throws UnknownEntityException
      *             if the role does not exist.
+     * 
      */
     @Override
 	public <T extends Role> T getRoleByName(String name) throws DataBackendException, UnknownEntityException
@@ -110,8 +121,8 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
     /**
      * Retrieve a Role object with specified Id.
      *
-     * @param name
-     *            the name of the Role.
+     * @param id
+     *            the ID of the Role.
      *
      * @return an object representing the Role with specified name.
      *

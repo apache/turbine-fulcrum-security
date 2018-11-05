@@ -99,7 +99,7 @@ public class PermissionSet extends SecuritySet<Permission>
     /**
      * Print out a PermissionSet as a String
      * 
-     * @returns The Permission Set as String
+     * @return The Permission Set as String
      * 
      */
     @Override

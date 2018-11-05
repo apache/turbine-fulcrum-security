@@ -35,13 +35,14 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  * or mapped to method names as listed below:
  * 
  * <ul>
- * <li>Turbine (framework) user manager method(s) -> method(s) in this (Fulcrum )manager 
- * <li>createAccount -> {@link #addUser(User, String)}
- * <li>removeAccount -> {@link #removeUser(User)}
- * <li>store -> {@link #saveUser(User)}
- * <li>retrieve (2x)-> {@link #getUser(String)}, {@link #getUser(String, String)}
- * <li>retrieveList -> {@link #getAllUsers()}
- * <li>accountExists (2x)-> {@link #checkExists(String)}, {@link #checkExists(User)}
+ * <li>Turbine (framework) user manager method(s) -&gt; method(s) in this (Fulcrum) manager
+ * <li>createAccount -&gt; {@link #addUser(User, String)}
+ * <li>removeAccount -&gt; {@link #removeUser(User)}
+ * <li>store -&gt; {@link #saveUser(User)}
+ * <li>retrieve (2x)-&gt; {@link #getUser(String)}, {@link #getUser(String, String)}
+ * <li>retrieveList -&gt; {@link #getAllUsers()}
+ * <li>accountExists (2x)-&gt; {@link #checkExists(String)}, {@link #checkExists(User)}
+ * </ul>
  * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
@@ -62,11 +63,8 @@ public interface TurbineUserManager extends UserManager
      * Checks whether a passed user object matches the anonymous user pattern
      * according to the configured user manager
      *
-     * @param An
-     *            user object
-     *
+     * @param user A user object
      * @return True if this is an anonymous user
-     *
      */
-    boolean isAnonymousUser(User u);
+    boolean isAnonymousUser(User user);
 }

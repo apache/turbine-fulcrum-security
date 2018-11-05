@@ -109,8 +109,8 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
     /**
      * Retrieve a Permission object with specified Id.
      *
-     * @param name
-     *            the name of the Permission.
+     * @param id
+     *            the ID of the Permission.
      *
      * @return an object representing the Permission with specified name.
      *
@@ -176,7 +176,7 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
      *
      * The name is used for looking up the permission
      *
-     * @param role
+     * @param permission
      *            The permission to be checked.
      * @return true if the specified permission exists
      * @throws DataBackendException

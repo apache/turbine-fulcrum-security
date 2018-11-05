@@ -39,9 +39,6 @@ import org.junit.Test;
 
 /**
  * @author Eric Pugh
- * 
- *         To change the template for this generated type comment go to
- *         Window>Preferences>Java>Code Generation>Code and Comments
  */
 public abstract class AbstractUserManagerTest extends BaseUnit4Test
 {
@@ -166,8 +163,9 @@ public abstract class AbstractUserManagerTest extends BaseUnit4Test
         userManager.authenticate(user, "JC_SUBSET");
     }
 
-    /*
+    /**
      * Class to test for User getUserInstance()
+     * @throws Exception generic exception
      */
     @Test
     public void testGetUserInstance() throws Exception
@@ -177,8 +175,10 @@ public abstract class AbstractUserManagerTest extends BaseUnit4Test
         assertTrue(user.getName() == null);
     }
 
-    /*
+    /**
      * Class to test for User getUserInstance(String)
+     * 
+     * @throws Exception generic exception
      */
     @Test
     public void testGetUserInstanceString() throws Exception
@@ -191,12 +191,12 @@ public abstract class AbstractUserManagerTest extends BaseUnit4Test
      * Need to figure out if save is something we want.. right now it just bloes
      * up if you actually cahnge anything.
      * 
-     * @todo figur out what to do here...
-     * @throws Exception
+     * @throws Exception generic exception
      */
     @Test
     public void testSaveUser() throws Exception
     {
+    	// TODO figure out what to do here
         user = userManager.getUserInstance("Kate");
         userManager.addUser(user, "katiedid");
         user = userManager.getUser(user.getName());

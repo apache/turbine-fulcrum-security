@@ -45,7 +45,7 @@ public interface BasicAccessControlList extends Serializable, AccessControlList
     /**
      * Checks if the user is assigned a specific Group
      * 
-     * @param role
+     * @param group
      *            the Group
      * @return <code>true</code> if the user is assigned to the Group
      */
@@ -54,7 +54,7 @@ public interface BasicAccessControlList extends Serializable, AccessControlList
     /**
      * Checks if the user is assigned a specific Group
      * 
-     * @param role
+     * @param group
      *            the group name
      * @return <code>true</code>if the user is assigned the Group.
      */

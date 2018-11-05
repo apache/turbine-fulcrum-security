@@ -32,23 +32,32 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 /**
  * This implementation keeps all objects in memory. This is mostly meant to help
  * with testing and prototyping of ideas.
- *
- * @todo Need to load up Crypto component and actually encrypt passwords!
+ * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
+
+// TODO Need to load up Crypto component and actually encrypt passwords!
+
 public abstract class AbstractUserManager extends AbstractEntityManager implements UserManager
 {
-    /**
-     * 
-     */
+    /** ID **/
     private static final long serialVersionUID = 1L;
 
+    /**
+     * @param user user to persist
+     * @param <T> User type
+     * @return a User object
+     * @throws DataBackendException if fail to connect
+     */
     protected abstract <T extends User> T persistNewUser(T user) throws DataBackendException;
 
     private ACLFactory aclFactory;
     private Authenticator authenticator;
 
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.UserManager#getACL(org.apache.fulcrum.security.entity.User)
+     */
     @Override
 	public <T extends AccessControlList> T getACL(User user) throws UnknownEntityException
     {

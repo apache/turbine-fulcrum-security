@@ -41,10 +41,8 @@ public class BasicACLFactory extends AbstractManager implements ACLFactory
      * This constructs a new ACL object from the configured class and
      * initializes it with the supplied roles and permissions.
      *
-     * @param roles
-     *            The roles that this ACL should contain
-     * @param permissions
-     *            The permissions for this ACL
+     * @param groupSet
+     *            The GroupSet that this ACL should contain
      *
      * @return an object implementing ACL interface.
      * @throws UnknownEntityException
@@ -66,6 +64,9 @@ public class BasicACLFactory extends AbstractManager implements ACLFactory
         return accessControlList;
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.model.ACLFactory#getAccessControlList(org.apache.fulcrum.security.entity.User)
+     */
     public <T extends AccessControlList> T getAccessControlList(User user)
     {
         GroupSet groupSet = ((BasicUser) user).getGroups();

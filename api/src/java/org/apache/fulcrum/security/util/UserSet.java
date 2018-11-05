@@ -94,7 +94,7 @@ public class UserSet<T extends User> extends SecuritySet<User>
     /**
      * Print out a UserSet as a String
      * 
-     * @returns The User Set as String
+     * @return The User Set as String
      * 
      */
     @Override

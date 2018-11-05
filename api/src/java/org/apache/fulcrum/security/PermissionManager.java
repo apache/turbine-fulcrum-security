@@ -52,9 +52,8 @@ public interface PermissionManager extends Serializable
      * the default constructor.
      *
      * @return an object implementing Permission interface.
-     * @throws UnknownEntityException
-     *             if the object could not be instantiated.
-     * @throws DataBackendException 
+     * @throws DataBackendException
+     * 				if there was an error accessing the data backend. 
      */
     <T extends Permission> T getPermissionInstance() throws DataBackendException;
 
@@ -68,8 +67,8 @@ public interface PermissionManager extends Serializable
      *            The name of the Permission
      *
      * @return an object implementing Permission interface.
-     * @throws UnknownEntityException
-     *             if the object could not be instantiated.
+     * @throws DataBackendException
+     * 				if there was an error accessing the data backend. 
      */
     <T extends Permission> T getPermissionInstance(String permName) throws DataBackendException;
 
@@ -89,8 +88,8 @@ public interface PermissionManager extends Serializable
     /**
      * Retrieve a Permission object with specified Id.
      *
-     * @param name
-     *            the name of the Permission.
+     * @param id
+     *            the Id of the Permission.
      *
      * @return an object representing the Permission with specified name.
      *
@@ -157,8 +156,6 @@ public interface PermissionManager extends Serializable
      * @return true if the permission exists in the system, false otherwise
      * @throws DataBackendException
      *             when more than one Permission with the same name exists.
-     * @throws Exception
-     *             A generic exception.
      */
     boolean checkExists(Permission permission) throws DataBackendException;
 
@@ -171,8 +168,6 @@ public interface PermissionManager extends Serializable
      * @return true if the permission exists in the system, false otherwise
      * @throws DataBackendException
      *             when more than one Permission with the same name exists.
-     * @throws Exception
-     *             A generic exception.
      */
     boolean checkExists(String permissionName) throws DataBackendException;
 }

@@ -1,5 +1,7 @@
 package org.apache.fulcrum.security.entity.impl;
 
+import org.apache.commons.lang3.StringUtils;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -37,7 +39,7 @@ public class SecurityEntityImpl implements SecurityEntity
     private Object id;
 
     /**
-     * @return
+     * @return object id
      */
     public Object getId()
     {
@@ -45,7 +47,7 @@ public class SecurityEntityImpl implements SecurityEntity
     }
 
     /**
-     * @param id
+     * @param id the object id
      */
     public void setId(Object id)
     {
@@ -53,7 +55,7 @@ public class SecurityEntityImpl implements SecurityEntity
     }
 
     /**
-     * @return
+     * @return object name
      */
     public String getName()
     {
@@ -63,16 +65,15 @@ public class SecurityEntityImpl implements SecurityEntity
     /**
      * Pass in the name for this entity. Also lowercases it.
      * 
-     * @param name
+     * @param name name of entity
+     * @throws IllegalArgumentException must provide a name
      */
-    public void setName(String name)
+    public void setName(String name) throws IllegalArgumentException
     {
-        if (name == null)
-        {
+        if (StringUtils.isEmpty(name))
             throw new IllegalArgumentException("Must provide a valid name for all SecurityEntities.");
-        }
-
-        this.name = name.toLowerCase();
+        else
+        	this.name = name.toLowerCase();
     }
 
     @Override

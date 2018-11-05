@@ -59,7 +59,7 @@ public interface BasicGroup extends Group
     /**
      * Set the users that are part of this group as a Set
      * 
-     * @param userSet
+     * @param users
      *            a set of users
      */
     public <T extends User> void setUsersAsSet(Set<T> users);

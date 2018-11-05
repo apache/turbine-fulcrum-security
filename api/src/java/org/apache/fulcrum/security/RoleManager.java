@@ -45,14 +45,13 @@ public interface RoleManager extends Serializable
     String ROLE = RoleManager.class.getName();
 
     /**
-     * Construct a blank Role object.
+     * Construct a blank Role object
      *
      * This method calls getRoleClass, and then creates a new object using the
      * default constructor.
-     *
+     * 
      * @return an object implementing Role interface.
-     * @throws DataBackendException
-     *             if the object could not be instantiated.
+     * @throws DataBackendException if the object could not be instantiated
      */
     <T extends Role> T getRoleInstance() throws DataBackendException;
 
@@ -87,8 +86,8 @@ public interface RoleManager extends Serializable
     /**
      * Retrieve a Role object with specified Id.
      *
-     * @param name
-     *            the name of the Role.
+     * @param id
+     *            the Id of the Role.
      *
      * @return an object representing the Role with specified name.
      *
@@ -155,8 +154,6 @@ public interface RoleManager extends Serializable
      * @return true if the role exists in the system, false otherwise
      * @throws DataBackendException
      *             when more than one Role with the same name exists.
-     * @throws Exception
-     *             A generic exception.
      */
     boolean checkExists(Role role) throws DataBackendException;
 
@@ -169,8 +166,6 @@ public interface RoleManager extends Serializable
      * @return true if the role exists in the system, false otherwise
      * @throws DataBackendException
      *             when more than one Role with the same name exists.
-     * @throws Exception
-     *             A generic exception.
      */
     boolean checkExists(String roleName) throws DataBackendException;
 }

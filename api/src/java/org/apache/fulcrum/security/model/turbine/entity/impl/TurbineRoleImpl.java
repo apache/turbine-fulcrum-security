@@ -89,6 +89,7 @@ public class TurbineRoleImpl extends AbstractTurbineSecurityEntityImpl implement
      * 
      * @param permissions
      *            a set of permissions
+     * @param <T> Permission
      */
     public <T extends Permission> void setPermissionsAsSet(Set<T> permissions)
     {
@@ -98,7 +99,7 @@ public class TurbineRoleImpl extends AbstractTurbineSecurityEntityImpl implement
     /**
      * This method should only be used by a RoleManager. Not directly.
      * 
-     * @param permission
+     * @param permission the permission to add
      */
     public void addPermission(Permission permission)
     {
@@ -108,7 +109,7 @@ public class TurbineRoleImpl extends AbstractTurbineSecurityEntityImpl implement
     /**
      * This method should only be used by a RoleManager. Not directly.
      * 
-     * @param permission
+     * @param permission the permission to remove
      */
     public void removePermission(Permission permission)
     {

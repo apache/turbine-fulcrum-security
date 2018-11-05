@@ -35,23 +35,29 @@ import org.apache.fulcrum.security.util.UserSet;
  */
 public class BasicGroupImpl extends SecurityEntityImpl implements BasicGroup
 {
-    private Set<? extends User> userSet = new UserSet();
+    /**
+	 * Serial version
+	 */
+	private static final long serialVersionUID = 8754093174457116551L;
+	
+	/** User set **/
+	private Set<? extends User> userSet = new UserSet<>();
 
     /**
      * Get the users that are part of this group
      * 
      * @return a set of users
      */
-    public UserSet getUsers()
+    public UserSet<?> getUsers()
     {
         if (userSet instanceof UserSet)
         {
-            return (UserSet) userSet;
+            return (UserSet<?>) userSet;
         }
         else
         {
-            userSet = new UserSet(userSet);
-            return (UserSet) userSet;
+            userSet = new UserSet<>(userSet);
+            return (UserSet<?>) userSet;
         }
     }
 
@@ -69,7 +75,7 @@ public class BasicGroupImpl extends SecurityEntityImpl implements BasicGroup
         }
         else
         {
-            this.userSet = new UserSet();
+            this.userSet = new UserSet<>();
         }
     }
 
@@ -87,7 +93,7 @@ public class BasicGroupImpl extends SecurityEntityImpl implements BasicGroup
     /**
      * Set the users that are part of this group as a Set
      * 
-     * @param userSet
+     * @param users
      *            a set of users
      */
     public <T extends User> void setUsersAsSet(Set<T> users)

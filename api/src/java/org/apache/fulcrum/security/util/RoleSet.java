@@ -97,7 +97,7 @@ public class RoleSet extends SecuritySet<Role>
     /**
      * Print out a RoleSet as a String
      * 
-     * @returns The Role Set as String
+     * @return The Role Set as String
      * 
      */
     @Override

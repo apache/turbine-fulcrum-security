@@ -40,26 +40,26 @@ public interface BasicModelManager extends ModelManager
      * 
      * This method is used when adding a user to a group
      * 
-     * @param user
-     *            the User.
+     * @param user the User
+     * @param group the Group           
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      * @throws UnknownEntityException
      *             if the account is not present.
      */
-    void grant(User user, Group group) throws DataBackendException, UnknownEntityException;
+    public void grant(User user, Group group) throws DataBackendException, UnknownEntityException;
 
     /**
      * Removes a user from a group
      * 
-     * @param user
-     *            the User.
+     * @param user the User
+     * @param group the Group
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      * @throws UnknownEntityException
      *             if the user or group is not present.
      */
-    void revoke(User user, Group group) throws DataBackendException, UnknownEntityException;
+    public void revoke(User user, Group group) throws DataBackendException, UnknownEntityException;
 
     /**
      * Revokes all groups from an User.
@@ -73,5 +73,5 @@ public interface BasicModelManager extends ModelManager
      * @throws UnknownEntityException
      *             if the account is not present.
      */
-    void revokeAll(User user) throws DataBackendException, UnknownEntityException;
+    public void revokeAll(User user) throws DataBackendException, UnknownEntityException;
 }

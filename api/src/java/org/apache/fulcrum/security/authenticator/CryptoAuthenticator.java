@@ -36,12 +36,13 @@ import org.apache.fulcrum.security.util.DataBackendException;
 /**
  * This class authenticates using the Fulcrum Crypto service a user and their
  * password
+ * 
+ * avalon.component name="crypto-authenticator"
+ * avalon.service  type="org.apache.fulcrum.security.authenticator.Authenticator"
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
- * @avalon.component name="crypto-authenticator"
- * @avalon.service
- *                 type="org.apache.fulcrum.security.authenticator.Authenticator"
+ *                
  */
 public class CryptoAuthenticator extends AbstractLogEnabled implements Authenticator, Serviceable, Disposable, Configurable
 {
@@ -83,8 +84,8 @@ public class CryptoAuthenticator extends AbstractLogEnabled implements Authentic
     }
 
     // ---------------- Avalon Lifecycle Methods ---------------------
-    /**
-     * Avalon component lifecycle method
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
     @Override
     public void configure(Configuration conf) throws ConfigurationException
@@ -93,8 +94,8 @@ public class CryptoAuthenticator extends AbstractLogEnabled implements Authentic
         cipher = conf.getChild("cipher").getValue();
     }
 
-    /**
-     * Avalon component lifecycle method
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
      */
     @Override
     public void service(ServiceManager manager) throws ServiceException
@@ -102,8 +103,8 @@ public class CryptoAuthenticator extends AbstractLogEnabled implements Authentic
         this.cryptoService = (CryptoService) manager.lookup(CryptoService.ROLE);
     }
 
-    /**
-     * Avalon component lifecycle method
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.activity.Disposable#dispose()
      */
     @Override
     public void dispose()

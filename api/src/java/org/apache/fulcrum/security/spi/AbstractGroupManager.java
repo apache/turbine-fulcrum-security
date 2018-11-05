@@ -114,8 +114,8 @@ public abstract class AbstractGroupManager extends AbstractEntityManager impleme
     /**
      * Retrieve a Group object with specified Id.
      *
-     * @param name
-     *            the name of the Group.
+     * @param id
+     *            the ID of the Group.
      *
      * @return an object representing the Group with specified name.
      *
@@ -177,7 +177,7 @@ public abstract class AbstractGroupManager extends AbstractEntityManager impleme
      *
      * The name is used for looking up the group
      *
-     * @param role
+     * @param group
      *            The group to be checked.
      * @return true if the specified group exists
      * @throws DataBackendException

@@ -103,7 +103,7 @@ public class DynamicRoleImpl extends SecurityEntityImpl implements DynamicRole
     /**
      * This method should only be used by a RoleManager. Not directly.
      * 
-     * @param permission
+     * @param permission the Permission to add
      */
     public void addPermission(Permission permission)
     {
@@ -113,7 +113,7 @@ public class DynamicRoleImpl extends SecurityEntityImpl implements DynamicRole
     /**
      * This method should only be used by a RoleManager. Not directly.
      * 
-     * @param permission
+     * @param permission the Permission to remove
      */
     public void removePermission(Permission permission)
     {
@@ -141,7 +141,7 @@ public class DynamicRoleImpl extends SecurityEntityImpl implements DynamicRole
     /**
      * Set the groups this role belongs to
      * 
-     * @param groups
+     * @param groupSet
      *            the set of groups
      */
     public void setGroups(GroupSet groupSet)
@@ -159,7 +159,7 @@ public class DynamicRoleImpl extends SecurityEntityImpl implements DynamicRole
     /**
      * This method should only be used by a RoleManager. Not directly.
      * 
-     * @param group
+     * @param group the Group to remove
      */
     public void removeGroup(Group group)
     {
@@ -169,7 +169,7 @@ public class DynamicRoleImpl extends SecurityEntityImpl implements DynamicRole
     /**
      * This method should only be used by a RoleManager. Not directly.
      * 
-     * @param group
+     * @param group the Group to add
      */
     public void addGroup(Group group)
     {

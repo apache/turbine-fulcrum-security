@@ -49,7 +49,7 @@ public abstract class AbstractManager extends AbstractLogEnabled implements Serv
     private UserManager userManager;
 
     /**
-     * @return
+     * @return the service manager
      */
     protected ServiceManager getServiceManager()
     {
@@ -57,7 +57,8 @@ public abstract class AbstractManager extends AbstractLogEnabled implements Serv
     }
 
     /**
-     * @return
+     * @return the user manager
+     * @throws DataBackendException if fail to connect to datasource
      */
     protected UserManager getUserManager() throws DataBackendException
     {
@@ -77,7 +78,8 @@ public abstract class AbstractManager extends AbstractLogEnabled implements Serv
     }
 
     /**
-     * @return
+     * @return the permission manager
+     * @throws DataBackendException if fail to connect to datasource
      */
     protected PermissionManager getPermissionManager() throws DataBackendException
     {
@@ -97,7 +99,8 @@ public abstract class AbstractManager extends AbstractLogEnabled implements Serv
     }
 
     /**
-     * @return
+     * @return the role manager
+     * @throws DataBackendException if fail to connect to datasource
      */
     protected RoleManager getRoleManager() throws DataBackendException
     {
@@ -117,7 +120,8 @@ public abstract class AbstractManager extends AbstractLogEnabled implements Serv
     }
 
     /**
-     * @return
+     * @return the group manager
+     * @throws DataBackendException if fail to connect to datasource
      */
     protected GroupManager getGroupManager() throws DataBackendException
     {
@@ -138,6 +142,7 @@ public abstract class AbstractManager extends AbstractLogEnabled implements Serv
 
     /**
      * Avalon Service lifecycle method
+     * @throws ServiceException if fail to connect
      */
     @Override
 	public void service(ServiceManager manager) throws ServiceException
@@ -156,6 +161,9 @@ public abstract class AbstractManager extends AbstractLogEnabled implements Serv
         manager = null;
     }
 
+    /**
+     * @param obj the object to release
+     */
     protected void release(Object obj)
     {
         if (obj != null)
@@ -165,11 +173,11 @@ public abstract class AbstractManager extends AbstractLogEnabled implements Serv
     }
 
     /**
-     * @return A resolved object
-     * @throws DataBackendException
-     *             if the backend failed for some reason.
+     * @param lookup the object to resolve
+     * @return the actual object
+     * @throws RuntimeException exception if fails to find the manager
      */
-    protected Object resolve(String lookup)
+    protected Object resolve(String lookup) throws RuntimeException
     {
         Object component = null;
         {

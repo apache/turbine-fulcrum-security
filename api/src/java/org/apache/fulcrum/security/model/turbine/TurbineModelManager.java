@@ -67,6 +67,7 @@ public interface TurbineModelManager extends ModelManager
      * href="#global">global group</a>.
      * 
      * @return A Group object that represents the global group.
+     * @throws DataBackendException generic exception
      */
     Group getGlobalGroup() throws DataBackendException;
     
@@ -85,6 +86,8 @@ public interface TurbineModelManager extends ModelManager
      *              the old Role
      * @param newRole
      *              the new Role
+     * @throws DataBackendException generic exception
+     * @throws UnknownEntityException generic exception
      */
     void replace(User user, Role oldRole, Role newRole)  throws DataBackendException, UnknownEntityException;
 
@@ -159,7 +162,7 @@ public interface TurbineModelManager extends ModelManager
      * @throws UnknownEntityException
      *             if the Group is not present.
      */
-    void revokeAll(Group role) throws DataBackendException, UnknownEntityException;
+    void revokeAll(Group group) throws DataBackendException, UnknownEntityException;
 
     /**
      * Grant an User a Role in a Group.

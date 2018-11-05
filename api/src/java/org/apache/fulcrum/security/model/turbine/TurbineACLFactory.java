@@ -49,7 +49,8 @@ public class TurbineACLFactory extends AbstractManager implements ACLFactory
     private TurbineModelManager modelManager;
     
     /**
-     * @return
+     * @return A model manager
+     * @throws DataBackendException generic exception
      */
     protected TurbineModelManager getTurbineModelManager() throws DataBackendException
     {
@@ -68,7 +69,7 @@ public class TurbineACLFactory extends AbstractManager implements ACLFactory
         return modelManager;
     }
 	
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.model.ACLFactory#getAccessControlList(org.apache.fulcrum.security.entity.User)
      */
     @Override

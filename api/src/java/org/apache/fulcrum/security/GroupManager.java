@@ -88,8 +88,8 @@ public interface GroupManager extends Serializable
     /**
      * Retrieve a Group object with specified Id.
      *
-     * @param name
-     *            the name of the Group.
+     * @param id
+     *            the Id of the Group.
      *
      * @return an object representing the Group with specified name.
      *
@@ -151,13 +151,11 @@ public interface GroupManager extends Serializable
     /**
      * Determines if the <code>Group</code> exists in the security system.
      *
-     * @param permission
+     * @param group
      *            a <code>Group</code> value
      * @return true if the group exists in the system, false otherwise
      * @throws DataBackendException
      *             when more than one group with the same name exists.
-     * @throws Exception
-     *             A generic exception.
      */
     boolean checkExists(Group group) throws DataBackendException;
 
@@ -170,8 +168,6 @@ public interface GroupManager extends Serializable
      * @return true if the group exists in the system, false otherwise
      * @throws DataBackendException
      *             when more than one group with the same name exists.
-     * @throws Exception
-     *             A generic exception.
      */
-    boolean checkExists(String group) throws DataBackendException;
+    boolean checkExists(String groupName) throws DataBackendException;
 }

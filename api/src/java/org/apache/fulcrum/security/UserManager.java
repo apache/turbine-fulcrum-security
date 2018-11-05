@@ -77,13 +77,11 @@ public interface UserManager extends Serializable
     /**
      * Determines if the <code>User</code> exists in the security system.
      *
-     * @param role
+     * @param user
      *            a <code>User</code> value
      * @return true if the user exists in the system, false otherwise
      * @throws DataBackendException
      *             when more than one user with the same name exists.
-     * @throws Exception
-     *             A generic exception.
      */
     boolean checkExists(User user) throws DataBackendException;
 
@@ -106,9 +104,9 @@ public interface UserManager extends Serializable
      * @param username
      *            the name of the user.
      * @return an User object.
-     * @exception UnknownEntityException
+     * @throws UnknownEntityException
      *                if the user's record does not exist in the database.
-     * @exception DataBackendException
+     * @throws DataBackendException
      *                if there is a problem accessing the storage.
      */
     <T extends User> T getUser(String username) throws UnknownEntityException, DataBackendException;
@@ -119,9 +117,9 @@ public interface UserManager extends Serializable
      * @param id
      *            the id of the user.
      * @return an User object.
-     * @exception UnknownEntityException
+     * @throws UnknownEntityException
      *                if the user's record does not exist in the database.
-     * @exception DataBackendException
+     * @throws DataBackendException
      *                if there is a problem accessing the storage.
      */
     <T extends User> T getUserById(Object id) throws UnknownEntityException, DataBackendException;
@@ -136,11 +134,11 @@ public interface UserManager extends Serializable
      * @param password
      *            the user supplied password.
      * @return an User object.
-     * @exception PasswordMismatchException
+     * @throws PasswordMismatchException
      *                if the supplied password was incorrect.
-     * @exception UnknownEntityException
+     * @throws UnknownEntityException
      *                if the user's record does not exist in the database.
-     * @exception DataBackendException
+     * @throws DataBackendException
      *                if there is a problem accessing the storage.
      */
     <T extends User> T getUser(String username, String password) throws PasswordMismatchException, UnknownEntityException, DataBackendException;
@@ -176,11 +174,11 @@ public interface UserManager extends Serializable
      *            an User object to authenticate.
      * @param password
      *            the user supplied password.
-     * @exception PasswordMismatchException
+     * @throws PasswordMismatchException
      *                if the supplied password was incorrect.
-     * @exception UnknownEntityException
+     * @throws UnknownEntityException
      *                if the user's record does not exist in the database.
-     * @exception DataBackendException
+     * @throws DataBackendException
      *                if there is a problem accessing the storage.
      */
     void authenticate(User user, String password) throws PasswordMismatchException, UnknownEntityException, DataBackendException;
@@ -193,6 +191,8 @@ public interface UserManager extends Serializable
      * @param password
      *            The password to use for the object creation
      *
+     * @return User the user added
+     * 
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      * @throws EntityExistsException
@@ -221,11 +221,11 @@ public interface UserManager extends Serializable
      *            the current password suplied by the user.
      * @param newPassword
      *            the current password requested by the user.
-     * @exception PasswordMismatchException
+     * @throws PasswordMismatchException
      *                if the supplied password was incorrect.
-     * @exception UnknownEntityException
+     * @throws UnknownEntityException
      *                if the user's record does not exist in the database.
-     * @exception DataBackendException
+     * @throws DataBackendException
      *                if there is a problem accessing the storage.
      */
     void changePassword(User user, String oldPassword, String newPassword) throws PasswordMismatchException, UnknownEntityException,
@@ -243,9 +243,9 @@ public interface UserManager extends Serializable
      *            an User to change password for.
      * @param password
      *            the new password.
-     * @exception UnknownEntityException
+     * @throws UnknownEntityException
      *                if the user's record does not exist in the database.
-     * @exception DataBackendException
+     * @throws DataBackendException
      *                if there is a problem accessing the storage.
      */
     void forcePassword(User user, String password) throws UnknownEntityException, DataBackendException;
@@ -253,7 +253,8 @@ public interface UserManager extends Serializable
     /**
      * Return a Class object representing the system's chosen implementation of
      * of ACL interface.
-     *
+     * 
+     * @param user the user
      * @return systems's chosen implementation of ACL interface.
      * @throws UnknownEntityException
      *             if the implementation of ACL interface could not be

@@ -62,20 +62,21 @@ public interface TurbineRole extends Role, TurbineUserGroupRoleEntity
      * 
      * @param permissions
      *            a set of permissions
+     * @param <T> Permission
      */
     public <T extends Permission> void setPermissionsAsSet(Set<T> permissions);
 
     /**
      * This method should only be used by a RoleManager. Not directly.
      * 
-     * @param permission
+     * @param permission perm to add
      */
     public void addPermission(Permission permission);
 
     /**
      * This method should only be used by a RoleManager. Not directly.
      * 
-     * @param permission
+     * @param permission perm to remove
      */
     public void removePermission(Permission permission);
 }

@@ -25,14 +25,14 @@ import org.apache.fulcrum.security.util.GroupSet;
  * This is a control class that makes it easy to find out if a particular User
  * has a given Permission. It also determines if a User has a a particular Role.
  * 
- * @todo Need to rethink the two maps.. Why not just a single list of groups?
- *       That would then cascade down to all the other roles and so on..
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id: BasicAccessControlListImpl.java 535465 2007-05-05 06:58:06Z tv
- *          $
  */
 public class BasicAccessControlListImpl implements BasicAccessControlList
 {
+	// TODO Need to rethink the two maps.. Why not just a single list of groups?
+	// That would then cascade down to all the other roles and so on..
+
     /**
      * Serial number
      */
@@ -53,13 +53,8 @@ public class BasicAccessControlListImpl implements BasicAccessControlList
      * The objects that constructs an AccessControlList must supply hashtables
      * of role/permission sets keyed with group objects. <br>
      * 
-     * @param roleSets
-     *            a hashtable containing RoleSet objects keyed with Group
-     *            objects
-     * @param permissionSets
-     *            a hashtable containing PermissionSet objects keyed with Roles
-     *            objects
-     * @todo need to check this method over...
+     * @param groupSet
+     *            a hashtable containing GroupSet objects
      */
     public BasicAccessControlListImpl(GroupSet groupSet)
     {
@@ -79,7 +74,7 @@ public class BasicAccessControlListImpl implements BasicAccessControlList
     /**
      * Checks if the user is assigned a specific Group
      * 
-     * @param role
+     * @param group
      *            the Group
      * @return <code>true</code> if the user is assigned the Group
      */
@@ -91,7 +86,7 @@ public class BasicAccessControlListImpl implements BasicAccessControlList
     /**
      * Checks if the user is assigned a specific Group
      * 
-     * @param role
+     * @param group
      *            the Group name
      * @return <code>true</code> if the user is assigned the Group
      */
