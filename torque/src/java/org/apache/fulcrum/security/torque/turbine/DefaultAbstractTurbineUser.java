@@ -60,7 +60,7 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
      *
      * @param criteria Criteria to define the selection of records
      * @param con a database connection
-     * @throws TorqueException
+     * @throws TorqueException  if any database error occurs
      *
      * @return a list of User/Group/Role relations
      */
@@ -71,9 +71,8 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
         return (List<T>) TurbineUserGroupRolePeer.doSelectJoinTurbineRole(criteria, con);
     }
     
-    /**
-     * 
-     * @see TorqueAbstractTurbineTurbineSecurityEntity#retrieveAttachedObjects(Connection, Boolean, List)
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.turbine.TorqueAbstractTurbineTurbineSecurityEntityDefault#retrieveAttachedObjects(java.sql.Connection, java.lang.Boolean, java.util.List)
      */
     @Override
     public <T extends TurbineUserGroupRoleModelPeerMapper> void retrieveAttachedObjects( Connection con, Boolean lazy, List<T> ugrs ) throws TorqueException
@@ -91,8 +90,8 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
         }
     }
     
-    /**
-     * @see TorqueAbstractTurbineTurbineSecurityEntity#retrieveAttachedObjects(Connection, boolean)
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection, java.lang.Boolean)
      */
     @Override
     public void retrieveAttachedObjects( Connection con, Boolean lazy ) throws TorqueException
@@ -109,6 +108,9 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)
+     */
     @Override
     public void retrieveAttachedObjects( Connection con )
         throws TorqueException
@@ -116,9 +118,7 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
         retrieveAttachedObjects( con, false ); //false
     }
 
-    /**
-     * Removes all entries, then inserts, what is found in {@link #getUserGroupRoleSet()}.
-     * 
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#update(java.sql.Connection)
      */
     @Override
@@ -152,7 +152,7 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
         }
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#delete()
      */
     @Override
@@ -161,6 +161,12 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
         TurbineUserPeer.doDelete(SimpleKey.keyFor(getEntityId()));
     }
     
+    /**
+     * @param con data connection
+     * @param userGroupRoleSet U/G/R set
+     * @param ugrs list of all ugrs
+     * @throws TorqueException if data connection could not be found
+     */
     private <T extends TurbineUserGroupRoleModelPeerMapper> void maptoModel( Connection con, Set<TurbineUserGroupRole> userGroupRoleSet,
                              List<T> ugrs )
         throws TorqueException
@@ -170,6 +176,7 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
             TurbineUserGroupRole ugr = new TurbineUserGroupRole();
             ugr.setUser((User) this);
             ugr.setRole(ttugr.getTurbineRole(con));
+            
             // org.apache.fulcrum.security.torque.om.TurbineGroup implements 
             // org.apache.fulcrum.security.model.turbine.entity.TurbineGroup
             // but may be hides it? 

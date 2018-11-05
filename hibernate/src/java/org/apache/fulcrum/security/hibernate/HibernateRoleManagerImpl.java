@@ -126,8 +126,6 @@ public class HibernateRoleManagerImpl extends AbstractRoleManager
      * @return a new Role object that has id set up properly.
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
-     * @throws EntityExistsException
-     *             if the role already exists.
      */
     @Override
     protected synchronized Role persistNewRole(Role role) throws DataBackendException

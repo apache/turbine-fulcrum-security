@@ -55,7 +55,7 @@ public abstract class TorqueAbstractBasicGroup extends TorqueAbstractSecurityEnt
      *
      * @param criteria Criteria to define the selection of records
      * @param con a database connection
-     * @throws TorqueException
+     * @throws TorqueException  if any database error occurs
      *
      * @return a list of User/Group relations
      */

@@ -42,6 +42,11 @@ public class MemoryHelper
         return new Integer(++uniqueId);
     }
 
+    /**
+     * @param securityEntities list of security entities
+     * @param name the name
+     * @return <code>true</code> if exists
+     */
     public static boolean checkExists(List<? extends SecurityEntity> securityEntities, String name)
     {
         boolean exists = false;

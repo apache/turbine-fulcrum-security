@@ -50,12 +50,10 @@ public class PersistenceHelperDefaultImpl extends AbstractManager implements Per
     /**
      * Deletes an entity object
      * 
-     * @param role
+     * @param entity
      *            The object to be removed
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
-     * @throws UnknownEntityException
-     *             if the object does not exist.
      */
     public void removeEntity(SecurityEntity entity) throws DataBackendException
     {
@@ -85,12 +83,10 @@ public class PersistenceHelperDefaultImpl extends AbstractManager implements Per
     /**
      * Stores changes made to an object
      * 
-     * @param role
+     * @param entity
      *            The object to be saved
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
-     * @throws UnknownEntityException
-     *             if the role does not exist.
      */
     public void updateEntity(SecurityEntity entity) throws DataBackendException
     {
@@ -128,12 +124,10 @@ public class PersistenceHelperDefaultImpl extends AbstractManager implements Per
     /**
      * adds an entity
      * 
-     * @param role
+     * @param entity
      *            The object to be saved
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
-     * @throws UnknownEntityException
-     *             if the role does not exist.
      */
     public void addEntity(SecurityEntity entity) throws DataBackendException
     {
@@ -164,7 +158,7 @@ public class PersistenceHelperDefaultImpl extends AbstractManager implements Per
      * Returns a hibernate session, or if is null, opens one.
      * 
      * @return An Open hibernate session.
-     * @throws HibernateException
+     * @throws HibernateException generic exception
      */
     public Session retrieveSession() throws HibernateException
     {
@@ -176,7 +170,7 @@ public class PersistenceHelperDefaultImpl extends AbstractManager implements Per
     }
 
     /**
-     * Return the hibernate configuration
+     * @return the hibernate configuration
      */
     public Configuration getConfiguration()
     {
@@ -186,7 +180,7 @@ public class PersistenceHelperDefaultImpl extends AbstractManager implements Per
     /**
      * In some environments we will load the session factory up and pass it in.
      * 
-     * @param hibernateService
+     * @param sessionFactory
      *            The hibernateService to set.
      */
     public void setSessionFactory(SessionFactory sessionFactory)
@@ -204,9 +198,7 @@ public class PersistenceHelperDefaultImpl extends AbstractManager implements Per
         return sessionFactory;
     }
 
-    /**
-     * Avalon lifecycle method
-     * 
+    /* (non-Javadoc)
      * @see org.apache.avalon.framework.activity.Initializable#initialize()
      */
     public void initialize() throws Exception
@@ -214,9 +206,7 @@ public class PersistenceHelperDefaultImpl extends AbstractManager implements Per
         sessionFactory = configuration.buildSessionFactory();
     }
 
-    /**
-     * Avalon lifecycle method
-     * 
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.spi.AbstractManager#dispose()
      */
     @Override
@@ -226,9 +216,7 @@ public class PersistenceHelperDefaultImpl extends AbstractManager implements Per
         super.dispose();
     }
 
-    /**
-     * Avalon lifecycle method
-     * 
+    /* (non-Javadoc)
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
     public void configure(org.apache.avalon.framework.configuration.Configuration conf) throws ConfigurationException

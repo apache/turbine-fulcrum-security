@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.torque.dynamic;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -34,471 +35,413 @@ import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.torque.TorqueException;
 import org.apache.torque.util.Transaction;
+
 /**
  * This implementation persists to a database via Torque.
  *
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id:$
  */
-public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager implements DynamicModelManager
-{
-    /**
-     * Revokes a Role from a Group.
-     *
-     * @param group the Group.
-     * @param role the Role.
-     * @throws DataBackendException if there was an error accessing the data backend.
-     * @throws UnknownEntityException if group or role is not present.
-     */
-    @Override
-	public synchronized void revoke(Group group, Role role)
-        throws DataBackendException, UnknownEntityException
-    {
-        boolean groupExists = getGroupManager().checkExists(group);
-        boolean roleExists = getRoleManager().checkExists(role);
+public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager implements DynamicModelManager {
+	
+	/**
+	 * Serial ID
+	 */
+	private static final long serialVersionUID = -4102444603078107928L;
 
-        if (groupExists && roleExists)
-        {
-            ((DynamicGroup) group).removeRole(role);
-            ((DynamicRole) role).removeGroup(group);
+	/**
+	 * Revokes a Role from a Group.
+	 *
+	 * @param group the Group.
+	 * @param role  the Role.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if group or role is not present.
+	 */
+	@Override
+	public synchronized void revoke(Group group, Role role) throws DataBackendException, UnknownEntityException {
+		boolean groupExists = getGroupManager().checkExists(group);
+		boolean roleExists = getRoleManager().checkExists(role);
 
-            Connection con = null;
+		if (groupExists && roleExists) {
+			((DynamicGroup) group).removeRole(role);
+			((DynamicRole) role).removeGroup(group);
 
-            try
-            {
-                con = Transaction.begin();
+			Connection con = null;
 
-                ((TorqueAbstractSecurityEntity)role).update(con);
-                ((TorqueAbstractSecurityEntity)group).update(con);
+			try {
+				con = Transaction.begin();
 
-                Transaction.commit(con);
-                con = null;
-            }
-            catch (TorqueException e)
-            {
-                throw new DataBackendException("revoke('" + group.getName() + "', '" + role.getName() + "') failed", e);
-            }
-            finally
-            {
-                if (con != null)
-                {
-                    Transaction.safeRollback(con);
-                }
-            }
+				((TorqueAbstractSecurityEntity) role).update(con);
+				((TorqueAbstractSecurityEntity) group).update(con);
 
-            return;
-        }
+				Transaction.commit(con);
+				con = null;
+			} catch (TorqueException e) {
+				throw new DataBackendException("revoke('" + group.getName() + "', '" + role.getName() + "') failed", e);
+			} finally {
+				if (con != null) {
+					Transaction.safeRollback(con);
+				}
+			}
 
-        if (!groupExists)
-        {
-            throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
-        }
+			return;
+		}
 
-        if (!roleExists)
-        {
-            throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
-        }
-    }
+		if (!groupExists) {
+			throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
+		}
 
-    /**
-     * Grants a Role a Permission
-     *
-     * @param role the Role.
-     * @param permission the Permission.
-     * @throws DataBackendException if there was an error accessing the data backend.
-     * @throws UnknownEntityException if role or permission is not present.
-     */
-    @Override
+		if (!roleExists) {
+			throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
+		}
+	}
+
+	/**
+	 * Grants a Role a Permission
+	 *
+	 * @param role       the Role.
+	 * @param permission the Permission.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if role or permission is not present.
+	 */
+	@Override
 	public synchronized void grant(Role role, Permission permission)
-        throws DataBackendException, UnknownEntityException
-    {
-        boolean roleExists = getRoleManager().checkExists(role);
-        boolean permissionExists = getPermissionManager().checkExists(permission);
+			throws DataBackendException, UnknownEntityException {
+		boolean roleExists = getRoleManager().checkExists(role);
+		boolean permissionExists = getPermissionManager().checkExists(permission);
 
-        if (roleExists && permissionExists)
-        {
-            ((DynamicRole) role).addPermission(permission);
-            ((DynamicPermission) permission).addRole(role);
+		if (roleExists && permissionExists) {
+			((DynamicRole) role).addPermission(permission);
+			((DynamicPermission) permission).addRole(role);
 
-            Connection con = null;
+			Connection con = null;
 
-            try
-            {
-            	con = Transaction.begin();
+			try {
+				con = Transaction.begin();
 
-                ((TorqueAbstractSecurityEntity)role).update(con);
-                ((TorqueAbstractSecurityEntity)permission).update(con);
+				((TorqueAbstractSecurityEntity) role).update(con);
+				((TorqueAbstractSecurityEntity) permission).update(con);
 
-                Transaction.commit(con);
-                con = null;
-            }
-            catch (TorqueException e)
-            {
-                throw new DataBackendException("grant('" + role.getName() + "', '" + permission.getName() + "') failed", e);
-            }
-            finally
-            {
-                if (con != null)
-                {
-                    Transaction.safeRollback(con);
-                }
-            }
+				Transaction.commit(con);
+				con = null;
+			} catch (TorqueException e) {
+				throw new DataBackendException("grant('" + role.getName() + "', '" + permission.getName() + "') failed",
+						e);
+			} finally {
+				if (con != null) {
+					Transaction.safeRollback(con);
+				}
+			}
 
-            return;
-        }
+			return;
+		}
 
-        if (!roleExists)
-        {
-            throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
-        }
+		if (!roleExists) {
+			throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
+		}
 
-        if (!permissionExists)
-        {
-            throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
-        }
-    }
+		if (!permissionExists) {
+			throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
+		}
+	}
 
-    /**
-     * Revokes a Permission from a Role.
-     *
-     * @param role the Role.
-     * @param permission the Permission.
-     * @throws DataBackendException if there was an error accessing the data backend.
-     * @throws UnknownEntityException if role or permission is not present.
-     */
-    @Override
+	/**
+	 * Revokes a Permission from a Role.
+	 *
+	 * @param role       the Role.
+	 * @param permission the Permission.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if role or permission is not present.
+	 */
+	@Override
 	public synchronized void revoke(Role role, Permission permission)
-        throws DataBackendException, UnknownEntityException
-    {
-        boolean roleExists = getRoleManager().checkExists(role);
-        boolean permissionExists = getPermissionManager().checkExists(permission);
+			throws DataBackendException, UnknownEntityException {
+		boolean roleExists = getRoleManager().checkExists(role);
+		boolean permissionExists = getPermissionManager().checkExists(permission);
 
-        if (roleExists && permissionExists)
-        {
-            ((DynamicRole) role).removePermission(permission);
-            ((DynamicPermission) permission).removeRole(role);
+		if (roleExists && permissionExists) {
+			((DynamicRole) role).removePermission(permission);
+			((DynamicPermission) permission).removeRole(role);
 
-            Connection con = null;
+			Connection con = null;
 
-            try
-            {
-            	con = Transaction.begin();;
+			try {
+				con = Transaction.begin();
+				;
 
-                ((TorqueAbstractSecurityEntity)role).update(con);
-                ((TorqueAbstractSecurityEntity)permission).update(con);
+				((TorqueAbstractSecurityEntity) role).update(con);
+				((TorqueAbstractSecurityEntity) permission).update(con);
 
-                Transaction.commit(con);
-                con = null;
-            }
-            catch (TorqueException e)
-            {
-                throw new DataBackendException("revoke('" + role.getName() + "', '" + permission.getName() + "') failed", e);
-            }
-            finally
-            {
-                if (con != null)
-                {
-                    Transaction.safeRollback(con);
-                }
-            }
+				Transaction.commit(con);
+				con = null;
+			} catch (TorqueException e) {
+				throw new DataBackendException(
+						"revoke('" + role.getName() + "', '" + permission.getName() + "') failed", e);
+			} finally {
+				if (con != null) {
+					Transaction.safeRollback(con);
+				}
+			}
 
-            return;
-        }
+			return;
+		}
 
-        if (!roleExists)
-        {
-            throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
-        }
+		if (!roleExists) {
+			throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
+		}
 
-        if (!permissionExists)
-        {
-            throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
-        }
-    }
+		if (!permissionExists) {
+			throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
+		}
+	}
 
-    /**
-     * Puts a user in a group.
-     *
-     * This method is used when adding a user to a group
-     *
-     * @param user the User.
-     * @throws DataBackendException if there was an error accessing the data backend.
-     * @throws UnknownEntityException if the account is not present.
-     */
-    @Override
-	public synchronized void grant(User user, Group group) throws DataBackendException, UnknownEntityException
-    {
-        boolean groupExists = getGroupManager().checkExists(group);
-        boolean userExists = getUserManager().checkExists(user);
+	/**
+	 * Puts a user in a group.
+	 *
+	 * This method is used when adding a user to a group
+	 *
+	 * @param user  the User.
+	 * @param group the Group
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if the account is not present.
+	 */
+	@Override
+	public synchronized void grant(User user, Group group) throws DataBackendException, UnknownEntityException {
+		boolean groupExists = getGroupManager().checkExists(group);
+		boolean userExists = getUserManager().checkExists(user);
 
-        if (groupExists && userExists)
-        {
-            ((DynamicUser) user).addGroup(group);
-            ((DynamicGroup) group).addUser(user);
+		if (groupExists && userExists) {
+			((DynamicUser) user).addGroup(group);
+			((DynamicGroup) group).addUser(user);
 
-            Connection con = null;
+			Connection con = null;
 
-            try
-            {
-            	con = Transaction.begin();
+			try {
+				con = Transaction.begin();
 
-                ((TorqueAbstractSecurityEntity)user).update(con);
-                ((TorqueAbstractSecurityEntity)group).update(con);
+				((TorqueAbstractSecurityEntity) user).update(con);
+				((TorqueAbstractSecurityEntity) group).update(con);
 
-                Transaction.commit(con);
-                con = null;
-            }
-            catch (TorqueException e)
-            {
-                throw new DataBackendException("grant('" + user.getName() + "', '" + group.getName() + "') failed", e);
-            }
-            finally
-            {
-                if (con != null)
-                {
-                    Transaction.safeRollback(con);
-                }
-            }
+				Transaction.commit(con);
+				con = null;
+			} catch (TorqueException e) {
+				throw new DataBackendException("grant('" + user.getName() + "', '" + group.getName() + "') failed", e);
+			} finally {
+				if (con != null) {
+					Transaction.safeRollback(con);
+				}
+			}
 
-            return;
-        }
+			return;
+		}
 
-        if (!groupExists)
-        {
-            throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
-        }
+		if (!groupExists) {
+			throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
+		}
 
-        if (!userExists)
-        {
-            throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
-        }
-    }
+		if (!userExists) {
+			throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
+		}
+	}
 
-    /**
-     * Removes a user in a group.
-     *
-     * This method is used when removing a user to a group
-     *
-     * @param user the User.
-     * @throws DataBackendException if there was an error accessing the data backend.
-     * @throws UnknownEntityException if the user or group is not present.
-     */
-    @Override
-	public synchronized void revoke(User user, Group group) throws DataBackendException, UnknownEntityException
-    {
-        boolean groupExists = getGroupManager().checkExists(group);
-        boolean userExists = getUserManager().checkExists(user);
+	/**
+	 * Removes a user in a group.
+	 *
+	 * This method is used when removing a user to a group
+	 *
+	 * @param user  the User.
+	 * @param group the Group
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if the user or group is not present.
+	 */
+	@Override
+	public synchronized void revoke(User user, Group group) throws DataBackendException, UnknownEntityException {
+		boolean groupExists = getGroupManager().checkExists(group);
+		boolean userExists = getUserManager().checkExists(user);
 
-        if (groupExists && userExists)
-        {
-            ((DynamicUser) user).removeGroup(group);
-            ((DynamicGroup) group).removeUser(user);
+		if (groupExists && userExists) {
+			((DynamicUser) user).removeGroup(group);
+			((DynamicGroup) group).removeUser(user);
 
-            Connection con = null;
+			Connection con = null;
 
-            try
-            {
-            	con = Transaction.begin();
+			try {
+				con = Transaction.begin();
 
-                ((TorqueAbstractSecurityEntity)user).update(con);
-                ((TorqueAbstractSecurityEntity)group).update(con);
+				((TorqueAbstractSecurityEntity) user).update(con);
+				((TorqueAbstractSecurityEntity) group).update(con);
 
-                Transaction.commit(con);
-                con = null;
-            }
-            catch (TorqueException e)
-            {
-                throw new DataBackendException("revoke('" + user.getName() + "', '" + group.getName() + "') failed", e);
-            }
-            finally
-            {
-                if (con != null)
-                {
-                    Transaction.safeRollback(con);
-                }
-            }
+				Transaction.commit(con);
+				con = null;
+			} catch (TorqueException e) {
+				throw new DataBackendException("revoke('" + user.getName() + "', '" + group.getName() + "') failed", e);
+			} finally {
+				if (con != null) {
+					Transaction.safeRollback(con);
+				}
+			}
 
-            return;
-        }
+			return;
+		}
 
-        if (!groupExists)
-        {
-            throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
-        }
+		if (!groupExists) {
+			throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
+		}
 
-        if (!userExists)
-        {
-            throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
-        }
-    }
+		if (!userExists) {
+			throw new UnknownEntityException("Unknown user '" + user.getName() + "'");
+		}
+	}
 
-    /**
-     * Grants a Group a Role
-     *
-     * @param group the Group.
-     * @param role the Role.
-     * @throws DataBackendException if there was an error accessing the data backend.
-     * @throws UnknownEntityException if group or role is not present.
-     */
-    @Override
-	public synchronized void grant(Group group, Role role)
-        throws DataBackendException, UnknownEntityException
-    {
-        boolean groupExists = getGroupManager().checkExists(group);
-        boolean roleExists = getRoleManager().checkExists(role);
+	/**
+	 * Grants a Group a Role
+	 *
+	 * @param group the Group.
+	 * @param role  the Role.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if group or role is not present.
+	 */
+	@Override
+	public synchronized void grant(Group group, Role role) throws DataBackendException, UnknownEntityException {
+		boolean groupExists = getGroupManager().checkExists(group);
+		boolean roleExists = getRoleManager().checkExists(role);
 
-        if (groupExists && roleExists)
-        {
-            ((DynamicGroup) group).addRole(role);
-            ((DynamicRole) role).addGroup(group);
+		if (groupExists && roleExists) {
+			((DynamicGroup) group).addRole(role);
+			((DynamicRole) role).addGroup(group);
 
-            Connection con = null;
+			Connection con = null;
 
-            try
-            {
-            	con = Transaction.begin();
+			try {
+				con = Transaction.begin();
 
-                ((TorqueAbstractSecurityEntity)role).update(con);
-                ((TorqueAbstractSecurityEntity)group).update(con);
+				((TorqueAbstractSecurityEntity) role).update(con);
+				((TorqueAbstractSecurityEntity) group).update(con);
 
-                Transaction.commit(con);
-                con = null;
-            }
-            catch (TorqueException e)
-            {
-                throw new DataBackendException("grant('" + group.getName() + "', '" + role.getName() + "') failed", e);
-            }
-            finally
-            {
-                if (con != null)
-                {
-                    Transaction.safeRollback(con);
-                }
-            }
+				Transaction.commit(con);
+				con = null;
+			} catch (TorqueException e) {
+				throw new DataBackendException("grant('" + group.getName() + "', '" + role.getName() + "') failed", e);
+			} finally {
+				if (con != null) {
+					Transaction.safeRollback(con);
+				}
+			}
 
-            return;
-        }
+			return;
+		}
 
-        if (!groupExists)
-        {
-            throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
-        }
+		if (!groupExists) {
+			throw new UnknownEntityException("Unknown group '" + group.getName() + "'");
+		}
 
-        if (!roleExists)
-        {
-            throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
-        }
-    }
+		if (!roleExists) {
+			throw new UnknownEntityException("Unknown role '" + role.getName() + "'");
+		}
+	}
 
-    /**
-     * Allow B to assumes A's roles, groups and permissions
-     * @param delegator A
-     * @param delegatee B
-     */
-    @Override
+	/**
+	 * Allow B to assumes A's roles, groups and permissions
+	 * 
+	 * @param delegator A
+	 * @param delegatee B
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if delegator or delagatee is not present.
+	 */
+	@Override
 	public synchronized void addDelegate(User delegator, User delegatee)
-            throws DataBackendException, UnknownEntityException
-    {
-        boolean delegatorExists = getUserManager().checkExists(delegator);
-        boolean delegateeExists = getUserManager().checkExists(delegatee);
+			throws DataBackendException, UnknownEntityException {
+		boolean delegatorExists = getUserManager().checkExists(delegator);
+		boolean delegateeExists = getUserManager().checkExists(delegatee);
 
-        if (delegatorExists && delegateeExists)
-        {
-            super.addDelegate(delegator, delegatee);
+		if (delegatorExists && delegateeExists) {
+			super.addDelegate(delegator, delegatee);
 
-            Connection con = null;
+			Connection con = null;
 
-            try
-            {
-            	con = Transaction.begin();
+			try {
+				con = Transaction.begin();
 
-                ((TorqueAbstractSecurityEntity)delegator).update(con);
-                ((TorqueAbstractSecurityEntity)delegatee).update(con);
+				((TorqueAbstractSecurityEntity) delegator).update(con);
+				((TorqueAbstractSecurityEntity) delegatee).update(con);
 
-                Transaction.commit(con);
-                con = null;
-            }
-            catch (TorqueException e)
-            {
-                throw new DataBackendException("addDelegate('"
-                        + delegator.getName() + "', '"
-                        + delegatee.getName() + "') failed", e);
-            }
-            finally
-            {
-                if (con != null)
-                {
-                    Transaction.safeRollback(con);
-                }
-            }
+				Transaction.commit(con);
+				con = null;
+			} catch (TorqueException e) {
+				throw new DataBackendException(
+						"addDelegate('" + delegator.getName() + "', '" + delegatee.getName() + "') failed", e);
+			} finally {
+				if (con != null) {
+					Transaction.safeRollback(con);
+				}
+			}
 
-            return;
-        }
+			return;
+		}
 
-        if (!delegatorExists)
-        {
-            throw new UnknownEntityException("Unknown user '" + delegator.getName() + "'");
-        }
+		if (!delegatorExists) {
+			throw new UnknownEntityException("Unknown user '" + delegator.getName() + "'");
+		}
 
-        if (!delegateeExists)
-        {
-            throw new UnknownEntityException("Unknown user '" + delegatee.getName() + "'");
-        }
-    }
+		if (!delegateeExists) {
+			throw new UnknownEntityException("Unknown user '" + delegatee.getName() + "'");
+		}
+	}
 
-    /**
-     * Stop A having B's roles, groups and permissions
-     * @param delegate A
-     * @param delegatee B
-     */
-    @Override
+	/**
+	 * Stop A having B's roles, groups and permissions
+	 * 
+	 * @param delegator  A
+	 * @param delegatee  B
+	 * 
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if delegator or delagatee is not present.
+	 */
+	@Override
 	public synchronized void removeDelegate(User delegator, User delegatee)
-            throws DataBackendException, UnknownEntityException
-    {
-        boolean delegatorExists = getUserManager().checkExists(delegator);
-        boolean delegateeExists = getUserManager().checkExists(delegatee);
+			throws DataBackendException, UnknownEntityException {
+		boolean delegatorExists = getUserManager().checkExists(delegator);
+		boolean delegateeExists = getUserManager().checkExists(delegatee);
 
-        if (delegatorExists && delegateeExists)
-        {
-            super.removeDelegate(delegator, delegatee);
+		if (delegatorExists && delegateeExists) {
+			super.removeDelegate(delegator, delegatee);
 
-            Connection con = null;
+			Connection con = null;
 
-            try
-            {
-            	con = Transaction.begin();
+			try {
+				con = Transaction.begin();
 
-                ((TorqueAbstractSecurityEntity)delegator).update(con);
-                ((TorqueAbstractSecurityEntity)delegatee).update(con);
+				((TorqueAbstractSecurityEntity) delegator).update(con);
+				((TorqueAbstractSecurityEntity) delegatee).update(con);
 
-                Transaction.commit(con);
-                con = null;
-            }
-            catch (TorqueException e)
-            {
-                throw new DataBackendException("removeDelegate('"
-                        + delegator.getName() + "', '"
-                        + delegatee.getName() + "') failed", e);
-            }
-            finally
-            {
-                if (con != null)
-                {
-                    Transaction.safeRollback(con);
-                }
-            }
+				Transaction.commit(con);
+				con = null;
+			} catch (TorqueException e) {
+				throw new DataBackendException(
+						"removeDelegate('" + delegator.getName() + "', '" + delegatee.getName() + "') failed", e);
+			} finally {
+				if (con != null) {
+					Transaction.safeRollback(con);
+				}
+			}
 
-            return;
-        }
+			return;
+		}
 
-        if (!delegatorExists)
-        {
-            throw new UnknownEntityException("Unknown user '" + delegator.getName() + "'");
-        }
+		if (!delegatorExists) {
+			throw new UnknownEntityException("Unknown user '" + delegator.getName() + "'");
+		}
 
-        if (!delegateeExists)
-        {
-            throw new UnknownEntityException("Unknown user '" + delegatee.getName() + "'");
-        }
-    }
+		if (!delegateeExists) {
+			throw new UnknownEntityException("Unknown user '" + delegatee.getName() + "'");
+		}
+	}
 }

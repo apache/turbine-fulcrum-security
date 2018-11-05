@@ -36,7 +36,7 @@
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		
+
 		<!-- Easy update of torque libs -->
 		<torque.version>4.0</torque.version>
 		<torque.om>org.apache.fulcrum.security.torque.om</torque.om>
@@ -54,8 +54,48 @@
 					<forkMode>perTest</forkMode>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+				
+					<!--  TODO : figure out why javadoc warnings are not ignored
+						as this is breaking mvn site generation 
+						The only 'warnings' that remain and are serious are coming from
+						the OM generated classes
+					-->
+					
+					<!--  worked on torque, but not here? -->
+					<doclint>none</doclint>
+					
+					<!--  exclude generated sources for now (only works when running mvn javadoc:javadoc, but not with mvn site? -->
+					<excludePackageNames>org.apache.fulcrum.security.torque.om*</excludePackageNames>
+
+					<!-- adding this did not help :( -->					
+					<sourceFileExcludes>
+					        <sourceFileExclude>**/torque/target/generated-sources/*.java</sourceFileExclude>
+					</sourceFileExcludes>
+					
+				</configuration>
+			</plugin>
+
+
 		</plugins>
 	</build>
+
+	 <reporting>
+	    <plugins>
+	      <plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-javadoc-plugin</artifactId>
+	        <version>3.0.1</version>
+	        <configuration>
+	          <show>public</show>
+	        </configuration>
+	      </plugin>
+	    </plugins>
+	  </reporting>
+  
 
 	<dependencies>
 		<dependency>
@@ -74,25 +114,25 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-		    <groupId>org.hsqldb</groupId>
-		    <artifactId>hsqldb</artifactId>
-		    <!--  broken -->
-		    <!--  <version>2.4.1</version> -->
-		    <version>1.8.0.10</version>
-		    <scope>test</scope>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<!-- broken -->
+			<!-- <version>2.4.1</version> -->
+			<version>1.8.0.10</version>
+			<scope>test</scope>
 		</dependency>
 
-      <dependency>
-        <groupId>commons-dbcp</groupId>
-        <artifactId>commons-dbcp</artifactId>
-        <version>1.4</version>
-      </dependency>
-  
-      <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-dbcp2</artifactId>
-        <version>2.5.0</version>
-      </dependency>
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>2.5.0</version>
+		</dependency>
 
 		<!-- testing dependencies -->
 		<dependency>

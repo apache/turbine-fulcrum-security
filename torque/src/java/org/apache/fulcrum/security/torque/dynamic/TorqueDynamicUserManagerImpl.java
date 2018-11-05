@@ -41,7 +41,7 @@ public class TorqueDynamicUserManagerImpl extends TorqueAbstractUserManager
      */
     private static final long serialVersionUID = 1L;
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.TorqueAbstractUserManager#doSelectAllUsers(java.sql.Connection)
      */
     @SuppressWarnings("unchecked")
@@ -52,7 +52,7 @@ public class TorqueDynamicUserManagerImpl extends TorqueAbstractUserManager
         return (List<T>)TorqueDynamicUserPeer.doSelect(criteria, con);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.TorqueAbstractUserManager#doSelectById(java.lang.Integer, java.sql.Connection)
      */
     @SuppressWarnings("unchecked")
@@ -61,7 +61,7 @@ public class TorqueDynamicUserManagerImpl extends TorqueAbstractUserManager
         return (T) TorqueDynamicUserPeer.retrieveByPK(id, con);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.TorqueAbstractUserManager#doSelectByName(java.lang.String, java.sql.Connection)
      */
     @SuppressWarnings("unchecked")

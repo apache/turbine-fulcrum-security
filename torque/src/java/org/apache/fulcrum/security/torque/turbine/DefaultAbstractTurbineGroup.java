@@ -52,7 +52,7 @@ public abstract class DefaultAbstractTurbineGroup extends TorqueAbstractTurbineT
      *
      * @param criteria Criteria to define the selection of records
      * @param con a database connection
-     * @throws TorqueException
+     * @throws TorqueException  if any database error occurs
      *
      * @return a list of User/Group/Role relations
      */
@@ -70,8 +70,8 @@ public abstract class DefaultAbstractTurbineGroup extends TorqueAbstractTurbineT
         retrieveAttachedObjects( con, false );
     }    
     
-    /**
-     * @see TorqueAbstractTurbineTurbineSecurityEntity#retrieveAttachedObjects(Connection, boolean)
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection, java.lang.Boolean)
      */
     @Override
     public void retrieveAttachedObjects( Connection con, Boolean lazy ) throws TorqueException
@@ -95,6 +95,9 @@ public abstract class DefaultAbstractTurbineGroup extends TorqueAbstractTurbineT
     }
     
    
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.turbine.TorqueAbstractTurbineTurbineSecurityEntity#getUserGroupRoleSet()
+     */
     @Override
     public <T extends TurbineUserGroupRole> Set<T> getUserGroupRoleSet() throws DataBackendException
     {
@@ -126,7 +129,7 @@ public abstract class DefaultAbstractTurbineGroup extends TorqueAbstractTurbineT
         
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#update(java.sql.Connection)
      */
     @Override
@@ -160,7 +163,7 @@ public abstract class DefaultAbstractTurbineGroup extends TorqueAbstractTurbineT
         }
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#delete()
      */
     @Override

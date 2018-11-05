@@ -47,6 +47,7 @@ public abstract class TorqueAbstractTurbineTurbineSecurityEntityDefault extends 
      * @param con A database connection
      * @param lazy if <code>true</code>, fetches objects lazily
      * @param ugrs The custom TurbineUserGroupRole set
+     * @throws TorqueException if data connection not found
      */
     public abstract <T extends TurbineUserGroupRoleModelPeerMapper> void retrieveAttachedObjects( Connection con, Boolean lazy, List<T> ugrs ) throws TorqueException;
    

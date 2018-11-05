@@ -36,7 +36,7 @@ import org.apache.torque.criteria.Criteria;
  */
 public class TorqueDynamicGroupManagerImpl extends TorqueAbstractGroupManager
 {
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.TorqueAbstractGroupManager#doSelectAllGroups(java.sql.Connection)
      */
     @SuppressWarnings("unchecked")
@@ -47,7 +47,7 @@ public class TorqueDynamicGroupManagerImpl extends TorqueAbstractGroupManager
         return (List<T>)TorqueDynamicGroupPeer.doSelect(criteria, con);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.TorqueAbstractGroupManager#doSelectById(java.lang.Integer, java.sql.Connection)
      */
     @SuppressWarnings("unchecked")
@@ -56,7 +56,7 @@ public class TorqueDynamicGroupManagerImpl extends TorqueAbstractGroupManager
         return (T) TorqueDynamicGroupPeer.retrieveByPK(id, con);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.TorqueAbstractGroupManager#doSelectByName(java.lang.String, java.sql.Connection)
      */
     @SuppressWarnings("unchecked")

@@ -41,15 +41,19 @@ public abstract class TorqueAbstractTurbineTurbineSecurityEntity extends TorqueA
 	/** a cache of user_group_role objects */
     private Set<? extends TurbineUserGroupRole> userGroupRoleSet = null;
     
-    /**
-     * @throws DataBackendException 
-     * @see org.apache.fulcrum.security.model.turbine.entity.TurbineGroup#addUserGroupRole(org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole)
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRoleEntity#addUserGroupRole(org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole)
      */
     public void addUserGroupRole(TurbineUserGroupRole userGroupRole) throws DataBackendException
     {
         getUserGroupRoleSet().add(userGroupRole);
     }
     
+    /**
+     * @param user_group_role u/g/r to add
+     * @param isLazilyLoaded <code>true</code> for lazy loading
+     * @throws DataBackendException if the database backend is not found
+     */
     public void addUserGroupRole( TurbineUserGroupRole user_group_role, boolean isLazilyLoaded ) throws DataBackendException {
         if (isLazilyLoaded) 
         {
@@ -61,6 +65,10 @@ public abstract class TorqueAbstractTurbineTurbineSecurityEntity extends TorqueA
         }
     }
     
+    /**
+     * @return get default u/g/r set
+     * @throws DataBackendException if the database backend is not found
+     */
     @SuppressWarnings("unchecked")
     private <T extends TurbineUserGroupRole> Set<T> getDefaultUserGroupRoleSet() throws DataBackendException
     {
@@ -72,24 +80,28 @@ public abstract class TorqueAbstractTurbineTurbineSecurityEntity extends TorqueA
         return (Set<T>) userGroupRoleSet;
     }
 
-    /**
-     * @throws DataBackendException if loaded lazily
-     * @see org.apache.fulcrum.security.model.turbine.entity.TurbineGroup#getUserGroupRoleSet()
-     */
+	/* (non-Javadoc)
+	 * @see org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRoleEntity#getUserGroupRoleSet()
+	 * @throws DataBackendException if loaded lazily
+	 */
 	public <T extends TurbineUserGroupRole> Set<T> getUserGroupRoleSet() throws DataBackendException
     {
         return getDefaultUserGroupRoleSet();
     }
 
-    /**
-     * @throws DataBackendException 
-     * @see org.apache.fulcrum.security.model.turbine.entity.TurbineGroup#removeUserGroupRole(org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole)
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRoleEntity#removeUserGroupRole(org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole)
      */
     public void removeUserGroupRole(TurbineUserGroupRole userGroupRole) throws DataBackendException
     {
         getUserGroupRoleSet().remove(userGroupRole);
     }
     
+    /**
+     * @param user_group_role u/g/r to remove
+     * @param isLazilyLoaded <code>true</code> for lazy loading
+     * @throws DataBackendException if the database backend is not found
+     */
     public void removeUserGroupRole( TurbineUserGroupRole user_group_role, boolean isLazilyLoaded ) throws DataBackendException {
         if (isLazilyLoaded) 
         {
@@ -101,8 +113,8 @@ public abstract class TorqueAbstractTurbineTurbineSecurityEntity extends TorqueA
         }
     }
 
-    /**
-     * @see org.apache.fulcrum.security.model.turbine.entity.TurbineGroup#setUserGroupRoleSet(java.util.Set)
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRoleEntity#setUserGroupRoleSet(java.util.Set)
      */
     public <T extends TurbineUserGroupRole> void setUserGroupRoleSet(Set<T> userGroupRoleSet)
     {

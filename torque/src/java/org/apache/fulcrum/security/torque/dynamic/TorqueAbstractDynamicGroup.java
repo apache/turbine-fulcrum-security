@@ -61,7 +61,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
      *
      * @param criteria Criteria to define the selection of records
      * @param con a database connection
-     * @throws TorqueException
+     * @throws TorqueException  if any database error occurs
      *
      * @return a list of User/Group relations
      */
@@ -80,7 +80,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
      *
      * @param criteria Criteria to define the selection of records
      * @param con a database connection
-     * @throws TorqueException
+     * @throws TorqueException  if any database error occurs
      *
      * @return a list of Role/Group relations
      */
@@ -91,7 +91,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
         return TorqueDynamicGroupRolePeer.doSelectJoinTorqueDynamicRole(criteria, con);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.model.basic.entity.BasicGroup#addUser(org.apache.fulcrum.security.entity.User)
      */
     public void addUser(User user)
@@ -99,7 +99,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
         getUsers().add(user);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.model.basic.entity.BasicGroup#getUsers()
      */
     public UserSet getUsers()
@@ -116,7 +116,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
         return (UserSet)userSet;
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.model.basic.entity.BasicGroup#getUsersAsSet()
      */
     @SuppressWarnings("unchecked")
@@ -125,7 +125,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
         return (Set<T>)userSet;
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.model.basic.entity.BasicGroup#removeUser(org.apache.fulcrum.security.entity.User)
      */
     public void removeUser(User user)
@@ -133,7 +133,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
         getUsers().remove(user);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.model.basic.entity.BasicGroup#setUsers(org.apache.fulcrum.security.util.UserSet)
      */
     public void setUsers(UserSet userSet)
@@ -148,7 +148,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
         }
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.model.basic.entity.BasicGroup#setUsersAsSet(java.util.Set)
      */
     public <T extends User> void setUsersAsSet(Set<T> users)
@@ -156,7 +156,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
         setUsers(new UserSet<User>(users));
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup#addRole(org.apache.fulcrum.security.entity.Role)
      */
     public void addRole(Role role)
@@ -164,7 +164,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
         getRoles().add(role);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup#getRoles()
      */
     public RoleSet getRoles()
@@ -181,7 +181,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
         return (RoleSet)roleSet;
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup#getRolesAsSet()
      */
     @SuppressWarnings("unchecked")
@@ -190,7 +190,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
         return (Set<T>)roleSet;
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup#removeRole(org.apache.fulcrum.security.entity.Role)
      */
     public void removeRole(Role role)
@@ -198,7 +198,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
         getRoles().remove(role);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup#setRoles(org.apache.fulcrum.security.util.RoleSet)
      */
     public void setRoles(RoleSet roleSet)
@@ -213,7 +213,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
         }
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup#setRolesAsSet(java.util.Set)
      */
     public <T extends Role> void setRolesAsSet(Set<T> roles)
@@ -222,13 +222,16 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
     }
 
     /**
-     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#getDatabaseName()
+     * @return the database name
      */
     public String getDatabaseName()
     {
         return TorqueDynamicGroupPeer.DATABASE_NAME;
     }
     
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)
+     */
     @Override
     public void retrieveAttachedObjects( Connection con )
         throws TorqueException
@@ -236,8 +239,8 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
         retrieveAttachedObjects( con, false );
     }
 
-    /**
-     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(Connection, Boolean)
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection, java.lang.Boolean)
      */
     @Override
     public void retrieveAttachedObjects( Connection con, Boolean lazy )
@@ -262,7 +265,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
         }
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#update(java.sql.Connection)
      */
     public void update(Connection con) throws TorqueException
@@ -311,7 +314,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
         }
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#delete()
      */
     public void delete() throws TorqueException

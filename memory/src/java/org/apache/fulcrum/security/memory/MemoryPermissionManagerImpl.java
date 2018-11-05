@@ -92,13 +92,11 @@ public class MemoryPermissionManagerImpl extends AbstractPermissionManager
     /**
      * Determines if the <code>Permission</code> exists in the security system.
      *
-     * @param permission
+     * @param permissionName
      *            a <code>String</code> value
-     * @return true if the permission exists in the system, false otherwise
+     * @return <code>true</code> if the permission exists in the system, false otherwise
      * @throws DataBackendException
      *             when more than one Permission with the same name exists.
-     * @throws Exception
-     *             A generic exception.
      */
     public boolean checkExists(String permissionName) throws DataBackendException
     {
@@ -143,8 +141,6 @@ public class MemoryPermissionManagerImpl extends AbstractPermissionManager
      * @return a new Permission object that has id set up properly.
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
-     * @throws EntityExistsException
-     *             if the permission already exists.
      */
     @Override
     protected synchronized <T extends Permission> T persistNewPermission(T permission) throws DataBackendException

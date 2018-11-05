@@ -59,7 +59,7 @@ public abstract class DefaultAbstractTurbineRole extends TorqueAbstractTurbineTu
      *
      * @param criteria Criteria to define the selection of records
      * @param con a database connection
-     * @throws TorqueException
+     * @throws TorqueException  if any database error occurs
      *
      * @return a list of Role/Permission relations
      */
@@ -78,7 +78,7 @@ public abstract class DefaultAbstractTurbineRole extends TorqueAbstractTurbineTu
      *
      * @param criteria Criteria to define the selection of records
      * @param con a database connection
-     * @throws TorqueException
+     * @throws TorqueException  if any database error occurs
      *
      * @return a list of User/Group/Role relations
      */
@@ -168,8 +168,8 @@ public abstract class DefaultAbstractTurbineRole extends TorqueAbstractTurbineTu
     }
 
     
-    /**
-     * @see TorqueAbstractTurbineTurbineSecurityEntity#retrieveAttachedObjects(Connection, boolean)
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection, java.lang.Boolean)
      */
     @Override
     public void retrieveAttachedObjects( Connection con, Boolean lazy )
@@ -203,6 +203,9 @@ public abstract class DefaultAbstractTurbineRole extends TorqueAbstractTurbineTu
         }
     }
     
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.turbine.TorqueAbstractTurbineTurbineSecurityEntity#getUserGroupRoleSet()
+     */
     @Override
     public <T extends TurbineUserGroupRole> Set<T> getUserGroupRoleSet() throws DataBackendException
     {
@@ -234,10 +237,8 @@ public abstract class DefaultAbstractTurbineRole extends TorqueAbstractTurbineTu
     }
     
     
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#update(java.sql.Connection)
-     * 
-     * use for grants only!
      */
     @Override
 	public void update(Connection con) throws TorqueException

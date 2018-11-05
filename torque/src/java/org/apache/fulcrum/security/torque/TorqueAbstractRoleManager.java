@@ -67,7 +67,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager impl
      *
      * @return a List of Role instances
      *
-     * @throws TorqueException if any database error occurs
+     * @throws TorqueException  if any database error occurs
      */
     protected abstract <T extends Role> List<T> doSelectAllRoles(Connection con)
         throws TorqueException;
@@ -82,7 +82,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager impl
      *
      * @throws NoRowsException if no such group exists
      * @throws TooManyRowsException if multiple groups with the given name exist
-     * @throws TorqueException if any other database error occurs
+     * @throws TorqueException  if any database error occurs if any other database error occurs
      */
     protected abstract <T extends Role> T doSelectByName(String name, Connection con)
         throws NoRowsException, TooManyRowsException, TorqueException;
@@ -97,7 +97,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager impl
      *
      * @throws NoRowsException if no such group exists
      * @throws TooManyRowsException if multiple groups with the given id exist
-     * @throws TorqueException if any other database error occurs
+     * @throws TorqueException  if any database error occurs if any other database error occurs
      */
     protected abstract <T extends Role> T doSelectById(Integer id, Connection con)
         throws NoRowsException, TooManyRowsException, TorqueException;
@@ -143,7 +143,6 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager impl
     * @return a new Role object that has id set up properly.
     * @throws DataBackendException if there was an error accessing the data
     *         backend.
-    * @throws EntityExistsException if the role already exists.
     */
     @Override
 	protected synchronized <T extends Role> T persistNewRole(T role) throws DataBackendException

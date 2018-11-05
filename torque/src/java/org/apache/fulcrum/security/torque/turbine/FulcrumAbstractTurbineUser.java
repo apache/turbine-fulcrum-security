@@ -53,7 +53,7 @@ public abstract class FulcrumAbstractTurbineUser extends TorqueAbstractTurbineTu
      *
      * @param criteria Criteria to define the selection of records
      * @param con a database connection
-     * @throws TorqueException
+     * @throws TorqueException  if any database error occurs
      *
      * @return a list of User/Group/Role relations
      */
@@ -64,6 +64,9 @@ public abstract class FulcrumAbstractTurbineUser extends TorqueAbstractTurbineTu
         return TorqueTurbineUserGroupRolePeer.doSelectJoinTorqueTurbineRole(criteria, con);
     }
     
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)
+     */
     @Override
     public void retrieveAttachedObjects( Connection con )
         throws TorqueException
@@ -71,8 +74,8 @@ public abstract class FulcrumAbstractTurbineUser extends TorqueAbstractTurbineTu
         retrieveAttachedObjects( con, false );
     }
 
-    /**
-     * @see TorqueAbstractTurbineTurbineSecurityEntity#retrieveAttachedObjects(Connection, boolean)
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection, java.lang.Boolean)
      */
     @Override
     public void retrieveAttachedObjects(Connection con, Boolean lazy) throws TorqueException
@@ -93,9 +96,7 @@ public abstract class FulcrumAbstractTurbineUser extends TorqueAbstractTurbineTu
         }
     }
 
-    /**
-     * Removes all entries, then inserts, what is found in {@link #getUserGroupRoleSet()}.
-     * 
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#update(java.sql.Connection)
      */
     @Override
@@ -129,10 +130,10 @@ public abstract class FulcrumAbstractTurbineUser extends TorqueAbstractTurbineTu
         }
     }
 
-    /**
+    
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#delete()
      */
-    
     @Override
 	public void delete() throws TorqueException
     {

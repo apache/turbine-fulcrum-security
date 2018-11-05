@@ -149,8 +149,6 @@ public class HibernatePermissionManagerImpl extends AbstractPermissionManager
      * @return a new Permission object that has id set up properly.
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
-     * @throws EntityExistsException
-     *             if the permission already exists.
      */
     @Override
     protected synchronized Permission persistNewPermission(Permission permission) throws DataBackendException

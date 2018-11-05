@@ -42,8 +42,8 @@ public class MemoryModelManagerImpl extends AbstractManager implements BasicMode
      * 
      * This method is used when adding a user to a group
      * 
-     * @param user
-     *            the User.
+     * @param user the User
+     * @param group the Group           
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      * @throws UnknownEntityException
@@ -86,6 +86,7 @@ public class MemoryModelManagerImpl extends AbstractManager implements BasicMode
      * 
      * @param user
      *            the User.
+     * @param group the Group
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
      * @throws UnknownEntityException

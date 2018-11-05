@@ -46,6 +46,7 @@ public abstract class TorqueAbstractSecurityEntity
      * Set a numeric entity id
      *
      * @param id numeric id of this entity
+     * @throws TorqueException database not found exception
      */
     public abstract void setEntityId(Integer id) throws TorqueException;
 
@@ -67,7 +68,8 @@ public abstract class TorqueAbstractSecurityEntity
      * Retrieve attached objects such as users, permissions, ...
      * 
      * @param con A database connection
-     * * @param lazy if <code>true</code>, may load some or all relationships later
+     * @param lazy if <code>true</code>, may load some or all relationships later
+     * @throws TorqueException database not found exception
      */
     public abstract void retrieveAttachedObjects(Connection con, Boolean lazy) throws TorqueException;
     
@@ -76,6 +78,7 @@ public abstract class TorqueAbstractSecurityEntity
      * old contract, lazy is set to <code>false</code>.
      *
      * @param con A database connection
+     * @throws TorqueException database not found exception
      */
     public abstract void retrieveAttachedObjects(Connection con) throws TorqueException;
 
@@ -83,13 +86,14 @@ public abstract class TorqueAbstractSecurityEntity
      * Update this instance to the database with all dependent objects
      *
      * @param con A database connection
+     * @throws TorqueException database not found exception
      */
     public abstract void update(Connection con) throws TorqueException;
     
     /**
      * Delete this entity
      *
-     * @throws TorqueException if any database operation fails
+     * @throws TorqueException  if any database error occurs if any database operation fails
      */
     public abstract void delete() throws TorqueException;
 

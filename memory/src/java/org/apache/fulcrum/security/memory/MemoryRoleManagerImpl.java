@@ -81,13 +81,9 @@ public class MemoryRoleManagerImpl extends AbstractRoleManager
     /**
      * Determines if the <code>Role</code> exists in the security system.
      *
-     * @param permission
+     * @param roleName
      *            a <code>String</code> value
      * @return true if the role exists in the system, false otherwise
-     * @throws DataBackendException
-     *             when more than one Role with the same name exists.
-     * @throws Exception
-     *             A generic exception.
      */
     public boolean checkExists(String roleName)
     {
@@ -114,8 +110,6 @@ public class MemoryRoleManagerImpl extends AbstractRoleManager
      * @return a new Role object that has id set up properly.
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
-     * @throws EntityExistsException
-     *             if the role already exists.
      */
     @Override
     protected synchronized <T extends Role> T persistNewRole(T role) throws DataBackendException

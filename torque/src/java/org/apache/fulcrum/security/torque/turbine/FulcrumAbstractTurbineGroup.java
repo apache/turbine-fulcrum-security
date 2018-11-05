@@ -53,7 +53,7 @@ public abstract class FulcrumAbstractTurbineGroup extends TorqueAbstractTurbineT
      *
      * @param criteria Criteria to define the selection of records
      * @param con a database connection
-     * @throws TorqueException
+     * @throws TorqueException  if any database error occurs
      *
      * @return a list of User/Group/Role relations
      */

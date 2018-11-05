@@ -37,6 +37,11 @@ import org.apache.torque.criteria.Criteria;
 public class TorqueDynamicPermissionManagerImpl extends TorqueAbstractPermissionManager
 {
     /**
+	 * Serial ID
+	 */
+	private static final long serialVersionUID = -4831283855331325456L;
+
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager#doSelectAllPermissions(java.sql.Connection)
      */
     @SuppressWarnings("unchecked")
@@ -47,7 +52,7 @@ public class TorqueDynamicPermissionManagerImpl extends TorqueAbstractPermission
         return (List<T>)TorqueDynamicPermissionPeer.doSelect(criteria, con);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager#doSelectById(java.lang.Integer, java.sql.Connection)
      */
     @SuppressWarnings("unchecked")
@@ -56,7 +61,7 @@ public class TorqueDynamicPermissionManagerImpl extends TorqueAbstractPermission
         return (T) TorqueDynamicPermissionPeer.retrieveByPK(id, con);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager#doSelectByName(java.lang.String, java.sql.Connection)
      */
     @SuppressWarnings("unchecked")

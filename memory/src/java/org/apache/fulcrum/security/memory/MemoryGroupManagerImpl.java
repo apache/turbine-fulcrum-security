@@ -126,13 +126,11 @@ public class MemoryGroupManagerImpl extends AbstractGroupManager implements Grou
     /**
      * Determines if the <code>Group</code> exists in the security system.
      *
-     * @param group
+     * @param groupName
      *            a <code>Group</code> value
      * @return true if the group exists in the system, false otherwise
      * @throws DataBackendException
      *             when more than one Group with the same name exists.
-     * @throws Exception
-     *             A generic exception.
      */
     public boolean checkExists(String groupName) throws DataBackendException
     {
@@ -147,8 +145,6 @@ public class MemoryGroupManagerImpl extends AbstractGroupManager implements Grou
      * @return a new Group object that has id set up properly.
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
-     * @throws EntityExistsException
-     *             if the group already exists.
      */
     @Override
     protected synchronized <T extends Group> T persistNewGroup(T group) throws DataBackendException

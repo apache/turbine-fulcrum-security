@@ -53,7 +53,7 @@ public abstract class TorqueAbstractDynamicPermission extends TorqueAbstractSecu
      *
      * @param criteria Criteria to define the selection of records
      * @param con a database connection
-     * @throws TorqueException
+     * @throws TorqueException  if any database error occurs
      *
      * @return a list of Role/Permission relations
      */
@@ -130,7 +130,7 @@ public abstract class TorqueAbstractDynamicPermission extends TorqueAbstractSecu
     }
 
     /**
-     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#getDatabaseName()
+     * @return the database name
      */
     public String getDatabaseName()
     {

@@ -177,8 +177,6 @@ public class HibernateGroupManagerImpl extends AbstractGroupManager
      * @return a new Group object that has id set up properly.
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
-     * @throws EntityExistsException
-     *             if the group already exists.
      */
     @Override
     protected synchronized Group persistNewGroup(Group group) throws DataBackendException

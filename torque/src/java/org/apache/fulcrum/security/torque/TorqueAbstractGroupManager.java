@@ -67,7 +67,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager im
      *
      * @return a List of Group instances
      *
-     * @throws TorqueException if any database error occurs
+     * @throws TorqueException  if any database error occurs
      */
     protected abstract <T extends Group> List<T> doSelectAllGroups(Connection con)
         throws TorqueException;
@@ -82,7 +82,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager im
      *
      * @throws NoRowsException if no such group exists
      * @throws TooManyRowsException if multiple groups with the given name exist
-     * @throws TorqueException if any other database error occurs
+     * @throws TorqueException  if any database error occurs if any other database error occurs
      */
     protected abstract <T extends Group> T doSelectByName(String name, Connection con)
         throws NoRowsException, TooManyRowsException, TorqueException;
@@ -97,7 +97,7 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager im
      *
      * @throws NoRowsException if no such group exists
      * @throws TooManyRowsException if multiple groups with the given id exist
-     * @throws TorqueException if any other database error occurs
+     * @throws TorqueException  if any database error occurs if any other database error occurs
      */
     protected abstract <T extends Group> T doSelectById(Integer id, Connection con)
         throws NoRowsException, TooManyRowsException, TorqueException;
@@ -109,7 +109,6 @@ public abstract class TorqueAbstractGroupManager extends AbstractGroupManager im
     * @return a new Group object that has id set up properly.
     * @throws DataBackendException if there was an error accessing the data
     *         backend.
-    * @throws EntityExistsException if the group already exists.
     */
     @Override
 	protected synchronized <T extends Group> T persistNewGroup(T group) throws DataBackendException

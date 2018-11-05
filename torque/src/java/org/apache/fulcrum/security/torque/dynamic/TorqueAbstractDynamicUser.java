@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.torque.dynamic;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -35,328 +36,326 @@ import org.apache.fulcrum.security.util.UserSet;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
 import org.apache.torque.om.SimpleKey;
+
 /**
  * This abstract class provides the SecurityInterface to the managers.
  *
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id:$
  */
-public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEntity
-    implements DynamicUser
-{
-    /** Serial version */
+public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEntity implements DynamicUser {
+	/** Serial version */
 	private static final long serialVersionUID = -7307211992287876455L;
 
 	/** a cache of group objects */
-    private Set<Group> groupSet = null;
+	private Set<Group> groupSet = null;
 
-    /** a cache of delegator (user) objects */
-    private Set<User> delegators = null;
+	/** a cache of delegator (user) objects */
+	private Set<User> delegators = null;
 
-    /** a cache of delegatee(user) objects */
-    private Set<User> delegatees = null;
+	/** a cache of delegatee(user) objects */
+	private Set<User> delegatees = null;
 
-    /**
-     * Forward reference to generated code
-     *
-     * Get a list of association objects, pre-populated with their TorqueDynamicGroup
-     * objects.
-     *
-     * @param criteria Criteria to define the selection of records
-     * @param con a database connection
-     * @throws TorqueException
-     *
-     * @return a list of User/Group relations
-     */
-    protected List<TorqueDynamicUserGroup> getTorqueDynamicUserGroupsJoinTorqueDynamicGroup(Criteria criteria, Connection con)
-        throws TorqueException
-    {
-        criteria.and(TorqueDynamicUserGroupPeer.USER_ID, getEntityId() );
-        return TorqueDynamicUserGroupPeer.doSelectJoinTorqueDynamicGroup(criteria, con);
-    }
+	/**
+	 * Forward reference to generated code
+	 *
+	 * Get a list of association objects, pre-populated with their
+	 * TorqueDynamicGroup objects.
+	 *
+	 * @param criteria Criteria to define the selection of records
+	 * @param con      a database connection
+	 * @throws TorqueException if any database error occurs
+	 *
+	 * @return a list of User/Group relations
+	 */
+	protected List<TorqueDynamicUserGroup> getTorqueDynamicUserGroupsJoinTorqueDynamicGroup(Criteria criteria,
+			Connection con) throws TorqueException {
+		criteria.and(TorqueDynamicUserGroupPeer.USER_ID, getEntityId());
+		return TorqueDynamicUserGroupPeer.doSelectJoinTorqueDynamicGroup(criteria, con);
+	}
 
-    /**
-     * Forward reference to generated code
-     *
-     * Get a list of delegator association objects, pre-populated with their
-     * TorqueDynamicUserDelegates objects.
-     *
-     * @param criteria Criteria to define the selection of records
-     * @param con a database connection
-     * @throws TorqueException
-     *
-     * @return a list of User/Delegator relations
-     */
-    protected List<TorqueDynamicUserDelegates> getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(Criteria criteria, Connection con)
-        throws TorqueException
-    {
-        criteria.and(TorqueDynamicUserDelegatesPeer.DELEGATEE_USER_ID, getEntityId() );
-        return TorqueDynamicUserDelegatesPeer.doSelectJoinTorqueDynamicUserRelatedByDelegatorUserId(criteria, con);
-    }
+	/**
+	 * Forward reference to generated code
+	 *
+	 * Get a list of delegator association objects, pre-populated with their
+	 * TorqueDynamicUserDelegates objects.
+	 *
+	 * @param criteria Criteria to define the selection of records
+	 * @param con      a database connection
+	 * @throws TorqueException if any database error occurs
+	 *
+	 * @return a list of User/Delegator relations
+	 */
+	protected List<TorqueDynamicUserDelegates> getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(
+			Criteria criteria, Connection con) throws TorqueException {
+		criteria.and(TorqueDynamicUserDelegatesPeer.DELEGATEE_USER_ID, getEntityId());
+		return TorqueDynamicUserDelegatesPeer.doSelectJoinTorqueDynamicUserRelatedByDelegatorUserId(criteria, con);
+	}
 
-    /**
-     * Forward reference to generated code
-     *
-     * Get a list of delegatee association objects, pre-populated with their
-     * TorqueDynamicUserDelegates objects.
-     *
-     * @param criteria Criteria to define the selection of records
-     * @param con a database connection
-     * @throws TorqueException
-     *
-     * @return a list of User/Delegator relations
-     */
-    protected List<TorqueDynamicUserDelegates> getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(Criteria criteria, Connection con)
-        throws TorqueException
-    {
-        criteria.and(TorqueDynamicUserDelegatesPeer.DELEGATOR_USER_ID, getEntityId() );
-        return TorqueDynamicUserDelegatesPeer.doSelectJoinTorqueDynamicUserRelatedByDelegateeUserId(criteria, con);
-    }
+	/**
+	 * Forward reference to generated code
+	 *
+	 * Get a list of delegatee association objects, pre-populated with their
+	 * TorqueDynamicUserDelegates objects.
+	 *
+	 * @param criteria Criteria to define the selection of records
+	 * @param con      a database connection
+	 * @throws TorqueException if any database error occurs
+	 *
+	 * @return a list of User/Delegator relations
+	 */
+	protected List<TorqueDynamicUserDelegates> getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(
+			Criteria criteria, Connection con) throws TorqueException {
+		criteria.and(TorqueDynamicUserDelegatesPeer.DELEGATOR_USER_ID, getEntityId());
+		return TorqueDynamicUserDelegatesPeer.doSelectJoinTorqueDynamicUserRelatedByDelegateeUserId(criteria, con);
+	}
 
-    /**
-     * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#addGroup(org.apache.fulcrum.security.entity.Group)
-     */
-    public void addGroup(Group group)
-    {
-        getGroups().add(group);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.fulcrum.security.model.basic.entity.BasicUser#addGroup(org.apache.
+	 * fulcrum.security.entity.Group)
+	 */
+	public void addGroup(Group group) {
+		getGroups().add(group);
+	}
 
-    /**
-     * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#getGroups()
-     */
-    public GroupSet getGroups()
-    {
-        if (groupSet == null)
-        {
-            groupSet = new GroupSet();
-        }
-        else if(!(groupSet instanceof GroupSet))
-        {
-            groupSet = new GroupSet(groupSet);
-        }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#getGroups()
+	 */
+	public GroupSet getGroups() {
+		if (groupSet == null) {
+			groupSet = new GroupSet();
+		} else if (!(groupSet instanceof GroupSet)) {
+			groupSet = new GroupSet(groupSet);
+		}
 
-        return (GroupSet)groupSet;
-    }
+		return (GroupSet) groupSet;
+	}
 
-    /**
-     * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#getGroupsAsSet()
-     */
-    @SuppressWarnings("unchecked")
-	public <T extends Group> Set<T> getGroupsAsSet()
-    {
-        return (Set<T>)groupSet;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.fulcrum.security.model.basic.entity.BasicUser#getGroupsAsSet()
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Group> Set<T> getGroupsAsSet() {
+		return (Set<T>) groupSet;
+	}
 
-    /**
-     * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#removeGroup(org.apache.fulcrum.security.entity.Group)
-     */
-    public void removeGroup(Group group)
-    {
-        getGroups().remove(group);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.fulcrum.security.model.basic.entity.BasicUser#removeGroup(org.
+	 * apache.fulcrum.security.entity.Group)
+	 */
+	public void removeGroup(Group group) {
+		getGroups().remove(group);
+	}
 
-    /**
-     * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#setGroups(org.apache.fulcrum.security.util.GroupSet)
-     */
-    public void setGroups(GroupSet groups)
-    {
-        if (groups != null)
-        {
-            this.groupSet = groups;
-        }
-        else
-        {
-            this.groupSet = new GroupSet();
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.fulcrum.security.model.basic.entity.BasicUser#setGroups(org.apache
+	 * .fulcrum.security.util.GroupSet)
+	 */
+	public void setGroups(GroupSet groups) {
+		if (groups != null) {
+			this.groupSet = groups;
+		} else {
+			this.groupSet = new GroupSet();
+		}
+	}
 
-    /**
-     * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#setGroupsAsSet(java.util.Set)
-     */
-    public <T extends Group> void setGroupsAsSet(Set<T> groups)
-    {
-        setGroups(new GroupSet(groups));
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.fulcrum.security.model.basic.entity.BasicUser#setGroupsAsSet(java.
+	 * util.Set)
+	 */
+	public <T extends Group> void setGroupsAsSet(Set<T> groups) {
+		setGroups(new GroupSet(groups));
+	}
 
-    /**
-     * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicUser#getDelegatees()
-     */
-    @SuppressWarnings("unchecked")
-	public <T extends User> Set<T> getDelegatees()
-    {
-        if (delegatees == null)
-        {
-            delegatees = new UserSet<T>();
-        }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.fulcrum.security.model.dynamic.entity.DynamicUser#getDelegatees()
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends User> Set<T> getDelegatees() {
+		if (delegatees == null) {
+			delegatees = new UserSet<T>();
+		}
 
-        return (Set<T>)delegatees;
-    }
+		return (Set<T>) delegatees;
+	}
 
-    /**
-     * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicUser#getDelegators()
-     */
-    @SuppressWarnings("unchecked")
-	public <T extends User> Set<T> getDelegators()
-    {
-        if (delegators == null)
-        {
-            delegators = new UserSet<T>();
-        }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.fulcrum.security.model.dynamic.entity.DynamicUser#getDelegators()
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends User> Set<T> getDelegators() {
+		if (delegators == null) {
+			delegators = new UserSet<T>();
+		}
 
-        return (Set<T>)delegators;
-    }
+		return (Set<T>) delegators;
+	}
 
-    /**
-     * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicUser#setDelegatees(java.util.Set)
-     */
-    public <T extends User> void setDelegatees(Set<T> delegatees)
-    {
-        if (delegatees != null)
-        {
-            this.delegatees = new UserSet<T>(delegatees);
-        }
-        else
-        {
-            this.delegatees = new UserSet<T>();
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.fulcrum.security.model.dynamic.entity.DynamicUser#setDelegatees(
+	 * java.util.Set)
+	 */
+	public <T extends User> void setDelegatees(Set<T> delegatees) {
+		if (delegatees != null) {
+			this.delegatees = new UserSet<T>(delegatees);
+		} else {
+			this.delegatees = new UserSet<T>();
+		}
+	}
 
-    /**
-     * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicUser#setDelegators(java.util.Set)
-     */
-    public <T extends User> void setDelegators(Set<T> delegates)
-    {
-        if (delegators != null)
-        {
-            this.delegators = new UserSet<T>(delegates);
-        }
-        else
-        {
-            this.delegators = new UserSet<T>();
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.fulcrum.security.model.dynamic.entity.DynamicUser#setDelegators(
+	 * java.util.Set)
+	 */
+	public <T extends User> void setDelegators(Set<T> delegates) {
+		if (delegators != null) {
+			this.delegators = new UserSet<T>(delegates);
+		} else {
+			this.delegators = new UserSet<T>();
+		}
+	}
 
-    /**
-     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#getDatabaseName()
-     */
-    public String getDatabaseName()
-    {
-        return TorqueDynamicUserPeer.DATABASE_NAME;
-    }
-    
-    @Override
-    public void retrieveAttachedObjects( Connection con )
-        throws TorqueException
-    {
-        retrieveAttachedObjects( con, false );
-    }
+	/**
+	 * @return the database name
+	 */
+	public String getDatabaseName() {
+		return TorqueDynamicUserPeer.DATABASE_NAME;
+	}
 
-    /**
-     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(Connection, Boolean)
-     */
-    @Override
-    public void retrieveAttachedObjects( Connection con, Boolean lazy )
-        throws TorqueException
-    {
-        this.groupSet = new GroupSet();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#
+	 * retrieveAttachedObjects(java.sql.Connection)
+	 */
+	@Override
+	public void retrieveAttachedObjects(Connection con) throws TorqueException {
+		retrieveAttachedObjects(con, false);
+	}
 
-        List<TorqueDynamicUserGroup> usergroups = getTorqueDynamicUserGroupsJoinTorqueDynamicGroup(new Criteria(), con);
+	/**
+	 * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(Connection,
+	 *      Boolean)
+	 */
+	@Override
+	public void retrieveAttachedObjects(Connection con, Boolean lazy) throws TorqueException {
+		this.groupSet = new GroupSet();
 
-        for (TorqueDynamicUserGroup tdug : usergroups)
-        {
-            groupSet.add(tdug.getTorqueDynamicGroup());
-        }
+		List<TorqueDynamicUserGroup> usergroups = getTorqueDynamicUserGroupsJoinTorqueDynamicGroup(new Criteria(), con);
 
-        this.delegators = new UserSet<User>();
+		for (TorqueDynamicUserGroup tdug : usergroups) {
+			groupSet.add(tdug.getTorqueDynamicGroup());
+		}
 
-        List<TorqueDynamicUserDelegates> delegatorlist = getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(new Criteria(), con);
+		this.delegators = new UserSet<User>();
 
-        for (TorqueDynamicUserDelegates tdud : delegatorlist)
-        {
-            delegators.add(tdud.getTorqueDynamicUserRelatedByDelegatorUserId());
-        }
+		List<TorqueDynamicUserDelegates> delegatorlist = getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(
+				new Criteria(), con);
 
-        this.delegatees = new UserSet<User>();
+		for (TorqueDynamicUserDelegates tdud : delegatorlist) {
+			delegators.add(tdud.getTorqueDynamicUserRelatedByDelegatorUserId());
+		}
 
-        List<TorqueDynamicUserDelegates> delegateelist = getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(new Criteria(), con);
+		this.delegatees = new UserSet<User>();
 
-        for (TorqueDynamicUserDelegates tdud : delegateelist)
-        {
-            delegatees.add(tdud.getTorqueDynamicUserRelatedByDelegateeUserId());
-        }
-    }
+		List<TorqueDynamicUserDelegates> delegateelist = getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(
+				new Criteria(), con);
 
-    /**
-     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#update(java.sql.Connection)
-     */
-    public void update(Connection con) throws TorqueException
-    {
-        if (groupSet != null)
-        {
-            Criteria criteria = new Criteria();
+		for (TorqueDynamicUserDelegates tdud : delegateelist) {
+			delegatees.add(tdud.getTorqueDynamicUserRelatedByDelegateeUserId());
+		}
+	}
 
-            /* remove old entries */
-            criteria.where(TorqueDynamicUserGroupPeer.USER_ID, getEntityId());
-            TorqueDynamicUserGroupPeer.doDelete(criteria, con);
+	/**
+	 * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#update(java.sql.Connection)
+	 */
+	public void update(Connection con) throws TorqueException {
+		if (groupSet != null) {
+			Criteria criteria = new Criteria();
 
-            for (Group g : groupSet)
-            {
-                TorqueDynamicUserGroup ug = new TorqueDynamicUserGroup();
-                ug.setUserId(getEntityId());
-                ug.setGroupId((Integer)g.getId());
-                ug.save(con);
-            }
-        }
+			/* remove old entries */
+			criteria.where(TorqueDynamicUserGroupPeer.USER_ID, getEntityId());
+			TorqueDynamicUserGroupPeer.doDelete(criteria, con);
 
-        if (delegators != null)
-        {
-            Criteria criteria = new Criteria();
+			for (Group g : groupSet) {
+				TorqueDynamicUserGroup ug = new TorqueDynamicUserGroup();
+				ug.setUserId(getEntityId());
+				ug.setGroupId((Integer) g.getId());
+				ug.save(con);
+			}
+		}
 
-            /* remove old entries */
-            criteria.where(TorqueDynamicUserDelegatesPeer.DELEGATEE_USER_ID, getEntityId());
-            TorqueDynamicUserDelegatesPeer.doDelete(criteria, con);
+		if (delegators != null) {
+			Criteria criteria = new Criteria();
 
-            for (User u : delegators)
-            {
-                TorqueDynamicUserDelegates ud = new TorqueDynamicUserDelegates();
-                ud.setDelegateeUserId(getEntityId());
-                ud.setDelegatorUserId((Integer)u.getId());
-                ud.save(con);
-            }
-        }
+			/* remove old entries */
+			criteria.where(TorqueDynamicUserDelegatesPeer.DELEGATEE_USER_ID, getEntityId());
+			TorqueDynamicUserDelegatesPeer.doDelete(criteria, con);
 
-        if (delegatees != null)
-        {
-            Criteria criteria = new Criteria();
+			for (User u : delegators) {
+				TorqueDynamicUserDelegates ud = new TorqueDynamicUserDelegates();
+				ud.setDelegateeUserId(getEntityId());
+				ud.setDelegatorUserId((Integer) u.getId());
+				ud.save(con);
+			}
+		}
 
-            /* remove old entries */
-            criteria.where(TorqueDynamicUserDelegatesPeer.DELEGATOR_USER_ID, getEntityId());
-            TorqueDynamicUserDelegatesPeer.doDelete(criteria, con);
+		if (delegatees != null) {
+			Criteria criteria = new Criteria();
 
-            for (User u : delegatees)
-            {
-                TorqueDynamicUserDelegates ud = new TorqueDynamicUserDelegates();
-                ud.setDelegatorUserId(getEntityId());
-                ud.setDelegateeUserId((Integer)u.getId());
-                ud.save(con);
-            }
-        }
+			/* remove old entries */
+			criteria.where(TorqueDynamicUserDelegatesPeer.DELEGATOR_USER_ID, getEntityId());
+			TorqueDynamicUserDelegatesPeer.doDelete(criteria, con);
 
-        try
-        {
-            save(con);
-        }
-        catch (Exception e)
-        {
-            throw new TorqueException(e);
-        }
-    }
+			for (User u : delegatees) {
+				TorqueDynamicUserDelegates ud = new TorqueDynamicUserDelegates();
+				ud.setDelegatorUserId(getEntityId());
+				ud.setDelegateeUserId((Integer) u.getId());
+				ud.save(con);
+			}
+		}
 
-    /**
-     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#delete()
-     */
-    public void delete() throws TorqueException
-    {
-        TorqueDynamicUserPeer.doDelete(SimpleKey.keyFor(getEntityId()));
-    }
+		try {
+			save(con);
+		} catch (Exception e) {
+			throw new TorqueException(e);
+		}
+	}
+
+	/**
+	 * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#delete()
+	 */
+	public void delete() throws TorqueException {
+		TorqueDynamicUserPeer.doDelete(SimpleKey.keyFor(getEntityId()));
+	}
 }

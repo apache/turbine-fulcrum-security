@@ -54,7 +54,7 @@ public abstract class DefaultAbstractTurbinePermission extends TorqueAbstractSec
      *
      * @param criteria Criteria to define the selection of records
      * @param con a database connection
-     * @throws TorqueException
+     * @throws TorqueException  if any database error occurs
      *
      * @return a list of Role/Permission relations
      */

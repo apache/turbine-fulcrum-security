@@ -37,6 +37,11 @@ import org.apache.torque.criteria.Criteria;
 public class TorqueDynamicRoleManagerImpl extends TorqueAbstractRoleManager
 {
     /**
+	 * Serial
+	 */
+	private static final long serialVersionUID = 907083674412091946L;
+
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.TorqueAbstractRoleManager#doSelectAllRoles(java.sql.Connection)
      */
     @SuppressWarnings("unchecked")
@@ -47,7 +52,7 @@ public class TorqueDynamicRoleManagerImpl extends TorqueAbstractRoleManager
         return (List<T>)TorqueDynamicRolePeer.doSelect(criteria, con);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.TorqueAbstractRoleManager#doSelectById(java.lang.Integer, java.sql.Connection)
      */
     @SuppressWarnings("unchecked")
@@ -56,7 +61,7 @@ public class TorqueDynamicRoleManagerImpl extends TorqueAbstractRoleManager
         return (T) TorqueDynamicRolePeer.retrieveByPK(id, con);
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.TorqueAbstractRoleManager#doSelectByName(java.lang.String, java.sql.Connection)
      */
     @SuppressWarnings("unchecked")

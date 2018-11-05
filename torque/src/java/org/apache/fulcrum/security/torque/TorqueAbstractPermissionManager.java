@@ -1,4 +1,5 @@
 package org.apache.fulcrum.security.torque;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -33,363 +34,292 @@ import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
 import org.apache.torque.util.Transaction;
+
 /**
  * This implementation persists to a database via Torque.
  *
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id:$
  */
-public abstract class TorqueAbstractPermissionManager extends AbstractPermissionManager
-{
-    
+public abstract class TorqueAbstractPermissionManager extends AbstractPermissionManager {
+
 	/** Serial version */
 	private static final long serialVersionUID = 194503017446833485L;
-	
+
 	// no lazyLoading
 
 	/**
-     * Avalon Service lifecycle method
-     */ 
-    @Override
-	public void configure(Configuration conf) throws ConfigurationException
-    {
-       super.configure( conf );
+	 * Avalon Service lifecycle method
+	 */
+	@Override
+	public void configure(Configuration conf) throws ConfigurationException {
+		super.configure(conf);
 
-    }
-    
-    /**
-     * Get all specialized Permissions
-     *
-     * @param con a database connection
-     *
-     * @return a List of Permission instances
-     *
-     * @throws TorqueException if any database error occurs
-     */
-    protected abstract <T extends Permission> List<T> doSelectAllPermissions(Connection con)
-        throws TorqueException;
+	}
 
-    /**
-     * Get a specialized Permission by name
-     *
-     * @param name the name of the group
-     * @param con a database connection
-     *
-     * @return a Permission instance
-     *
-     * @throws NoRowsException if no such group exists
-     * @throws TooManyRowsException if multiple groups with the given name exist
-     * @throws TorqueException if any other database error occurs
-     */
-    protected abstract <T extends Permission> T doSelectByName(String name, Connection con)
-        throws NoRowsException, TooManyRowsException, TorqueException;
+	/**
+	 * Get all specialized Permissions
+	 *
+	 * @param con a database connection
+	 * @return a List of Permission instances
+	 * @throws TorqueException if any database error occurs
+	 */
+	protected abstract <T extends Permission> List<T> doSelectAllPermissions(Connection con) throws TorqueException;
 
-    /**
-     * Get a specialized Permission by id
-     *
-     * @param id the id of the group
-     * @param con a database connection
-     *
-     * @return a Permission instance
-     *
-     * @throws NoRowsException if no such group exists
-     * @throws TooManyRowsException if multiple groups with the given id exist
-     * @throws TorqueException if any other database error occurs
-     */
-    protected abstract <T extends Permission> T doSelectById(Integer id, Connection con)
-        throws NoRowsException, TooManyRowsException, TorqueException;
+	/**
+	 * Get a specialized Permission by name
+	 *
+	 * @param name the name of the group
+	 * @param con  a database connection
+	 *
+	 * @return a Permission instance
+	 *
+	 * @throws NoRowsException      if no such group exists
+	 * @throws TooManyRowsException if multiple groups with the given name exist
+	 * @throws TorqueException      if any database error occurs if any other
+	 *                              database error occurs
+	 */
+	protected abstract <T extends Permission> T doSelectByName(String name, Connection con)
+			throws NoRowsException, TooManyRowsException, TorqueException;
 
-    /**
-     * Renames an existing Permission.
-     *
-     * @param permission
-     *            The object describing the permission to be renamed.
-     * @param name
-     *            the new name for the permission.
-     * @throws DataBackendException
-     *             if there was an error accessing the data backend.
-     * @throws UnknownEntityException
-     *             if the permission does not exist.
-     */
-    @Override
-	public synchronized void renamePermission(Permission permission, String name) throws DataBackendException, UnknownEntityException
-    {
-        if (checkExists(permission))
-        {
-            permission.setName(name);
+	/**
+	 * Get a specialized Permission by id
+	 *
+	 * @param id  the id of the group
+	 * @param con a database connection
+	 *
+	 * @return a Permission instance
+	 *
+	 * @throws NoRowsException      if no such group exists
+	 * @throws TooManyRowsException if multiple groups with the given id exist
+	 * @throws TorqueException      if any database error occurs if any other
+	 *                              database error occurs
+	 */
+	protected abstract <T extends Permission> T doSelectById(Integer id, Connection con)
+			throws NoRowsException, TooManyRowsException, TorqueException;
 
-            try
-            {
-                TorqueAbstractSecurityEntity p = (TorqueAbstractSecurityEntity)permission;
-                p.setNew(false);
-                p.save();
-            }
-            catch (Exception e)
-            {
-                throw new DataBackendException("Renaming Permission '" + permission.getName() + "' failed", e);
-            }
-        }
-        else
-        {
-            throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
-        }
-    }
+	/**
+	 * Renames an existing Permission.
+	 *
+	 * @param permission The object describing the permission to be renamed.
+	 * @param name       the new name for the permission.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if the permission does not exist.
+	 */
+	@Override
+	public synchronized void renamePermission(Permission permission, String name)
+			throws DataBackendException, UnknownEntityException {
+		if (checkExists(permission)) {
+			permission.setName(name);
 
-    /**
-     * Removes a Permission from the system.
-     *
-     * @param permission
-     *            The object describing the permission to be removed.
-     * @throws DataBackendException
-     *             if there was an error accessing the data backend.
-     * @throws UnknownEntityException
-     *             if the permission does not exist.
-     */
-    @Override
-	public synchronized void removePermission(Permission permission) throws DataBackendException, UnknownEntityException
-    {
-        if (checkExists(permission))
-        {
-            try
-            {
+			try {
+				TorqueAbstractSecurityEntity p = (TorqueAbstractSecurityEntity) permission;
+				p.setNew(false);
+				p.save();
+			} catch (Exception e) {
+				throw new DataBackendException("Renaming Permission '" + permission.getName() + "' failed", e);
+			}
+		} else {
+			throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
+		}
+	}
 
-                ((TorqueAbstractSecurityEntity)permission).delete();
-            }
-            catch (TorqueException e)
-            {
-                throw new DataBackendException("Removing Permission '" + permission.getName() + "' failed", e);
-            }
-        }
-        else
-        {
-            throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
-        }
-    }
+	/**
+	 * Removes a Permission from the system.
+	 *
+	 * @param permission The object describing the permission to be removed.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if the permission does not exist.
+	 */
+	@Override
+	public synchronized void removePermission(Permission permission)
+			throws DataBackendException, UnknownEntityException {
+		if (checkExists(permission)) {
+			try {
 
-    /**
-     * Creates a new permission with specified attributes.
-     *
-     * @param permission
-     *            the object describing the permission to be created.
-     * @return a new Permission object that has id set up properly.
-     * @throws DataBackendException
-     *             if there was an error accessing the data backend.
-     * @throws EntityExistsException
-     *             if the permission already exists.
-     */
-    @Override
-	protected synchronized <T extends Permission> T persistNewPermission(T permission) throws DataBackendException
-    {
-        try
-        {
-            ((TorqueAbstractSecurityEntity)permission).save();
-        }
-        catch (Exception e)
-        {
-            throw new DataBackendException("Adding Permission '" + permission.getName() + "' failed", e);
-        }
+				((TorqueAbstractSecurityEntity) permission).delete();
+			} catch (TorqueException e) {
+				throw new DataBackendException("Removing Permission '" + permission.getName() + "' failed", e);
+			}
+		} else {
+			throw new UnknownEntityException("Unknown permission '" + permission.getName() + "'");
+		}
+	}
 
-        return permission;
-    }
+	/**
+	 * Creates a new permission with specified attributes.
+	 *
+	 * @param permission the object describing the permission to be created.
+	 * @return a new Permission object that has id set up properly.
+	 * @throws DataBackendException  if there was an error accessing the data
+	 *                               backend.
+	 */
+	@Override
+	protected synchronized <T extends Permission> T persistNewPermission(T permission) throws DataBackendException {
+		try {
+			((TorqueAbstractSecurityEntity) permission).save();
+		} catch (Exception e) {
+			throw new DataBackendException("Adding Permission '" + permission.getName() + "' failed", e);
+		}
 
-    /**
-     * Retrieves all permissions defined in the system.
-     *
-     * @return the names of all roles defined in the system.
-     * @throws DataBackendException
-     *             if there was an error accessing the data backend.
-     */
-    @Override
-	public PermissionSet getAllPermissions() throws DataBackendException
-    {
-        PermissionSet permissionSet = new PermissionSet();
-        Connection con = null;
+		return permission;
+	}
 
-        try
-        {
-            con = Transaction.begin();
+	/**
+	 * Retrieves all permissions defined in the system.
+	 *
+	 * @return the names of all roles defined in the system.
+	 * @throws DataBackendException if there was an error accessing the data
+	 *                              backend.
+	 */
+	@Override
+	public PermissionSet getAllPermissions() throws DataBackendException {
+		PermissionSet permissionSet = new PermissionSet();
+		Connection con = null;
 
-            List<Permission> permissions = doSelectAllPermissions(con);
+		try {
+			con = Transaction.begin();
 
-            for (Permission p : permissions)
-            {
-                // Add attached objects if they exist
-                ((TorqueAbstractSecurityEntity)p).retrieveAttachedObjects(con, false);
-                permissionSet.add(p);
-            }
+			List<Permission> permissions = doSelectAllPermissions(con);
 
-            Transaction.commit(con);
-            con = null;
-        }
-        catch (TorqueException e)
-        {
-            throw new DataBackendException("Error retrieving permission information", e);
-        }
-        finally
-        {
-            if (con != null)
-            {
-                Transaction.safeRollback(con);
-            }
-        }
+			for (Permission p : permissions) {
+				// Add attached objects if they exist
+				((TorqueAbstractSecurityEntity) p).retrieveAttachedObjects(con, false);
+				permissionSet.add(p);
+			}
 
-        return permissionSet;
-    }
+			Transaction.commit(con);
+			con = null;
+		} catch (TorqueException e) {
+			throw new DataBackendException("Error retrieving permission information", e);
+		} finally {
+			if (con != null) {
+				Transaction.safeRollback(con);
+			}
+		}
 
-    /**
-     * Determines if the <code>Permission</code> exists in the security
-     * system.
-     *
-     * @param permissionName
-     *            a <code>Permission</code> value
-     * @return true if the permission name exists in the system, false otherwise
-     * @throws DataBackendException
-     *             when more than one Permission with the same name exists.
-     */
-    @Override
-	public boolean checkExists(String permissionName) throws DataBackendException
-    {
-        boolean exists = false;
+		return permissionSet;
+	}
 
-        Connection con = null;
+	/**
+	 * Determines if the <code>Permission</code> exists in the security system.
+	 *
+	 * @param permissionName a <code>Permission</code> value
+	 * @return true if the permission name exists in the system, false otherwise
+	 * @throws DataBackendException when more than one Permission with the same name
+	 *                              exists.
+	 */
+	@Override
+	public boolean checkExists(String permissionName) throws DataBackendException {
+		boolean exists = false;
 
-        try
-        {
-            con = Transaction.begin();
+		Connection con = null;
 
-            doSelectByName(permissionName, con);
+		try {
+			con = Transaction.begin();
 
-            Transaction.commit(con);
-            con = null;
+			doSelectByName(permissionName, con);
 
-            exists = true;
-        }
-        catch (NoRowsException e)
-        {
-            exists = false;
-        }
-        catch (TooManyRowsException e)
-        {
-            throw new DataBackendException("Multiple permissions with same name '" + permissionName + "'");
-        }
-        catch (TorqueException e)
-        {
-            throw new DataBackendException("Error retrieving permission information", e);
-        }
-        finally
-        {
-            if (con != null)
-            {
-                Transaction.safeRollback(con);
-            }
-        }
+			Transaction.commit(con);
+			con = null;
 
-        return exists;
-    }
+			exists = true;
+		} catch (NoRowsException e) {
+			exists = false;
+		} catch (TooManyRowsException e) {
+			throw new DataBackendException("Multiple permissions with same name '" + permissionName + "'");
+		} catch (TorqueException e) {
+			throw new DataBackendException("Error retrieving permission information", e);
+		} finally {
+			if (con != null) {
+				Transaction.safeRollback(con);
+			}
+		}
 
-    /**
-     * Retrieve a Permission object with specified id.
-     *
-     * @param id
-     *            the id of the Permission.
-     * @return an object representing the Permission with specified id.
-     * @throws DataBackendException
-     *             if there was an error accessing the data backend.
-     * @throws UnknownEntityException
-     *             if the permission does not exist.
-     */
-    @Override
-	public <T extends Permission> T getPermissionById(Object id) throws DataBackendException, UnknownEntityException
-    {
-        T permission;
+		return exists;
+	}
 
-        if (id != null && id instanceof Integer)
-        {
-            Connection con = null;
+	/**
+	 * Retrieve a Permission object with specified id.
+	 *
+	 * @param id the id of the Permission.
+	 * @return an object representing the Permission with specified id.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if the permission does not exist.
+	 */
+	@Override
+	public <T extends Permission> T getPermissionById(Object id) throws DataBackendException, UnknownEntityException {
+		T permission;
 
-            try
-            {
-                con = Transaction.begin();
+		if (id != null && id instanceof Integer) {
+			Connection con = null;
 
-                permission = doSelectById((Integer)id, con);
+			try {
+				con = Transaction.begin();
 
-                // Add attached objects if they exist
-                ((TorqueAbstractSecurityEntity)permission).retrieveAttachedObjects(con, false);
+				permission = doSelectById((Integer) id, con);
 
-                Transaction.commit(con);
-                con = null;
-            }
-            catch (NoRowsException e)
-            {
-                throw new UnknownEntityException("Permission with id '" + id + "' does not exist.", e);
-            }
-            catch (TorqueException e)
-            {
-                throw new DataBackendException("Error retrieving permission information", e);
-            }
-            finally
-            {
-                if (con != null)
-                {
-                    Transaction.safeRollback(con);
-                }
-            }
-        }
-        else
-        {
-            throw new UnknownEntityException("Invalid permission id '" + id + "'");
-        }
+				// Add attached objects if they exist
+				((TorqueAbstractSecurityEntity) permission).retrieveAttachedObjects(con, false);
 
-        return permission;
-    }
+				Transaction.commit(con);
+				con = null;
+			} catch (NoRowsException e) {
+				throw new UnknownEntityException("Permission with id '" + id + "' does not exist.", e);
+			} catch (TorqueException e) {
+				throw new DataBackendException("Error retrieving permission information", e);
+			} finally {
+				if (con != null) {
+					Transaction.safeRollback(con);
+				}
+			}
+		} else {
+			throw new UnknownEntityException("Invalid permission id '" + id + "'");
+		}
 
-    /**
-     * Retrieve a Permission object with specified name.
-     *
-     * @param name the name of the Group.
-     * @return an object representing the Group with specified name.
-     * @throws DataBackendException if there was an error accessing the
-     *         data backend.
-     * @throws UnknownEntityException if the group does not exist.
-     */
-    @Override
-	public <T extends Permission> T getPermissionByName(String name) throws DataBackendException, UnknownEntityException
-    {
-        T permission = null;
-        Connection con = null;
+		return permission;
+	}
 
-        try
-        {
-            con = Transaction.begin();
+	/**
+	 * Retrieve a Permission object with specified name.
+	 *
+	 * @param name the name of the Group.
+	 * @return an object representing the Group with specified name.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if the group does not exist.
+	 */
+	@Override
+	public <T extends Permission> T getPermissionByName(String name)
+			throws DataBackendException, UnknownEntityException {
+		T permission = null;
+		Connection con = null;
 
-            permission = doSelectByName(name, con);
+		try {
+			con = Transaction.begin();
 
-            // Add attached objects if they exist
-            ((TorqueAbstractSecurityEntity)permission).retrieveAttachedObjects(con, false);
+			permission = doSelectByName(name, con);
 
-            Transaction.commit(con);
-            con = null;
-        }
-        catch (NoRowsException e)
-        {
-            throw new UnknownEntityException("Could not find permission " + name);
-        }
-        catch (TooManyRowsException e)
-        {
-            throw new DataBackendException("Multiple Permissions with same name '" + name + "'");
-        }
-        catch (TorqueException e)
-        {
-            throw new DataBackendException("Error retrieving permission information", e);
-        }
-        finally
-        {
-            if (con != null)
-            {
-                Transaction.safeRollback(con);
-            }
-        }
+			// Add attached objects if they exist
+			((TorqueAbstractSecurityEntity) permission).retrieveAttachedObjects(con, false);
 
-        return permission;
-    }
+			Transaction.commit(con);
+			con = null;
+		} catch (NoRowsException e) {
+			throw new UnknownEntityException("Could not find permission " + name);
+		} catch (TooManyRowsException e) {
+			throw new DataBackendException("Multiple Permissions with same name '" + name + "'");
+		} catch (TorqueException e) {
+			throw new DataBackendException("Error retrieving permission information", e);
+		} finally {
+			if (con != null) {
+				Transaction.safeRollback(con);
+			}
+		}
+
+		return permission;
+	}
 }

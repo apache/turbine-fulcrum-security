@@ -44,12 +44,18 @@ public class PeerManagerDefaultImpl extends AbstractManager
 	private static final long serialVersionUID = -3891813089694207441L;
 	private Map<String,Peer> peers = new ConcurrentHashMap<String,Peer>(4,0.75f,4);
 
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.peer.PeerManager#getPeerInstance(java.lang.String)
+     */
     @Override
     public <P extends Peer> P getPeerInstance(String peerClassName) throws DataBackendException
     {
         return getPeerInstance( peerClassName, Peer.class, null);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.peer.PeerManager#getPeerInstance(java.lang.String, java.lang.Class, java.lang.String)
+     */
     @SuppressWarnings( "unchecked" )
     @Override
     public <P extends Peer> P getPeerInstance( String peerClassName, Class<? extends Peer> peerInterface , String className) throws DataBackendException

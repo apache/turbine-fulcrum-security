@@ -54,7 +54,7 @@ public abstract class FulcrumAbstractTurbinePermission extends TorqueAbstractSec
      *
      * @param criteria Criteria to define the selection of records
      * @param con a database connection
-     * @throws TorqueException
+     * @throws TorqueException  if any database error occurs
      *
      * @return a list of Role/Permission relations
      */
@@ -131,13 +131,16 @@ public abstract class FulcrumAbstractTurbinePermission extends TorqueAbstractSec
     }
 
     /**
-     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#getDatabaseName()
+     * @return the database name
      */
     public String getDatabaseName()
     {
         return TorqueTurbinePermissionPeer.DATABASE_NAME;
     }
     
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)
+     */
     @Override
     public void retrieveAttachedObjects( Connection con )
         throws TorqueException
@@ -145,8 +148,8 @@ public abstract class FulcrumAbstractTurbinePermission extends TorqueAbstractSec
         retrieveAttachedObjects( con, false );
     }
 
-    /**
-     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection, java.lang.Boolean)
      */
     @Override
     public void retrieveAttachedObjects( Connection con, Boolean lazy )
@@ -162,7 +165,7 @@ public abstract class FulcrumAbstractTurbinePermission extends TorqueAbstractSec
         }
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#update(java.sql.Connection)
      */
     public void update(Connection con) throws TorqueException
@@ -194,7 +197,7 @@ public abstract class FulcrumAbstractTurbinePermission extends TorqueAbstractSec
         }
     }
 
-    /**
+    /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#delete()
      */
     public void delete() throws TorqueException

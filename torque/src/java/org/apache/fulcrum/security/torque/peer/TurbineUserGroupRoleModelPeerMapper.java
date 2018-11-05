@@ -39,7 +39,7 @@ public interface TurbineUserGroupRoleModelPeerMapper
      * the database
      *
      * @return the associated TurbineUser object
-     * @throws TorqueException when reading from the database fails.
+     * @throws TorqueException  if any database error occurs when reading from the database fails.
      */
     User getTurbineUser()
         throws TorqueException;
@@ -52,7 +52,7 @@ public interface TurbineUserGroupRoleModelPeerMapper
      * @param connection the connection used to retrieve the associated object
      *        from the database, if it was not retrieved before
      * @return the associated TurbineUser object
-     * @throws TorqueException
+     * @throws TorqueException  if any database error occurs
      */
     User getTurbineUser( Connection connection )
         throws TorqueException;
@@ -63,7 +63,7 @@ public interface TurbineUserGroupRoleModelPeerMapper
      * the database
      *
      * @return the associated TurbineGroup object
-     * @throws TorqueException when reading from the database fails.
+     * @throws TorqueException  if any database error occurs when reading from the database fails.
      */
     Group getTurbineGroup()
         throws TorqueException;
@@ -76,7 +76,7 @@ public interface TurbineUserGroupRoleModelPeerMapper
      * @param connection the connection used to retrieve the associated object
      *        from the database, if it was not retrieved before
      * @return the associated TurbineGroup object
-     * @throws TorqueException
+     * @throws TorqueException  if any database error occurs
      */
     Group getTurbineGroup( Connection connection )
         throws TorqueException;
@@ -87,7 +87,7 @@ public interface TurbineUserGroupRoleModelPeerMapper
      * the database
      *
      * @return the associated TurbineRole object
-     * @throws TorqueException when reading from the database fails.
+     * @throws TorqueException  if any database error occurs when reading from the database fails.
      */
     Role getTurbineRole()
         throws TorqueException;
@@ -100,7 +100,7 @@ public interface TurbineUserGroupRoleModelPeerMapper
      * @param connection the connection used to retrieve the associated object
      *        from the database, if it was not retrieved before
      * @return the associated TurbineRole object
-     * @throws TorqueException
+     * @throws TorqueException  if any database error occurs
      */
     Role getTurbineRole( Connection connection )
         throws TorqueException;

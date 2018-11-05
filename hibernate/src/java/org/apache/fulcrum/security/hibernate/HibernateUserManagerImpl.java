@@ -146,13 +146,9 @@ public class HibernateUserManagerImpl extends AbstractUserManager
      * 
      * @param user
      *            the object describing account to be created.
-     * @param password
-     *            The password to use for the account.
      * 
      * @throws DataBackendException
      *             if there was an error accessing the data backend.
-     * @throws EntityExistsException
-     *             if the user account already exists.
      */
     @Override
     public User persistNewUser(User user) throws DataBackendException
@@ -164,7 +160,7 @@ public class HibernateUserManagerImpl extends AbstractUserManager
     /**
      * Stores User attributes. The User is required to exist in the system.
      * 
-     * @param role
+     * @param user
      *            The User to be stored.
      * @throws DataBackendException
      *             if there was an error accessing the data backend.

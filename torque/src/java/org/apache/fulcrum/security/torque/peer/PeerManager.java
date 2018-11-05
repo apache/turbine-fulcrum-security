@@ -42,12 +42,12 @@ public interface PeerManager extends Serializable
     String ROLE = PeerManager.class.getName(); 
 
     /**
-     *  Expects the class name of a Torque Peer class, which could be instantiated. 
-     *  @see AbstractEntityManager#getPeerClassName()
+     * Expects the class name of a Torque Peer class, which could be instantiated. 
+     * {@link org.apache.fulcrum.security.spi.AbstractEntityManager#getClassName()}
      *  
      * @param peerClassName the peerClassName
-     * 
-     * @return a (cashed) peer class instance
+     * @return a cached peer class instance
+     * @throws DataBackendException data backend exception
      */
     public abstract <P extends Peer> P getPeerInstance(String peerClassName)
         throws DataBackendException;
@@ -55,11 +55,11 @@ public interface PeerManager extends Serializable
     /**
      * This method is provided to get more helpful exception messages.
      * 
-     * @param peerClassName
+     * @param peerClassName the peerClassName
      * @param class1 expected class the peers should implement 
      * @param className target class, i.e. the data object class type of the Peer object. The data object for which the peer is provided. 
-     * @return
-     * @throws DataBackendException
+     * @return peer instance
+     * @throws DataBackendException data backend exception
      */
     public abstract <P extends Peer> P getPeerInstance( String peerClassName, Class<? extends Peer> class1, String className ) throws DataBackendException;
 
