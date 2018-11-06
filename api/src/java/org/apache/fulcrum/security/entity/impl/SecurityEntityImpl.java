@@ -1,6 +1,5 @@
 package org.apache.fulcrum.security.entity.impl;
 
-import org.apache.commons.lang3.StringUtils;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -34,7 +33,12 @@ import org.apache.fulcrum.security.entity.SecurityEntity;
  */
 public class SecurityEntityImpl implements SecurityEntity
 {
-    private String name;
+    /**
+	 * Serial id
+	 */
+	private static final long serialVersionUID = 6949229336753158100L;
+
+	private String name;
 
     private Object id;
 
@@ -70,10 +74,12 @@ public class SecurityEntityImpl implements SecurityEntity
      */
     public void setName(String name) throws IllegalArgumentException
     {
-        if (StringUtils.isEmpty(name))
+    	if ( name == null )
+    	{
             throw new IllegalArgumentException("Must provide a valid name for all SecurityEntities.");
-        else
+    	} else {
         	this.name = name.toLowerCase();
+    	}
     }
 
     @Override
