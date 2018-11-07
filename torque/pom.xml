@@ -70,11 +70,6 @@
 					
 					<!--  exclude generated sources for now (only works when running mvn javadoc:javadoc, but not with mvn site? -->
 					<excludePackageNames>org.apache.fulcrum.security.torque.om*</excludePackageNames>
-
-					<!-- adding this did not help :( -->					
-					<sourceFileExcludes>
-					        <sourceFileExclude>**/torque/target/generated-sources/*.java</sourceFileExclude>
-					</sourceFileExcludes>
 					
 				</configuration>
 			</plugin>
