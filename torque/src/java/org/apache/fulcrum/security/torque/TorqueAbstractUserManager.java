@@ -198,6 +198,8 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager {
 
 	/**
 	 * Retrieve a user from persistent storage using username as the key.
+	 * 
+	 * Additionally retrieves all attached objects from {@link TorqueAbstractSecurityEntity#retrieveAttachedObjects(Connection, Boolean)}
 	 *
 	 * @param userName the name of the user.
 	 * @return an User object.

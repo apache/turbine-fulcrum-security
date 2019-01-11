@@ -30,6 +30,7 @@ import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupRolePeer;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUserGroup;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUserGroupPeer;
 import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UserSet;
 import org.apache.torque.TorqueException;
@@ -234,7 +235,7 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
      */
     @Override
     public void retrieveAttachedObjects( Connection con )
-        throws TorqueException
+        throws DataBackendException
     {
         retrieveAttachedObjects( con, false );
     }
@@ -244,24 +245,30 @@ public abstract class TorqueAbstractDynamicGroup extends TorqueAbstractSecurityE
      */
     @Override
     public void retrieveAttachedObjects( Connection con, Boolean lazy )
-        throws TorqueException
+        throws DataBackendException
     {
         this.userSet = new UserSet<User>();
+        
+        try {
 
-        List<TorqueDynamicUserGroup> usergroups = getTorqueDynamicUserGroupsJoinTorqueDynamicUser(new Criteria(), con);
-
-        for (TorqueDynamicUserGroup tdug : usergroups)
-        {
-            userSet.add(tdug.getTorqueDynamicUser());
-        }
-
-        this.roleSet = new RoleSet();
-
-        List<TorqueDynamicGroupRole> grouproles = getTorqueDynamicGroupRolesJoinTorqueDynamicRole(new Criteria(), con);
-
-        for (TorqueDynamicGroupRole tdgr : grouproles)
-        {
-            roleSet.add(tdgr.getTorqueDynamicRole());
+            List<TorqueDynamicUserGroup> usergroups = getTorqueDynamicUserGroupsJoinTorqueDynamicUser(new Criteria(), con);
+    
+            for (TorqueDynamicUserGroup tdug : usergroups)
+            {
+                userSet.add(tdug.getTorqueDynamicUser());
+            }
+    
+            this.roleSet = new RoleSet();
+    
+            List<TorqueDynamicGroupRole> grouproles = getTorqueDynamicGroupRolesJoinTorqueDynamicRole(new Criteria(), con);
+    
+            for (TorqueDynamicGroupRole tdgr : grouproles)
+            {
+                roleSet.add(tdgr.getTorqueDynamicRole());
+            }
+        
+        } catch (TorqueException e ) {
+            throw new DataBackendException( e.getMessage(),e );
         }
     }
 

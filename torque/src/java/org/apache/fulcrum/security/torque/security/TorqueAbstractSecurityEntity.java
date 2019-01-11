@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.sql.Connection;
 
 import org.apache.fulcrum.security.entity.SecurityEntity;
+import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.torque.TorqueException;
 import org.apache.torque.om.Persistent;
 /**
@@ -71,16 +72,16 @@ public abstract class TorqueAbstractSecurityEntity
      * @param lazy if <code>true</code>, may load some or all relationships later
      * @throws TorqueException database not found exception
      */
-    public abstract void retrieveAttachedObjects(Connection con, Boolean lazy) throws TorqueException;
+    public abstract void retrieveAttachedObjects(Connection con, Boolean lazy) throws DataBackendException;
     
     
     /**
      * old contract, lazy is set to <code>false</code>.
      *
      * @param con A database connection
-     * @throws TorqueException database not found exception
+     * @throws DataBackendException wrapper exception: user information not found exception
      */
-    public abstract void retrieveAttachedObjects(Connection con) throws TorqueException;
+    public abstract void retrieveAttachedObjects(Connection con) throws DataBackendException;
 
     /**
      * Update this instance to the database with all dependent objects

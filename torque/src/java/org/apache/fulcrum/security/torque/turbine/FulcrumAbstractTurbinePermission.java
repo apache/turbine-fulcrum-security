@@ -27,6 +27,7 @@ import org.apache.fulcrum.security.torque.om.TorqueTurbinePermissionPeer;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePermission;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePermissionPeer;
 import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
@@ -143,7 +144,7 @@ public abstract class FulcrumAbstractTurbinePermission extends TorqueAbstractSec
      */
     @Override
     public void retrieveAttachedObjects( Connection con )
-        throws TorqueException
+        throws DataBackendException
     {
         retrieveAttachedObjects( con, false );
     }
@@ -153,15 +154,19 @@ public abstract class FulcrumAbstractTurbinePermission extends TorqueAbstractSec
      */
     @Override
     public void retrieveAttachedObjects( Connection con, Boolean lazy )
-        throws TorqueException
+        throws DataBackendException
     {
         this.roleSet = new RoleSet();
 
-        List<TorqueTurbineRolePermission> rolepermissions = getTorqueTurbineRolePermissionsJoinTorqueTurbineRole(new Criteria(), con);
-
-        for (TorqueTurbineRolePermission ttrp : rolepermissions)
-        {
-            roleSet.add(ttrp.getTorqueTurbineRole());
+        try {
+            List<TorqueTurbineRolePermission> rolepermissions = getTorqueTurbineRolePermissionsJoinTorqueTurbineRole(new Criteria(), con);
+    
+            for (TorqueTurbineRolePermission ttrp : rolepermissions)
+            {
+                roleSet.add(ttrp.getTorqueTurbineRole());
+            }
+        } catch (TorqueException e ) {
+            throw new DataBackendException( e.getMessage(),e );
         }
     }
 

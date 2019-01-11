@@ -27,6 +27,7 @@ import org.apache.fulcrum.security.torque.om.TorqueDynamicPermissionPeer;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePermission;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePermissionPeer;
 import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
@@ -139,7 +140,7 @@ public abstract class TorqueAbstractDynamicPermission extends TorqueAbstractSecu
     
     @Override
     public void retrieveAttachedObjects( Connection con )
-        throws TorqueException
+        throws DataBackendException
     {
         retrieveAttachedObjects( con, false );
     }
@@ -149,15 +150,19 @@ public abstract class TorqueAbstractDynamicPermission extends TorqueAbstractSecu
      */
     @Override
     public void retrieveAttachedObjects( Connection con, Boolean lazy )
-        throws TorqueException
+        throws DataBackendException
     {
         this.roleSet = new RoleSet();
 
-        List<TorqueDynamicRolePermission> rolepermissions = getTorqueDynamicRolePermissionsJoinTorqueDynamicRole(new Criteria(), con);
-
-        for (TorqueDynamicRolePermission tdrp : rolepermissions)
-        {
-            roleSet.add(tdrp.getTorqueDynamicRole());
+        try {
+            List<TorqueDynamicRolePermission> rolepermissions = getTorqueDynamicRolePermissionsJoinTorqueDynamicRole(new Criteria(), con);
+    
+            for (TorqueDynamicRolePermission tdrp : rolepermissions)
+            {
+                roleSet.add(tdrp.getTorqueDynamicRole());
+            }
+        } catch (TorqueException e ) {
+            throw new DataBackendException( e.getMessage(),e );
         }
     }
 

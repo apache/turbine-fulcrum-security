@@ -65,7 +65,7 @@ public abstract class DefaultAbstractTurbineGroup extends TorqueAbstractTurbineT
     
     @Override
     public void retrieveAttachedObjects( Connection con )
-        throws TorqueException
+        throws DataBackendException
     {
         retrieveAttachedObjects( con, false );
     }    
@@ -74,23 +74,26 @@ public abstract class DefaultAbstractTurbineGroup extends TorqueAbstractTurbineT
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection, java.lang.Boolean)
      */
     @Override
-    public void retrieveAttachedObjects( Connection con, Boolean lazy ) throws TorqueException
+    public void retrieveAttachedObjects( Connection con, Boolean lazy ) throws DataBackendException
     {
-        if (!lazy) {
-            Set<TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
-            
-            List<org.apache.fulcrum.security.torque.om.TurbineUserGroupRole> ugrs = getTurbineUserGroupRolesJoinTurbineRole(new Criteria(), con);
-    
-            for (org.apache.fulcrum.security.torque.om.TurbineUserGroupRole ttugr : ugrs)
-            {
-                TurbineUserGroupRole ugr = new TurbineUserGroupRole();
-                ugr.setGroup(this);
-                ugr.setRole(ttugr.getTurbineRole());
-                ugr.setUser(ttugr.getTurbineUser(con));
-                userGroupRoleSet.add(ugr);
+        try {
+            if (!lazy) {
+                Set<TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
+                
+                List<org.apache.fulcrum.security.torque.om.TurbineUserGroupRole> ugrs = getTurbineUserGroupRolesJoinTurbineRole(new Criteria(), con);
+        
+                for (org.apache.fulcrum.security.torque.om.TurbineUserGroupRole ttugr : ugrs)
+                {
+                    TurbineUserGroupRole ugr = new TurbineUserGroupRole();
+                    ugr.setGroup(this);
+                    ugr.setRole(ttugr.getTurbineRole());
+                    ugr.setUser(ttugr.getTurbineUser(con));
+                    userGroupRoleSet.add(ugr);
+                }
+                setUserGroupRoleSet(userGroupRoleSet);
             }
-    
-            setUserGroupRoleSet(userGroupRoleSet);
+        } catch (TorqueException e ) {
+            throw new DataBackendException( e.getMessage(),e );
         }
     }
     

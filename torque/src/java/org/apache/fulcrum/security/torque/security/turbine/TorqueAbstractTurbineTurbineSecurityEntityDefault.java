@@ -23,6 +23,7 @@ import java.util.List;
 import org.apache.fulcrum.security.model.ACLFactory;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRoleEntity;
 import org.apache.fulcrum.security.torque.peer.TurbineUserGroupRoleModelPeerMapper;
+import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.torque.TorqueException;
 
 /**
@@ -47,8 +48,8 @@ public abstract class TorqueAbstractTurbineTurbineSecurityEntityDefault extends 
      * @param con A database connection
      * @param lazy if <code>true</code>, fetches objects lazily
      * @param ugrs The custom TurbineUserGroupRole set
-     * @throws TorqueException if data connection not found
+     * @throws DataBackendException if data connection or user information (table objects) not found
      */
-    public abstract <T extends TurbineUserGroupRoleModelPeerMapper> void retrieveAttachedObjects( Connection con, Boolean lazy, List<T> ugrs ) throws TorqueException;
+    public abstract <T extends TurbineUserGroupRoleModelPeerMapper> void retrieveAttachedObjects( Connection con, Boolean lazy, List<T> ugrs ) throws DataBackendException;
    
 }

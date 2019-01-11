@@ -178,7 +178,7 @@ public class TorqueTurbineUserManagerImpl extends PeerUserManager implements Tur
     
     /**
      * Retrieve a user from persistent storage using username as the
-     * key.
+     * key. Also retrieves all attached objects (user group role relationships).
      *
      * @param userName the name of the user.
      * @return an User object.
@@ -229,7 +229,7 @@ public class TorqueTurbineUserManagerImpl extends PeerUserManager implements Tur
     }
     
     /**
-     * Retrieves all users defined in the system.
+     * Retrieves all users with attached related objects (user group role relationships) defined in the system.
      *
      * @return the names of all users defined in the system.
      * @throws DataBackendException if there was an error accessing the data
@@ -274,7 +274,7 @@ public class TorqueTurbineUserManagerImpl extends PeerUserManager implements Tur
   }
 
   /**
-   * Retrieve a User object with specified id.
+   * Retrieve a User object with specified id and all attached objects (user group role relationships).
    *
    * @param id
    *            the id of the User.
@@ -329,32 +329,45 @@ public class TorqueTurbineUserManagerImpl extends PeerUserManager implements Tur
       return user;
   }
   
-  private <T extends User> void attachRelatedObjects( T user, Connection con )
-                  throws TorqueException
+  /**
+   * Retrieves all related objects (user group roles). If the objects not exists {@link DataBackendException} is wrapped in a new TorqueException.
+   * 
+   * @param user
+   * @param con
+   * @throws TorqueException
+   */
+  private <T extends User> void attachRelatedObjects( T user, Connection con ) throws TorqueException
+  {
+      if (user instanceof TorqueAbstractSecurityEntity) {
+          if (getCustomPeer()) {
+              try
               {
-                  if (user instanceof TorqueAbstractSecurityEntity) {
-                      if (getCustomPeer()) {
-                          try
-                          {
-                              TorqueTurbineUserGroupRolePeer<TurbineUserGroupRoleModelPeerMapper> peerInstance = 
-                                              (TorqueTurbineUserGroupRolePeer<TurbineUserGroupRoleModelPeerMapper>) getUserGroupRolePeerInstance();
-                              Criteria criteria = new Criteria();
-                              // expecting the same name in any custom implementation
-                              criteria.where(peerInstance.getTableMap().getColumn(getColumnName4UserGroupRole() ), ( (TorqueAbstractSecurityEntity) user ).getEntityId() );                        
-                              List<TurbineUserGroupRoleModelPeerMapper> ugrs = peerInstance.doSelectJoinTurbineRole( criteria, con );
-                              
-                              if (user instanceof TorqueAbstractTurbineTurbineSecurityEntityDefault) {
-                                  ((TorqueAbstractTurbineTurbineSecurityEntityDefault)user).retrieveAttachedObjects(con, false, ugrs);
-                              }
-                          }
-                          catch ( DataBackendException e )
-                          {
-                              throw new TorqueException( e );
-                          }
-                      } else {
-                          ((TorqueAbstractSecurityEntity)user).retrieveAttachedObjects(con);
-                      }
+                  TorqueTurbineUserGroupRolePeer<TurbineUserGroupRoleModelPeerMapper> peerInstance = 
+                                  (TorqueTurbineUserGroupRolePeer<TurbineUserGroupRoleModelPeerMapper>) getUserGroupRolePeerInstance();
+                  Criteria criteria = new Criteria();
+                  // expecting the same name in any custom implementation
+                  criteria.where(peerInstance.getTableMap().getColumn(getColumnName4UserGroupRole() ), ( (TorqueAbstractSecurityEntity) user ).getEntityId() );                        
+                  List<TurbineUserGroupRoleModelPeerMapper> ugrs = peerInstance.doSelectJoinTurbineRole( criteria, con );
+                  
+                  if (user instanceof TorqueAbstractTurbineTurbineSecurityEntityDefault) {
+                      ((TorqueAbstractTurbineTurbineSecurityEntityDefault)user).retrieveAttachedObjects(con, false, ugrs);
                   }
               }
+              catch ( DataBackendException e )
+              {
+                  throw new TorqueException( e );
+              }
+          } else {
+              try
+              {
+                ((TorqueAbstractSecurityEntity)user).retrieveAttachedObjects(con);
+              }
+              catch ( DataBackendException e )
+              {
+                  throw new TorqueException( e );
+              }
+          }
+      }
+  }
 
 }

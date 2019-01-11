@@ -28,8 +28,8 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
 import org.apache.fulcrum.security.torque.om.TurbineUserGroupRolePeer;
 import org.apache.fulcrum.security.torque.om.TurbineUserPeer;
 import org.apache.fulcrum.security.torque.peer.TurbineUserGroupRoleModelPeerMapper;
-import org.apache.fulcrum.security.torque.security.turbine.TorqueAbstractTurbineTurbineSecurityEntity;
 import org.apache.fulcrum.security.torque.security.turbine.TorqueAbstractTurbineTurbineSecurityEntityDefault;
+import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
 import org.apache.torque.om.SimpleKey;
@@ -55,27 +55,31 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
      * 
      * Does intentionally not initialize the cache collTurbineUserGroupRoles for referenced objects. 
      * 
-     * Be careful not call any of the generated getTurbineUserGroupRoles methods in derived classes,
+     * Be careful not to call any of the generated getTurbineUserGroupRoles methods in derived classes,
      * the link {@link #save()} method otherwise might not update the right relationships.
      *
      * @param criteria Criteria to define the selection of records
      * @param con a database connection
-     * @throws TorqueException  if any database error occurs
+     * @throws DataBackendException  if any database error occurs
      *
      * @return a list of User/Group/Role relations
      */
     protected <T extends TurbineUserGroupRoleModelPeerMapper> List<T> getTurbineUserGroupRolesJoinTurbineRole(Criteria criteria, Connection con)
-        throws TorqueException
+        throws DataBackendException
     {
         criteria.and(TurbineUserGroupRolePeer.USER_ID, getEntityId() );
-        return (List<T>) TurbineUserGroupRolePeer.doSelectJoinTurbineRole(criteria, con);
+        try {
+            return (List<T>) TurbineUserGroupRolePeer.doSelectJoinTurbineRole(criteria, con);
+        } catch (  TorqueException e) {
+            throw new DataBackendException( e.getMessage(), e );
+        }
     }
     
     /* (non-Javadoc)
      * @see org.apache.fulcrum.security.torque.security.turbine.TorqueAbstractTurbineTurbineSecurityEntityDefault#retrieveAttachedObjects(java.sql.Connection, java.lang.Boolean, java.util.List)
      */
     @Override
-    public <T extends TurbineUserGroupRoleModelPeerMapper> void retrieveAttachedObjects( Connection con, Boolean lazy, List<T> ugrs ) throws TorqueException
+    public <T extends TurbineUserGroupRoleModelPeerMapper> void retrieveAttachedObjects( Connection con, Boolean lazy, List<T> ugrs ) throws DataBackendException
     {
         if (!lazy ) { // !lazy
             Set<TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
@@ -94,7 +98,7 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection, java.lang.Boolean)
      */
     @Override
-    public void retrieveAttachedObjects( Connection con, Boolean lazy ) throws TorqueException
+    public void retrieveAttachedObjects( Connection con, Boolean lazy ) throws DataBackendException
     {
         if (!lazy) {
             Set<TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
@@ -113,7 +117,7 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
      */
     @Override
     public void retrieveAttachedObjects( Connection con )
-        throws TorqueException
+        throws DataBackendException
     {
         retrieveAttachedObjects( con, false ); //false
     }
@@ -169,19 +173,23 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
      */
     private <T extends TurbineUserGroupRoleModelPeerMapper> void maptoModel( Connection con, Set<TurbineUserGroupRole> userGroupRoleSet,
                              List<T> ugrs )
-        throws TorqueException
+        throws DataBackendException
     {
-        for (TurbineUserGroupRoleModelPeerMapper ttugr : ugrs)
-        {
-            TurbineUserGroupRole ugr = new TurbineUserGroupRole();
-            ugr.setUser((User) this);
-            ugr.setRole(ttugr.getTurbineRole(con));
-            
-            // org.apache.fulcrum.security.torque.om.TurbineGroup implements 
-            // org.apache.fulcrum.security.model.turbine.entity.TurbineGroup
-            // but may be hides it? 
-            ugr.setGroup(ttugr.getTurbineGroup(con));
-            userGroupRoleSet.add(ugr);
+        try {
+            for (TurbineUserGroupRoleModelPeerMapper ttugr : ugrs)
+            {
+                TurbineUserGroupRole ugr = new TurbineUserGroupRole();
+                ugr.setUser((User) this);
+                ugr.setRole(ttugr.getTurbineRole(con));
+                
+                // org.apache.fulcrum.security.torque.om.TurbineGroup implements 
+                // org.apache.fulcrum.security.model.turbine.entity.TurbineGroup
+                // but may be hides it? 
+                ugr.setGroup(ttugr.getTurbineGroup(con));
+                userGroupRoleSet.add(ugr);
+            }
+        } catch (TorqueException e ) {
+            throw new DataBackendException( e.getMessage(),e );
         }
     }
 }

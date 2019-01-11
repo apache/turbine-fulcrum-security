@@ -27,6 +27,7 @@ import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroup;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueBasicUserPeer;
 import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
@@ -134,7 +135,7 @@ public abstract class TorqueAbstractBasicUser extends TorqueAbstractSecurityEnti
      */
     @Override
     public void retrieveAttachedObjects( Connection con )
-        throws TorqueException
+        throws DataBackendException
     {
         retrieveAttachedObjects( con, false );
     }
@@ -144,15 +145,19 @@ public abstract class TorqueAbstractBasicUser extends TorqueAbstractSecurityEnti
      */
     @Override
     public void retrieveAttachedObjects( Connection con, Boolean lazy )
-        throws TorqueException
+        throws DataBackendException
     {
         this.groupSet = new GroupSet();
 
-        List<TorqueBasicUserGroup> usergroups = getTorqueBasicUserGroupsJoinTorqueBasicGroup(new Criteria(), con);
-
-        for (TorqueBasicUserGroup tbug : usergroups)
-        {
-            groupSet.add(tbug.getTorqueBasicGroup());
+        try {
+            List<TorqueBasicUserGroup> usergroups = getTorqueBasicUserGroupsJoinTorqueBasicGroup(new Criteria(), con);
+    
+            for (TorqueBasicUserGroup tbug : usergroups)
+            {
+                groupSet.add(tbug.getTorqueBasicGroup());
+            }
+        } catch (TorqueException e ) {
+            throw new DataBackendException( e.getMessage(),e );
         }
     }
 
