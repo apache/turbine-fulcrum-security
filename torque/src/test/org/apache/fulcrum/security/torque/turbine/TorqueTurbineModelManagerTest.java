@@ -18,7 +18,8 @@ package org.apache.fulcrum.security.torque.turbine;
  * under the License.
  */
 
-import static org.junit.Assert.fail;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.turbine.test.AbstractTurbineModelManagerTest;
@@ -31,9 +32,8 @@ import org.apache.fulcrum.security.torque.om.TorqueTurbineUserGroupRolePeer;
 import org.apache.fulcrum.security.torque.om.TorqueTurbineUserPeer;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
@@ -46,7 +46,7 @@ public class TorqueTurbineModelManagerTest
     protected static HsqlDB hsqlDB = null;
 
 	@Override
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception
     {
         try
@@ -62,13 +62,13 @@ public class TorqueTurbineModelManagerTest
         }
         catch (Exception e)
         {
-        	Assert.fail(e.toString());
+        	fail(e.toString());
         }
 
     }
    
 	@Override
-	@After
+	@AfterEach
 	public void tearDown()
     {
         // cleanup tables

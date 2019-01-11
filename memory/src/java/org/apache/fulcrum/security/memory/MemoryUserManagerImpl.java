@@ -39,6 +39,11 @@ public class MemoryUserManagerImpl extends AbstractUserManager {
 	// TODO Need to load up Crypto component and actually encrypt passwords!
 
 	private static List<User> users = new ArrayList<User>();
+	
+	public MemoryUserManagerImpl() {
+        // reset
+	    users.clear();
+    }
 
 	/** Our Unique ID counter */
 	// private static int uniqueId = 0;

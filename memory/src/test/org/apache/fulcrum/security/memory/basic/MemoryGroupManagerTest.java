@@ -1,5 +1,7 @@
 package org.apache.fulcrum.security.memory.basic;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,11 +23,8 @@ package org.apache.fulcrum.security.memory.basic;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractGroupManagerTest;
-import static org.junit.Assert.*;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 /**
  * @author Eric Pugh
@@ -36,7 +35,7 @@ public class MemoryGroupManagerTest extends AbstractGroupManagerTest
 {
 
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         try
@@ -53,7 +52,7 @@ public class MemoryGroupManagerTest extends AbstractGroupManagerTest
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown()
     {
         group = null;

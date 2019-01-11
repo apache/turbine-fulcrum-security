@@ -20,8 +20,9 @@ package org.apache.fulcrum.security.torque;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractPermissionManagerTest;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
 
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
@@ -32,7 +33,7 @@ public class TorquePermissionManagerTest extends AbstractPermissionManagerTest
 {
     protected static HsqlDB hsqlDB = null;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception
     {
         hsqlDB = new HsqlDB("src/test/fulcrum-dynamic-schema.sql");
@@ -49,7 +50,7 @@ public class TorquePermissionManagerTest extends AbstractPermissionManagerTest
     }
 
     @Override
-    @After
+    @AfterEach
 	public void tearDown()
     {
 /*

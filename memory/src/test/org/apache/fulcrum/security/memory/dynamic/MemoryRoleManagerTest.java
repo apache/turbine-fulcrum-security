@@ -1,5 +1,7 @@
 package org.apache.fulcrum.security.memory.dynamic;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,10 +23,9 @@ package org.apache.fulcrum.security.memory.dynamic;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractRoleManagerTest;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
-import static org.junit.Assert.*;
 
 /**
  * @author Eric Pugh
@@ -34,7 +35,7 @@ import static org.junit.Assert.*;
 public class MemoryRoleManagerTest extends AbstractRoleManagerTest
 {
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         try
@@ -51,7 +52,7 @@ public class MemoryRoleManagerTest extends AbstractRoleManagerTest
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown()
     {
         role = null;

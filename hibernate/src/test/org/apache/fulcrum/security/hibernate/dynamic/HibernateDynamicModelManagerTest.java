@@ -1,5 +1,7 @@
 package org.apache.fulcrum.security.hibernate.dynamic;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -23,12 +25,9 @@ import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.hibernate.HibernateHelper;
 import org.apache.fulcrum.security.hibernate.PersistenceHelper;
 import org.apache.fulcrum.security.model.dynamic.test.AbstractDynamicModelManagerTest;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
-import static org.junit.Assert.*;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
@@ -38,7 +37,7 @@ import org.junit.Test;
 public class HibernateDynamicModelManagerTest extends AbstractDynamicModelManagerTest
 {
     @Override
-	@Before
+	@BeforeEach
     public void setUp()
     {
         try
@@ -57,7 +56,7 @@ public class HibernateDynamicModelManagerTest extends AbstractDynamicModelManage
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown()
     {
         try

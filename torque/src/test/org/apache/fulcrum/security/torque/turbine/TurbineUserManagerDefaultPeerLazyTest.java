@@ -18,7 +18,9 @@ package org.apache.fulcrum.security.torque.turbine;
  * under the License.
  */
 
-import static org.junit.Assert.fail;
+
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -36,7 +38,9 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
 import org.apache.torque.util.Transaction;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
 
 /**
  * Test user with attached object (user-role-goup relationship)
@@ -49,7 +53,7 @@ public class TurbineUserManagerDefaultPeerLazyTest extends AbstractTurbineUserMa
 {
     protected static HsqlDB hsqlDB = null;
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         try
@@ -79,6 +83,7 @@ public class TurbineUserManagerDefaultPeerLazyTest extends AbstractTurbineUserMa
    
 
     @Override
+    @AfterEach
 	public void tearDown()
     {
         

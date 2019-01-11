@@ -1,5 +1,10 @@
 package org.apache.fulcrum.security.model.dynamic.test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -42,18 +47,17 @@ import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.UserSet;
-import org.apache.fulcrum.testcontainer.BaseUnit4Test;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Eric Pugh
  * @author <a href="mailto:ben@gidley.co.uk">Ben Gidley </a>
  *
  */
-public abstract class AbstractDynamicModelManagerTest extends BaseUnit4Test
+public abstract class AbstractDynamicModelManagerTest extends BaseUnit5Test
 {
     private static final String ONLY_BORRIS_PERMISSION = "ONLY_BORRIS_PERMISSION";
 
@@ -79,7 +83,7 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnit4Test
 
     protected SecurityService securityService;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception
     {
         roleManager = securityService.getRoleManager();
@@ -91,7 +95,7 @@ public abstract class AbstractDynamicModelManagerTest extends BaseUnit4Test
 
 
 	@Override
-	@After
+	@AfterEach
     public void tearDown()
     {
         this.release(roleManager);

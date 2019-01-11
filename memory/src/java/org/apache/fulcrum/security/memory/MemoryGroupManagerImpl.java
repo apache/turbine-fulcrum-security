@@ -25,7 +25,6 @@ import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.spi.AbstractGroupManager;
 import org.apache.fulcrum.security.util.DataBackendException;
-import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 
@@ -38,7 +37,13 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public class MemoryGroupManagerImpl extends AbstractGroupManager implements GroupManager
 {
+    // static to simulate database ?
     private static List<Group> groups = new ArrayList<Group>();
+    
+    public MemoryGroupManagerImpl() {
+        // reset
+        groups = new ArrayList<Group>();
+    }
 
     /** Our Unique ID counter */
     // private static int uniqueId = 0;

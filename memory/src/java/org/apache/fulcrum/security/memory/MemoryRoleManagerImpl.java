@@ -40,6 +40,11 @@ public class MemoryRoleManagerImpl extends AbstractRoleManager
 {
     /** List to store all our roles in */
     private static List<Role> roles = new ArrayList<Role>();
+    
+    public MemoryRoleManagerImpl() {
+        // reset
+        roles.clear();
+    }
 
     /** Our Unique ID counter */
     // private static int uniqueId = 0;

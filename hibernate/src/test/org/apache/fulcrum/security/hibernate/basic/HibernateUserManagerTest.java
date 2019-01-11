@@ -18,15 +18,15 @@ package org.apache.fulcrum.security.hibernate.basic;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.hibernate.HibernateHelper;
 import org.apache.fulcrum.security.hibernate.PersistenceHelper;
 import org.apache.fulcrum.security.model.test.AbstractUserManagerTest;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
 
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
@@ -34,7 +34,7 @@ import org.junit.Before;
  */
 public class HibernateUserManagerTest extends AbstractUserManagerTest
 {
-    @Before
+    @BeforeEach
     public void setUp()
     {
         try
@@ -53,7 +53,7 @@ public class HibernateUserManagerTest extends AbstractUserManagerTest
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown()
     {
         try

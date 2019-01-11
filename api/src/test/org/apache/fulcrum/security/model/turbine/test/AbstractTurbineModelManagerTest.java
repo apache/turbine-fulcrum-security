@@ -18,11 +18,10 @@ package org.apache.fulcrum.security.model.turbine.test;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Set;
 
@@ -42,16 +41,16 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.UserSet;
-import org.apache.fulcrum.testcontainer.BaseUnit4Test;
-import org.junit.Before;
-import org.junit.Test;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Initialization of services in implementing tests
  * @author Eric Pugh
  * 
  */
-public abstract class AbstractTurbineModelManagerTest extends BaseUnit4Test
+public abstract class AbstractTurbineModelManagerTest extends BaseUnit5Test
 {
     protected Role role;
 
@@ -67,7 +66,7 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit4Test
 
     protected SecurityService securityService;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception
     {
     	securityService  = (SecurityService) lookup(SecurityService.ROLE);

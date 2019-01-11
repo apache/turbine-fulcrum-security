@@ -1,6 +1,7 @@
 package org.apache.fulcrum.security.memory.dynamic;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,8 +24,9 @@ import static org.junit.Assert.fail;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.dynamic.test.AbstractDynamicModelManagerTest;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
 
 
 /**
@@ -37,7 +39,7 @@ public class MemoryDynamicModelManagerTest extends AbstractDynamicModelManagerTe
 
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp()
     {
         try
@@ -55,7 +57,7 @@ public class MemoryDynamicModelManagerTest extends AbstractDynamicModelManagerTe
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown()
     {
         super.tearDown();

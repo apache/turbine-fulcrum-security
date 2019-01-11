@@ -23,10 +23,10 @@ import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.hibernate.HibernateHelper;
 import org.apache.fulcrum.security.hibernate.PersistenceHelper;
 import org.apache.fulcrum.security.model.turbine.test.AbstractTurbineModelManagerTest;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Eric Pugh
@@ -37,7 +37,7 @@ public class HibernateTurbineModelManagerTest extends AbstractTurbineModelManage
 {
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() throws Exception
     {
 
@@ -57,7 +57,7 @@ public class HibernateTurbineModelManagerTest extends AbstractTurbineModelManage
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown()
     {
         super.tearDown();

@@ -28,15 +28,15 @@ import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
-import org.apache.fulcrum.testcontainer.BaseUnit4Test;
-import org.junit.Test;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Eric Pugh
  */
-public abstract class AbstractPermissionManagerTest extends BaseUnit4Test
+public abstract class AbstractPermissionManagerTest extends BaseUnit5Test
 {
     protected Permission permission;
     protected PermissionManager permissionManager;

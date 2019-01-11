@@ -19,12 +19,12 @@ package org.apache.fulcrum.security.torque.turbine;
  * under the License.
  */
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.UserManager;
@@ -41,8 +41,8 @@ import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.UserSet;
-import org.apache.fulcrum.testcontainer.BaseUnit4Test;
-import org.junit.Test;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Eric Pugh
@@ -51,7 +51,7 @@ import org.junit.Test;
  * Same as {@link AbstractUserManagerTest} in Fulcrum API module, but with user-group-role-sets added and checked
  * 
  */
-public abstract class AbstractTurbineUserManagerTest extends BaseUnit4Test
+public abstract class AbstractTurbineUserManagerTest extends BaseUnit5Test
 {
     protected User user;
     protected UserManager userManager;

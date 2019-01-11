@@ -19,7 +19,7 @@ package org.apache.fulcrum.security.model.basic.test;
  * under the License.
  */
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.SecurityService;
@@ -30,14 +30,14 @@ import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.basic.BasicModelManager;
 import org.apache.fulcrum.security.model.basic.entity.BasicGroup;
 import org.apache.fulcrum.security.model.basic.entity.BasicUser;
-import org.apache.fulcrum.testcontainer.BaseUnit4Test;
-import org.junit.Before;
-import org.junit.Test;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Eric Pugh
  */
-public abstract class AbstractModelManagerTest extends BaseUnit4Test
+public abstract class AbstractModelManagerTest extends BaseUnit5Test
 {
     protected Role role;
     protected BasicModelManager modelManager;
@@ -45,7 +45,7 @@ public abstract class AbstractModelManagerTest extends BaseUnit4Test
     protected UserManager userManager;
     protected SecurityService securityService;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception
     {
         userManager = securityService.getUserManager();

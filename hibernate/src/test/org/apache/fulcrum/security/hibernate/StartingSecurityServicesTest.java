@@ -23,15 +23,16 @@ import static org.junit.Assert.assertTrue;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
-import org.apache.fulcrum.testcontainer.BaseUnit4Test;
-import org.junit.Test;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.junit.jupiter.api.Test;
+
 /**
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
  * @version $Id: StartingSecurityServicesTest.java 535465 2007-05-05 06:58:06Z
  *          tv $
  */
 
-public class StartingSecurityServicesTest extends BaseUnit4Test
+public class StartingSecurityServicesTest extends BaseUnit5Test
 {
     private SecurityService securityService = null;
 

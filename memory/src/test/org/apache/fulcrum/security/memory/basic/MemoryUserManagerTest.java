@@ -1,5 +1,7 @@
 package org.apache.fulcrum.security.memory.basic;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,11 +21,12 @@ package org.apache.fulcrum.security.memory.basic;
  * under the License.
  */
 
-import static org.junit.Assert.fail;
+
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractUserManagerTest;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
+
 
 /**
  * @author Eric Pugh
@@ -33,7 +36,7 @@ import org.junit.Before;
 public class MemoryUserManagerTest extends AbstractUserManagerTest
 {
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         try

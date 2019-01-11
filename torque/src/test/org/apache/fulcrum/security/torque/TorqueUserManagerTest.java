@@ -18,11 +18,12 @@ package org.apache.fulcrum.security.torque;
  * under the License.
  */
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractUserManagerTest;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
+
 
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
@@ -34,7 +35,7 @@ public class TorqueUserManagerTest extends AbstractUserManagerTest
 {
     protected static HsqlDB hsqlDB = null;
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         try

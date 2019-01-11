@@ -20,11 +20,11 @@ package org.apache.fulcrum.security.torque;
 
 import static org.junit.Assert.fail;
 
-import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractRoleManagerTest;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
 
 /**
  * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
@@ -35,7 +35,7 @@ public class TorqueRoleManagerTest extends AbstractRoleManagerTest
 {
     protected static HsqlDB hsqlDB = null;
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         try
@@ -58,7 +58,7 @@ public class TorqueRoleManagerTest extends AbstractRoleManagerTest
     }
 
     @Override
-    @After
+    @AfterEach
 	public void tearDown()
     {
 /*

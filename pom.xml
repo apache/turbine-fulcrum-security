@@ -21,7 +21,7 @@
    <parent>
        <artifactId>turbine-parent</artifactId>
        <groupId>org.apache.turbine</groupId>
-       <version>5</version>
+       <version>6-SNAPSHOT</version>
        <relativePath />
    </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -110,7 +110,7 @@
           <groupId>org.apache.fulcrum</groupId>
           <artifactId>fulcrum-testcontainer</artifactId>
           <!-- junit 5 seems to have problems to find unit tests in test scoped jar org.apache.fulcrum:fulcrum-security-api:test-jar, downgraded from 1.0.8-SNAPSHOT, classpath loading issue?  -->
-          <version>1.0.7</version>
+          <version>1.0.8</version>
           <scope>test</scope>
         </dependency>
         <dependency>

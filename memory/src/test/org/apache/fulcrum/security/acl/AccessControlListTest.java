@@ -1,5 +1,7 @@
 package org.apache.fulcrum.security.acl;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,9 +20,7 @@ package org.apache.fulcrum.security.acl;
  * specific language governing permissions and limitations
  * under the License.
  */
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -44,9 +44,10 @@ import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.RoleSet;
-import org.apache.fulcrum.testcontainer.BaseUnit4Test;
-import org.junit.Before;
-import org.junit.Test;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 /**
  * Test that we can generate AccessControlLists from the Factory
@@ -54,7 +55,7 @@ import org.junit.Test;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class AccessControlListTest extends BaseUnit4Test
+public class AccessControlListTest extends BaseUnit5Test
 {
 
     private UserManager userManager;
@@ -66,10 +67,9 @@ public class AccessControlListTest extends BaseUnit4Test
     private static int counter = 1;
     private User user;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception
     {
-
 
         this.setRoleFileName("src/test/DynamicMemoryRoleConfig.xml");
         this.setConfigurationFileName("src/test/DynamicMemoryComponentConfig.xml");

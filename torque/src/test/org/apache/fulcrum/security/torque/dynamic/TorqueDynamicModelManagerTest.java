@@ -1,5 +1,7 @@
 package org.apache.fulcrum.security.torque.dynamic;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -32,10 +34,8 @@ import org.apache.fulcrum.security.torque.om.TorqueDynamicUserGroupPeer;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUserPeer;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
-import org.junit.After;
-import org.junit.Before;
-
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 
 /**
@@ -48,7 +48,7 @@ public class TorqueDynamicModelManagerTest extends AbstractDynamicModelManagerTe
     protected static HsqlDB hsqlDB = null;
 
     @Override
-	@Before
+	@BeforeEach
     public void setUp()
     {
         try
@@ -69,7 +69,7 @@ public class TorqueDynamicModelManagerTest extends AbstractDynamicModelManagerTe
     }
 
     @Override
-    @After
+    @AfterEach
 	public void tearDown()
     {
         // cleanup tables

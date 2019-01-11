@@ -21,12 +21,10 @@ package org.apache.fulcrum.security.hibernate;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractUserManagerTest;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
-import static org.junit.Assert.*;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
@@ -34,7 +32,7 @@ import org.junit.Test;
  */
 public class HibernateUserManagerTest extends AbstractUserManagerTest
 {
-    @Before
+    @BeforeEach
     public void setUp()
     {
         try
@@ -53,7 +51,7 @@ public class HibernateUserManagerTest extends AbstractUserManagerTest
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown()
     {
         try

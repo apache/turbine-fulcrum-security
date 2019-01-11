@@ -1,5 +1,7 @@
 package org.apache.fulcrum.security.acl;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,9 +20,7 @@ package org.apache.fulcrum.security.acl;
  * specific language governing permissions and limitations
  * under the License.
  */
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -41,9 +41,11 @@ import org.apache.fulcrum.security.model.turbine.TurbineModelManager;
 import org.apache.fulcrum.security.util.GroupSet;
 import org.apache.fulcrum.security.util.PermissionSet;
 import org.apache.fulcrum.security.util.RoleSet;
-import org.apache.fulcrum.testcontainer.BaseUnit4Test;
-import org.junit.Before;
-import org.junit.Test;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 /**
  * Test that we can generate AccessControlLists from the Factory
@@ -51,7 +53,7 @@ import org.junit.Test;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id: AccessControlListTest.java 1791100 2017-04-12 09:48:44Z gk $
  */
-public class TurbineAccessControlListTest extends BaseUnit4Test
+public class TurbineAccessControlListTest extends BaseUnit5Test
 {
 
     private UserManager userManager;
@@ -63,7 +65,7 @@ public class TurbineAccessControlListTest extends BaseUnit4Test
     private static int counter = 1;
     private User user;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception
     {
 
@@ -82,7 +84,18 @@ public class TurbineAccessControlListTest extends BaseUnit4Test
         	userManager.addUser(user, "secretpassword");
         }
         
-
+    }
+    
+    @Override
+    @AfterEach
+    public void tearDown()
+    {
+        userManager = null;
+        groupManager = null;
+        roleManager = null;
+        modelManager = null;
+        permissionManager = null;
+        user = null;
     }
 
     @Test
@@ -111,7 +124,8 @@ public class TurbineAccessControlListTest extends BaseUnit4Test
         assertTrue(dacl.hasPermission(permission,group));     
         assertEquals(dacl.getPermissions(group).toString(),permissionSets.get(group).toString());
         Serializable serDeSer = SerializationUtils.roundtrip(acl);
-        assertTrue("Expected RoleSet: [role 4 -> 4]", ((TurbineAccessControlList)serDeSer).getRoles().toString().equals(dacl.getRoles().toString()));
+        assertTrue( ((TurbineAccessControlList)serDeSer).getRoles().toString().equals(dacl.getRoles().toString()),
+                "Expected RoleSet: [role 4 -> 4]");
 
     }
     @Test
@@ -270,23 +284,28 @@ public class TurbineAccessControlListTest extends BaseUnit4Test
     @Test
     public void testHasRoleStringString() throws Exception
     {
-        Group group = getGroup();
-        Group group2 = getGroup();
-        Role role = getRole();
-        Role role2 = getRole();
-        Role role3 = getRole();
-        modelManager.grant(user, group, role);
-        modelManager.grant(user, group, role2);
-        modelManager.grant(user, group2, role);
-        modelManager.grant(user, group2, role3);
-        acl = userManager.getACL(user);
-        assertTrue(acl.hasRole(role.getName(), group.getName()));
-        assertTrue(acl.hasRole(role.getName(), group2.getName()));
-        assertTrue(acl.hasRole(role2.getName(), group.getName()));
-        assertFalse(acl.hasRole(role2.getName(), group2.getName()));
-        assertTrue(acl.hasRole(role.getName(), group2.getName()));
-        assertFalse(acl.hasRole(role2.getName(), group2.getName()));
-        assertTrue(acl.hasRole(role3.getName(), group2.getName()));
+        try {
+            Group group = getGroup();
+            Group group2 = getGroup();
+            Role role = getRole();
+            Role role2 = getRole();
+            Role role3 = getRole();
+            modelManager.grant(user, group, role);
+            modelManager.grant(user, group, role2);
+            modelManager.grant(user, group2, role);
+            modelManager.grant(user, group2, role3);
+            acl = userManager.getACL(user);
+            assertTrue(acl.hasRole(role.getName(), group.getName()));
+            assertTrue(acl.hasRole(role.getName(), group2.getName()));
+            assertTrue(acl.hasRole(role2.getName(), group.getName()));
+            assertFalse(acl.hasRole(role2.getName(), group2.getName()));
+            assertTrue(acl.hasRole(role.getName(), group2.getName()));
+            assertFalse(acl.hasRole(role2.getName(), group2.getName()));
+            assertTrue(acl.hasRole(role3.getName(), group2.getName()));
+        } catch (Exception e) {
+            fail("failed with " + e.getMessage());
+        }
+        
     }
 
     /*

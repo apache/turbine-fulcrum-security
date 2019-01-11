@@ -18,8 +18,8 @@ package org.apache.fulcrum.security;
  * specific language governing permissions and limitations
  * under the License.
  */
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.fulcrum.security.memory.MemoryGroupManagerImpl;
@@ -29,8 +29,9 @@ import org.apache.fulcrum.security.memory.MemoryUserManagerImpl;
 import org.apache.fulcrum.security.model.basic.BasicModelManager;
 import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
 import org.apache.fulcrum.security.model.turbine.TurbineModelManager;
-import org.apache.fulcrum.testcontainer.BaseUnit4Test;
-import org.junit.Test;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.junit.jupiter.api.Test;
+
 
 /**
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
@@ -38,10 +39,9 @@ import org.junit.Test;
  *          tv $
  */
 
-public class StartingSecurityServicesTest extends BaseUnit4Test
+public class StartingSecurityServicesTest extends BaseUnit5Test
 {
     private SecurityService securityService = null;
-
 
 
     @Test
@@ -50,7 +50,7 @@ public class StartingSecurityServicesTest extends BaseUnit4Test
         this.setRoleFileName("src/test/DynamicMemoryRoleConfig.xml");
         this.setConfigurationFileName("src/test/DynamicMemoryComponentConfig.xml");
         securityService = (SecurityService) lookup(SecurityService.ROLE);
-        assertTrue(securityService.getClass().getName(), securityService.getUserManager() instanceof MemoryUserManagerImpl);
+        assertTrue(securityService.getUserManager() instanceof MemoryUserManagerImpl, "check class:" + securityService.getClass().getName());
         assertTrue(securityService.getRoleManager() instanceof MemoryRoleManagerImpl);
         assertTrue(securityService.getPermissionManager() instanceof MemoryPermissionManagerImpl);
         assertTrue(securityService.getGroupManager() instanceof MemoryGroupManagerImpl);
@@ -95,7 +95,8 @@ public class StartingSecurityServicesTest extends BaseUnit4Test
         }
         catch (RuntimeException re)
         {
-            assertTrue("Type was " + re.getCause().getClass().getName(), re.getCause() instanceof ServiceException);
+            assertTrue( re.getCause() instanceof ServiceException, 
+                    "Type was " + re.getCause().getClass().getName());
         }
     }
 

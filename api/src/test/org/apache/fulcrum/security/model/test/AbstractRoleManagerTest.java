@@ -18,13 +18,12 @@ package org.apache.fulcrum.security.model.test;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.SecurityService;
@@ -32,13 +31,14 @@ import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.util.EntityExistsException;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.security.util.UnknownEntityException;
-import org.apache.fulcrum.testcontainer.BaseUnit4Test;
-import org.junit.Test;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.junit.jupiter.api.Test;
+
 
 /**
  * @author Eric Pugh
  */
-public abstract class AbstractRoleManagerTest extends BaseUnit4Test
+public abstract class AbstractRoleManagerTest extends BaseUnit5Test
 {
     protected Role role;
     protected RoleManager roleManager;

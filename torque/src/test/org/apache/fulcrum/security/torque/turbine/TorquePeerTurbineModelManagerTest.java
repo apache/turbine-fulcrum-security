@@ -18,7 +18,9 @@ package org.apache.fulcrum.security.torque.turbine;
  * under the License.
  */
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.turbine.test.AbstractTurbineModelManagerTest;
@@ -40,6 +42,9 @@ import org.apache.fulcrum.security.torque.peer.managers.PeerRoleManager;
 import org.apache.fulcrum.security.torque.peer.managers.PeerUserManager;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test with @link {@link #customPeers} requires at least Torque version 4.1.
@@ -56,6 +61,7 @@ public class TorquePeerTurbineModelManagerTest
     public static boolean customPeers = false;
 
     @Override
+    @BeforeEach
 	public void setUp() throws Exception
     {
         try
@@ -85,27 +91,32 @@ public class TorquePeerTurbineModelManagerTest
 
     }
     
+    @Test
     public void testCustomPeerSet() {
         if (roleManager instanceof TorqueAbstractRoleManager) {
-            assertTrue( "If a custom Peer for RoleManager should be tested, a peerClassName element should be set in the configuration file for roleManager.", ((PeerRoleManager)roleManager).getCustomPeer() == customPeers);
+            assertTrue(  ((PeerRoleManager)roleManager).getCustomPeer() == customPeers,
+                    "If a custom Peer for RoleManager should be tested, a peerClassName element should be set in the configuration file for roleManager.");
         }
         if (roleManager instanceof PeerManagable) {
             assertNotNull(((PeerManagable)roleManager).getPeerManager());
         }
         if (userManager instanceof TorqueAbstractUserManager) {
-            assertTrue( "If a custom Peer for UserManager should be tested, a peerClassName element should be set in the configuration file for userManager.", ((PeerUserManager)userManager).getCustomPeer() == customPeers);
+            assertTrue(  ((PeerUserManager)userManager).getCustomPeer() == customPeers,
+                    "If a custom Peer for UserManager should be tested, a peerClassName element should be set in the configuration file for userManager.");
         }
         if (userManager instanceof PeerManagable) {
             assertNotNull(((PeerManagable)userManager).getPeerManager());
         }
         if (groupManager instanceof TorqueAbstractGroupManager) {
-            assertTrue( "If a custom Peer for GroupManager should be tested, a peerClassName element should be set in the configuration file for groupManager.", ((PeerGroupManager)groupManager).getCustomPeer() == customPeers);
+            assertTrue(  ((PeerGroupManager)groupManager).getCustomPeer() == customPeers,
+                    "If a custom Peer for GroupManager should be tested, a peerClassName element should be set in the configuration file for groupManager.");
         }
         if (groupManager instanceof PeerManagable) {
             assertNotNull(((PeerManagable)groupManager).getPeerManager());
         }
         if (permissionManager instanceof TorqueAbstractPermissionManager) {
-            assertTrue( "If a custom Peer for PermissionManager should be tested, a peerClassName element should be set in the configuration file for permissionManager.", ((PeerPermissionManager)permissionManager).getCustomPeer() == customPeers);
+            assertTrue(  ((PeerPermissionManager)permissionManager).getCustomPeer() == customPeers,
+                    "If a custom Peer for PermissionManager should be tested, a peerClassName element should be set in the configuration file for permissionManager.");
         }
         if (permissionManager instanceof PeerManagable) {
             assertNotNull(((PeerManagable)permissionManager).getPeerManager());
@@ -113,6 +124,7 @@ public class TorquePeerTurbineModelManagerTest
     }
 
     @Override
+    @AfterEach
 	public void tearDown()
     {
         // cleanup tables

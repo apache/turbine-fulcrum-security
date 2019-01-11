@@ -18,20 +18,19 @@ package org.apache.fulcrum.security.hibernate;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.fulcrum.security.SecurityService;
-import org.apache.fulcrum.testcontainer.BaseUnit4Test;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
 import org.hibernate.Session;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id: PersistenceHelperDefaultImplTest.java 1374014 2012-08-16
  *          19:47:27Z tv $
  */
-public class PersistenceHelperDefaultImplTest extends BaseUnit4Test
+public class PersistenceHelperDefaultImplTest extends BaseUnit5Test
 {
 
     @SuppressWarnings("unused")

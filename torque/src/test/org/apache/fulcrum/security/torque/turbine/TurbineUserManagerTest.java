@@ -18,7 +18,9 @@ package org.apache.fulcrum.security.torque.turbine;
  * under the License.
  */
 
-import static org.junit.Assert.fail;
+
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -34,7 +36,9 @@ import org.apache.fulcrum.security.torque.om.TorqueTurbineUserPeer;
 import org.apache.torque.TorqueException;
 import org.apache.torque.criteria.Criteria;
 import org.apache.torque.util.Transaction;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
 
 /**
  * Test user with attached object (user-role-goup relationship)
@@ -47,7 +51,7 @@ public class TurbineUserManagerTest extends AbstractTurbineUserManagerTest
 {
     protected static HsqlDB hsqlDB = null;
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         try
@@ -74,11 +78,11 @@ public class TurbineUserManagerTest extends AbstractTurbineUserManagerTest
         {
             fail(e.toString());
         }
-    }
-    
+    }  
    
 
     @Override
+    @AfterEach
 	public void tearDown()
     {
         

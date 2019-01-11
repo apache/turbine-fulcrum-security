@@ -1,5 +1,7 @@
 package org.apache.fulcrum.security.memory.dynamic;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,9 +22,9 @@ package org.apache.fulcrum.security.memory.dynamic;
  */
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.test.AbstractPermissionManagerTest;
-import org.junit.After;
-import org.junit.Before;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
 
 /**
  * @author Eric Pugh
@@ -33,7 +35,7 @@ public class MemoryPermissionManagerTest extends AbstractPermissionManagerTest
 {
 
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         try
@@ -50,7 +52,7 @@ public class MemoryPermissionManagerTest extends AbstractPermissionManagerTest
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown()
     {
         permission = null;

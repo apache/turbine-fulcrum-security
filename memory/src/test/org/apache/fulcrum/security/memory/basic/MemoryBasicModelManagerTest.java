@@ -1,6 +1,7 @@
 package org.apache.fulcrum.security.memory.basic;
 
-import static org.junit.Assert.fail;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,8 +24,9 @@ import static org.junit.Assert.fail;
 
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.model.basic.test.AbstractModelManagerTest;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
 
 /**
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
@@ -36,7 +38,7 @@ public class MemoryBasicModelManagerTest extends AbstractModelManagerTest
 
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp()
     {
         try
@@ -54,7 +56,7 @@ public class MemoryBasicModelManagerTest extends AbstractModelManagerTest
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown()
     {
         super.tearDown();
