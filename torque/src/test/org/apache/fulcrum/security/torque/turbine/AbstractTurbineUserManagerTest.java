@@ -46,319 +46,352 @@ import org.junit.jupiter.api.Test;
 
 /**
  * @author Eric Pugh
- * @author Georg Kallidis
- * 
- * Same as {@link AbstractUserManagerTest} in Fulcrum API module, but with user-group-role-sets added and checked
- * 
+ * @author Georg Kallidis Same as {@link AbstractUserManagerTest} in Fulcrum API module, but with user-group-role-sets
+ *         added and checked
  */
-public abstract class AbstractTurbineUserManagerTest extends BaseUnit5Test
+public abstract class AbstractTurbineUserManagerTest
+    extends BaseUnit5Test
 {
     protected User user;
+
     protected UserManager userManager;
+
     protected SecurityService securityService;
 
     protected static final String TEST_GROUP = "TEST_GROUP";
+
     protected static final String TEST_ROLE = "TEST_Role";
+
     protected Group group;
+
     protected Role role;
 
     // requires default user in setup
     @Test
-    public void testCheckExists() throws Exception
+    public void testCheckExists()
+        throws Exception
     {
-        user = userManager.getUserInstance("Philip");
-        userManager.addUser(user, "bobo");
-        addDefaultGrantUserGroupRole(user) ;
-        
-        assertTrue(userManager.checkExists("philip"));
-        assertTrue(userManager.checkExists(user));
-        assertFalse(userManager.checkExists("ImaginaryFriend"));
-        user = userManager.getUserInstance("ImaginaryFriend");
-        assertFalse(userManager.checkExists(user));
+        user = userManager.getUserInstance( "Philip" );
+        userManager.addUser( user, "bobo" );
+        addDefaultGrantUserGroupRole( user );
+
+        assertTrue( userManager.checkExists( "philip" ) );
+        assertTrue( userManager.checkExists( user ) );
+        assertFalse( userManager.checkExists( "ImaginaryFriend" ) );
+        user = userManager.getUserInstance( "ImaginaryFriend" );
+        assertFalse( userManager.checkExists( user ) );
     }
+
     @Test
-    public void testCheckExistsWithString() throws Exception
+    public void testCheckExistsWithString()
+        throws Exception
     {
-        user = userManager.getUserInstance("Philip2");
-        userManager.addUser(user, "bobo");
-        addDefaultGrantUserGroupRole(user) ;
-        
-        assertTrue(userManager.checkExists("philip2"));
-        assertTrue(userManager.checkExists(user.getName()));
-        assertFalse(userManager.checkExists("ImaginaryFriend2"));
-        user = userManager.getUserInstance("ImaginaryFriend2");
-        assertFalse(userManager.checkExists(user.getName()));
+        user = userManager.getUserInstance( "Philip2" );
+        userManager.addUser( user, "bobo" );
+        addDefaultGrantUserGroupRole( user );
+
+        assertTrue( userManager.checkExists( "philip2" ) );
+        assertTrue( userManager.checkExists( user.getName() ) );
+        assertFalse( userManager.checkExists( "ImaginaryFriend2" ) );
+        user = userManager.getUserInstance( "ImaginaryFriend2" );
+        assertFalse( userManager.checkExists( user.getName() ) );
     }
 
     /*
      * Class to test for User retrieve(String)
      */
     @Test
-    public void testGetUserString() throws Exception
+    public void testGetUserString()
+        throws Exception
     {
-        user = userManager.getUserInstance("QuietMike");
-        userManager.addUser(user, "bobo");
-        addDefaultGrantUserGroupRole(user) ;
-        
-        user = userManager.getUser("QuietMike");
-        assertNotNull(user);
+        user = userManager.getUserInstance( "QuietMike" );
+        userManager.addUser( user, "bobo" );
+        addDefaultGrantUserGroupRole( user );
+
+        user = userManager.getUser( "QuietMike" );
+        assertNotNull( user );
     }
+
     @Test
-    public void testGetUserById() throws Exception
+    public void testGetUserById()
+        throws Exception
     {
-        user = userManager.getUserInstance("QuietMike2");
-        userManager.addUser(user, "bobo");
-        User user2 = userManager.getUserById(user.getId());
-        assertEquals(user.getName(), user2.getName());
-        assertEquals(user.getId(), user2.getId());
+        user = userManager.getUserInstance( "QuietMike2" );
+        userManager.addUser( user, "bobo" );
+        User user2 = userManager.getUserById( user.getId() );
+        assertEquals( user.getName(), user2.getName() );
+        assertEquals( user.getId(), user2.getId() );
     }
 
     /*
      * Class to test for User retrieve(String, String)
      */
     @Test
-    public void testGetUserStringString() throws Exception
+    public void testGetUserStringString()
+        throws Exception
     {
-        user = userManager.getUserInstance("Richard");
-        userManager.addUser(user, "va");
-        
-        addDefaultGrantUserGroupRole(user) ;
-        
-        user = userManager.getUser("Richard", "va");
-        assertNotNull(user);
-        user = userManager.getUser("richard", "va");
-        assertNotNull(user);
+        user = userManager.getUserInstance( "Richard" );
+        userManager.addUser( user, "va" );
+
+        addDefaultGrantUserGroupRole( user );
+
+        user = userManager.getUser( "Richard", "va" );
+        assertNotNull( user );
+        user = userManager.getUser( "richard", "va" );
+        assertNotNull( user );
         try
         {
-            user = userManager.getUser("richard", "VA");
-            fail("should have thrown PasswordMismatchException");
+            user = userManager.getUser( "richard", "VA" );
+            fail( "should have thrown PasswordMismatchException" );
         }
-        catch (PasswordMismatchException pme)
+        catch ( PasswordMismatchException pme )
         {
             // good
         }
     }
+
     @Test
-    public void testGetAllUsers() throws Exception
+    public void testGetAllUsers()
+        throws Exception
     {
         int size = userManager.getAllUsers().size();
-        user = userManager.getUserInstance("Bob");
-        userManager.addUser(user, "");
-        addDefaultGrantUserGroupRole(user) ;
-        
+        user = userManager.getUserInstance( "Bob" );
+        userManager.addUser( user, "" );
+        addDefaultGrantUserGroupRole( user );
+
         UserSet<User> userSet = userManager.getAllUsers();
-        assertEquals(size + 1, userSet.size());
+        assertEquals( size + 1, userSet.size() );
     }
+
     @Test
-    public void testAuthenticate() throws Exception
+    public void testAuthenticate()
+        throws Exception
     {
-        user = userManager.getUserInstance("Kay");
-        userManager.addUser(user, "jc");
-        addDefaultGrantUserGroupRole(user) ;
-        userManager.authenticate(user, "jc");
+        user = userManager.getUserInstance( "Kay" );
+        userManager.addUser( user, "jc" );
+        addDefaultGrantUserGroupRole( user );
+        userManager.authenticate( user, "jc" );
         try
         {
-            userManager.authenticate(user, "JC");
-            fail("should have thrown PasswordMismatchException");
+            userManager.authenticate( user, "JC" );
+            fail( "should have thrown PasswordMismatchException" );
         }
-        catch (PasswordMismatchException pme)
+        catch ( PasswordMismatchException pme )
         {
             // good
         }
     }
+
     @Test
-    public void testChangePassword() throws Exception
+    public void testChangePassword()
+        throws Exception
     {
-        user = userManager.getUserInstance("Jonathan");
-        userManager.addUser(user, "jc");
-        addDefaultGrantUserGroupRole(user) ;
+        user = userManager.getUserInstance( "Jonathan" );
+        userManager.addUser( user, "jc" );
+        addDefaultGrantUserGroupRole( user );
         try
         {
-            userManager.changePassword(user, "WrongPWD", "JC");
-            fail("should have thrown PasswordMismatchException");
+            userManager.changePassword( user, "WrongPWD", "JC" );
+            fail( "should have thrown PasswordMismatchException" );
         }
-        catch (PasswordMismatchException pme)
+        catch ( PasswordMismatchException pme )
         {
             // good
         }
-        userManager.changePassword(user, "jc", "JC");
-        userManager.authenticate(user, "JC");
+        userManager.changePassword( user, "jc", "JC" );
+        userManager.authenticate( user, "JC" );
     }
+
     @Test
-    public void testForcePassword() throws Exception
+    public void testForcePassword()
+        throws Exception
     {
-        user = userManager.getUserInstance("Connor");
-        userManager.addUser(user, "jc_subset");
-        addDefaultGrantUserGroupRole(user) ;
-        
-        userManager.forcePassword(user, "JC_SUBSET");
-        userManager.authenticate(user, "JC_SUBSET");
+        user = userManager.getUserInstance( "Connor" );
+        userManager.addUser( user, "jc_subset" );
+        addDefaultGrantUserGroupRole( user );
+
+        userManager.forcePassword( user, "JC_SUBSET" );
+        userManager.authenticate( user, "JC_SUBSET" );
     }
 
     /*
      * Class to test for User getUserInstance()
      */
     @Test
-    public void testGetUserInstance() throws Exception
+    public void testGetUserInstance()
+        throws Exception
     {
         user = userManager.getUserInstance();
-        assertNotNull(user);
-        assertTrue(user.getName() == null);
+        assertNotNull( user );
+        assertTrue( user.getName() == null );
     }
 
     /*
      * Class to test for User getUserInstance(String)
      */
     @Test
-    public void testGetUserInstanceString() throws Exception
+    public void testGetUserInstanceString()
+        throws Exception
     {
-        user = userManager.getUserInstance("Philip");
-        assertEquals("philip", user.getName());
+        user = userManager.getUserInstance( "Philip" );
+        assertEquals( "philip", user.getName() );
     }
 
     /**
-     * Need to figure out if save is something we want.. right now it just bloes
-     * up if you actually change anything.
+     * Need to figure out if save is something we want.. right now it just bloes up if you actually change anything.
      * 
      * @todo figur out what to do here...
      * @throws Exception
      */
     @Test
-    public void testSaveUser() throws Exception
+    public void testSaveUser()
+        throws Exception
     {
-        user = userManager.getUserInstance("Kate");
-        userManager.addUser(user, "katiedid");
-        
-        addDefaultGrantUserGroupRole(user) ;
-        
-        user = userManager.getUser(user.getName());
+        user = userManager.getUserInstance( "Kate" );
+        userManager.addUser( user, "katiedid" );
+
+        addDefaultGrantUserGroupRole( user );
+
+        user = userManager.getUser( user.getName() );
         // user.setName("Katherine");
-        userManager.saveUser(user);
-        assertEquals("kate", userManager.getUser(user.getName()).getName());
+        userManager.saveUser( user );
+        assertEquals( "kate", userManager.getUser( user.getName() ).getName() );
     }
+
     @Test
-    public void testGetACL() throws Exception
+    public void testGetACL()
+        throws Exception
     {
-        user = userManager.getUserInstance("Tony");
-        userManager.addUser(user, "california");
-        addDefaultGrantUserGroupRole(user) ;        
-        
-        AccessControlList acl = userManager.getACL(user);
-        
-        assertNotNull(acl);
-        
-        Role testRole = securityService.getRoleManager().getRoleByName(TEST_ROLE );
-        Group testGroup = securityService.getGroupManager().getGroupByName(TEST_GROUP );
-        assertTrue(((TurbineAccessControlList)acl).hasRole( testRole, testGroup ));
-        
-        Group globalGroup = securityService.<TurbineModelManager>getModelManager().getGlobalGroup();
-        securityService.<TurbineModelManager>getModelManager().grant( user, globalGroup, testRole );
+        user = userManager.getUserInstance( "Tony" );
+        userManager.addUser( user, "california" );
+        addDefaultGrantUserGroupRole( user );
+
+        AccessControlList acl = userManager.getACL( user );
+
+        assertNotNull( acl );
+
+        Role testRole = securityService.getRoleManager().getRoleByName( TEST_ROLE );
+        Group testGroup = securityService.getGroupManager().getGroupByName( TEST_GROUP );
+        assertTrue( ( (TurbineAccessControlList) acl ).hasRole( testRole, testGroup ) );
+
+        Group globalGroup = securityService.<TurbineModelManager> getModelManager().getGlobalGroup();
+        securityService.<TurbineModelManager> getModelManager().grant( user, globalGroup, testRole );
         // immutable
-        acl = userManager.getACL(user);
-        
-        assertTrue(((TurbineAccessControlList)acl).hasRole( testRole ));
+        acl = userManager.getACL( user );
+
+        assertTrue( ( (TurbineAccessControlList) acl ).hasRole( testRole ) );
     }
+
     @Test
-    public void testRemoveUser() throws Exception
+    public void testRemoveUser()
+        throws Exception
     {
-        user = userManager.getUserInstance("Rick");
-        userManager.addUser(user, "nb");
-        addDefaultGrantUserGroupRole(user) ;
+        user = userManager.getUserInstance( "Rick" );
+        userManager.addUser( user, "nb" );
+        addDefaultGrantUserGroupRole( user );
         // required
         revokeDefaultGrantUserGroupRole( user );
-        userManager.removeUser(user);
+        userManager.removeUser( user );
         try
         {
-            User user2 = userManager.getUser(user.getName());
-            fail("Should have thrown UEE");
+            User user2 = userManager.getUser( user.getName() );
+            fail( "Should have thrown UEE" );
         }
-        catch (UnknownEntityException uee)
+        catch ( UnknownEntityException uee )
         {
             // good
         }
     }
+
     @Test
-    public void testAddUser() throws Exception
+    public void testAddUser()
+        throws Exception
     {
-        user = userManager.getUserInstance("Joe1");
-        assertNull(user.getId());
-        userManager.addUser(user, "mc");
-        addDefaultGrantUserGroupRole(user) ;
-        user = userManager.getUserInstance("Joe2");
-        assertNull(user.getId());
-        userManager.addUser(user, "mc");
-        assertNotNull(user.getId());
-        assertNotNull(userManager.getUser(user.getName()));
+        user = userManager.getUserInstance( "Joe1" );
+        assertNull( user.getId() );
+        userManager.addUser( user, "mc" );
+        addDefaultGrantUserGroupRole( user );
+        user = userManager.getUserInstance( "Joe2" );
+        assertNull( user.getId() );
+        userManager.addUser( user, "mc" );
+        assertNotNull( user.getId() );
+        assertNotNull( userManager.getUser( user.getName() ) );
     }
 
     /*
      * Class to test for boolean checkExists(string)
      */
-    public void testAddUserTwiceFails() throws Exception
+    public void testAddUserTwiceFails()
+        throws Exception
     {
-        user = userManager.getUserInstance("EATLUNCH");
-        userManager.addUser(user, "bob");
-        addDefaultGrantUserGroupRole(user) ;
-        assertTrue(userManager.checkExists(user.getName()));
-        User user2 = userManager.getUserInstance("EATLUNCH");
+        user = userManager.getUserInstance( "EATLUNCH" );
+        userManager.addUser( user, "bob" );
+        addDefaultGrantUserGroupRole( user );
+        assertTrue( userManager.checkExists( user.getName() ) );
+        User user2 = userManager.getUserInstance( "EATLUNCH" );
         try
         {
-            userManager.addUser(user2, "bob");
+            userManager.addUser( user2, "bob" );
         }
-        catch (EntityExistsException uee)
+        catch ( EntityExistsException uee )
         {
             // good
         }
         try
         {
-            userManager.addUser(user2, "differentpassword");
+            userManager.addUser( user2, "differentpassword" );
         }
-        catch (EntityExistsException uee)
+        catch ( EntityExistsException uee )
         {
             // good
         }
     }
-    @Test
-    public void testCheckUserCaseSensitiveExists() throws Exception
-    {
-        user = userManager.getUserInstance("borrisJohnson");
-        userManager.addUser(user, "bob");
 
-        assertTrue(userManager.checkExists("borrisJohnson"));
-    }
-    
-    private void addDefaultGrantUserGroupRole(User user) throws Exception
+    @Test
+    public void testCheckUserCaseSensitiveExists()
+        throws Exception
     {
-        securityService.<TurbineModelManager>getModelManager().grant(user, group, role);
+        user = userManager.getUserInstance( "borrisJohnson" );
+        userManager.addUser( user, "bob" );
+
+        assertTrue( userManager.checkExists( "borrisJohnson" ) );
+    }
+
+    private void addDefaultGrantUserGroupRole( User user )
+        throws Exception
+    {
+        securityService.<TurbineModelManager> getModelManager().grant( user, group, role );
         boolean ugrFound = false;
         TurbineUserGroupRole ugrTest = null;
-        for (TurbineUserGroupRole ugr : ((TurbineUser) user).getUserGroupRoleSet())
+        for ( TurbineUserGroupRole ugr : ( (TurbineUser) user ).getUserGroupRoleSet() )
         {
-            if (ugr.getUser().equals(user) && ugr.getGroup().equals(group) && ugr.getRole().equals(role))
+            if ( ugr.getUser().equals( user ) && ugr.getGroup().equals( group ) && ugr.getRole().equals( role ) )
             {
                 ugrFound = true;
                 ugrTest = ugr;
                 break;
             }
         }
-        assertTrue(ugrFound);
-        assertTrue(ugrTest.getGroup().equals(group));
-        assertTrue(ugrTest.getUser().equals(user));
+        assertTrue( ugrFound );
+        assertTrue( ugrTest.getGroup().equals( group ) );
+        assertTrue( ugrTest.getUser().equals( user ) );
     }
-    
-    private void revokeDefaultGrantUserGroupRole(User user) throws Exception
+
+    private void revokeDefaultGrantUserGroupRole( User user )
+        throws Exception
     {
-        securityService.<TurbineModelManager>getModelManager().revoke(user, group, role);
+        securityService.<TurbineModelManager> getModelManager().revoke( user, group, role );
         boolean ugrFound = false;
-        for (TurbineUserGroupRole ugr : ((TurbineUser) user).getUserGroupRoleSet())
+        for ( TurbineUserGroupRole ugr : ( (TurbineUser) user ).getUserGroupRoleSet() )
         {
-            if (ugr.getUser().equals(user) && ugr.getGroup().equals(group) && ugr.getRole().equals(role))
+            if ( ugr.getUser().equals( user ) && ugr.getGroup().equals( group ) && ugr.getRole().equals( role ) )
             {
                 ugrFound = true;
                 break;
             }
-        };
-        assertFalse(ugrFound);
+        }
+        ;
+        assertFalse( ugrFound );
     }
 
 }

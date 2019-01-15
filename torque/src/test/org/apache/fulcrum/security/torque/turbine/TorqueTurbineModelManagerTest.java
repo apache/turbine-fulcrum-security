@@ -45,7 +45,6 @@ public class TorqueTurbineModelManagerTest
 {
     protected static HsqlDB hsqlDB = null;
 
-	@Override
 	@BeforeEach
 	public void setUp() throws Exception
     {
@@ -66,8 +65,7 @@ public class TorqueTurbineModelManagerTest
         }
 
     }
-   
-	@Override
+
 	@AfterEach
 	public void tearDown()
     {

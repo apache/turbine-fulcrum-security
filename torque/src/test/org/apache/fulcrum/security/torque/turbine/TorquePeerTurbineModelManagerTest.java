@@ -57,106 +57,115 @@ public class TorquePeerTurbineModelManagerTest
     extends AbstractTurbineModelManagerTest
 {
     protected static HsqlDB hsqlDB = null;
-    
+
     public static boolean customPeers = false;
 
-    @Override
     @BeforeEach
-	public void setUp() throws Exception
+    public void setUp()
+        throws Exception
     {
         try
         {
-            hsqlDB = new HsqlDB("src/test/fulcrum-turbine-schema.sql");
-            hsqlDB.addSQL("src/test/id-table-schema.sql");
-            hsqlDB.addSQL("src/test/fulcrum-turbine-schema-idtable-init.sql");
+            hsqlDB = new HsqlDB( "src/test/fulcrum-turbine-schema.sql" );
+            hsqlDB.addSQL( "src/test/id-table-schema.sql" );
+            hsqlDB.addSQL( "src/test/fulcrum-turbine-schema-idtable-init.sql" );
 
-            this.setRoleFileName("src/test/TurbineTorqueRoleConfig.xml");            
-            
-            if (customPeers)
-                this.setConfigurationFileName("src/test/TurbineTorqueWithPeersComponentConfig.xml");
+            this.setRoleFileName( "src/test/TurbineTorqueRoleConfig.xml" );
+
+            if ( customPeers )
+                this.setConfigurationFileName( "src/test/TurbineTorqueWithPeersComponentConfig.xml" );
             else
-                this.setConfigurationFileName("src/test/TurbineTorqueComponentConfig.xml");
-            
-            // The successful Test requires that the PeerImpl classes (in configuration file) implement the interface TorqueTurbinePeer,
+                this.setConfigurationFileName( "src/test/TurbineTorqueComponentConfig.xml" );
+
+            // The successful Test requires that the PeerImpl classes (in configuration file) implement the interface
+            // TorqueTurbinePeer,
             // cft. ClassCastException messages.
             // (interfaces could not yet automatically generated into Peers with Torque, cft JIRA Issue TORQUE-309).
-            
-            securityService = (SecurityService) lookup(SecurityService.ROLE);
+
+            securityService = (SecurityService) lookup( SecurityService.ROLE );
             super.setUp();
         }
-        catch (Exception e)
+        catch ( Exception e )
         {
-        	fail(e.toString());
+            fail( e.toString() );
         }
 
     }
-    
+
     @Test
-    public void testCustomPeerSet() {
-        if (roleManager instanceof TorqueAbstractRoleManager) {
-            assertTrue(  ((PeerRoleManager)roleManager).getCustomPeer() == customPeers,
-                    "If a custom Peer for RoleManager should be tested, a peerClassName element should be set in the configuration file for roleManager.");
+    public void testCustomPeerSet()
+    {
+        if ( roleManager instanceof TorqueAbstractRoleManager )
+        {
+            assertTrue( ( (PeerRoleManager) roleManager ).getCustomPeer() == customPeers,
+                        "If a custom Peer for RoleManager should be tested, a peerClassName element should be set in the configuration file for roleManager." );
         }
-        if (roleManager instanceof PeerManagable) {
-            assertNotNull(((PeerManagable)roleManager).getPeerManager());
+        if ( roleManager instanceof PeerManagable )
+        {
+            assertNotNull( ( (PeerManagable) roleManager ).getPeerManager() );
         }
-        if (userManager instanceof TorqueAbstractUserManager) {
-            assertTrue(  ((PeerUserManager)userManager).getCustomPeer() == customPeers,
-                    "If a custom Peer for UserManager should be tested, a peerClassName element should be set in the configuration file for userManager.");
+        if ( userManager instanceof TorqueAbstractUserManager )
+        {
+            assertTrue( ( (PeerUserManager) userManager ).getCustomPeer() == customPeers,
+                        "If a custom Peer for UserManager should be tested, a peerClassName element should be set in the configuration file for userManager." );
         }
-        if (userManager instanceof PeerManagable) {
-            assertNotNull(((PeerManagable)userManager).getPeerManager());
+        if ( userManager instanceof PeerManagable )
+        {
+            assertNotNull( ( (PeerManagable) userManager ).getPeerManager() );
         }
-        if (groupManager instanceof TorqueAbstractGroupManager) {
-            assertTrue(  ((PeerGroupManager)groupManager).getCustomPeer() == customPeers,
-                    "If a custom Peer for GroupManager should be tested, a peerClassName element should be set in the configuration file for groupManager.");
+        if ( groupManager instanceof TorqueAbstractGroupManager )
+        {
+            assertTrue( ( (PeerGroupManager) groupManager ).getCustomPeer() == customPeers,
+                        "If a custom Peer for GroupManager should be tested, a peerClassName element should be set in the configuration file for groupManager." );
         }
-        if (groupManager instanceof PeerManagable) {
-            assertNotNull(((PeerManagable)groupManager).getPeerManager());
+        if ( groupManager instanceof PeerManagable )
+        {
+            assertNotNull( ( (PeerManagable) groupManager ).getPeerManager() );
         }
-        if (permissionManager instanceof TorqueAbstractPermissionManager) {
-            assertTrue(  ((PeerPermissionManager)permissionManager).getCustomPeer() == customPeers,
-                    "If a custom Peer for PermissionManager should be tested, a peerClassName element should be set in the configuration file for permissionManager.");
+        if ( permissionManager instanceof TorqueAbstractPermissionManager )
+        {
+            assertTrue( ( (PeerPermissionManager) permissionManager ).getCustomPeer() == customPeers,
+                        "If a custom Peer for PermissionManager should be tested, a peerClassName element should be set in the configuration file for permissionManager." );
         }
-        if (permissionManager instanceof PeerManagable) {
-            assertNotNull(((PeerManagable)permissionManager).getPeerManager());
+        if ( permissionManager instanceof PeerManagable )
+        {
+            assertNotNull( ( (PeerManagable) permissionManager ).getPeerManager() );
         }
     }
 
-    @Override
     @AfterEach
-	public void tearDown()
+    public void tearDown()
     {
         // cleanup tables
         try
         {
             Criteria criteria = new Criteria();
-            criteria.where(TorqueTurbineUserGroupRolePeer.USER_ID, -1, Criteria.GREATER_THAN);
-            TorqueTurbineUserGroupRolePeer.doDelete(criteria);
+            criteria.where( TorqueTurbineUserGroupRolePeer.USER_ID, -1, Criteria.GREATER_THAN );
+            TorqueTurbineUserGroupRolePeer.doDelete( criteria );
 
             criteria = new Criteria();
-            criteria.where(TorqueTurbineRolePermissionPeer.ROLE_ID, 0, Criteria.GREATER_THAN);
-            TorqueTurbineRolePermissionPeer.doDelete(criteria);
+            criteria.where( TorqueTurbineRolePermissionPeer.ROLE_ID, 0, Criteria.GREATER_THAN );
+            TorqueTurbineRolePermissionPeer.doDelete( criteria );
 
             criteria = new Criteria();
-            criteria.where(TorqueTurbineUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
-            TorqueTurbineUserPeer.doDelete(criteria);
+            criteria.where( TorqueTurbineUserPeer.USER_ID, 0, Criteria.GREATER_THAN );
+            TorqueTurbineUserPeer.doDelete( criteria );
 
             criteria = new Criteria();
-            criteria.where(TorqueTurbineGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
-            TorqueTurbineGroupPeer.doDelete(criteria);
+            criteria.where( TorqueTurbineGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN );
+            TorqueTurbineGroupPeer.doDelete( criteria );
 
             criteria = new Criteria();
-            criteria.where(TorqueTurbineRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN);
-            TorqueTurbineRolePeer.doDelete(criteria);
+            criteria.where( TorqueTurbineRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN );
+            TorqueTurbineRolePeer.doDelete( criteria );
 
             criteria = new Criteria();
-            criteria.where(TorqueTurbinePermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN);
-            TorqueTurbinePermissionPeer.doDelete(criteria);
+            criteria.where( TorqueTurbinePermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN );
+            TorqueTurbinePermissionPeer.doDelete( criteria );
         }
-        catch (TorqueException e)
+        catch ( TorqueException e )
         {
-        	fail(e.toString());
+            fail( e.toString() );
         }
 
         modelManager = null;

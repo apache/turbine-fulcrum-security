@@ -18,8 +18,6 @@ package org.apache.fulcrum.security.torque.turbine;
  * under the License.
  */
 
-
-
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.sql.Connection;
@@ -39,15 +37,14 @@ import org.apache.torque.util.Transaction;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
-
 /**
  * Test user with attached object (user-role-goup relationship)
  * 
  * @author <a href="mailto:gk@apache.org">Georg Kallidis</a>
- *
  * @version $Id$
  */
-public class TurbineUserManagerTest extends AbstractTurbineUserManagerTest
+public class TurbineUserManagerTest
+    extends AbstractTurbineUserManagerTest
 {
     protected static HsqlDB hsqlDB = null;
 
@@ -56,36 +53,34 @@ public class TurbineUserManagerTest extends AbstractTurbineUserManagerTest
     {
         try
         {
-            hsqlDB = new HsqlDB("src/test/fulcrum-turbine-schema.sql");
-            hsqlDB.addSQL("src/test/id-table-schema.sql");
-            hsqlDB.addSQL("src/test/fulcrum-turbine-schema-idtable-init.sql");
-            
-            this.setRoleFileName("src/test/TurbineTorqueRoleConfig.xml");
-            // we have to use declared peers 
-            this.setConfigurationFileName("src/test/TurbineTorqueComponentConfig.xml");
-            securityService = (SecurityService) lookup(SecurityService.ROLE);
-            userManager = securityService.getUserManager();
-            
-            group = securityService.getGroupManager().getGroupInstance();
-            group.setName(TEST_GROUP);
-            securityService.getGroupManager().addGroup(group);
-            role = securityService.getRoleManager().getRoleInstance();
-            role.setName(TEST_ROLE);
-            securityService.getRoleManager().addRole(role);
-            
-        }
-        catch (Exception e)
-        {
-            fail(e.toString());
-        }
-    }  
-   
+            hsqlDB = new HsqlDB( "src/test/fulcrum-turbine-schema.sql" );
+            hsqlDB.addSQL( "src/test/id-table-schema.sql" );
+            hsqlDB.addSQL( "src/test/fulcrum-turbine-schema-idtable-init.sql" );
 
-    @Override
+            this.setRoleFileName( "src/test/TurbineTorqueRoleConfig.xml" );
+            // we have to use declared peers
+            this.setConfigurationFileName( "src/test/TurbineTorqueComponentConfig.xml" );
+            securityService = (SecurityService) lookup( SecurityService.ROLE );
+            userManager = securityService.getUserManager();
+
+            group = securityService.getGroupManager().getGroupInstance();
+            group.setName( TEST_GROUP );
+            securityService.getGroupManager().addGroup( group );
+            role = securityService.getRoleManager().getRoleInstance();
+            role.setName( TEST_ROLE );
+            securityService.getRoleManager().addRole( role );
+
+        }
+        catch ( Exception e )
+        {
+            fail( e.toString() );
+        }
+    }
+
     @AfterEach
-	public void tearDown()
+    public void tearDown()
     {
-        
+
         // cleanup tables
         Connection con = null;
         try
@@ -93,48 +88,49 @@ public class TurbineUserManagerTest extends AbstractTurbineUserManagerTest
             con = Transaction.begin();// "default"
 
             Criteria criteria = new Criteria();
-            criteria.where(TorqueTurbineUserGroupRolePeer.USER_ID, -1, Criteria.GREATER_THAN);
-            
-            TorqueTurbineUserGroupRolePeer.doDelete(criteria,con);
+            criteria.where( TorqueTurbineUserGroupRolePeer.USER_ID, -1, Criteria.GREATER_THAN );
+
+            TorqueTurbineUserGroupRolePeer.doDelete( criteria, con );
 
             criteria = new Criteria();
-            criteria.where(TorqueTurbineRolePermissionPeer.ROLE_ID, 0, Criteria.GREATER_THAN);
-            TorqueTurbineRolePermissionPeer.doDelete(criteria,con);
+            criteria.where( TorqueTurbineRolePermissionPeer.ROLE_ID, 0, Criteria.GREATER_THAN );
+            TorqueTurbineRolePermissionPeer.doDelete( criteria, con );
 
             criteria = new Criteria();
-            criteria.where(TorqueTurbineUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
-            TorqueTurbineUserPeer.doDelete(criteria,con);
- 
-            criteria = new Criteria();
-            criteria.where(TorqueTurbineGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
-            TorqueTurbineGroupPeer.doDelete(criteria,con);
+            criteria.where( TorqueTurbineUserPeer.USER_ID, 0, Criteria.GREATER_THAN );
+            TorqueTurbineUserPeer.doDelete( criteria, con );
 
             criteria = new Criteria();
-            criteria.where(TorqueTurbineRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN);
-            TorqueTurbineRolePeer.doDelete(criteria,con);
+            criteria.where( TorqueTurbineGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN );
+            TorqueTurbineGroupPeer.doDelete( criteria, con );
 
             criteria = new Criteria();
-            criteria.where(TorqueTurbinePermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN);
-            TorqueTurbinePermissionPeer.doDelete(criteria,con);
-            
+            criteria.where( TorqueTurbineRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN );
+            TorqueTurbineRolePeer.doDelete( criteria, con );
+
+            criteria = new Criteria();
+            criteria.where( TorqueTurbinePermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN );
+            TorqueTurbinePermissionPeer.doDelete( criteria, con );
+
             con.commit();
             con = null;
         }
-        catch (TorqueException e)
+        catch ( TorqueException e )
         {
-            fail(e.toString());
-        } catch (SQLException e) {
-             if (con != null)
-             {
-                 Transaction.safeRollback(con);
-             }
-             fail(e.toString());
+            fail( e.toString() );
         }
-        
+        catch ( SQLException e )
+        {
+            if ( con != null )
+            {
+                Transaction.safeRollback( con );
+            }
+            fail( e.toString() );
+        }
+
         user = null;
         userManager = null;
         securityService = null;
     }
-
 
 }

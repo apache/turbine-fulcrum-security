@@ -48,79 +48,80 @@ public class TurbineDefaultModelManagerLazyTest
 {
     protected static HsqlDB hsqlDB = null;
 
-    @Override
-	@BeforeEach
-	public void setUp() throws Exception
+    @BeforeEach
+    public void setUp()
+        throws Exception
     {
 
         try
         {
-            hsqlDB = new HsqlDB("src/test/fulcrum-turbine-default-schema.sql");
+            hsqlDB = new HsqlDB( "src/test/fulcrum-turbine-default-schema.sql" );
             // we do not need id-broker,set native in schema and added identity in hsql
             // same for both flavors
-            this.setRoleFileName("src/test/TurbineTorqueRoleConfig.xml");
-            // we have to use declared peers 
-            this.setConfigurationFileName("src/test/TurbineDefaultLazyWithPeersComponentConfig.xml");
-            securityService = (SecurityService) lookup(SecurityService.ROLE);
+            this.setRoleFileName( "src/test/TurbineTorqueRoleConfig.xml" );
+            // we have to use declared peers
+            this.setConfigurationFileName( "src/test/TurbineDefaultLazyWithPeersComponentConfig.xml" );
+            securityService = (SecurityService) lookup( SecurityService.ROLE );
             super.setUp();
         }
-        catch (Exception e)
+        catch ( Exception e )
         {
-            fail(e.toString());
+            fail( e.toString() );
         }
 
     }
 
-   
-
-    @Override
     @AfterEach
-	public void tearDown()
+    public void tearDown()
     {
         // cleanup tables
-    	Connection con = null;
+        Connection con = null;
         try
         {
-        	con = Transaction.begin();// "default"
+            con = Transaction.begin();// "default"
 
-        	Criteria criteria = new Criteria();
-            criteria.where(TurbineUserGroupRolePeer.USER_ID, -1, Criteria.GREATER_THAN);
-            
-            TurbineUserGroupRolePeer.doDelete(criteria,con);
+            Criteria criteria = new Criteria();
+            criteria.where( TurbineUserGroupRolePeer.USER_ID, -1, Criteria.GREATER_THAN );
 
-            criteria = new Criteria();
-            criteria.where(TurbineRolePermissionPeer.ROLE_ID, -1, Criteria.GREATER_THAN);
-            TurbineRolePermissionPeer.doDelete(criteria,con);
+            TurbineUserGroupRolePeer.doDelete( criteria, con );
 
             criteria = new Criteria();
-            criteria.where(TurbineUserPeer.USER_ID, 0, Criteria.GREATER_THAN);
-            TurbineUserPeer.doDelete(criteria,con);
- 
-            criteria = new Criteria();
-            criteria.where(TurbineGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN);
-            TurbineGroupPeer.doDelete(criteria,con);
+            criteria.where( TurbineRolePermissionPeer.ROLE_ID, -1, Criteria.GREATER_THAN );
+            TurbineRolePermissionPeer.doDelete( criteria, con );
 
             criteria = new Criteria();
-            criteria.where(TurbineRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN);
-            TurbineRolePeer.doDelete(criteria,con);
+            criteria.where( TurbineUserPeer.USER_ID, 0, Criteria.GREATER_THAN );
+            TurbineUserPeer.doDelete( criteria, con );
 
             criteria = new Criteria();
-            criteria.where(TurbinePermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN);
-            TurbinePermissionPeer.doDelete(criteria,con);
-            
+            criteria.where( TurbineGroupPeer.GROUP_ID, 0, Criteria.GREATER_THAN );
+            TurbineGroupPeer.doDelete( criteria, con );
+
+            criteria = new Criteria();
+            criteria.where( TurbineRolePeer.ROLE_ID, 0, Criteria.GREATER_THAN );
+            TurbineRolePeer.doDelete( criteria, con );
+
+            criteria = new Criteria();
+            criteria.where( TurbinePermissionPeer.PERMISSION_ID, 0, Criteria.GREATER_THAN );
+            TurbinePermissionPeer.doDelete( criteria, con );
+
             con.commit();
             con = null;
+
+            super.tearDown();
         }
-        catch (TorqueException e)
+        catch ( TorqueException e )
         {
-        	fail(e.toString());
-        } catch (SQLException e) {
-        	 if (con != null)
-             {
-                 Transaction.safeRollback(con);
-             }
-        	 fail(e.toString());
-		}
+            fail( e.toString() );
+        }
+        catch ( SQLException e )
+        {
+            if ( con != null )
+            {
+                Transaction.safeRollback( con );
+            }
+            fail( e.toString() );
+        }
 
         modelManager = null;
         securityService = null;
