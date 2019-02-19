@@ -49,7 +49,7 @@
         <dependency>
             <groupId>org.apache.fulcrum</groupId>
             <artifactId>fulcrum-crypto</artifactId>
-            <version>1.0.8-SNAPSHOT</version>
+            <version>1.0.8</version>
         </dependency>
         <!-- testing dependencies -->
 		<dependency>
