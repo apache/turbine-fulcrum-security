@@ -58,7 +58,8 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	/**
 	 * Constructs an empty Set
 	 */
-	public SecuritySet() {
+	public SecuritySet() 
+	{
 		nameMap = new TreeMap<String, T>(String.CASE_INSENSITIVE_ORDER);
 		idMap = new TreeMap<Object, T>();
 	}
@@ -69,7 +70,8 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	 * @return A Set Object
 	 *
 	 */
-	public Set<T> getSet() {
+	public Set<T> getSet() 
+	{
 		return new HashSet<T>(idMap.values());
 	}
 
@@ -78,7 +80,8 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	 *
 	 * @return The Set of Names in this Object, backed by the actual data.
 	 */
-	public Set<String> getNames() {
+	public Set<String> getNames() 
+	{
 		return nameMap.keySet();
 	}
 
@@ -87,7 +90,8 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	 *
 	 * @return The Set of Ids in this Object, backed by the actual data.
 	 */
-	public Set<Object> getIds() {
+	public Set<Object> getIds() 
+	{
 		return idMap.keySet();
 	}
 
@@ -95,7 +99,8 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	 * Removes all Objects from this Set.
 	 */
 	@Override
-	public void clear() {
+	public void clear() 
+	{
 		nameMap.clear();
 		idMap.clear();
 	}
@@ -106,8 +111,9 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	 * @param name Name of the Security Object.
 	 * @return True if argument matched an Object in this Set; false if no match.
 	 */
-	public boolean containsName(String name) {
-		return (StringUtils.isNotEmpty(name)) ? nameMap.containsKey(name) : false;
+	public boolean containsName(String name) 
+	{
+		return StringUtils.isNotEmpty(name) ? nameMap.containsKey(name) : false;
 	}
 
 	/**
@@ -116,7 +122,8 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	 * @param id Id of the Security Object.
 	 * @return True if argument matched an Object in this Set; false if no match.
 	 */
-	public boolean containsId(Object id) {
+	public boolean containsId(Object id) 
+	{
 		return (id == null) ? false : idMap.containsKey(id);
 	}
 
@@ -126,7 +133,8 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	 * @return An iterator for the Set
 	 */
 	@Override
-	public Iterator<T> iterator() {
+	public Iterator<T> iterator() 
+	{
 		return idMap.values().iterator();
 	}
 
@@ -136,7 +144,8 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	 * @return The cardinality of this Set.
 	 */
 	@Override
-	public int size() {
+	public int size() 
+	{
 		return idMap.size();
 	}
 
@@ -146,7 +155,8 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	 * @return The string representation of this Set.
 	 */
 	@Override
-	public String toString() {
+	public String toString() 
+	{
 		StringBuilder sbuf = new StringBuilder(12 * size());
 
 		for (Iterator<T> it = iterator(); it.hasNext();) {
@@ -169,15 +179,20 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	 * @see java.util.Collection#add(java.lang.Object)
 	 */
 	@Override
-	public boolean add(T o) {
-		if (contains(o)) {
+	public boolean add(T o) 
+	{
+		if (contains(o)) 
+		{
 			return false;
 		}
 
-		if (o.getId() != null) {
+		if (o.getId() != null) 
+		{
 			idMap.put(o.getId(), o);
 		}
-		if (o.getName() != null) {
+		
+		if (o.getName() != null) 
+		{
 			nameMap.put(o.getName(), o);
 		}
 
@@ -191,30 +206,35 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	 * @return True if this Set changed as a result; false if no change to this Set
 	 *         occurred (this Set already contained all members of the added Set).
 	 */
-	public boolean add(Collection<? extends T> collection) {
+	public boolean add(Collection<? extends T> collection) 
+	{
 		return addAll(collection);
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends T> collection) {
+	public boolean addAll(Collection<? extends T> collection) 
+	{
 		boolean res = false;
 
-		for (T o : collection) {
+		for (T o : collection) 
 			res |= add(o);
-		}
 
 		return res;
 	}
 
 	@Override
-	public boolean isEmpty() {
+	public boolean isEmpty() 
+	{
 		return idMap.isEmpty();
 	}
 
 	@Override
-	public boolean containsAll(Collection<?> collection) {
-		for (Object object : collection) {
-			if (!contains(object)) {
+	public boolean containsAll(Collection<?> collection) 
+	{
+		for (Object object : collection) 
+		{
+			if (!contains(object)) 
+			{
 				return false;
 			}
 		}
@@ -222,11 +242,14 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	}
 
 	@Override
-	public boolean removeAll(Collection<?> collection) {
+	public boolean removeAll(Collection<?> collection) 
+	{
 		boolean changed = false;
-		for (Object object : collection) {
+		for (Object object : collection) 
+		{
 			boolean result = remove(object);
-			if (result) {
+			if (result) 
+			{
 				changed = true;
 			}
 		}
@@ -235,7 +258,8 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	}
 
 	@Override
-	public boolean retainAll(Collection<?> collection) {
+	public boolean retainAll(Collection<?> collection) 
+	{
 		throw new RuntimeException("not implemented");
 	}
 
@@ -245,7 +269,8 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	 * @see java.util.Collection#toArray()
 	 */
 	@Override
-	public Object[] toArray() {
+	public Object[] toArray() 
+	{
 		return getSet().toArray();
 	}
 
@@ -256,10 +281,14 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	 * @return True if this Set contains the entity, false otherwise.
 	 */
 	@Override
-	public boolean contains(Object o) {
-		if (o == null || !(o instanceof SecurityEntity)) {
+	public boolean contains(Object o) 
+	{
+		if (o == null || !(o instanceof SecurityEntity)) 
+		{
 			return false;
-		} else {
+		} 
+		else 
+		{
 			return containsId(((SecurityEntity) o).getId());
 		}
 	}
@@ -271,8 +300,10 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	 * @return True if this Set contained the entity before it was removed.
 	 */
 	@Override
-	public boolean remove(Object o) {
-		if (o instanceof SecurityEntity) {
+	public boolean remove(Object o) 
+	{
+		if (o instanceof SecurityEntity) 
+		{
 			boolean res = contains(o);
 			idMap.remove(((SecurityEntity) o).getId());
 			nameMap.remove(((SecurityEntity) o).getName());
@@ -286,7 +317,8 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	 * @see java.util.Set#toArray(java.lang.Object[])
 	 */
 	@Override
-	public <A> A[] toArray(A[] a) {
+	public <A> A[] toArray(A[] a) 
+	{
 		return getSet().toArray(a);
 	}
 
@@ -297,7 +329,8 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	 * @param name Name of entity.
 	 * @return entity if argument matched an entity in this Set; null if no match.
 	 */
-	public T getByName(String name) {
+	public T getByName(String name) 
+	{
 		return nameMap.get(name);
 	}
 
@@ -307,7 +340,8 @@ public abstract class SecuritySet<T extends SecurityEntity> implements Serializa
 	 * @param id ID of entity.
 	 * @return entity if argument matched an entity in this Set; null if no match.
 	 */
-	public T getById(Object id) {
+	public T getById(Object id) 
+	{
 		return idMap.get(id);
 	}
 }

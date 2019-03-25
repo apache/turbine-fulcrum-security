@@ -1,6 +1,5 @@
 package org.apache.fulcrum.security.model.turbine;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,7 +18,6 @@ package org.apache.fulcrum.security.model.turbine;
  * specific language governing permissions and limitations
  * under the License.
  */
-
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,8 +46,9 @@ import org.apache.fulcrum.security.util.RoleSet;
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @author <a href="mailto:marco@intermeta.de">Marco Kn&uuml;ttel</a>
- * @version $Id: TurbineAccessControlList.java 1096130 2011-04-23 10:37:19Z ludwig $
+ * @version $Id: TurbineAccessControlList.java 1096130 2019-03-25 10:37:19Z painter $
  */
+@SuppressWarnings("rawtypes")
 public class TurbineAccessControlListImpl
         implements TurbineAccessControlList
 {
@@ -58,16 +57,22 @@ public class TurbineAccessControlListImpl
 
     /** The sets of roles that the user has in different groups */
     private Map<Group, RoleSet> roleSets;
+    
     /** The sets of permissions that the user has in different groups */
     private Map<Group, PermissionSet> permissionSets;
+    
     /** The global group */
     private Group globalGroup;
+    
     /** The group manager */
     private GroupManager groupManager;
+    
     /** The distinct list of groups that this user is part of */
     private GroupSet groupSet = new GroupSet();
+    
     /** The distinct list of roles that this user is part of */
     private RoleSet roleSet = new RoleSet();
+    
     /** the distinct list of permissions that this user has */
     private PermissionSet permissionSet = new PermissionSet();
 
@@ -434,19 +439,18 @@ public class TurbineAccessControlListImpl
         {
             return false;
         }
+        
         if (permission == null)
         {
             return false;
         }
+        
         for (Group group : groupset)
         {
             PermissionSet permissions = getPermissions(group);
-            if (permissions != null)
+            if (permissions != null && permissions.contains(permission))
             {
-                if (permissions.contains(permission))
-                {
-                    return true;
-                }
+            	return true;
             }
         }
         return false;
