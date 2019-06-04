@@ -21,7 +21,7 @@
    <parent>
        <artifactId>turbine-parent</artifactId>
        <groupId>org.apache.turbine</groupId>
-       <version>5</version>
+       <version>6-SNAPSHOT</version>
        <relativePath />
    </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -125,12 +125,6 @@
           <version>2.0.0-SNAPSHOT</version>
           <scope>test</scope>
         </dependency>
-        <dependency>
-          <groupId>junit</groupId>
-          <artifactId>junit</artifactId>
-          <version>4.12</version>
-          <scope>test</scope>
-        </dependency>
       </dependencies>
     </dependencyManagement>
     
@@ -158,6 +152,33 @@
         <module>torque</module>
         <module>dist</module>
     </modules>
+    
+    <!-- This let the report be set only at root level and is required since javadoc 3.1.0, as the aggregate reports by default at every level.  -->
+    <reporting>
+     <plugins>
+        <plugin>
+           <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-javadoc-plugin</artifactId>
+           <version>3.1.0</version>
+           <reportSets>
+             <reportSet>
+               <id>aggregate</id>
+               <inherited>false</inherited>
+               <reports>
+                <report>aggregate</report>
+               </reports>
+             </reportSet>
+             <reportSet>
+               <id>default</id>
+               <reports>
+                 <report>javadoc</report>
+                <report>test-javadoc</report>
+               </reports>          
+              </reportSet>
+           </reportSets>
+        </plugin>
+    </plugins>
+   </reporting>
     
     <properties>
         <turbine.site.path>fulcrum/fulcrum-security</turbine.site.path>
