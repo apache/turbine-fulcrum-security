@@ -36,7 +36,7 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 
 		<!-- Easy update of torque libs -->
-		<torque.version>4.0</torque.version>
+		<torque.version>4.1-SNAPSHOT</torque.version>
 		<torque.om>org.apache.fulcrum.security.torque.om</torque.om>
 		<torque.om.path>org/apache/fulcrum/security/torque/om</torque.om.path>
 	</properties>
@@ -131,7 +131,7 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-dbcp2</artifactId>
-			<version>2.6.1-SNAPSHOT</version>
+			<version>2.7.0</version>
 		</dependency>
 
 		<!-- testing dependencies -->

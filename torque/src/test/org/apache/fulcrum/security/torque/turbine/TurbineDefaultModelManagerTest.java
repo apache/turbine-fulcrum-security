@@ -62,6 +62,7 @@ public class TurbineDefaultModelManagerTest
             // we have to use declared peers
             this.setConfigurationFileName( "src/test/TurbineDefaultWithPeersComponentConfig.xml" );
             securityService = (SecurityService) lookup( SecurityService.ROLE );
+            
             super.setUp();
         }
         catch ( Exception e )

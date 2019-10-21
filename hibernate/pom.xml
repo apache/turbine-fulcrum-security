@@ -95,12 +95,12 @@
             <scope>test</scope>
         </dependency>
         <!-- testing dependencies -->
-		<dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>javax.servlet-api</artifactId>
-		    <version>3.1.0</version>
-		    <scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.apache.fulcrum</groupId>
             <artifactId>fulcrum-testcontainer</artifactId>
@@ -111,19 +111,16 @@
             <artifactId>fulcrum-yaafi</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- HIBERNATE LOGGER (log4j 1.2 mapper ) -->
         <dependency>
-        	<groupId>org.slf4j</groupId>
-        	<artifactId>slf4j-log4j12</artifactId>
-        	<version>1.6.1</version>
-        	<type>jar</type>
-        	<scope>test</scope>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-1.2-api</artifactId>
+            <version>${turbine.log4j2.version}</version>
         </dependency>
         <dependency>
-        	<groupId>log4j</groupId>
-        	<artifactId>log4j</artifactId>
-        	<version>1.2.16</version>
-        	<type>jar</type>
-        	<scope>test</scope>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.28</version>
         </dependency>
     </dependencies>
 </project>

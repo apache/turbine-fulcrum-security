@@ -18,12 +18,14 @@ package org.apache.fulcrum.security.torque.turbine;
  * under the License.
  */
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.apache.fulcrum.security.SecurityService;
+import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.model.turbine.TurbineModelManager;
 import org.apache.fulcrum.security.torque.HsqlDB;
 import org.apache.fulcrum.security.torque.om.TurbineGroupPeer;
@@ -38,6 +40,7 @@ import org.apache.torque.criteria.Criteria;
 import org.apache.torque.util.Transaction;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test user with attached object (user-role-goup relationship)
@@ -75,6 +78,14 @@ public class TurbineUserManagerDefaultPeerLazyTest
         {
             fail( e.toString() );
         }
+    }
+    
+    @Test
+    public void dummyTest()
+        throws Exception
+    {
+        Group group = securityService.getGroupManager().getGroupByName("TEST_GROUP" );
+        assertNotNull(group );
     }
 
     @Override

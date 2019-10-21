@@ -72,7 +72,7 @@ public abstract class TorqueAbstractSecurityEntity
      * @param lazy if <code>true</code>, may load some or all relationships later
      * @throws TorqueException database not found exception
      */
-    public abstract void retrieveAttachedObjects(Connection con, Boolean lazy) throws DataBackendException;
+    public abstract void retrieveAttachedObjects(Connection con, Boolean lazy) throws DataBackendException, TorqueException;
     
     
     /**
@@ -80,8 +80,9 @@ public abstract class TorqueAbstractSecurityEntity
      *
      * @param con A database connection
      * @throws DataBackendException wrapper exception: user information not found exception
+     * @throws TorqueException 
      */
-    public abstract void retrieveAttachedObjects(Connection con) throws DataBackendException;
+    public abstract void retrieveAttachedObjects(Connection con) throws DataBackendException, TorqueException;
 
     /**
      * Update this instance to the database with all dependent objects

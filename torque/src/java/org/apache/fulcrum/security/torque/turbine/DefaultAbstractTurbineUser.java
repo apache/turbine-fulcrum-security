@@ -60,12 +60,13 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
      *
      * @param criteria Criteria to define the selection of records
      * @param con a database connection
-     * @throws DataBackendException  if any database error occurs
+     * @throws DataBackendException  
      *
      * @return a list of User/Group/Role relations
+     * @throws TorqueException if any database error occurs
      */
     protected <T extends TurbineUserGroupRoleModelPeerMapper> List<T> getTurbineUserGroupRolesJoinTurbineRole(Criteria criteria, Connection con)
-        throws DataBackendException
+        throws TorqueException, DataBackendException
     {
         criteria.and(TurbineUserGroupRolePeer.USER_ID, getEntityId() );
         try {
@@ -79,7 +80,7 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
      * @see org.apache.fulcrum.security.torque.security.turbine.TorqueAbstractTurbineTurbineSecurityEntityDefault#retrieveAttachedObjects(java.sql.Connection, java.lang.Boolean, java.util.List)
      */
     @Override
-    public <T extends TurbineUserGroupRoleModelPeerMapper> void retrieveAttachedObjects( Connection con, Boolean lazy, List<T> ugrs ) throws DataBackendException
+    public <T extends TurbineUserGroupRoleModelPeerMapper> void retrieveAttachedObjects( Connection con, Boolean lazy, List<T> ugrs ) throws DataBackendException, TorqueException
     {
         if (!lazy ) { // !lazy
             Set<TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
@@ -98,7 +99,7 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
      * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection, java.lang.Boolean)
      */
     @Override
-    public void retrieveAttachedObjects( Connection con, Boolean lazy ) throws DataBackendException
+    public void retrieveAttachedObjects( Connection con, Boolean lazy ) throws TorqueException, DataBackendException
     {
         if (!lazy) {
             Set<TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
@@ -117,7 +118,7 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
      */
     @Override
     public void retrieveAttachedObjects( Connection con )
-        throws DataBackendException
+        throws DataBackendException, TorqueException
     {
         retrieveAttachedObjects( con, false ); //false
     }

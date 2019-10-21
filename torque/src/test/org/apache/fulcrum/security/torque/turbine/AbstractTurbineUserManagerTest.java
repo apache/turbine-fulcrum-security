@@ -42,6 +42,8 @@ import org.apache.fulcrum.security.util.PasswordMismatchException;
 import org.apache.fulcrum.security.util.UnknownEntityException;
 import org.apache.fulcrum.security.util.UserSet;
 import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -65,6 +67,10 @@ public abstract class AbstractTurbineUserManagerTest
     protected Group group;
 
     protected Role role;
+    
+    protected Logger logger = LogManager.getLogger();
+    
+   
 
     // requires default user in setup
     @Test
