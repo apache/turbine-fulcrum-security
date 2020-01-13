@@ -19,71 +19,24 @@ package org.apache.fulcrum.security.torque.peer;
  */
 import java.sql.Connection;
 
-import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.torque.om.TurbinePermission;
 import org.apache.torque.TorqueException;
 
 /**
- * This interface allows to retrieve user, group, role relationships either from custom or the default OM in 
+ * This extension to the marker interface {@linkplain Peer} is to allow for swappable Peer implementations 
+ * in Turbine Torque Manager Implementations.  
  * 
- * @link org.apache.fulcrum.security.torque.om. 
+ * @param <T>  The data object type used by the Torque PeerImpl class.
  * 
- * @author gk
- * @Id $Id$
- *
+ * @author <a href="mailto:gk@apache.org">Georg Kallidis</a>
+ * @version $Id$
  */
-public interface TurbineUserGroupRoleModelPeerMapper
+public interface TurbineRolePermissionPeerMapper
+
 {
-
-    /**
-     * Returns the associated TurbineUser object.
-     * If it was not retrieved before, the object is retrieved from
-     * the database
-     *
-     * @return the associated TurbineUser object
-     * @throws TorqueException  if any database error occurs when reading from the database fails.
-     */
-    User getTurbineUser()
-        throws TorqueException;
-
-    /**
-     * Return the associated TurbineUser object
-     * If it was not retrieved before, the object is retrieved from
-     * the database using the passed connection
-     *
-     * @param connection the connection used to retrieve the associated object
-     *        from the database, if it was not retrieved before
-     * @return the associated TurbineUser object
-     * @throws TorqueException  if any database error occurs
-     */
-    User getTurbineUser( Connection connection )
-        throws TorqueException;
-
-    /**
-     * Returns the associated TurbineGroup object.
-     * If it was not retrieved before, the object is retrieved from
-     * the database
-     *
-     * @return the associated TurbineGroup object
-     * @throws TorqueException  if any database error occurs when reading from the database fails.
-     */
-    Group getTurbineGroup()
-        throws TorqueException;
-
-    /**
-     * Return the associated TurbineGroup object
-     * If it was not retrieved before, the object is retrieved from
-     * the database using the passed connection
-     *
-     * @param connection the connection used to retrieve the associated object
-     *        from the database, if it was not retrieved before
-     * @return the associated TurbineGroup object
-     * @throws TorqueException  if any database error occurs
-     */
-    Group getTurbineGroup( Connection connection )
-        throws TorqueException;
-
+	
     /**
      * Returns the associated TurbineRole object.
      * If it was not retrieved before, the object is retrieved from
@@ -106,6 +59,29 @@ public interface TurbineUserGroupRoleModelPeerMapper
      * @throws TorqueException  if any database error occurs
      */
     Role getTurbineRole( Connection connection )
+        throws TorqueException;
+
+    /**
+     * Returns the associated TurbinePermission object.
+     * If it was not retrieved before, the object is retrieved from
+     * the database
+     *
+     * @return the associated TurbinePermission object
+     * @throws TorqueException when reading from the database fails.
+     */
+    Permission getTurbinePermission() throws TorqueException;
+    
+    /**
+     * Return the associated TurbinePermission object
+     * If it was not retrieved before, the object is retrieved from
+     * the database using the passed connection
+     *
+     * @param connection the connection used to retrieve the associated object
+     *        from the database, if it was not retrieved before
+     * @return the associated TurbinePermission object
+     * @throws TorqueException If a problem occurs with the get[$filedType] method.
+     */
+    public TurbinePermission getTurbinePermission(Connection connection)
         throws TorqueException;
 
 }

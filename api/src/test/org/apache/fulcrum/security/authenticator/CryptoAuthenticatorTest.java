@@ -23,23 +23,24 @@ import static org.junit.Assert.*;
 
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
-import org.apache.fulcrum.testcontainer.BaseUnit4Test;
-import org.junit.Before;
-import org.junit.Test;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class CryptoAuthenticatorTest extends BaseUnit4Test
+public class CryptoAuthenticatorTest extends BaseUnit5Test
 
 {
     private static final String preDefinedInput = "Oeltanks";
     private static final String preDefinedResult = "XBSqev4ilv7P7852G2rL5WgX3FLy8VzfOY+tVq+xjek=";
 
 
-    @Before
+    @BeforeEach
     public void setUp()
     {
         try

@@ -26,6 +26,7 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbinePermission;
 import org.apache.fulcrum.security.torque.om.TurbinePermissionPeer;
 import org.apache.fulcrum.security.torque.om.TurbineRolePermission;
 import org.apache.fulcrum.security.torque.om.TurbineRolePermissionPeer;
+import org.apache.fulcrum.security.torque.peer.TurbineRolePermissionPeerMapper;
 import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.RoleSet;
@@ -59,11 +60,11 @@ public abstract class DefaultAbstractTurbinePermission extends TorqueAbstractSec
      *
      * @return a list of Role/Permission relations
      */
-    protected List<TurbineRolePermission> getTurbineRolePermissionsJoinTurbineRole(Criteria criteria, Connection con)
+    protected <T extends TurbineRolePermissionPeerMapper> List<T> getTurbineRolePermissionsJoinTurbineRole(Criteria criteria, Connection con)
         throws TorqueException
     {
         criteria.and(TurbineRolePermissionPeer.PERMISSION_ID, getEntityId() );
-        return TurbineRolePermissionPeer.doSelectJoinTurbineRole(criteria, con);
+        return (List<T>) TurbineRolePermissionPeer.doSelectJoinTurbineRole(criteria, con);
     }
 
     /**
@@ -155,9 +156,9 @@ public abstract class DefaultAbstractTurbinePermission extends TorqueAbstractSec
             
             this.roleSet = new RoleSet();
     
-            List<TurbineRolePermission> rolepermissions = getTurbineRolePermissionsJoinTurbineRole(new Criteria(), con);
+            List<TurbineRolePermissionPeerMapper> rolepermissions = getTurbineRolePermissionsJoinTurbineRole(new Criteria(), con);
     
-            for (TurbineRolePermission ttrp : rolepermissions)
+            for (TurbineRolePermissionPeerMapper ttrp : rolepermissions)
             {
                 roleSet.add(ttrp.getTurbineRole());
             }

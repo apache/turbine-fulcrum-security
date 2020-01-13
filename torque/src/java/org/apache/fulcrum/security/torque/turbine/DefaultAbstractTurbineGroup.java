@@ -26,6 +26,7 @@ import org.apache.fulcrum.security.model.turbine.entity.TurbineGroup;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
 import org.apache.fulcrum.security.torque.om.TurbineGroupPeer;
 import org.apache.fulcrum.security.torque.om.TurbineUserGroupRolePeer;
+import org.apache.fulcrum.security.torque.peer.TurbineUserGroupRoleModelPeerMapper;
 import org.apache.fulcrum.security.torque.security.turbine.TorqueAbstractTurbineTurbineSecurityEntity;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.torque.TorqueException;
@@ -56,11 +57,11 @@ public abstract class DefaultAbstractTurbineGroup extends TorqueAbstractTurbineT
      *
      * @return a list of User/Group/Role relations
      */
-    protected List<org.apache.fulcrum.security.torque.om.TurbineUserGroupRole> getTurbineUserGroupRolesJoinTurbineRole(Criteria criteria, Connection con)
-        throws TorqueException
+    protected <T extends TurbineUserGroupRoleModelPeerMapper> List<T> getTurbineUserGroupRolesJoinTurbineRole(Criteria criteria, Connection con)
+            throws TorqueException, DataBackendException
     {
         criteria.and(TurbineUserGroupRolePeer.GROUP_ID, getEntityId() );
-        return TurbineUserGroupRolePeer.doSelectJoinTurbineRole(criteria, con);
+        return (List<T>) TurbineUserGroupRolePeer.doSelectJoinTurbineRole(criteria, con);
     }
     
     @Override
@@ -79,10 +80,10 @@ public abstract class DefaultAbstractTurbineGroup extends TorqueAbstractTurbineT
         try {
             if (!lazy) {
                 Set<TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
-                
-                List<org.apache.fulcrum.security.torque.om.TurbineUserGroupRole> ugrs = getTurbineUserGroupRolesJoinTurbineRole(new Criteria(), con);
+                               
+                List<TurbineUserGroupRoleModelPeerMapper> ugrs = getTurbineUserGroupRolesJoinTurbineRole(new Criteria(), con);
         
-                for (org.apache.fulcrum.security.torque.om.TurbineUserGroupRole ttugr : ugrs)
+                for (TurbineUserGroupRoleModelPeerMapper ttugr : ugrs)
                 {
                     TurbineUserGroupRole ugr = new TurbineUserGroupRole();
                     ugr.setGroup(this);

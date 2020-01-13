@@ -162,10 +162,10 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
         {
             throw new DataBackendException("Could not create a role with empty name!");
         }
-        if (role.getId() != null)
-        {
-            throw new DataBackendException("Could not create a role with an id of null!");
-        }
+//        if (role.getId() == null)
+//        {
+//            throw new DataBackendException("Could not create a role with an id of null!");
+//        }
         try
         {
             roleExists = checkExists(role);

@@ -22,13 +22,13 @@
       <Console name="console" target="SYSTEM_OUT">
         <PatternLayout pattern="%d [%t] %-5p %c - %m%n"/>
       </Console>
-      <File name="fulcrum" fileName="target/fulcrum.log">
+      <File name="fulcrum" fileName="./target/fulcrum.log">
         <PatternLayout pattern="%d [%t] %-5p %c - %m%n"/>
       </File>
-      <File name="torque" fileName="target/torque.log">
+      <File name="torque" fileName="./target/torque.log">
         <PatternLayout pattern="%d [%t] %-5p %c - %m%n"/>
       </File>
-      <File name="avalon" fileName="target/avalon.log">
+      <File name="avalon" fileName="./target/avalon.log">
         <PatternLayout pattern="%d [%t] %-5p %c - %m%n"/>
       </File>
     </Appenders>

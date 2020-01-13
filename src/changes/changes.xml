@@ -23,7 +23,18 @@
     <author email="epugh@upstate.com">Eric Pugh</author>
   </properties>
   <body>
-    <release version="1.1.3" date="in Subversion">
+   <release version="2.0.0" date="in Subversion">
+       <action type="update" dev="gk">
+        Torque sub project: 
+        - Update to Torque 4.1, using PeerInterface in schema, removed classes as now generated with PeerInterface.
+        - add TorqueException to method (TODO DataBackendException wanted)
+        - Dbcp2 update to v2.7.0
+       </action>
+        <action type="update" dev="gk">
+        - log4j2 (hibernate needs mapping 1.2 to 2)
+       </action>
+    </release>
+    <release version="1.1.3" date="2019-02-23">
       <action type="update" dev="jp">
         Update to commons-lang3, Java 8 by default
        </action>

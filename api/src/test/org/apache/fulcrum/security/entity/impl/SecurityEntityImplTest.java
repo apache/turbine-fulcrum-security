@@ -1,5 +1,8 @@
 package org.apache.fulcrum.security.entity.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,8 +23,7 @@ package org.apache.fulcrum.security.entity.impl;
  */
 
 import org.apache.fulcrum.security.entity.SecurityEntity;
-import static org.junit.Assert.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test the SecurityEntityImple

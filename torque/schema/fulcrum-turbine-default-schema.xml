@@ -30,11 +30,11 @@
     defaultIdMethod="none" defaultJavaType="object"
     xmlns="http://db.apache.org/torque/4.0/templates/database"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database 
-        http://db.apache.org/torque/4.0/templates/database.xsd">
+    xsi:schemaLocation="http://db.apache.org/torque/4.1/templates/database
+        http://db.apache.org/torque/4.1/templates/database.xsd">
 
 <!--   
-   after Torque 4.1 is released, add attribute peerInterface="org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer" 
+   added after Torque 4.1 release attribute peerInterface="org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer" 
    to tables TURBINE_PERMISSION,TURBINE_ROLE,TURBINE_GROUP,TURBINE_USER, cft. https://issues.apache.org/jira/browse/TRB-92 and https://issues.apache.org/jira/browse/TORQUE-309.
    -->
   <table name="TURBINE_PERMISSION" javaName="TurbinePermission" idMethod="native"  
@@ -91,7 +91,8 @@
   </table>
 
   <!-- Turbine Security Model -->
-  <table name="TURBINE_ROLE_PERMISSION" javaName="TurbineRolePermission" idMethod="none">
+  <table name="TURBINE_ROLE_PERMISSION" javaName="TurbineRolePermission" idMethod="none"
+  interface="org.apache.fulcrum.security.torque.peer.TurbineRolePermissionPeerMapper">
     <column name="ROLE_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
     <column name="PERMISSION_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
 

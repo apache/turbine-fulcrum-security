@@ -35,6 +35,11 @@ import org.apache.fulcrum.security.util.UnknownEntityException;
  */
 public abstract class AbstractPermissionManager extends AbstractEntityManager implements PermissionManager
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     protected abstract <T extends Permission> T persistNewPermission(T permission) throws DataBackendException;
 
     /**
@@ -150,10 +155,10 @@ public abstract class AbstractPermissionManager extends AbstractEntityManager im
         {
             throw new DataBackendException("Could not create a permission with empty name!");
         }
-        if (permission.getId() != null)
-        {
-            throw new DataBackendException("Could not create a permission with an id of null!");
-        }
+//        if (permission.getId() == null)
+//        {
+//            throw new DataBackendException("Could not create a permission with an id of null!");
+//        }
         try
         {
             permissionExists = checkExists(permission);

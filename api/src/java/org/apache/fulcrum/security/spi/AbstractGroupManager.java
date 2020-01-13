@@ -155,10 +155,10 @@ public abstract class AbstractGroupManager extends AbstractEntityManager impleme
         {
             throw new DataBackendException("Could not create a group with empty name!");
         }
-        if (group.getId() != null)
-        {
-            throw new DataBackendException("Could not create a group with an id of null!");
-        }
+//        if (group.getId() == null)
+//        {
+//            throw new DataBackendException("Could not create a group with an id of null!");
+//        }
         groupExists = checkExists(group);
         if (!groupExists)
         {

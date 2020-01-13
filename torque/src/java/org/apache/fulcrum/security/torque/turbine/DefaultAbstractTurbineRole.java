@@ -29,6 +29,8 @@ import org.apache.fulcrum.security.torque.om.TurbineRolePeer;
 import org.apache.fulcrum.security.torque.om.TurbineRolePermission;
 import org.apache.fulcrum.security.torque.om.TurbineRolePermissionPeer;
 import org.apache.fulcrum.security.torque.om.TurbineUserGroupRolePeer;
+import org.apache.fulcrum.security.torque.peer.TurbineRolePermissionPeerMapper;
+import org.apache.fulcrum.security.torque.peer.TurbineUserGroupRoleModelPeerMapper;
 import org.apache.fulcrum.security.torque.security.turbine.TorqueAbstractTurbineTurbineSecurityEntity;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.PermissionSet;
@@ -63,11 +65,11 @@ public abstract class DefaultAbstractTurbineRole extends TorqueAbstractTurbineTu
      *
      * @return a list of Role/Permission relations
      */
-    protected List<TurbineRolePermission> getTurbineRolePermissionsJoinTurbinePermission(Criteria criteria, Connection con)
+    protected <T extends TurbineRolePermissionPeerMapper> List<T> getTurbineRolePermissionsJoinTurbinePermission(Criteria criteria, Connection con)
         throws TorqueException
     {
         criteria.and(TurbineRolePermissionPeer.ROLE_ID, getEntityId() );
-        return TurbineRolePermissionPeer.doSelectJoinTurbinePermission(criteria, con);
+        return (List<T>) TurbineRolePermissionPeer.doSelectJoinTurbinePermission(criteria, con);
     }
 
     /**
@@ -82,11 +84,11 @@ public abstract class DefaultAbstractTurbineRole extends TorqueAbstractTurbineTu
      *
      * @return a list of User/Group/Role relations
      */
-    protected List<org.apache.fulcrum.security.torque.om.TurbineUserGroupRole> getTurbineUserGroupRolesJoinTurbineGroup(Criteria criteria, Connection con)
-        throws TorqueException
+    protected <T extends TurbineUserGroupRoleModelPeerMapper> List<T> getTurbineUserGroupRolesJoinTurbineGroup(Criteria criteria, Connection con)
+            throws TorqueException, DataBackendException
     {
         criteria.and(TurbineUserGroupRolePeer.ROLE_ID, getEntityId() );
-        return TurbineUserGroupRolePeer.doSelectJoinTurbineGroup(criteria, con);
+        return (List<T>) TurbineUserGroupRolePeer.doSelectJoinTurbineGroup(criteria, con);
     }
 
     /**
@@ -178,9 +180,9 @@ public abstract class DefaultAbstractTurbineRole extends TorqueAbstractTurbineTu
         this.permissionSet = new PermissionSet();
 
         try {
-            List<TurbineRolePermission> rolepermissions = getTurbineRolePermissionsJoinTurbinePermission(new Criteria(), con);
+            List<TurbineRolePermissionPeerMapper> rolepermissions = getTurbineRolePermissionsJoinTurbinePermission(new Criteria(), con);
     
-            for (TurbineRolePermission ttrp : rolepermissions)
+            for (TurbineRolePermissionPeerMapper ttrp : rolepermissions)
             {
                 permissionSet.add(ttrp.getTurbinePermission());
             }
@@ -188,9 +190,9 @@ public abstract class DefaultAbstractTurbineRole extends TorqueAbstractTurbineTu
             if (!lazy) {
                 Set<TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
         
-                List<org.apache.fulcrum.security.torque.om.TurbineUserGroupRole> ugrs = getTurbineUserGroupRolesJoinTurbineGroup(new Criteria(), con);
+                List<TurbineUserGroupRoleModelPeerMapper> ugrs = getTurbineUserGroupRolesJoinTurbineGroup(new Criteria(), con);
         
-                for (org.apache.fulcrum.security.torque.om.TurbineUserGroupRole ttugr : ugrs)
+                for (TurbineUserGroupRoleModelPeerMapper ttugr : ugrs)
                 {
                     TurbineUserGroupRole ugr = new TurbineUserGroupRole();
                     ugr.setRole(this);

@@ -92,6 +92,7 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit5Test
         permission.setName("ANSWER_PHONE");
         permissionManager.addPermission(permission);
         role = roleManager.getRoleInstance("RECEPTIONIST");
+        //role.setId(new Integer(1));
         roleManager.addRole(role);
         modelManager.grant(role, permission);
         role = roleManager.getRoleById(role.getId());
@@ -105,7 +106,8 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit5Test
         Permission permission = securityService.getPermissionManager().getPermissionInstance();
         permission.setName("ANSWER_FAX");
         securityService.getPermissionManager().addPermission(permission);
-        role = roleManager.getRoleInstance("SECRETARY");
+        role = roleManager.getRoleInstance("SECRETARY"); 
+        //role.setId(new Integer(1));
         roleManager.addRole(role);
         modelManager.grant(role, permission);
         role = roleManager.getRoleById(role.getId());
@@ -128,6 +130,7 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit5Test
         permission = securityService.getPermissionManager().addPermission(permission);
         permission2 =  securityService.getPermissionManager().addPermission(permission2);
         role = roleManager.getRoleInstance("ANOTHERSECRETARY");
+        //role.setId(new Integer(1));
         role = roleManager.addRole(role);
         modelManager.grant(role, permission);
         modelManager.grant(role, permission2);
@@ -154,6 +157,7 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit5Test
         securityService.getPermissionManager().addPermission(permission);
         securityService.getPermissionManager().addPermission(permission2);
         role = roleManager.getRoleInstance("HELPER");
+        //role.setId(new Integer(1));
         roleManager.addRole(role);
         modelManager.grant(role, permission);
         modelManager.grant(role, permission2);
@@ -173,13 +177,16 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit5Test
         securityService.getGroupManager().addGroup(group);
         Role role = securityService.getRoleManager().getRoleInstance();
         role.setName("TEST_REVOKEALLUSER_ROLE");
+        //role.setId(new Integer(1));
         role = securityService.getRoleManager().addRole(role);
         
         Group group2 = securityService.getGroupManager().getGroupInstance();
         group2.setName("TEST_REVOKEALLUSER_GROUP2");
+        //group2.setId(new Integer(1));
         securityService.getGroupManager().addGroup(group2);
         Role role2 = securityService.getRoleManager().getRoleInstance();
         role2.setName("TEST_REVOKEALLUSER_ROLE2");
+        //role2.setId(new Integer(2));
         role2 = securityService.getRoleManager().addRole(role2);
         
         String username = "calvin";
@@ -281,10 +288,14 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit5Test
     {
         Permission permission = permissionManager.getPermissionInstance();
         permission.setName("ANSWER_PHONE__");
+        //permission.setId(new Integer (1));
         permissionManager.addPermission(permission);
         
         Permission permission2 = permissionManager.getPermissionInstance();
         permission2.setName("ANSWER_PHONE__2");
+        // TurbineHibernate.hbm.xml has <generator class="native" for id, throws org.hibernate.HibernateException: 
+        // identifier of an instance of org.apache.fulcrum.security.model.turbine.entity.impl.TurbinePermissionImpl was altered from 1 to 2
+        //permission.setId(new Integer (2));
         permissionManager.addPermission(permission2);
         
         role = roleManager.getRoleInstance("RECEPTIONIST__");
@@ -292,9 +303,12 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit5Test
         
         Group group = securityService.getGroupManager().getGroupInstance();
         group.setName("TEST_GROUP__");
+        //group.setId(new Integer(1));
         securityService.getGroupManager().addGroup(group);
         Role role = roleManager.getRoleInstance();
+        
         role.setName("TEST_Role__");
+        //role.setId(new Integer(1));
         roleManager.addRole(role);
         User user = userManager.getUserInstance("Clint__");
         userManager.addUser(user, "clint");

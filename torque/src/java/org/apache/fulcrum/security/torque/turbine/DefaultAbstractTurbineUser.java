@@ -120,7 +120,7 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
     public void retrieveAttachedObjects( Connection con )
         throws DataBackendException, TorqueException
     {
-        retrieveAttachedObjects( con, false ); //false
+        retrieveAttachedObjects( con, false );
     }
 
     /* (non-Javadoc)

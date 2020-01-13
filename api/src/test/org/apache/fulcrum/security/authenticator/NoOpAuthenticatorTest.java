@@ -1,5 +1,7 @@
 package org.apache.fulcrum.security.authenticator;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -22,9 +24,8 @@ package org.apache.fulcrum.security.authenticator;
 
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicUserImpl;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
 
 /**
  * 

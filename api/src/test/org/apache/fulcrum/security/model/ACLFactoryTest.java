@@ -46,21 +46,24 @@ import org.apache.fulcrum.security.model.turbine.entity.impl.TurbineGroupImpl;
 import org.apache.fulcrum.security.model.turbine.entity.impl.TurbinePermissionImpl;
 import org.apache.fulcrum.security.model.turbine.entity.impl.TurbineRoleImpl;
 import org.apache.fulcrum.security.model.turbine.entity.impl.TurbineUserImpl;
-import org.apache.fulcrum.testcontainer.BaseUnitTest;
+import org.apache.fulcrum.testcontainer.BaseUnit5Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 /**
  *
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
  * @version $Id$
  */
-public class ACLFactoryTest extends BaseUnitTest
+public class ACLFactoryTest extends BaseUnit5Test
 {
 
-    public ACLFactoryTest(String arg0)
+    public ACLFactoryTest()
     {
-        super(arg0);
     }
 
+    @Test
     public void testCreatingTurbineACLandModel() throws Exception
     {
         this.setRoleFileName("src/test/TurbineACLRoleModelConfig.xml");
@@ -96,6 +99,7 @@ public class ACLFactoryTest extends BaseUnitTest
         assertTrue(tacl.hasPermission(permission, group));
     }
 
+    @Test
     public void testCreatingDynamicACL() throws Exception
     {
         this.setRoleFileName("src/test/DynamicACLRoleConfig.xml");
@@ -127,6 +131,7 @@ public class ACLFactoryTest extends BaseUnitTest
         assertTrue(dacl.hasPermission(permission));
     }
 
+    @Test
     public void testCreatingBasicACL() throws Exception
     {
         this.setRoleFileName("src/test/BasicACLRoleConfig.xml");
