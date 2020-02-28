@@ -25,6 +25,11 @@
   <body>
    <release version="2.0.0" date="in Subversion">
        <action type="update" dev="gk">
+        - Removed id-check in group/permission/role spi managers -  databases may use native generator/autoincrement.
+        - Torque add model test
+        - fixed missing interface for Role/Group/Permission DefaultAbstractTurbine*Managers,  TurbineRolePermissionPeerMapper
+       </action>
+       <action type="update" dev="gk">
         Torque sub project: 
         - Update to Torque 4.1, using PeerInterface in schema, removed classes as now generated with PeerInterface.
         - add TorqueException to method (TODO DataBackendException wanted)

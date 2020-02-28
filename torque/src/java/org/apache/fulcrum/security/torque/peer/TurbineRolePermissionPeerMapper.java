@@ -21,7 +21,7 @@ import java.sql.Connection;
 
 import org.apache.fulcrum.security.entity.Permission;
 import org.apache.fulcrum.security.entity.Role;
-import org.apache.fulcrum.security.torque.om.TurbinePermission;
+import org.apache.fulcrum.security.model.turbine.entity.TurbinePermission;
 import org.apache.torque.TorqueException;
 
 /**
