@@ -26,12 +26,13 @@
 <!-- @version $Id: torque-security-schema.xml,v 1.1 2005/09/26 14:10:04 tvan Exp $ -->
 <!-- ====================================================================     -->
 
-<database name="fulcrum"
+<database 
+  name="fulcrum"
     defaultIdMethod="none"
-    xmlns="http://db.apache.org/torque/4.0/templates/database"
+    xmlns="http://db.apache.org/torque/5.0/templates/database"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://db.apache.org/torque/4.0/templates/database 
-        http://db.apache.org/torque/4.0/templates/database.xsd">
+    xsi:schemaLocation="http://db.apache.org/torque/5.0/templates/database 
+        http://db.apache.org/torque/torque-5.0/documentation/orm-reference/database-5-0.xsd">
 
   <table name="FULCRUM_DYNAMIC_PERMISSION" javaName="TorqueDynamicPermission" idMethod="idbroker"
       baseClass="org.apache.fulcrum.security.torque.dynamic.TorqueAbstractDynamicPermission">

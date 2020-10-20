@@ -28,17 +28,18 @@
 
 <database name="default"
     defaultIdMethod="none" defaultJavaType="object"
-    xmlns="http://db.apache.org/torque/4.0/templates/database"
+    xmlns="http://db.apache.org/torque/5.0/templates/database"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://db.apache.org/torque/4.1/templates/database
-        http://db.apache.org/torque/4.1/templates/database.xsd">
+    xsi:schemaLocation="http://db.apache.org/torque/5.0/templates/database 
+        http://db.apache.org/torque/torque-5.0/documentation/orm-reference/database-5-0.xsd">
 
 <!--   
-   added after Torque 4.1 release attribute peerInterface="org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer" 
-   to tables TURBINE_PERMISSION,TURBINE_ROLE,TURBINE_GROUP,TURBINE_USER, cft. https://issues.apache.org/jira/browse/TRB-92 and https://issues.apache.org/jira/browse/TORQUE-309.
+   added after Torque 5.0 release attribute peerInterface="org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer" 
+   to tables TURBINE_PERMISSION,TURBINE_ROLE,TURBINE_GROUP,TURBINE_USER
    -->
   <table name="TURBINE_PERMISSION" javaName="TurbinePermission" idMethod="native"  
   baseClass="org.apache.fulcrum.security.torque.turbine.DefaultAbstractTurbinePermission"
+  interface="org.apache.fulcrum.security.model.turbine.entity.TurbinePermission"
   peerInterface="org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer">
     <column name="PERMISSION_ID" required="true" primaryKey="true" type="INTEGER" javaName="EntityId" javaType="object"/>
     <column name="PERMISSION_NAME" required="true" size="64" type="VARCHAR" javaName="EntityName"/>
@@ -51,6 +52,7 @@
 
   <table name="TURBINE_ROLE" javaName="TurbineRole" idMethod="native" 
       baseClass="org.apache.fulcrum.security.torque.turbine.DefaultAbstractTurbineRole"
+      interface="org.apache.fulcrum.security.model.turbine.entity.TurbineRole"
       peerInterface="org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer">
     <column name="ROLE_ID" required="true" primaryKey="true" type="INTEGER" javaName="EntityId" javaType="object"/>
     <column name="ROLE_NAME" required="true" size="64" type="VARCHAR" javaName="EntityName"/>
@@ -63,6 +65,7 @@
 
   <table name="TURBINE_GROUP" javaName="TurbineGroup" idMethod="native" 
       baseClass="org.apache.fulcrum.security.torque.turbine.DefaultAbstractTurbineGroup"
+      interface="org.apache.fulcrum.security.model.turbine.entity.TurbineGroup"
       peerInterface="org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer">
     <column name="GROUP_ID" required="true" primaryKey="true" type="INTEGER" javaName="EntityId" javaType="object"/>
     <column name="GROUP_NAME" required="true" type="VARCHAR" size="64" javaName="EntityName"/>
