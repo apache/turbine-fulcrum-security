@@ -41,6 +41,7 @@ public interface DynamicUser extends BasicUser
     /**
      * Get the set of delegatees for this user
      * 
+     * @param <T>
      * @return Returns the delegatees.
      */
     public <T extends User> Set<T> getDelegatees();
@@ -56,6 +57,7 @@ public interface DynamicUser extends BasicUser
     /**
      * Get the set of delegators for this user
      * 
+     * @param <T>
      * @return Returns the delegators.
      */
     public <T extends User> Set<T> getDelegators();

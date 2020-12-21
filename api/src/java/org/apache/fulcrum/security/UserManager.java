@@ -53,6 +53,7 @@ public interface UserManager extends Serializable
      * This method calls getUserClass, and then creates a new object using the
      * default constructor.
      *
+     * @param <T> User
      * @return an object implementing User interface.
      * @throws DataBackendException
      *             if the object could not be instantiated.
@@ -65,6 +66,7 @@ public interface UserManager extends Serializable
      * This method calls getUserClass, and then creates a new object using the
      * default constructor.
      *
+     * @param <T> User
      * @param userName
      *            The name of the user.
      *
@@ -101,6 +103,7 @@ public interface UserManager extends Serializable
     /**
      * Retrieve a user from persistent storage using username as the key.
      *
+     * @param <T> User
      * @param username
      *            the name of the user.
      * @return an User object.
@@ -114,6 +117,7 @@ public interface UserManager extends Serializable
     /**
      * Retrieve a user from persistent storage using the id as the key.
      *
+     * @param <T> User
      * @param id
      *            the id of the user.
      * @return an User object.
@@ -129,6 +133,7 @@ public interface UserManager extends Serializable
      * authenticate the user. The implementation may chose to authenticate to
      * the server as the user whose data is being retrieved.
      *
+     * @param <T> User
      * @param username
      *            the name of the user.
      * @param password
@@ -254,6 +259,7 @@ public interface UserManager extends Serializable
      * Return a Class object representing the system's chosen implementation of
      * of ACL interface.
      * 
+     * @param <T> AccessControlList
      * @param user the user
      * @return systems's chosen implementation of ACL interface.
      * @throws UnknownEntityException

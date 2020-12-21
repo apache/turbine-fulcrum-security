@@ -35,7 +35,8 @@ public interface TurbineUserGroupRoleEntity {
 
 	/**
 	 * Get the User/Group/Role set associated with this entity
-	 *
+	 * 
+	 * @param <T> TurbineUserGroupRole
 	 * @return a set of User/Group/Role relations
 	 * @throws DataBackendException generic exception
 	 */

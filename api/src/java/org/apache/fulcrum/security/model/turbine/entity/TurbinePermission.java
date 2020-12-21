@@ -78,6 +78,7 @@ public interface TurbinePermission extends Permission
     /**
      * Get the roles that this permission belongs to as Set
      * 
+     * @param <T> 
      * @return a set of roles
      */
     public <T extends Role> Set<T> getRolesAsSet();

@@ -61,6 +61,7 @@ public interface RoleManager extends Serializable
      * This method calls getRoleClass, and then creates a new object using the
      * default constructor.
      *
+     * @param <T> Role
      * @param roleName
      *            The name of the Role
      *
@@ -73,6 +74,7 @@ public interface RoleManager extends Serializable
     /**
      * Retrieve a Role object with specified name.
      *
+     * @param <T> Role
      * @param name
      *            the name of the Role.
      * @return an object representing the Role with specified name.
@@ -86,6 +88,7 @@ public interface RoleManager extends Serializable
     /**
      * Retrieve a Role object with specified Id.
      *
+     * @param <T> Role
      * @param id
      *            the Id of the Role.
      *
@@ -110,6 +113,8 @@ public interface RoleManager extends Serializable
     /**
      * Creates a new role with specified attributes.
      *
+     * @param <T> Role
+     * 
      * @param role
      *            The object describing the role to be created.
      * @return the new Role object.

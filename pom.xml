@@ -146,6 +146,14 @@
                 <tryUpdate>false</tryUpdate>
               </configuration>
             </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-javadoc-plugin</artifactId>
+              <configuration>
+                <source>1.8</source>
+                <detectJavaApiLink>false</detectJavaApiLink>
+              </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -182,6 +190,10 @@
                </reports>          
               </reportSet>
            </reportSets>
+           <configuration>
+                 <source>1.8</source>
+                 <detectJavaApiLink>false</detectJavaApiLink>
+            </configuration>
         </plugin>
     </plugins>
    </reporting>

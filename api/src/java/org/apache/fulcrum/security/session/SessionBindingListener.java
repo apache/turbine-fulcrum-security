@@ -1,5 +1,6 @@
 package org.apache.fulcrum.security.session;
 
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,7 +22,7 @@ package org.apache.fulcrum.security.session;
 
 /**
  * This interface is modelled after
- * {@link javax.servlet.http.HttpSessionBindingListener}.
+ * javax.servlet.http.HttpSessionBindingListener.
  * 
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$

@@ -70,6 +70,7 @@ public interface SecurityService
      * Returns the configured ModelManager object that can then be casted to the
      * specific model.
      *
+     * @param <T> ModelManager
      * @return An ModelManager object
      */
     <T extends ModelManager> T getModelManager();

@@ -51,6 +51,7 @@ public interface GroupManager extends Serializable
      * This method calls getGroupClass, and then creates a new object using the
      * default constructor.
      *
+     * @param <T>
      * @return an object implementing Group interface.
      * @throws DataBackendException
      *             if the object could not be instantiated.
@@ -74,7 +75,8 @@ public interface GroupManager extends Serializable
 
     /**
      * Retrieve a Group object with specified name.
-     *
+     * 
+     * @param <T>
      * @param name
      *            the name of the Group.
      * @return an object representing the Group with specified name.
@@ -88,6 +90,7 @@ public interface GroupManager extends Serializable
     /**
      * Retrieve a Group object with specified Id.
      *
+     * @param <T> Group type
      * @param id
      *            the Id of the Group.
      *
@@ -129,6 +132,7 @@ public interface GroupManager extends Serializable
     /**
      * Creates a new group with specified attributes.
      *
+     * @param <T>
      * @param group
      *            the object describing the group to be created.
      * @return the new Group object.

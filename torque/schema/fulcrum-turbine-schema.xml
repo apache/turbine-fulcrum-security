@@ -86,7 +86,8 @@
   </table>
 
   <!-- Turbine Security Model -->
-  <table name="TURBINE_ROLE_PERMISSION" javaName="TorqueTurbineRolePermission">
+  <table name="TURBINE_ROLE_PERMISSION" interface="org.apache.fulcrum.security.torque.peer.TurbineRolePermissionPeerMapper" 
+  javaName="TorqueTurbineRolePermission">
     <column name="ROLE_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
     <column name="PERMISSION_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
 
@@ -99,7 +100,9 @@
     </foreign-key>
   </table>
 
-  <table name="TURBINE_USER_GROUP_ROLE" javaName="TorqueTurbineUserGroupRole">
+  <table name="TURBINE_USER_GROUP_ROLE" javaName="TorqueTurbineUserGroupRole" 
+  interface="org.apache.fulcrum.security.torque.peer.TurbineUserGroupRoleModelPeerMapper"
+  peerInterface="org.apache.fulcrum.security.torque.peer.TorqueTurbineUserGroupRolePeer">
     <column name="USER_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
     <column name="GROUP_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>
     <column name="ROLE_ID" required="true" primaryKey="true" type="INTEGER" javaType="object"/>

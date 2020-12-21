@@ -51,6 +51,7 @@ public interface PermissionManager extends Serializable
      * This method calls getPermissionClass, and then creates a new object using
      * the default constructor.
      *
+     * @param <T>
      * @return an object implementing Permission interface.
      * @throws DataBackendException
      * 				if there was an error accessing the data backend. 
@@ -62,7 +63,8 @@ public interface PermissionManager extends Serializable
      *
      * This method calls getPermissionClass, and then creates a new object using
      * the default constructor.
-     *
+     * 
+     * @param <T>
      * @param permName
      *            The name of the Permission
      *
@@ -74,7 +76,8 @@ public interface PermissionManager extends Serializable
 
     /**
      * Retrieve a Permission object with specified name.
-     *
+     * 
+     * @param <T>
      * @param name
      *            the name of the Permission.
      * @return an object representing the Permission with specified name.
@@ -87,6 +90,8 @@ public interface PermissionManager extends Serializable
 
     /**
      * Retrieve a Permission object with specified Id.
+     * 
+     * @param <T>
      *
      * @param id
      *            the Id of the Permission.
