@@ -52,6 +52,7 @@ public interface BasicGroup extends Group
     /**
      * Get the users that are part of this group as a Set
      * 
+     * @param <T> User type
      * @return a set of users
      */
     public <T extends User> Set<T> getUsersAsSet();
@@ -59,6 +60,7 @@ public interface BasicGroup extends Group
     /**
      * Set the users that are part of this group as a Set
      * 
+     * @param <T> User type
      * @param users
      *            a set of users
      */

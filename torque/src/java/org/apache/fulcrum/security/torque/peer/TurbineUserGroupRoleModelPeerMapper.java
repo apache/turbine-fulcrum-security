@@ -27,7 +27,7 @@ import org.apache.torque.TorqueException;
 /**
  * This interface allows to retrieve user, group, role relationships either from custom or the default OM in 
  * 
- * @link org.apache.fulcrum.security.torque.om. 
+ * It should be implemented by appopriate om classes (interface may be set in schema).
  * 
  * @author gk
  * @Id $Id$

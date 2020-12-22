@@ -39,7 +39,7 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @param <T>
+	 * @param <T> role type
 	 * @param role to persist
 	 * @return the Role object
 	 * @throws DataBackendException if fail to connect to datasource
@@ -52,7 +52,7 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
      * This method calls getRoleClass, and then creates a new object using the
      * default constructor.
      *
-     * @param <T>
+     * @param <T> role type
      * @return an object implementing Role interface.
      * @throws DataBackendException
      *             if the object could not be instantiated.
@@ -78,7 +78,7 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
      * This method calls getRoleClass, and then creates a new object using the
      * default constructor.
      * 
-     * @param <T>
+     * @param <T> type of role 
      *
      * @param roleName
      *            The name of the role.
@@ -101,7 +101,7 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
      *
      * @see org.apache.fulcrum.security.RoleManager#getRoleByName(java.lang.String)
      * 
-     * @param <T>
+     * @param <T> type of role
      *
      * @param name
      *            the name of the Role.
@@ -127,7 +127,7 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
     /**
      * Retrieve a Role object with specified Id.
      * 
-     * @param <T>
+     * @param <T> the role type
      *
      * @param id
      *            the ID of the Role.
@@ -154,7 +154,7 @@ public abstract class AbstractRoleManager extends AbstractEntityManager implemen
     /**
      * Creates a new role with specified attributes.
      * 
-     * @param <T>
+     * @param <T> role type
      *
      * @param role
      *            the object describing the role to be created.

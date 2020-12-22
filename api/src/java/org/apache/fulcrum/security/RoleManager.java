@@ -20,6 +20,7 @@ package org.apache.fulcrum.security;
  */
 import java.io.Serializable;
 
+import org.apache.fulcrum.security.entity.Group;
 import org.apache.fulcrum.security.entity.Role;
 import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.fulcrum.security.util.EntityExistsException;
@@ -50,6 +51,7 @@ public interface RoleManager extends Serializable
      * This method calls getRoleClass, and then creates a new object using the
      * default constructor.
      * 
+     * @param <T> role type
      * @return an object implementing Role interface.
      * @throws DataBackendException if the object could not be instantiated
      */

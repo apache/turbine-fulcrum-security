@@ -150,8 +150,18 @@
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-javadoc-plugin</artifactId>
               <configuration>
-                <source>1.8</source>
-                <detectJavaApiLink>false</detectJavaApiLink>
+                    <source>1.8</source>
+                    <detectJavaApiLink>false</detectJavaApiLink>
+                    <!--  TODO : figure out why javadoc warnings are not ignored
+                        as this is breaking mvn site generation 
+                        The only 'warnings' that remain and are serious are coming from
+                        the OM generated classes
+                    -->
+                    <!--  worked on torque, but not here? -->
+                    <doclint>none</doclint>
+
+                    <!--  exclude generated sources for now (only works when running mvn javadoc:javadoc, but not with mvn site? -->
+                    <excludePackageNames>org.apache.fulcrum.security.torque.om.*</excludePackageNames>
               </configuration>
             </plugin>
         </plugins>
@@ -193,6 +203,9 @@
            <configuration>
                  <source>1.8</source>
                  <detectJavaApiLink>false</detectJavaApiLink>
+                 <!-- required here -->
+                 <doclint>none</doclint>
+                <excludePackageNames>org.apache.fulcrum.security.torque.om.*</excludePackageNames>
             </configuration>
         </plugin>
     </plugins>

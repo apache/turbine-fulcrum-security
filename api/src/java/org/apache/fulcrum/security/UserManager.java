@@ -53,7 +53,7 @@ public interface UserManager extends Serializable
      * This method calls getUserClass, and then creates a new object using the
      * default constructor.
      *
-     * @param <T> User
+     * @param <T> User type
      * @return an object implementing User interface.
      * @throws DataBackendException
      *             if the object could not be instantiated.
@@ -151,6 +151,7 @@ public interface UserManager extends Serializable
     /**
      * Retrieves all users defined in the system.
      *
+     * @param <T> User type
      * @return the names of all users defined in the system.
      * @throws DataBackendException
      *             if there was an error accessing the data backend.

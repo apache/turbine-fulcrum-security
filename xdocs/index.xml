@@ -281,11 +281,11 @@
      <subsection name="Torque Turbine Model Web App">
           <p>Check out the Turbine Web App from the maven archetype catalog to test a web app with example code. Find the archetype with 
           <source> 
-            // filter archeype catalog by groupid:artefactid = org.apache.turbine:turbine-webapp-4.0
+            // filter archeype catalog by groupid:artefactid = org.apache.turbine:turbine-webapp-5.1
             mvn archetype:generate
-          </source> or checkout and build turbine-webapp-4.0 based on Turbine 4 trunk:
+          </source> or checkout and build based on Turbine 5.1 trunk:
           <source>
-            svn co https://svn.apache.org/repos/asf/turbine/maven/archetypes/trunk/turbine-webapp-4.0
+            git clone https://gitbox.apache.org/repos/asf/turbine-archetypes.git
             mvn clean install
           </source>
           If you check out from the trunk, you may have to build other sources as well (any dependeny resource with a SNAPSHOT version).
