@@ -27,7 +27,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.fulcrum</groupId>
     <artifactId>fulcrum-security</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>2.0.0</version>
     <packaging>pom</packaging>
     <name>Fulcrum Security Master Build</name>
     <url>http://turbine.apache.org/fulcrum/fulcrum-security/</url>
@@ -41,9 +41,9 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/</developerConnection>
-        <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/security/</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-security-2.0.0</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/tags/fulcrum-security-2.0.0</developerConnection>
+        <url>http://svn.apache.org/viewvc/turbine/fulcrum/tags/fulcrum-security-2.0.0</url>
     </scm>
 
     <developers>
@@ -97,12 +97,12 @@
         <dependency>
           <groupId>org.apache.fulcrum</groupId>
           <artifactId>fulcrum-security-api</artifactId>
-          <version>2.0.0-SNAPSHOT</version>
+          <version>2.0.0</version>
         </dependency>
         <dependency>
           <groupId>org.apache.fulcrum</groupId>
           <artifactId>fulcrum-security-api</artifactId>
-          <version>2.0.0-SNAPSHOT</version>
+          <version>2.0.0</version>
           <type>test-jar</type>
           <scope>test</scope>
         </dependency>
@@ -110,7 +110,7 @@
           <groupId>org.apache.fulcrum</groupId>
           <artifactId>fulcrum-testcontainer</artifactId>
           <!-- junit 5 seems to have problems to find unit tests in test scoped jar org.apache.fulcrum:fulcrum-security-api:test-jar, upgrade from 1.0.8, classpath loading issue?  -->
-          <version>1.0.9-SNAPSHOT</version>
+          <version>1.0.9</version>
           <scope>test</scope>
         </dependency>
         <dependency>
@@ -122,7 +122,7 @@
         <dependency>
           <groupId>org.apache.fulcrum</groupId>
           <artifactId>fulcrum-security-memory</artifactId>
-          <version>2.0.0-SNAPSHOT</version>
+          <version>2.0.0</version>
           <scope>test</scope>
         </dependency>
         <dependency>
