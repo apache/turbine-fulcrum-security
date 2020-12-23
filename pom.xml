@@ -164,6 +164,23 @@
                     <excludePackageNames>org.apache.fulcrum.security.torque.om.*</excludePackageNames>
               </configuration>
             </plugin>
+             <plugin>
+              <groupId>org.owasp</groupId>
+              <artifactId>dependency-check-maven</artifactId>
+              <executions>
+                  <execution>
+                      <goals>
+                          <goal>aggregate</goal>
+                      </goals>
+                  </execution>
+              </executions>
+              <configuration>
+                   <!-- suppress false positive -->
+                   <suppressionFiles>
+                    <suppressionFile>${project.basedir}/suppression-owasp.xml</suppressionFile>
+                    </suppressionFiles>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

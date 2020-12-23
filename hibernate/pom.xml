@@ -62,13 +62,18 @@
         <dependency>
             <groupId>org.apache.fulcrum</groupId>
             <artifactId>fulcrum-security-api</artifactId>
-            </dependency>
-    
-        <!-- Needed for the Hibernate SPI -->
+            </dependency>  
+        <!-- Needed for the Hibernate SPI, TODO, CVE-2020-25638, resolution requires at least version 5.4.24.Final, better least 5.4.26.Final  -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>3.6.7.Final</version>
+            <version>3.6.10.Final</version>
+        </dependency>
+        <!-- security issue with collections 3.1: CVE-2015-6420, CVE-2017-15708 -->
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.2</version>
         </dependency>
         <dependency>
             <groupId>javassist</groupId>
@@ -117,9 +122,10 @@
             <version>${turbine.log4j2.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.28</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>2.14.0</version>
         </dependency>
+
     </dependencies>
 </project>
