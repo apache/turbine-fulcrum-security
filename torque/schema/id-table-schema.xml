@@ -26,7 +26,7 @@
 <!-- ID_TABLE table used by the id broker mechanism in Torque.            -->
 <!-- ==================================================================== -->
 <!-- @author: <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>       -->
-<!-- @version $Id: id-table-schema.xml,v 1.2 2005/09/23 12:19:52 tvan Exp $ -->
+<!-- @version $Id$ -->
 <!-- ==================================================================== -->
 
 <database name="fulcrum"

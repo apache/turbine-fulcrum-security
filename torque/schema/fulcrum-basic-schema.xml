@@ -23,7 +23,7 @@
 <!--                                                                          -->
 <!-- ====================================================================     -->
 <!-- @author: <a href="mailto:tv@apache.org">Thomas Vandahl</a> -->
-<!-- @version $Id: torque-security-schema.xml,v 1.1 2005/09/26 14:10:04 tvan Exp $ -->
+<!-- @version $Id$ -->
 <!-- ====================================================================     -->
 <database name="fulcrum"
     defaultIdMethod="none"

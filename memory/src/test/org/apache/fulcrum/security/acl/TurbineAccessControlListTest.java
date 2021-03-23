@@ -51,7 +51,7 @@ import org.junit.jupiter.api.Test;
  * Test that we can generate AccessControlLists from the Factory
  * 
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh</a>
- * @version $Id: AccessControlListTest.java 1791100 2017-04-12 09:48:44Z gk $
+ * @version $Id$
  */
 public class TurbineAccessControlListTest extends BaseUnit5Test
 {
