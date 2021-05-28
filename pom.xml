@@ -22,6 +22,7 @@
        <artifactId>turbine-parent</artifactId>
        <groupId>org.apache.turbine</groupId>
        <version>8</version>
+       <relativePath></relativePath>
    </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.fulcrum</groupId>
@@ -40,9 +41,9 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/</connection>
+        <connection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/</connection>
         <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/</developerConnection>
-        <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/security/</url>
+        <url>https://svn.apache.org/viewvc/turbine/fulcrum/trunk/security/</url>
     </scm>
 
     <developers>
