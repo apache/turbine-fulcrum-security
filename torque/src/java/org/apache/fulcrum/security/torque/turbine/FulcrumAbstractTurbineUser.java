@@ -58,11 +58,11 @@ public abstract class FulcrumAbstractTurbineUser extends TorqueAbstractTurbineTu
      *
      * @return a list of User/Group/Role relations
      */
-    protected List<TorqueTurbineUserGroupRole> getTorqueTurbineUserGroupRolesJoinTorqueTurbineRole(Criteria criteria, Connection con)
+    protected List<TorqueTurbineUserGroupRole> getTorqueTurbineUserGroupRolesJoinTorqueTurbineGroup(Criteria criteria, Connection con)
         throws TorqueException
     {
         criteria.and(TorqueTurbineUserGroupRolePeer.USER_ID, getEntityId() );
-        return TorqueTurbineUserGroupRolePeer.doSelectJoinTorqueTurbineRole(criteria, con);
+        return TorqueTurbineUserGroupRolePeer.doSelectJoinTorqueTurbineGroup(criteria, con);
     }
     
     /* (non-Javadoc)
@@ -84,7 +84,7 @@ public abstract class FulcrumAbstractTurbineUser extends TorqueAbstractTurbineTu
         try {
             if (!lazy) {
                 Set<TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
-                List<TorqueTurbineUserGroupRole> ugrs = getTorqueTurbineUserGroupRolesJoinTorqueTurbineRole(new Criteria(), con);
+                List<TorqueTurbineUserGroupRole> ugrs = getTorqueTurbineUserGroupRolesJoinTorqueTurbineGroup(new Criteria(), con);
         
                 for (TorqueTurbineUserGroupRole ttugr : ugrs)
                 {

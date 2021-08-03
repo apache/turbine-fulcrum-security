@@ -151,7 +151,7 @@ public class TurbineACLFactory extends AbstractManager implements ACLFactory
         {
             accessControlList =
                 new TurbineAccessControlListImpl(turbineUserGroupRoleSet,
-                        groupManager, roleManager, modelManager);
+                        groupManager, roleManager, modelManager, getLogger());
         }
         catch (FulcrumSecurityException e)
         {

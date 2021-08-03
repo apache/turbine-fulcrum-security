@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.avalon.framework.logger.Logger;
 import org.apache.fulcrum.security.GroupManager;
 import org.apache.fulcrum.security.RoleManager;
 import org.apache.fulcrum.security.entity.Group;
@@ -75,6 +76,9 @@ public class TurbineAccessControlListImpl
     
     /** the distinct list of permissions that this user has */
     private PermissionSet permissionSet = new PermissionSet();
+    
+    /** the Avalon logger */
+    private transient Logger logger;
 
     /**
      * Constructs a new AccessControlList.
@@ -90,21 +94,30 @@ public class TurbineAccessControlListImpl
      *            The set of user/group/role relations that this acl is built from
      * @param groupManager the Group manager
      * @param roleManager the Role manager
-     * @param modelManager he model Manager
+     * @param modelManager the model Manager
+     * @param logger 
      *
      * @throws FulcrumSecurityException if the global group cannot be retrieved
      */
     public TurbineAccessControlListImpl(
     		Set<? extends TurbineUserGroupRole> turbineUserGroupRoleSet,
-    		GroupManager groupManager, RoleManager roleManager, TurbineModelManager modelManager) throws FulcrumSecurityException
+    		GroupManager groupManager, RoleManager roleManager, TurbineModelManager modelManager, Logger logger) throws FulcrumSecurityException
     {
         this.roleSets = new HashMap<Group, RoleSet>();
         this.permissionSets = new HashMap<Group, PermissionSet>();
         this.groupManager = groupManager;
+        
+        this.logger = logger;
 
         for (TurbineUserGroupRole ugr : turbineUserGroupRoleSet)
         {
             Group group = ugr.getGroup();
+            // check if group matches
+            if (this.logger != null && this.groupManager != null && group.getClass() != this.groupManager.getGroupInstance().getClass()) {
+                this.logger.warn( "Turbine group classes do not match, some lookup might fail, check in componentConfiguration.xml. Expected class: " +
+                        this.groupManager.getGroupInstance().getClass() + ", actual class: " +group.getClass()
+            );
+            }
             groupSet.add(group);
 
             Role role = ugr.getRole();
@@ -147,13 +160,9 @@ public class TurbineAccessControlListImpl
             }
         }
         // this check might be not needed any more, required for custom group
-        if (groupManager != null)
+        if (modelManager != null)
         {
-        	this.globalGroup = groupManager.getGroupByName(modelManager.getGlobalGroupName());
-        }
-        else
-        {
-        	this.globalGroup = groupSet.getByName(TurbineModelManager.GLOBAL_GROUP_NAME);
+        	this.globalGroup = modelManager.getGlobalGroup();
         }
     }
 
@@ -176,7 +185,7 @@ public class TurbineAccessControlListImpl
     /**
      * Retrieves a set of Roles an user is assigned in the global Group.
      *
-     * @return the set of Roles this user has within the global Group.
+     * @return the set of Roles this user has within the global Group or null.
      */
     @Override
     public RoleSet getRoles()
@@ -502,11 +511,18 @@ public class TurbineAccessControlListImpl
     {
         try
         {
-            return groupManager.getAllGroups().toArray(new Group[0]);
+            return (groupManager != null)? groupManager.getAllGroups().toArray(new Group[0])
+                    : new Group[0];
         }
         catch (FulcrumSecurityException e)
         {
             return new Group[0];
         }
+    }
+
+    @Override
+    public GroupSet getGroupSet()
+    {
+        return groupSet;
     }
 }

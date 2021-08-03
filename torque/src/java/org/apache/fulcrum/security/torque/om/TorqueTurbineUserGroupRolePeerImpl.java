@@ -23,11 +23,10 @@ public class TorqueTurbineUserGroupRolePeerImpl
     /** Serial version */
     private static final long serialVersionUID = 1608546448609L;
 
-	@Override
-	public List doSelectJoinTurbineRole(Criteria criteria, Connection con) throws TorqueException {
-		return doSelectJoinTorqueTurbineRole(criteria, con);
-	}
-
-
+    @Override
+    public List doSelectJoinTurbineGroup(Criteria criteria, Connection con) throws TorqueException
+    {
+        return doSelectJoinTorqueTurbineGroup(criteria, con);
+    }
 
 }

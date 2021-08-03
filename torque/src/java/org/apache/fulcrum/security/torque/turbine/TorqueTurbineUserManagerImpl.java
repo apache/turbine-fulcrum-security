@@ -347,7 +347,7 @@ public class TorqueTurbineUserManagerImpl extends PeerUserManager implements Tur
                   Criteria criteria = new Criteria();
                   // expecting the same name in any custom implementation
                   criteria.where(peerInstance.getTableMap().getColumn(getColumnName4UserGroupRole() ), ( (TorqueAbstractSecurityEntity) user ).getEntityId() );                        
-                  List<TurbineUserGroupRoleModelPeerMapper> ugrs = peerInstance.doSelectJoinTurbineRole( criteria, con );
+                  List<TurbineUserGroupRoleModelPeerMapper> ugrs = peerInstance.doSelectJoinTurbineGroup( criteria, con );
                   
                   if (user instanceof TorqueAbstractTurbineTurbineSecurityEntityDefault) {
                       ((TorqueAbstractTurbineTurbineSecurityEntityDefault)user).retrieveAttachedObjects(con, false, ugrs);

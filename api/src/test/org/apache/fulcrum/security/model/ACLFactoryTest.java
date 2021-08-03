@@ -46,8 +46,12 @@ import org.apache.fulcrum.security.model.turbine.entity.impl.TurbineGroupImpl;
 import org.apache.fulcrum.security.model.turbine.entity.impl.TurbinePermissionImpl;
 import org.apache.fulcrum.security.model.turbine.entity.impl.TurbineRoleImpl;
 import org.apache.fulcrum.security.model.turbine.entity.impl.TurbineUserImpl;
+import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.testcontainer.BaseUnit5Test;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
@@ -97,6 +101,15 @@ public class ACLFactoryTest extends BaseUnit5Test
         assertTrue(acl instanceof TurbineAccessControlList);
         TurbineAccessControlList tacl = (TurbineAccessControlList) acl;
         assertTrue(tacl.hasPermission(permission, group));
+        
+        RoleSet roleSet = tacl.getRoles( group );
+        assertTrue(roleSet.contains( role ), "expect group "+ group +  " has role "+ role);
+        
+        assertNull( tacl.getRoles(), "expect no role in global group");
+//        assertTrue(tacl.getAllGroups().length > 0, 
+//                "expect length for all group set:" + tacl.getAllGroups());
+        assertTrue(tacl.getGroupSet().size() > 0, 
+                "expect length for all group set:" + tacl.getAllGroups());
     }
 
     @Test

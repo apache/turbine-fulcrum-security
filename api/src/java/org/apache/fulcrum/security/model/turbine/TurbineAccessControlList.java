@@ -57,7 +57,7 @@ public interface TurbineAccessControlList<T extends TurbineAccessControlList<T>>
     /**
      * Retrieves a set of Roles an user is assigned in the global Group.
      *
-     * @return the set of Roles this user has within the global Group.
+     * @return the set of Roles this user has within the global Group or null.
      */
     RoleSet getRoles();
 
@@ -208,4 +208,11 @@ public interface TurbineAccessControlList<T extends TurbineAccessControlList<T>>
      * from within WebMacro/Velocity template
      */
     Group[] getAllGroups();
+
+    /**
+     * Retrieves a set of Groups an user is assigned to.
+     *
+     * @return the set of Groups this user is assigned to.
+     */
+    GroupSet getGroupSet();
 }

@@ -131,6 +131,12 @@
           <version>${turbine.log4j2.version}</version>
           <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.avalon.framework</groupId>
+            <artifactId>avalon-framework-api</artifactId>
+            <version>4.3.1</version>
+             <scope>provided</scope>
+           </dependency>
       </dependencies>
     </dependencyManagement>
     

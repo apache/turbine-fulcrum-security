@@ -37,7 +37,7 @@ public interface TorqueTurbineUserGroupRolePeer<T extends TurbineUserGroupRoleMo
     extends Peer
 {
 	
-    List<T> doSelectJoinTurbineRole( Criteria criteria, Connection con ) throws TorqueException;
+    List<T> doSelectJoinTurbineGroup( Criteria criteria, Connection con ) throws TorqueException;
     
     TableMap getTableMap() throws TorqueException;
 

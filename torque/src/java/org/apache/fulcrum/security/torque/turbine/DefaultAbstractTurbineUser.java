@@ -46,11 +46,11 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
 {
     /** Serial version */
 	private static final long serialVersionUID = -7255623655281852566L;
-
+    
     /**
      * Forward reference to module generated code
      *
-     * Get a list of association objects, pre-populated with their TurbineRole
+     * Get a list of association objects, pre-populated with their TurbineGroup
      * objects.
      * 
      * Does intentionally not initialize the cache collTurbineUserGroupRoles for referenced objects. 
@@ -65,28 +65,29 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
      * @return a list of User/Group/Role relations
      * @throws TorqueException if any database error occurs
      */
-    protected <T extends TurbineUserGroupRoleModelPeerMapper> List<T> getTurbineUserGroupRolesJoinTurbineRole(Criteria criteria, Connection con)
+    protected <T extends TurbineUserGroupRoleModelPeerMapper> List<T> getTurbineUserGroupRolesJoinTurbineGroup(Criteria criteria, Connection con)
         throws TorqueException, DataBackendException
     {
         criteria.and(TurbineUserGroupRolePeer.USER_ID, getEntityId() );
         try {
-            return (List<T>) TurbineUserGroupRolePeer.doSelectJoinTurbineRole(criteria, con);
+            return (List<T>) TurbineUserGroupRolePeer.doSelectJoinTurbineGroup(criteria, con);
         } catch (  TorqueException e) {
             throw new DataBackendException( e.getMessage(), e );
         }
     }
     
-    /* (non-Javadoc)
+    /** 
      * @see org.apache.fulcrum.security.torque.security.turbine.TorqueAbstractTurbineTurbineSecurityEntityDefault#retrieveAttachedObjects(java.sql.Connection, java.lang.Boolean, java.util.List)
      */
     @Override
     public <T extends TurbineUserGroupRoleModelPeerMapper> void retrieveAttachedObjects( Connection con, Boolean lazy, List<T> ugrs ) throws DataBackendException, TorqueException
     {
-        if (!lazy ) { // !lazy
+        if (!lazy ) { 
             Set<TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
     
             if (ugrs == null) { // default 
-                ugrs = getTurbineUserGroupRolesJoinTurbineRole(new Criteria(), con);
+                // the groups are the keys in roleset, roles are not expected to be used as keys
+                ugrs = getTurbineUserGroupRolesJoinTurbineGroup(new Criteria(), con);
             } 
     
             maptoModel( con, userGroupRoleSet, ugrs );
@@ -104,8 +105,9 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
         if (!lazy) {
             Set<TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
             
-            List<TurbineUserGroupRoleModelPeerMapper> ugrs = getTurbineUserGroupRolesJoinTurbineRole(new Criteria(), con);
+            List<TurbineUserGroupRoleModelPeerMapper> ugrs = getTurbineUserGroupRolesJoinTurbineGroup(new Criteria(), con);
     
+            // TODO: Need to call this too to fetch right role object? getTurbineUserGroupRolesJoinTurbineRole
             // org.apache.fulcrum.security.torque.om.TurbineUserGroupRole
             maptoModel( con, userGroupRoleSet, ugrs );
     
@@ -168,11 +170,12 @@ public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTu
     
     /**
      * @param con data connection
-     * @param userGroupRoleSet U/G/R set
+     * @param userGroupRoleSet U/G/R to be set / target object
      * @param ugrs list of all ugrs
      * @throws TorqueException if data connection could not be found
      */
-    private <T extends TurbineUserGroupRoleModelPeerMapper> void maptoModel( Connection con, Set<TurbineUserGroupRole> userGroupRoleSet,
+    private <T extends TurbineUserGroupRoleModelPeerMapper> void maptoModel( Connection con, 
+            Set<TurbineUserGroupRole> userGroupRoleSet,
                              List<T> ugrs )
         throws DataBackendException
     {

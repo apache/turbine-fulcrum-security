@@ -50,7 +50,6 @@ public abstract class PeerGroupManager extends TorqueAbstractGroupManager implem
     {
        super.configure( conf );
        
-       // peerClassName = conf.getChild( PEER_CLASS_NAME_KEY).getValue( "org.apache.fulcrum.security.torque.om.TorqueTurbineGroupPeer" );
         peerClassName = conf.getChild( PEER_CLASS_NAME_KEY).getValue( null );
         if (peerClassName != null) {
             setPeerClassName( peerClassName );
