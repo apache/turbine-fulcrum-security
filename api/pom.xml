@@ -26,12 +26,10 @@
     <artifactId>fulcrum-security-api</artifactId>
     <name>Fulcrum Security API</name>
     <description>Fulcrum Security Basic API</description>
-    <url>http://turbine.apache.org/fulcrum/fulcrum-security/fulcrum-security-api</url>
-
+    <url>https://turbine.apache.org/fulcrum/fulcrum-security/fulcrum-security-api</url>
+    
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/</developerConnection>
-        <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/security/</url>
+      <url>https://github.com/apache/${turbine.site.path}/tree/${project.scm.tag}/api</url>
     </scm>
 
     <dependencies>

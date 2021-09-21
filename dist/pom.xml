@@ -29,11 +29,6 @@
     <packaging>pom</packaging>
     <name>Fulcrum Security Distribution Build</name>
     
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/</developerConnection>
-        <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/security/</url>
-    </scm>
     
     <!-- NOTE: These dependency declarations are only required to sort this project to the 
          end of the line in the multimodule build. 

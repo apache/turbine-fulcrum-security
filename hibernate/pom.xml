@@ -32,10 +32,9 @@
       that uses Hibernate as a database backend.
     </description>
     <url>http://turbine.apache.org/fulcrum/fulcrum-security/fulcrum-security-hibernate/</url>
+    
     <scm>
-      <connection>scm:svn:http://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/</connection>
-      <developerConnection>scm:svn:https://svn.apache.org/repos/asf/turbine/fulcrum/trunk/security/</developerConnection>
-      <url>http://svn.apache.org/viewvc/turbine/fulcrum/trunk/security/</url>
+      <url>https://github.com/apache/${turbine.site.path}/tree/${project.scm.tag}/hibernate</url>
     </scm>
 
     <build>

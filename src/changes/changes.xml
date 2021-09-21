@@ -23,7 +23,16 @@
     <author email="epugh@upstate.com">Eric Pugh</author>
   </properties>
   <body>
-  <release version="2.0.0" description="In Subversion">
+  <release version="2.0.1" description="In VC">
+      <action type="update" dev="gk">
+        -  Torque: use by default Turbinegroup not TurbineRole from generated doSelectJoinTurbine* method, as this will be used as key in lookup in acl roleSets.
+        - add groupSet to interface to TurbineAccessControlList
+        - add transient avalon logger to TurbineAccessControlList constructor
+        - use model manager to fetch global group (model manager should be set always)
+        -  Add Torque 5.0. schemata, update to Turbine parent v8
+      </action>
+   </release>
+  <release version="2.0.0" description="2020-01-04">
       <action type="update" dev="painter">Java Dependency update: Bump dbcp2 from 2.8.0 to 2.9.0</action>      
       <action type="fix" dev="gk">
         -Use of interfaces TurbineRolePermissionPeerMapper and TurbineUserGroupRoleModelPeerMapper in fulcrum-turbine-schema.xml  

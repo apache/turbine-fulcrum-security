@@ -21,7 +21,7 @@
    <parent>
        <artifactId>turbine-parent</artifactId>
        <groupId>org.apache.turbine</groupId>
-       <version>8</version>
+       <version>9-SNAPSHOT</version>
        <relativePath></relativePath>
    </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -32,19 +32,21 @@
     <name>Fulcrum Security Master Build</name>
     <url>https://turbine.apache.org/fulcrum/fulcrum-security/</url>
 
-    <!-- Required for staging to work -->
-    <distributionManagement>
-        <site>
-            <id>turbine.apache.org</id>
-            <url>https://turbine.apache.org/fulcrum/fulcrum-security/</url>
-        </site>
-    </distributionManagement>
-
     <scm>
         <connection>scm:git:https://gitbox.apache.org/repos/asf/turbine-fulcrum-security.git</connection>
         <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/turbine-fulcrum-security.git</developerConnection>
-        <url>https://gitbox.apache.org/repos/asf/turbine-fulcrum-security.git</url>
+        <url>https://github.com/apache/${turbine.site.path}/tree/${project.scm.tag}</url>
+        <tag>HEAD</tag>
     </scm>
+    
+     <!-- distributionManagement required for staging to work, id and url defined in parent, adapt turbine.site.path -->
+    <distributionManagement>
+      <site>
+          <name>Fulcrum Security Website</name>
+           <id>apache.org</id>
+          <url>https://github.com/apache/turbine-fulcrum-security/</url>
+        </site>
+   </distributionManagement>
 
     <developers>
         <developer>
@@ -150,6 +152,7 @@
               <configuration>
                 <content>${siteContent.path}</content>
                 <tryUpdate>false</tryUpdate>
+                <scmBranch>asf-site</scmBranch>
               </configuration>
             </plugin>
             <plugin>
@@ -170,6 +173,7 @@
                     <excludePackageNames>org.apache.fulcrum.security.torque.om.*</excludePackageNames>
               </configuration>
             </plugin>
+
              <plugin>
               <groupId>org.owasp</groupId>
               <artifactId>dependency-check-maven</artifactId>
@@ -235,8 +239,7 @@
    </reporting>
     
     <properties>
-        <turbine.site.path>fulcrum/fulcrum-security</turbine.site.path>
-        <turbine.scmPubCheckoutDirectory>${turbine.site.cache}/fulcrum/security</turbine.scmPubCheckoutDirectory>
+        <turbine.site.path>turbine-fulcrum-security</turbine.site.path>
         <turbine.site.cache>${project.build.directory}/turbine-sites</turbine.site.cache>
         <siteContent.path>${project.build.directory}/staging</siteContent.path><!-- default stagingSiteURL -->
     </properties>

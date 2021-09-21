@@ -1,0 +1,22 @@
+target/
+*.log
+
+.classpath
+.project
+.settings/
+
+# Idea IntelliJ
+*.ipr
+*.iws
+*.iml
+.idea/
+
+pom.xml.*
+
+# ignore generated, but review the exceptions 
+torque/src/java/org/apache/fulcrum/security/torque/om/TorqueBasic*
+torque/src/java/org/apache/fulcrum/security/torque/om/TorqueDynamic*
+torque/src/java/org/apache/fulcrum/security/torque/om/*Mapper.java
+torque/src/java/org/apache/fulcrum/security/torque/om/*Peer.java
+torque/src/java/org/apache/fulcrum/security/torque/om/Turbine*.java
+torque/src/java/org/apache/fulcrum/security/torque/om/TorqueTurbine*.java
