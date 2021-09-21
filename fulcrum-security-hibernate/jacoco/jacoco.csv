@@ -1,0 +1,10 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Fulcrum Security Hibernate Impl,org.apache.fulcrum.security.hibernate.dynamic,HibernateModelManagerImpl,230,284,27,25,29,91,25,11,0,10
+Fulcrum Security Hibernate Impl,org.apache.fulcrum.security.hibernate,HibernateGroupManagerImpl,56,197,3,11,10,41,3,13,0,9
+Fulcrum Security Hibernate Impl,org.apache.fulcrum.security.hibernate,PersistenceHelperDefaultImpl,74,169,8,12,16,48,8,13,1,10
+Fulcrum Security Hibernate Impl,org.apache.fulcrum.security.hibernate,HibernateUserManagerImpl,101,171,6,10,15,37,7,10,1,8
+Fulcrum Security Hibernate Impl,org.apache.fulcrum.security.hibernate,HibernateRoleManagerImpl,70,160,4,10,11,37,4,11,0,8
+Fulcrum Security Hibernate Impl,org.apache.fulcrum.security.hibernate,PersistenceHelper,0,4,0,0,0,1,0,1,0,1
+Fulcrum Security Hibernate Impl,org.apache.fulcrum.security.hibernate,HibernatePermissionManagerImpl,63,160,4,10,9,37,4,11,0,8
+Fulcrum Security Hibernate Impl,org.apache.fulcrum.security.hibernate.turbine,HibernateModelManagerImpl,198,262,30,22,29,73,25,8,0,7
+Fulcrum Security Hibernate Impl,org.apache.fulcrum.security.hibernate.basic,HibernateModelManagerImpl,93,157,11,15,11,48,11,7,0,5

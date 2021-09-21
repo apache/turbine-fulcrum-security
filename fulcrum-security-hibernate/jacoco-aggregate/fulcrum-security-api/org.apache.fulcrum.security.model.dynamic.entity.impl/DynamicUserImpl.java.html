@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DynamicUserImpl.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Fulcrum Security Hibernate Impl</a> &gt; <a href="../index.html" class="el_bundle">fulcrum-security-api</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.model.dynamic.entity.impl</a> &gt; <span class="el_source">DynamicUserImpl.java</span></div><h1>DynamicUserImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.model.dynamic.entity.impl;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.util.HashSet;
+import java.util.Set;
+
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.basic.entity.impl.BasicUserImpl;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
+
+/**
+ * Represents the &quot;simple&quot; model where permissions are related to roles, roles
+ * are related to groups and groups are related to users, all in many to many
+ * relationships.
+ * 
+ * Users have a set of delegates and delegatee's. If user A has B in their
+ * delegates - B assumes A's groups,roles and permissions If user C has D in
+ * their delegatees - C assumes D's groups,roles and permissions
+ * 
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id: DynamicUser.java 437451 2006-08-27 20:20:44Z tv $
+ */
+<span class="fc" id="L41">public class DynamicUserImpl extends BasicUserImpl implements DynamicUser</span>
+{
+    /**
+     * Serial number
+     */
+    private static final long serialVersionUID = 2841311062371647853L;
+
+<span class="fc" id="L48">    private Set&lt;? extends User&gt; delegators = new HashSet&lt;User&gt;();</span>
+
+<span class="fc" id="L50">    private Set&lt;? extends User&gt; delegatees = new HashSet&lt;User&gt;();</span>
+
+    /**
+     * Get the set of delegatees for this user
+     * 
+     * @return Returns the delegatees.
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public &lt;T extends User&gt; Set&lt;T&gt; getDelegatees()
+    {
+<span class="fc" id="L60">        return (Set&lt;T&gt;) delegatees;</span>
+    }
+
+    /**
+     * Set the delegatees for this user
+     * 
+     * @param delegatees
+     *            The delegatees to set.
+     */
+    public &lt;T extends User&gt; void setDelegatees(Set&lt;T&gt; delegatees)
+    {
+<span class="fc" id="L71">        this.delegatees = delegatees;</span>
+<span class="fc" id="L72">    }</span>
+
+    /**
+     * Get the set of delegators for this user
+     * 
+     * @return Returns the delegators.
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public &lt;T extends User&gt; Set&lt;T&gt; getDelegators()
+    {
+<span class="fc" id="L82">        return (Set&lt;T&gt;) delegators;</span>
+    }
+
+    /**
+     * Set the delegators for this user
+     * 
+     * @param delegators
+     *            The delegators to set.
+     */
+    public &lt;T extends User&gt; void setDelegators(Set&lt;T&gt; delegators)
+    {
+<span class="fc" id="L93">        this.delegators = delegators;</span>
+<span class="fc" id="L94">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

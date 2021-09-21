@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HibernateGroupManagerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Hibernate Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.hibernate</a> &gt; <span class="el_source">HibernateGroupManagerImpl.java</span></div><h1>HibernateGroupManagerImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.hibernate;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.util.List;
+
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.spi.AbstractGroupManager;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityExistsException;
+import org.apache.fulcrum.security.util.GroupSet;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.hibernate.HibernateException;
+
+/**
+ * This implementation persists to a database via Hibernate.
+ * 
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id: HibernateGroupManagerImpl.java 1374014 2012-08-16 19:47:27Z tv
+ *          $
+ */
+@SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L39">public class HibernateGroupManagerImpl extends AbstractGroupManager</span>
+{
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private PersistenceHelper persistenceHelper;
+
+    /**
+     * Retrieve a Group object with specified name.
+     * 
+     * @param name
+     *            the name of the Group.
+     * @return an object representing the Group with specified name.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the group does not exist.
+     */
+    @Override
+    public Group getGroupByName(String name) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L61">        Group group = null;</span>
+        try
+        {
+<span class="fc" id="L64">            List&lt;Group&gt; groups = getPersistenceHelper().retrieveSession()</span>
+<span class="fc" id="L65">                    .createQuery(&quot;from &quot; + Group.class.getName() + &quot; g where g.name=:name&quot;).setString(&quot;name&quot;, name.toLowerCase()).list();</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">            if (groups.size() == 0)</span>
+            {
+<span class="fc" id="L68">                throw new UnknownEntityException(&quot;Could not find group&quot; + name);</span>
+            }
+<span class="fc" id="L70">            group = groups.get(0);</span>
+        }
+<span class="nc" id="L72">        catch (HibernateException e)</span>
+        {
+<span class="nc" id="L74">            throw new DataBackendException(&quot;Error retrieving group information&quot;, e);</span>
+<span class="fc" id="L75">        }</span>
+<span class="fc" id="L76">        return group;</span>
+    }
+
+    /**
+     * Retrieves all groups defined in the system.
+     * 
+     * @return the names of all groups defined in the system.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     */
+    public GroupSet getAllGroups() throws DataBackendException
+    {
+<span class="fc" id="L88">        GroupSet groupSet = new GroupSet();</span>
+        try
+        {
+
+<span class="fc" id="L92">            List&lt;Group&gt; groups = getPersistenceHelper().retrieveSession().createQuery(&quot;from &quot; + Group.class.getName()).list();</span>
+<span class="fc" id="L93">            groupSet.add(groups);</span>
+        }
+<span class="nc" id="L95">        catch (HibernateException e)</span>
+        {
+<span class="nc" id="L97">            throw new DataBackendException(&quot;Error retrieving group information&quot;, e);</span>
+<span class="fc" id="L98">        }</span>
+<span class="fc" id="L99">        return groupSet;</span>
+    }
+
+    /**
+     * Removes a Group from the system.
+     * 
+     * @param group
+     *            The object describing the group to be removed.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the group does not exist.
+     */
+    public synchronized void removeGroup(Group group) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L114">        getPersistenceHelper().removeEntity(group);</span>
+<span class="fc" id="L115">    }</span>
+
+    /**
+     * Renames an existing Group.
+     * 
+     * @param group
+     *            The object describing the group to be renamed.
+     * @param name
+     *            the new name for the group.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the group does not exist.
+     */
+    public synchronized void renameGroup(Group group, String name) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L131">        boolean groupExists = false;</span>
+<span class="fc" id="L132">        groupExists = checkExists(group);</span>
+<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        if (groupExists)</span>
+        {
+<span class="fc" id="L135">            group.setName(name);</span>
+<span class="fc" id="L136">            getPersistenceHelper().updateEntity(group);</span>
+        }
+        else
+        {
+<span class="nc" id="L140">            throw new UnknownEntityException(&quot;Unknown group '&quot; + group + &quot;'&quot;);</span>
+        }
+<span class="fc" id="L142">    }</span>
+
+    /**
+     * Determines if the &lt;code&gt;Group&lt;/code&gt; exists in the security system.
+     * 
+     * @param groupName
+     *            a &lt;code&gt;Group&lt;/code&gt; value
+     * @return true if the group name exists in the system, false otherwise
+     * @throws DataBackendException
+     *             when more than one Group with the same name exists.
+     */
+    public boolean checkExists(String groupName) throws DataBackendException
+    {
+        List&lt;Group&gt; groups;
+        try
+        {
+<span class="fc" id="L158">            groups = getPersistenceHelper().retrieveSession().createQuery(&quot;from &quot; + Group.class.getName() + &quot; sg where sg.name=:name&quot;)</span>
+<span class="fc" id="L159">                    .setString(&quot;name&quot;, groupName).list();</span>
+        }
+<span class="nc" id="L161">        catch (HibernateException e)</span>
+        {
+<span class="nc" id="L163">            throw new DataBackendException(&quot;Error retrieving user information&quot;, e);</span>
+<span class="fc" id="L164">        }</span>
+<span class="pc bpc" id="L165" title="1 of 2 branches missed.">        if (groups.size() &gt; 1)</span>
+        {
+<span class="nc" id="L167">            throw new DataBackendException(&quot;Multiple groups with same name '&quot; + groupName + &quot;'&quot;);</span>
+        }
+<span class="fc bfc" id="L169" title="All 2 branches covered.">        return (groups.size() == 1);</span>
+    }
+
+    /**
+     * Creates a new group with specified attributes.
+     * 
+     * @param group
+     *            the object describing the group to be created.
+     * @return a new Group object that has id set up properly.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     */
+    @Override
+    protected synchronized Group persistNewGroup(Group group) throws DataBackendException
+    {
+<span class="fc" id="L184">        getPersistenceHelper().addEntity(group);</span>
+<span class="fc" id="L185">        return group;</span>
+    }
+
+    /**
+     * @return Returns the persistenceHelper.
+     */
+    public PersistenceHelper getPersistenceHelper()
+    {
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        if (persistenceHelper == null)</span>
+        {
+<span class="fc" id="L195">            persistenceHelper = (PersistenceHelper) resolve(PersistenceHelper.ROLE);</span>
+        }
+<span class="fc" id="L197">        return persistenceHelper;</span>
+    }
+
+    /**
+     * Retrieve a Group object with specified id.
+     * 
+     * @param id
+     *            the id of the Group.
+     * @return an object representing the Group with specified id.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the group does not exist.
+     */
+    @Override
+    public Group getGroupById(Object id) throws DataBackendException, UnknownEntityException
+    {
+
+<span class="fc" id="L215">        Group group = null;</span>
+
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">        if (id != null)</span>
+        {
+            try
+            {
+<span class="fc" id="L221">                List&lt;Group&gt; groups = getPersistenceHelper().retrieveSession()</span>
+<span class="fc" id="L222">                        .createQuery(&quot;from &quot; + Group.class.getName() + &quot; sr where sr.id=:id&quot;).setLong(&quot;id&quot;, ((Long) id).longValue()).list();</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">                if (groups.size() == 0)</span>
+                {
+<span class="fc" id="L225">                    throw new UnknownEntityException(&quot;Could not find group by id &quot; + id);</span>
+                }
+<span class="fc" id="L227">                group = groups.get(0);</span>
+
+            }
+<span class="nc" id="L230">            catch (HibernateException e)</span>
+            {
+<span class="nc" id="L232">                throw new DataBackendException(&quot;Error retrieving group information&quot;, e);</span>
+<span class="fc" id="L233">            }</span>
+        }
+
+<span class="fc" id="L236">        return group;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>AbstractManager.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Fulcrum Security Memory Impl</a> &gt; <a href="../index.html" class="el_bundle">fulcrum-security-api</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.spi</a> &gt; <span class="el_source">AbstractManager.java</span></div><h1>AbstractManager.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.spi;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.framework.service.ServiceException;
+import org.apache.avalon.framework.service.ServiceManager;
+import org.apache.avalon.framework.service.Serviceable;
+import org.apache.avalon.framework.thread.ThreadSafe;
+import org.apache.fulcrum.security.GroupManager;
+import org.apache.fulcrum.security.PermissionManager;
+import org.apache.fulcrum.security.RoleManager;
+import org.apache.fulcrum.security.UserManager;
+import org.apache.fulcrum.security.util.DataBackendException;
+
+/**
+ * 
+ * This abstract implementation provides most of the functionality that a
+ * manager will need.
+ * 
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id$
+ */
+<span class="fc" id="L41">public abstract class AbstractManager extends AbstractLogEnabled implements Serviceable, Disposable, ThreadSafe</span>
+{
+<span class="fc" id="L43">    boolean composed = false;</span>
+
+<span class="fc" id="L45">    protected ServiceManager manager = null;</span>
+    private PermissionManager permissionManager;
+    private RoleManager roleManager;
+    private GroupManager groupManager;
+    private UserManager userManager;
+
+    /**
+     * @return the service manager
+     */
+    protected ServiceManager getServiceManager()
+    {
+<span class="nc" id="L56">        return manager;</span>
+    }
+
+    /**
+     * @return the user manager
+     * @throws DataBackendException if fail to connect to datasource
+     */
+    protected UserManager getUserManager() throws DataBackendException
+    {
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (userManager == null)</span>
+        {
+            try
+            {
+<span class="fc" id="L69">                userManager = (UserManager) manager.lookup(UserManager.ROLE);</span>
+
+            }
+<span class="nc" id="L72">            catch (ServiceException ce)</span>
+            {
+<span class="nc" id="L74">                throw new DataBackendException(ce.getMessage(), ce);</span>
+<span class="fc" id="L75">            }</span>
+        }
+<span class="fc" id="L77">        return userManager;</span>
+    }
+
+    /**
+     * @return the permission manager
+     * @throws DataBackendException if fail to connect to datasource
+     */
+    protected PermissionManager getPermissionManager() throws DataBackendException
+    {
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (permissionManager == null)</span>
+        {
+            try
+            {
+<span class="fc" id="L90">                permissionManager = (PermissionManager) manager.lookup(PermissionManager.ROLE);</span>
+
+            }
+<span class="nc" id="L93">            catch (ServiceException ce)</span>
+            {
+<span class="nc" id="L95">                throw new DataBackendException(ce.getMessage(), ce);</span>
+<span class="fc" id="L96">            }</span>
+        }
+<span class="fc" id="L98">        return permissionManager;</span>
+    }
+
+    /**
+     * @return the role manager
+     * @throws DataBackendException if fail to connect to datasource
+     */
+    protected RoleManager getRoleManager() throws DataBackendException
+    {
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        if (roleManager == null)</span>
+        {
+            try
+            {
+<span class="fc" id="L111">                roleManager = (RoleManager) manager.lookup(RoleManager.ROLE);</span>
+
+            }
+<span class="fc" id="L114">            catch (ServiceException ce)</span>
+            {
+<span class="fc" id="L116">                throw new DataBackendException(ce.getMessage(), ce);</span>
+<span class="fc" id="L117">            }</span>
+        }
+<span class="fc" id="L119">        return roleManager;</span>
+    }
+
+    /**
+     * @return the group manager
+     * @throws DataBackendException if fail to connect to datasource
+     */
+    protected GroupManager getGroupManager() throws DataBackendException
+    {
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (groupManager == null)</span>
+        {
+            try
+            {
+<span class="fc" id="L132">                groupManager = (GroupManager) manager.lookup(GroupManager.ROLE);</span>
+
+            }
+<span class="nc" id="L135">            catch (ServiceException ce)</span>
+            {
+<span class="nc" id="L137">                throw new DataBackendException(ce.getMessage(), ce);</span>
+<span class="fc" id="L138">            }</span>
+        }
+<span class="fc" id="L140">        return groupManager;</span>
+    }
+
+    /**
+     * Avalon Service lifecycle method
+     * @throws ServiceException if fail to connect
+     */
+    @Override
+	public void service(ServiceManager manager) throws ServiceException
+    {
+<span class="fc" id="L150">        this.manager = manager;</span>
+
+<span class="fc" id="L152">    }</span>
+
+    @Override
+	public void dispose()
+    {
+<span class="fc" id="L157">        release(roleManager);</span>
+<span class="fc" id="L158">        release(permissionManager);</span>
+<span class="fc" id="L159">        release(groupManager);</span>
+<span class="fc" id="L160">        release(userManager);</span>
+<span class="fc" id="L161">        manager = null;</span>
+<span class="fc" id="L162">    }</span>
+
+    /**
+     * @param obj the object to release
+     */
+    protected void release(Object obj)
+    {
+<span class="fc bfc" id="L169" title="All 2 branches covered.">        if (obj != null)</span>
+        {
+<span class="fc" id="L171">            manager.release(obj);</span>
+        }
+<span class="fc" id="L173">    }</span>
+
+    /**
+     * @param lookup the object to resolve
+     * @return the actual object
+     * @throws RuntimeException exception if fails to find the manager
+     */
+    protected Object resolve(String lookup) throws RuntimeException
+    {
+<span class="fc" id="L182">        Object component = null;</span>
+        {
+            try
+            {
+<span class="fc" id="L186">                component = manager.lookup(lookup);</span>
+            }
+<span class="nc" id="L188">            catch (ServiceException ce)</span>
+            {
+<span class="nc" id="L190">                throw new RuntimeException(ce.getMessage(), ce);</span>
+<span class="fc" id="L191">            }</span>
+        }
+<span class="fc" id="L193">        return component;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

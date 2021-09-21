@@ -1,0 +1,4 @@
+org.apache.fulcrum.security.hibernate
+org.apache.fulcrum.security.hibernate.basic
+org.apache.fulcrum.security.hibernate.dynamic
+org.apache.fulcrum.security.hibernate.turbine

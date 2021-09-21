@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CryptoAuthenticator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security API</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.authenticator</a> &gt; <span class="el_source">CryptoAuthenticator.java</span></div><h1>CryptoAuthenticator.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.authenticator;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.security.NoSuchAlgorithmException;
+
+import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.framework.service.ServiceException;
+import org.apache.avalon.framework.service.ServiceManager;
+import org.apache.avalon.framework.service.Serviceable;
+import org.apache.fulcrum.crypto.CryptoAlgorithm;
+import org.apache.fulcrum.crypto.CryptoService;
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.util.DataBackendException;
+
+/**
+ * This class authenticates using the Fulcrum Crypto service a user and their
+ * password
+ * 
+ * avalon.component name=&quot;crypto-authenticator&quot;
+ * avalon.service  type=&quot;org.apache.fulcrum.security.authenticator.Authenticator&quot;
+ *
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id$
+ *                
+ */
+<span class="fc" id="L47">public class CryptoAuthenticator extends AbstractLogEnabled implements Authenticator, Serviceable, Disposable, Configurable</span>
+{
+<span class="fc" id="L49">    boolean composed = false;</span>
+<span class="fc" id="L50">    protected CryptoService cryptoService = null;</span>
+    private String algorithm;
+    private String cipher;
+
+    /**
+     * Authenticate a user with the specified password. If authentication is
+     * successful the method returns true. If it fails, it returns false If
+     * there are any problems, an exception is thrown.
+     *
+     * @param user
+     *            a User object.
+     * @param password
+     *            the user supplied password.
+     * @exception DataBackendException
+     *                if there is a problem accessing the storage.
+     */
+    @Override
+    public boolean authenticate(User user, String password) throws DataBackendException
+    {
+        try
+        {
+<span class="fc" id="L71">            CryptoAlgorithm ca = cryptoService.getCryptoAlgorithm(algorithm);</span>
+<span class="fc" id="L72">            ca.setCipher(cipher);</span>
+<span class="fc" id="L73">            String output = ca.encrypt(password);</span>
+<span class="fc" id="L74">            return output.equals(user.getPassword());</span>
+        }
+<span class="nc" id="L76">        catch (NoSuchAlgorithmException e)</span>
+        {
+<span class="nc" id="L78">            throw new DataBackendException(e.getMessage(), e);</span>
+        }
+<span class="nc" id="L80">        catch (Exception ex)</span>
+        {
+<span class="nc" id="L82">            throw new DataBackendException(ex.getMessage(), ex);</span>
+        }
+    }
+
+    // ---------------- Avalon Lifecycle Methods ---------------------
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
+     */
+    @Override
+    public void configure(Configuration conf) throws ConfigurationException
+    {
+<span class="fc" id="L93">        algorithm = conf.getChild(&quot;algorithm&quot;).getValue();</span>
+<span class="fc" id="L94">        cipher = conf.getChild(&quot;cipher&quot;).getValue();</span>
+<span class="fc" id="L95">    }</span>
+
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
+     */
+    @Override
+    public void service(ServiceManager manager) throws ServiceException
+    {
+<span class="fc" id="L103">        this.cryptoService = (CryptoService) manager.lookup(CryptoService.ROLE);</span>
+<span class="fc" id="L104">    }</span>
+
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.activity.Disposable#dispose()
+     */
+    @Override
+    public void dispose()
+    {
+<span class="fc" id="L112">        cryptoService = null;</span>
+<span class="fc" id="L113">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

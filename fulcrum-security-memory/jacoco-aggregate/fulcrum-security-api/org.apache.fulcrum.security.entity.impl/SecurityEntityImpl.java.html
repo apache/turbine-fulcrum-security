@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>SecurityEntityImpl.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Fulcrum Security Memory Impl</a> &gt; <a href="../index.html" class="el_bundle">fulcrum-security-api</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.entity.impl</a> &gt; <span class="el_source">SecurityEntityImpl.java</span></div><h1>SecurityEntityImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.entity.impl;
+
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.fulcrum.security.entity.SecurityEntity;
+
+/**
+ * Base class for all objects implementing SecurityEnitity. This class
+ * automatically lowercases the name. So the permission &quot;EDIT&quot; will equal &quot;eDit&quot;
+ * and &quot;edit&quot;;
+ * 
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id$
+ */
+<span class="fc" id="L34">public class SecurityEntityImpl implements SecurityEntity</span>
+{
+    /**
+	 * Serial id
+	 */
+	private static final long serialVersionUID = 6949229336753158100L;
+
+	private String name;
+
+    private Object id;
+
+    /**
+     * @return object id
+     */
+    public Object getId()
+    {
+<span class="fc" id="L50">        return id;</span>
+    }
+
+    /**
+     * @param id the object id
+     */
+    public void setId(Object id)
+    {
+<span class="fc" id="L58">        this.id = id;</span>
+<span class="fc" id="L59">    }</span>
+
+    /**
+     * @return object name
+     */
+    public String getName()
+    {
+<span class="fc" id="L66">        return name;</span>
+    }
+
+    /**
+     * Pass in the name for this entity. Also lowercases it.
+     * 
+     * @param name name of entity
+     * @throws IllegalArgumentException must provide a name
+     */
+    public void setName(String name) throws IllegalArgumentException
+    {
+<span class="fc bfc" id="L77" title="All 2 branches covered.">    	if ( name == null )</span>
+    	{
+<span class="fc" id="L79">            throw new IllegalArgumentException(&quot;Must provide a valid name for all SecurityEntities.&quot;);</span>
+    	} else {
+<span class="fc" id="L81">        	this.name = name.toLowerCase();</span>
+    	}
+<span class="fc" id="L83">    }</span>
+
+    @Override
+    public String toString()
+    {
+<span class="fc" id="L88">        return getClass().getName() + &quot; (id:&quot; + getId() + &quot; name:&quot; + getName() + &quot;)&quot;;</span>
+    }
+
+    /**
+     * Check if this object is equal to another
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object o)
+    {
+<span class="fc" id="L99">        boolean equals = true;</span>
+<span class="fc" id="L100">        Object id = getId();</span>
+
+<span class="pc bpc" id="L102" title="1 of 4 branches missed.">        if (o == null || id == null)</span>
+        {
+<span class="fc" id="L104">            equals = false;</span>
+        }
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">        else if (!(o instanceof SecurityEntity))</span>
+        {
+<span class="nc" id="L108">            equals = false;</span>
+        }
+        else
+        {
+<span class="fc" id="L112">            equals = id.equals(((SecurityEntity) o).getId());</span>
+        }
+<span class="fc" id="L114">        return equals;</span>
+    }
+
+    /**
+     * Calculate a hash code for this object
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode()
+    {
+<span class="fc" id="L125">        return new HashCodeBuilder(47, 11).append(getId()).append(getName()).toHashCode();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

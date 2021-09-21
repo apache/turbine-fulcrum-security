@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TorqueBasicModelManagerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.torque.basic</a> &gt; <span class="el_source">TorqueBasicModelManagerImpl.java</span></div><h1>TorqueBasicModelManagerImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.torque.basic;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.basic.BasicModelManager;
+import org.apache.fulcrum.security.model.basic.entity.BasicGroup;
+import org.apache.fulcrum.security.model.basic.entity.BasicUser;
+import org.apache.fulcrum.security.spi.AbstractManager;
+import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.apache.torque.TorqueException;
+import org.apache.torque.util.Transaction;
+/**
+ * This implementation persists to a database via Torque.
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id:$
+ */
+<span class="fc" id="L41">public class TorqueBasicModelManagerImpl extends AbstractManager implements BasicModelManager</span>
+{
+    /**
+     * Puts a user in a group.
+     *
+     * This method is used when adding a user to a group
+     *
+     * @param user the User.
+     * @throws DataBackendException if there was an error accessing the data backend.
+     * @throws UnknownEntityException if the account is not present.
+     */
+    @Override
+	public synchronized void grant(User user, Group group) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L55">        boolean groupExists = getGroupManager().checkExists(group);</span>
+<span class="fc" id="L56">        boolean userExists = getUserManager().checkExists(user);</span>
+
+<span class="pc bpc" id="L58" title="2 of 4 branches missed.">        if (groupExists &amp;&amp; userExists)</span>
+        {
+<span class="fc" id="L60">            ((BasicUser) user).addGroup(group);</span>
+<span class="fc" id="L61">            ((BasicGroup) group).addUser(user);</span>
+
+<span class="fc" id="L63">            Connection con = null;</span>
+
+            try
+            {
+<span class="fc" id="L67">            	con = Transaction.begin();</span>
+
+<span class="fc" id="L69">                ((TorqueAbstractSecurityEntity)user).update(con);</span>
+<span class="fc" id="L70">                ((TorqueAbstractSecurityEntity)group).update(con);</span>
+
+<span class="fc" id="L72">                Transaction.commit(con);</span>
+<span class="fc" id="L73">                con = null;</span>
+            }
+<span class="nc" id="L75">            catch (TorqueException e)</span>
+            {
+<span class="nc" id="L77">                throw new DataBackendException(&quot;grant('&quot; + user.getName() + user.getId() + &quot;', '&quot; + group.getName() + group.getId() + &quot;') failed&quot;, e);</span>
+            }
+            finally
+            {
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">                if (con != null)</span>
+                {
+<span class="nc" id="L83">                    Transaction.safeRollback(con);</span>
+                }
+            }
+
+<span class="fc" id="L87">            return;</span>
+        }
+
+<span class="nc bnc" id="L90" title="All 2 branches missed.">        if (!groupExists)</span>
+        {
+<span class="nc" id="L92">            throw new UnknownEntityException(&quot;Unknown group '&quot; + group.getName() + &quot;'&quot;);</span>
+        }
+
+<span class="nc bnc" id="L95" title="All 2 branches missed.">        if (!userExists)</span>
+        {
+<span class="nc" id="L97">            throw new UnknownEntityException(&quot;Unknown user '&quot; + user.getName() + &quot;'&quot;);</span>
+        }
+<span class="nc" id="L99">    }</span>
+
+    /**
+     * Removes a user in a group.
+     *
+     * This method is used when removing a user to a group
+     *
+     * @param user the User.
+     * @throws DataBackendException if there was an error accessing the data backend.
+     * @throws UnknownEntityException if the user or group is not present.
+     */
+    @Override
+	public synchronized void revoke(User user, Group group) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L113">        boolean groupExists = getGroupManager().checkExists(group);</span>
+<span class="fc" id="L114">        boolean userExists = getUserManager().checkExists(user);</span>
+
+<span class="pc bpc" id="L116" title="2 of 4 branches missed.">        if (groupExists &amp;&amp; userExists)</span>
+        {
+<span class="fc" id="L118">            ((BasicUser) user).removeGroup(group);</span>
+<span class="fc" id="L119">            ((BasicGroup) group).removeUser(user);</span>
+
+<span class="fc" id="L121">            Connection con = null;</span>
+
+            try
+            {
+<span class="fc" id="L125">            	con = Transaction.begin();</span>
+
+<span class="fc" id="L127">                ((TorqueAbstractSecurityEntity)user).update(con);</span>
+<span class="fc" id="L128">                ((TorqueAbstractSecurityEntity)group).update(con);</span>
+
+<span class="fc" id="L130">                Transaction.commit(con);</span>
+<span class="fc" id="L131">                con = null;</span>
+            }
+<span class="nc" id="L133">            catch (TorqueException e)</span>
+            {
+<span class="nc" id="L135">                throw new DataBackendException(&quot;grant('&quot; + user.getName() + user.getId() + &quot;', '&quot; + group.getName() + group.getId() + &quot;') failed&quot;, e);</span>
+            }
+            finally
+            {
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">                if (con != null)</span>
+                {
+<span class="nc" id="L141">                    Transaction.safeRollback(con);</span>
+                }
+            }
+
+<span class="fc" id="L145">            return;</span>
+        }
+
+<span class="nc bnc" id="L148" title="All 2 branches missed.">        if (!groupExists)</span>
+        {
+<span class="nc" id="L150">            throw new UnknownEntityException(&quot;Unknown group '&quot; + group.getName() + &quot;'&quot;);</span>
+        }
+
+<span class="nc bnc" id="L153" title="All 2 branches missed.">        if (!userExists)</span>
+        {
+<span class="nc" id="L155">            throw new UnknownEntityException(&quot;Unknown user '&quot; + user.getName() + &quot;'&quot;);</span>
+        }
+<span class="nc" id="L157">    }</span>
+
+    /**
+     * Revokes all groups from a user
+     *
+     * This method is used when deleting an account.
+     *
+     * @param user the User.
+     * @throws DataBackendException if there was an error accessing the data backend.
+     * @throws UnknownEntityException if the account is not present.
+     */
+    @Override
+	public synchronized void revokeAll(User user)
+        throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L172">        boolean userExists = getUserManager().checkExists(user);</span>
+
+<span class="pc bpc" id="L174" title="1 of 2 branches missed.">        if (userExists)</span>
+        {
+<span class="fc" id="L176">            BasicUser u = (BasicUser) user;</span>
+
+            // copy to avoid ConcurrentModificationException
+<span class="fc" id="L179">            List&lt;Group&gt; groups = new ArrayList&lt;Group&gt;(u.getGroups());</span>
+
+<span class="fc bfc" id="L181" title="All 2 branches covered.">            for (Group group : groups)</span>
+            {
+<span class="fc" id="L183">                u.removeGroup(group);</span>
+<span class="fc" id="L184">            }</span>
+
+<span class="fc" id="L186">            Connection con = null;</span>
+
+            try
+            {
+<span class="fc" id="L190">            	con = Transaction.begin();</span>
+
+<span class="fc" id="L192">                ((TorqueAbstractSecurityEntity)user).update(con);</span>
+
+<span class="fc" id="L194">                Transaction.commit(con);</span>
+<span class="fc" id="L195">                con = null;</span>
+            }
+<span class="nc" id="L197">            catch (TorqueException e)</span>
+            {
+<span class="nc" id="L199">                throw new DataBackendException(&quot;revokeAll('&quot; + user.getName() + user.getId() + &quot;') failed&quot;, e);</span>
+            }
+            finally
+            {
+<span class="pc bpc" id="L203" title="1 of 2 branches missed.">                if (con != null)</span>
+                {
+<span class="nc" id="L205">                    Transaction.safeRollback(con);</span>
+                }
+            }
+
+<span class="fc" id="L209">            return;</span>
+        }
+        else
+        {
+<span class="nc" id="L213">            throw new UnknownEntityException(&quot;Unknown user '&quot; + user.getName() + &quot;'&quot;);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

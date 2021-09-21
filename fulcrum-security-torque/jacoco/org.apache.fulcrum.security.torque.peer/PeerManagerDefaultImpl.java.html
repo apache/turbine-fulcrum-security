@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PeerManagerDefaultImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.torque.peer</a> &gt; <span class="el_source">PeerManagerDefaultImpl.java</span></div><h1>PeerManagerDefaultImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.torque.peer;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.apache.avalon.framework.activity.Disposable;
+import org.apache.fulcrum.security.spi.AbstractManager;
+import org.apache.fulcrum.security.util.DataBackendException;
+
+/**
+ * Use this class, if you want to replace the default Torque Peer classes with your own. 
+ *  
+ * To use it, the PeerImpl classes (usually generated) must implement 
+ * at least the {@linkplain Peer} marker interface or some extended interface.
+ * 
+ * @see PeerManager
+ * 
+ * @author &lt;a href=&quot;mailto:gk@apache.org&quot;&gt;Georg Kallidis&lt;/a&gt;
+ * @version $Id$
+ * 
+ */
+<span class="fc" id="L39">public class PeerManagerDefaultImpl extends AbstractManager</span>
+    implements PeerManager, Disposable
+{
+      
+	 /** Serial version */
+	private static final long serialVersionUID = -3891813089694207441L;
+<span class="fc" id="L45">	private Map&lt;String,Peer&gt; peers = new ConcurrentHashMap&lt;String,Peer&gt;(4,0.75f,4);</span>
+
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.peer.PeerManager#getPeerInstance(java.lang.String)
+     */
+    @Override
+    public &lt;P extends Peer&gt; P getPeerInstance(String peerClassName) throws DataBackendException
+    {
+<span class="nc" id="L53">        return getPeerInstance( peerClassName, Peer.class, null);</span>
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.peer.PeerManager#getPeerInstance(java.lang.String, java.lang.Class, java.lang.String)
+     */
+    @SuppressWarnings( &quot;unchecked&quot; )
+    @Override
+    public &lt;P extends Peer&gt; P getPeerInstance( String peerClassName, Class&lt;? extends Peer&gt; peerInterface , String className) throws DataBackendException
+    {
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        if (peers.containsKey(peerClassName )) {</span>
+<span class="fc" id="L64">            getLogger().debug( &quot; get cached PeerInstance():&quot; +  peers.get( peerClassName ));</span>
+<span class="fc" id="L65">            return (P) peers.get( peerClassName );</span>
+        }
+        try
+        {
+<span class="fc" id="L69">            P peer = (P) Class.forName(peerClassName).getConstructor().newInstance();</span>
+<span class="fc" id="L70">            getLogger().debug( &quot; getPeerInstance():&quot; +  peer);</span>
+<span class="fc" id="L71">            peers.put( peerClassName, peer );</span>
+<span class="fc" id="L72">            return peer;</span>
+        }
+<span class="nc" id="L74">        catch (ClassCastException e) {</span>
+<span class="nc" id="L75">            throw new DataBackendException( e.getMessage()+ &quot;.\nThe peer class &quot; + peerClassName + &quot; should implement &quot;+ peerInterface + &quot;\n of generic type &lt;&quot;+className +&quot;&gt;.&quot;,e );</span>
+        } 
+<span class="nc" id="L77">        catch (Throwable e)</span>
+        {
+<span class="nc" id="L79">            throw new DataBackendException(&quot;Problem creating instance of class &quot; + peerClassName, e);</span>
+        }             
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

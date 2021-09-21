@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>AbstractPermissionManager.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="../index.html" class="el_bundle">fulcrum-security-api</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.spi</a> &gt; <span class="el_source">AbstractPermissionManager.java</span></div><h1>AbstractPermissionManager.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.spi;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import org.apache.commons.lang3.StringUtils;
+import org.apache.fulcrum.security.PermissionManager;
+import org.apache.fulcrum.security.entity.Permission;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityExistsException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+
+/**
+ * This implementation keeps all objects in memory. This is mostly meant to help
+ * with testing and prototyping of ideas.
+ *
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id: AbstractPermissionManager.java 1372918 2012-08-14 15:19:40Z tv
+ *          $
+ */
+<span class="fc" id="L36">public abstract class AbstractPermissionManager extends AbstractEntityManager implements PermissionManager</span>
+{
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    protected abstract &lt;T extends Permission&gt; T persistNewPermission(T permission) throws DataBackendException;
+
+    /**
+     * Construct a blank Permission object.
+     *
+     * This method calls getPermissionClass, and then creates a new object using
+     * the default constructor.
+     *
+     * @return an object implementing Permission interface.
+     * @throws DataBackendException
+     *             if the object could not be instantiated.
+     */
+    @Override
+	public &lt;T extends Permission&gt; T getPermissionInstance() throws DataBackendException
+    {
+        try
+        {
+            @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L61">			T permission = (T) Class.forName(getClassName()).newInstance();</span>
+<span class="fc" id="L62">            return permission;</span>
+        }
+<span class="nc" id="L64">        catch (Exception e)</span>
+        {
+<span class="nc" id="L66">            throw new DataBackendException(&quot;Failed to instantiate a Permission implementation object&quot;, e);</span>
+        }
+    }
+
+    /**
+     * Construct a blank Permission object.
+     *
+     * This method calls getPermissionClass, and then creates a new object using
+     * the default constructor.
+     *
+     * @param permName
+     *            The name of the permission.
+     *
+     * @return an object implementing Permission interface.
+     * @throws DataBackendException
+     *             if the object could not be instantiated.
+     */
+    @Override
+	public &lt;T extends Permission&gt; T getPermissionInstance(String permName) throws DataBackendException
+    {
+<span class="fc" id="L86">        T perm = getPermissionInstance();</span>
+<span class="fc" id="L87">        perm.setName(permName);</span>
+<span class="fc" id="L88">        return perm;</span>
+    }
+
+    /**
+     * Retrieve a Permission object with specified name.
+     *
+     * @param name
+     *            the name of the Permission.
+     * @return an object representing the Permission with specified name.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the permission does not exist.
+     */
+    @Override
+	public &lt;T extends Permission&gt; T getPermissionByName(String name) throws DataBackendException, UnknownEntityException
+    {
+        @SuppressWarnings(&quot;unchecked&quot;)
+<span class="nc" id="L106">		T permission = (T) getAllPermissions().getByName(name);</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        if (permission == null)</span>
+        {
+<span class="nc" id="L109">            throw new UnknownEntityException(&quot;The specified permission does not exist&quot;);</span>
+        }
+<span class="nc" id="L111">        return permission;</span>
+    }
+
+    /**
+     * Retrieve a Permission object with specified Id.
+     *
+     * @param id
+     *            the ID of the Permission.
+     *
+     * @return an object representing the Permission with specified name.
+     *
+     * @throws UnknownEntityException
+     *             if the permission does not exist in the database.
+     * @throws DataBackendException
+     *             if there is a problem accessing the storage.
+     */
+    @Override
+	public &lt;T extends Permission&gt; T getPermissionById(Object id) throws DataBackendException, UnknownEntityException
+    {
+        @SuppressWarnings(&quot;unchecked&quot;)
+<span class="nc" id="L131">		T permission = (T) getAllPermissions().getById(id);</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        if (permission == null)</span>
+        {
+<span class="nc" id="L134">            throw new UnknownEntityException(&quot;The specified permission does not exist&quot;);</span>
+        }
+<span class="nc" id="L136">        return permission;</span>
+    }
+
+    /**
+     * Creates a new permission with specified attributes.
+     *
+     * @param permission
+     *            the object describing the permission to be created.
+     * @return a new Permission object that has id set up properly.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws EntityExistsException
+     *             if the permission already exists.
+     */
+    @Override
+	public synchronized &lt;T extends Permission&gt; T addPermission(T permission) throws DataBackendException, EntityExistsException
+    {
+<span class="fc" id="L153">        boolean permissionExists = false;</span>
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">        if (StringUtils.isEmpty(permission.getName()))</span>
+        {
+<span class="nc" id="L156">            throw new DataBackendException(&quot;Could not create a permission with empty name!&quot;);</span>
+        }
+//        if (permission.getId() == null)
+//        {
+//            throw new DataBackendException(&quot;Could not create a permission with an id of null!&quot;);
+//        }
+        try
+        {
+<span class="fc" id="L164">            permissionExists = checkExists(permission);</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">            if (!permissionExists)</span>
+            {
+<span class="fc" id="L167">                return persistNewPermission(permission);</span>
+            }
+        }
+<span class="nc" id="L170">        catch (Exception e)</span>
+        {
+<span class="nc" id="L172">            throw new DataBackendException(&quot;addPermission(Permission) failed&quot;, e);</span>
+<span class="fc" id="L173">        }</span>
+        // the only way we could get here without return/throw triggered
+        // is that the permissionExists was true.
+<span class="fc" id="L176">        throw new EntityExistsException(&quot;Permission '&quot; + permission + &quot;' already exists&quot;);</span>
+    }
+
+    /**
+     * Check whether a specified permission exists.
+     *
+     * The name is used for looking up the permission
+     *
+     * @param permission
+     *            The permission to be checked.
+     * @return true if the specified permission exists
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     */
+    @Override
+	public boolean checkExists(Permission permission) throws DataBackendException
+    {
+<span class="fc" id="L193">        return checkExists(permission.getName());</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractTurbineModelManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security API</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.model.turbine</a> &gt; <span class="el_source">AbstractTurbineModelManager.java</span></div><h1>AbstractTurbineModelManager.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.model.turbine;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.Permission;
+import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineGroup;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineRole;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
+import org.apache.fulcrum.security.spi.AbstractManager;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityExistsException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+
+/**
+ * Holds shared functionality between different implementations of
+ * TurbineModelManager's.
+ * 
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh &lt;/a&gt;
+ * @version $Id: AbstractDynamicModelManager.java,v 1.2 2004/07/07 18:18:09
+ *          epugh Exp $
+ */
+<span class="fc" id="L45">public abstract class AbstractTurbineModelManager extends AbstractManager implements TurbineModelManager, Configurable</span>
+{
+	
+    
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    
+    private String globalGroupName;
+    
+    //private boolean cascadeDelete;
+	// ---------------- Avalon Lifecycle Methods ---------------------
+    /**
+     * Avalon component lifecycle method
+     */
+    @Override
+	public void configure(Configuration conf)
+    {
+<span class="fc" id="L64">    	globalGroupName = conf.getAttribute(</span>
+    			TurbineModelManager.GLOBAL_GROUP_ATTR_NAME,
+    			TurbineModelManager.GLOBAL_GROUP_NAME);
+    	//cascadeDelete = conf.getAttributeAsBoolean( TurbineModelManager.CASCADE_DELETE_ATTR_NAME, false );
+<span class="fc" id="L68">    }</span>
+    
+    /**
+     * Provides a reference to the Group object that represents the &lt;a
+     * href=&quot;#global&quot;&gt;global group &lt;/a&gt;.
+     * 
+     * @return A Group object that represents the global group.
+     */
+    @Override
+	public Group getGlobalGroup() throws DataBackendException
+    {
+<span class="nc" id="L79">        Group g = null;</span>
+        try
+        {
+<span class="nc" id="L82">            g = getGroupManager().getGroupByName(globalGroupName);</span>
+        }
+<span class="nc" id="L84">        catch (UnknownEntityException uee)</span>
+        {
+<span class="nc" id="L86">            g = getGroupManager().getGroupInstance(globalGroupName);</span>
+            try
+            {
+<span class="nc" id="L89">                getGroupManager().addGroup(g);</span>
+            }
+<span class="nc" id="L91">            catch (EntityExistsException eee)</span>
+            {
+<span class="nc" id="L93">                throw new DataBackendException(eee.getMessage(), eee);</span>
+<span class="nc" id="L94">            }</span>
+
+<span class="nc" id="L96">        }</span>
+<span class="nc" id="L97">        return g;</span>
+    }
+
+    /**
+     * Revokes all permissions from a Role.
+     * 
+     * This method is used when deleting a Role.
+     * 
+     * @param role
+     *            the Role
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the Role is not present.
+     */
+    @Override
+	public synchronized void revokeAll(Role role) throws DataBackendException, UnknownEntityException
+    {
+<span class="nc" id="L115">        revokeAll( role, false );</span>
+<span class="nc" id="L116">    }</span>
+    
+    /**
+     * Revokes by default all permissions from a Role and if flag is set
+     * all groups and users for this role
+     * 
+     * This method is used when deleting a Role.
+     * 
+     * @param role
+     *            the Role
+     * @param cascadeDelete
+     *             if &lt;code&gt;true &lt;/code&gt; removes all groups and user for this role.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the Role is not present.
+     */
+    @Override
+    public synchronized void revokeAll(Role role, boolean cascadeDelete) throws DataBackendException, UnknownEntityException
+    {
+<span class="nc" id="L136">        boolean roleExists = false;</span>
+<span class="nc" id="L137">        roleExists = getRoleManager().checkExists(role);</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">        if (roleExists)</span>
+        {
+
+<span class="nc" id="L141">            Object permissions[] = ((TurbineRole) role).getPermissions().toArray();</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">            for (Object permission : permissions)</span>
+            {
+<span class="nc" id="L144">                revoke(role, (Permission) permission);</span>
+            }
+<span class="nc bnc" id="L146" title="All 2 branches missed.">            if (cascadeDelete) {</span>
+<span class="nc" id="L147">                Object userGroupRoles[] = ((TurbineRole) role).getUserGroupRoleSet().toArray();</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">                for (Object userGroupRole : userGroupRoles)</span>
+                {
+<span class="nc" id="L150">                    TurbineUserGroupRole ugr = (TurbineUserGroupRole) userGroupRole;</span>
+<span class="nc" id="L151">                    revoke(ugr.getUser(), ugr.getGroup(), role);</span>
+                }
+            }
+<span class="nc" id="L154">        }</span>
+        else
+        {
+<span class="nc" id="L157">            throw new UnknownEntityException(&quot;Unknown role '&quot; + role.getName() + &quot;'&quot;);</span>
+        }
+
+<span class="nc" id="L160">    }</span>
+
+    /**
+     * Revokes all roles and groups from a User.
+     * 
+     * This method is used when deleting a User.
+     * 
+     * @param user
+     *            the User
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the Role is not present.
+     */
+    @Override
+	public synchronized void revokeAll(User user) throws DataBackendException, UnknownEntityException
+    {
+<span class="nc" id="L177">        boolean userExists = false;</span>
+<span class="nc" id="L178">        userExists = getUserManager().checkExists(user);</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">        if (userExists)</span>
+        {
+
+<span class="nc" id="L182">            Object userGroupRoles[] = ((TurbineUser) user).getUserGroupRoleSet().toArray();</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">            for (Object userGroupRole : userGroupRoles)</span>
+            {
+<span class="nc" id="L185">                TurbineUserGroupRole ugr = (TurbineUserGroupRole) userGroupRole;</span>
+<span class="nc" id="L186">                revoke(user, ugr.getGroup(), ugr.getRole());</span>
+            }
+<span class="nc" id="L188">        }</span>
+        else
+        {
+<span class="nc" id="L191">            throw new UnknownEntityException(&quot;Unknown user '&quot; + user.getName() + &quot;'&quot;);</span>
+        }
+<span class="nc" id="L193">    }</span>
+    
+    /**
+     * Revokes all roles and users from a Group.
+     * 
+     * This method is used when deleting a User.
+     * 
+     * @param group
+     *            the Group
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the Group is not present.
+     */
+    @Override
+    public synchronized void revokeAll(Group group) throws DataBackendException, UnknownEntityException
+    {
+<span class="nc" id="L210">        boolean groupExists = false;</span>
+<span class="nc" id="L211">        groupExists = getGroupManager().checkExists(group);</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">        if (groupExists)</span>
+        {
+
+<span class="nc" id="L215">            Object userGroupRoles[] = ((TurbineGroup) group).getUserGroupRoleSet().toArray();</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">            for (Object userGroupRole : userGroupRoles)</span>
+            {
+<span class="nc" id="L218">                TurbineUserGroupRole ugr = (TurbineUserGroupRole) userGroupRole;</span>
+<span class="nc" id="L219">                revoke(ugr.getUser(), group, ugr.getRole());</span>
+            }
+<span class="nc" id="L221">        }</span>
+        else
+        {
+<span class="nc" id="L224">            throw new UnknownEntityException(&quot;Unknown group '&quot; + group.getName() + &quot;'&quot;);</span>
+        }
+<span class="nc" id="L226">    }</span>
+
+	@Override
+	public String getGlobalGroupName() {
+<span class="fc" id="L230">		return globalGroupName;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DynamicRoleImpl.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Fulcrum Security Memory Impl</a> &gt; <a href="../index.html" class="el_bundle">fulcrum-security-api</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.model.dynamic.entity.impl</a> &gt; <span class="el_source">DynamicRoleImpl.java</span></div><h1>DynamicRoleImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.model.dynamic.entity.impl;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.util.Set;
+
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.Permission;
+import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
+import org.apache.fulcrum.security.util.GroupSet;
+import org.apache.fulcrum.security.util.PermissionSet;
+
+/**
+ * Represents the &quot;simple&quot; model where permissions are related to roles, roles
+ * are related to groups and groups are related to users, all in many to many
+ * relationships.
+ * 
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id: DynamicRole.java 437451 2006-08-27 20:20:44Z tv $
+ */
+<span class="fc" id="L39">public class DynamicRoleImpl extends SecurityEntityImpl implements DynamicRole</span>
+{
+<span class="fc" id="L41">    private Set&lt;? extends Permission&gt; permissionSet = new PermissionSet();</span>
+
+<span class="fc" id="L43">    private Set&lt;? extends Group&gt; groupSet = new GroupSet();</span>
+
+    /**
+     * Get the permission that are part of this role
+     * 
+     * @return a set of permissions
+     */
+    public PermissionSet getPermissions()
+    {
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        if (permissionSet instanceof PermissionSet)</span>
+        {
+<span class="fc" id="L54">            return (PermissionSet) permissionSet;</span>
+        }
+        else
+        {
+<span class="nc" id="L58">            permissionSet = new PermissionSet(permissionSet);</span>
+<span class="nc" id="L59">            return (PermissionSet) permissionSet;</span>
+        }
+    }
+
+    /**
+     * Get the permission that are part of this role as Set
+     * 
+     * @return a set of permissions
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public &lt;T extends Permission&gt; Set&lt;T&gt; getPermissionsAsSet()
+    {
+<span class="nc" id="L71">        return (Set&lt;T&gt;) permissionSet;</span>
+    }
+
+    /**
+     * Set the permission that are part of this role
+     * 
+     * @param permissionSet
+     *            a set of permissions
+     */
+    public void setPermissions(PermissionSet permissionSet)
+    {
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (permissionSet != null)</span>
+        {
+<span class="nc" id="L84">            this.permissionSet = permissionSet;</span>
+        }
+        else
+        {
+<span class="nc" id="L88">            this.permissionSet = new PermissionSet();</span>
+        }
+<span class="nc" id="L90">    }</span>
+
+    /**
+     * Set the permission that are part of this role as Set
+     * 
+     * @param permissions
+     *            a set of permissions
+     */
+    public &lt;T extends Permission&gt; void setPermissionsAsSet(Set&lt;T&gt; permissions)
+    {
+<span class="nc" id="L100">        this.permissionSet = permissions;</span>
+<span class="nc" id="L101">    }</span>
+
+    /**
+     * This method should only be used by a RoleManager. Not directly.
+     * 
+     * @param permission the Permission to add
+     */
+    public void addPermission(Permission permission)
+    {
+<span class="fc" id="L110">        getPermissions().add(permission);</span>
+<span class="fc" id="L111">    }</span>
+
+    /**
+     * This method should only be used by a RoleManager. Not directly.
+     * 
+     * @param permission the Permission to remove
+     */
+    public void removePermission(Permission permission)
+    {
+<span class="fc" id="L120">        getPermissions().remove(permission);</span>
+<span class="fc" id="L121">    }</span>
+
+    /**
+     * Get the groups this role belongs to
+     * 
+     * @return a set of groups
+     */
+    public GroupSet getGroups()
+    {
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">        if (groupSet instanceof GroupSet)</span>
+        {
+<span class="fc" id="L132">            return (GroupSet) groupSet;</span>
+        }
+        else
+        {
+<span class="nc" id="L136">            groupSet = new GroupSet(groupSet);</span>
+<span class="nc" id="L137">            return (GroupSet) groupSet;</span>
+        }
+    }
+
+    /**
+     * Set the groups this role belongs to
+     * 
+     * @param groupSet
+     *            the set of groups
+     */
+    public void setGroups(GroupSet groupSet)
+    {
+<span class="nc bnc" id="L149" title="All 2 branches missed.">        if (groupSet != null)</span>
+        {
+<span class="nc" id="L151">            this.groupSet = groupSet;</span>
+        }
+        else
+        {
+<span class="nc" id="L155">            this.groupSet = new GroupSet();</span>
+        }
+<span class="nc" id="L157">    }</span>
+
+    /**
+     * This method should only be used by a RoleManager. Not directly.
+     * 
+     * @param group the Group to remove
+     */
+    public void removeGroup(Group group)
+    {
+<span class="fc" id="L166">        getGroups().remove(group);</span>
+<span class="fc" id="L167">    }</span>
+
+    /**
+     * This method should only be used by a RoleManager. Not directly.
+     * 
+     * @param group the Group to add
+     */
+    public void addGroup(Group group)
+    {
+<span class="fc" id="L176">        getGroups().add(group);</span>
+<span class="fc" id="L177">    }</span>
+
+    /**
+     * Set the groups this role belongs to as a Set
+     * 
+     * @param groups
+     *            the set of groups
+     */
+    public &lt;T extends Group&gt; void setGroupsAsSet(Set&lt;T&gt; groups)
+    {
+<span class="nc" id="L187">        this.groupSet = groups;</span>
+<span class="nc" id="L188">    }</span>
+
+    /**
+     * Get the groups this role belongs to as a Set
+     * 
+     * @return a set of groups
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public &lt;T extends Group&gt; Set&lt;T&gt; getGroupsAsSet()
+    {
+<span class="nc" id="L198">        return (Set&lt;T&gt;) groupSet;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

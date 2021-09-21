@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TorqueAbstractRoleManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.torque</a> &gt; <span class="el_source">TorqueAbstractRoleManager.java</span></div><h1>TorqueAbstractRoleManager.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.torque;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.sql.Connection;
+import java.util.List;
+
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.spi.AbstractRoleManager;
+import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityExistsException;
+import org.apache.fulcrum.security.util.RoleSet;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.apache.torque.NoRowsException;
+import org.apache.torque.TooManyRowsException;
+import org.apache.torque.TorqueException;
+import org.apache.torque.util.Transaction;
+/**
+ * This implementation persists to a database via Torque.
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id:$
+ */
+<span class="fc" id="L42">public abstract class TorqueAbstractRoleManager extends AbstractRoleManager implements LazyLoadable </span>
+{
+    
+	/** Serial version */
+	private static final long serialVersionUID = 4258137881250800204L;
+	
+	private static final String LAZY_LOADING = &quot;lazy&quot;;
+<span class="fc" id="L49">    protected Boolean lazyLoading = false;</span>
+    
+    /**
+     * Avalon Service lifecycle method
+     */
+    @Override
+    public void configure(Configuration conf) throws ConfigurationException
+    {
+<span class="fc" id="L57">       super.configure( conf );</span>
+<span class="fc" id="L58">       lazyLoading = conf.getAttributeAsBoolean( LAZY_LOADING, false);</span>
+<span class="fc" id="L59">       getLogger().debug(&quot;setting lazyLoading: &quot; + lazyLoading);</span>
+<span class="fc" id="L60">    }</span>
+
+    
+    /**
+     * Get all specialized Roles
+     *
+     * @param con a database connection
+     *
+     * @return a List of Role instances
+     *
+     * @throws TorqueException  if any database error occurs
+     */
+    protected abstract &lt;T extends Role&gt; List&lt;T&gt; doSelectAllRoles(Connection con)
+        throws TorqueException;
+
+    /**
+     * Get a specialized Role by name
+     *
+     * @param name the name of the group
+     * @param con a database connection
+     *
+     * @return a Role instance
+     *
+     * @throws NoRowsException if no such group exists
+     * @throws TooManyRowsException if multiple groups with the given name exist
+     * @throws TorqueException  if any database error occurs if any other database error occurs
+     */
+    protected abstract &lt;T extends Role&gt; T doSelectByName(String name, Connection con)
+        throws NoRowsException, TooManyRowsException, TorqueException;
+
+    /**
+     * Get a specialized Role by id
+     *
+     * @param id the id of the group
+     * @param con a database connection
+     *
+     * @return a Role instance
+     *
+     * @throws NoRowsException if no such group exists
+     * @throws TooManyRowsException if multiple groups with the given id exist
+     * @throws TorqueException  if any database error occurs if any other database error occurs
+     */
+    protected abstract &lt;T extends Role&gt; T doSelectById(Integer id, Connection con)
+        throws NoRowsException, TooManyRowsException, TorqueException;
+
+
+    /**
+    * Renames an existing Role.
+    *
+    * @param role The object describing the role to be renamed.
+    * @param name the new name for the role.
+    * @throws DataBackendException if there was an error accessing the data
+    *         backend.
+    * @throws UnknownEntityException if the role does not exist.
+    */
+    @Override
+	public synchronized void renameRole(Role role, String name) throws DataBackendException, UnknownEntityException
+    {
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        if (checkExists(role))</span>
+        {
+<span class="fc" id="L120">            role.setName(name);</span>
+
+            try
+            {
+<span class="fc" id="L124">                TorqueAbstractSecurityEntity r = (TorqueAbstractSecurityEntity)role;</span>
+<span class="fc" id="L125">                r.setNew(false);</span>
+<span class="fc" id="L126">                r.save();</span>
+            }
+<span class="nc" id="L128">            catch (Exception e)</span>
+            {
+<span class="nc" id="L130">                throw new DataBackendException(&quot;Renaming Role '&quot; + role.getName() + &quot;' failed&quot;, e);</span>
+<span class="fc" id="L131">            }</span>
+        }
+        else
+        {
+<span class="nc" id="L135">            throw new UnknownEntityException(&quot;Unknown Role '&quot; + role.getName() + &quot;'&quot;);</span>
+        }
+<span class="fc" id="L137">    }</span>
+
+    /**
+    * Creates a new role with specified attributes.
+    *
+    * @param role the object describing the role to be created.
+    * @return a new Role object that has id set up properly.
+    * @throws DataBackendException if there was an error accessing the data
+    *         backend.
+    */
+    @Override
+	protected synchronized &lt;T extends Role&gt; T persistNewRole(T role) throws DataBackendException
+    {
+        try
+        {
+<span class="fc" id="L152">            ((TorqueAbstractSecurityEntity)role).save();</span>
+        }
+<span class="nc" id="L154">        catch (Exception e)</span>
+        {
+<span class="nc" id="L156">            throw new DataBackendException(&quot;Adding Role '&quot; + role.getName() + &quot;' failed&quot;, e);</span>
+<span class="fc" id="L157">        }</span>
+
+<span class="fc" id="L159">        return role;</span>
+    }
+
+    /**
+    * Removes a Role from the system.
+    *
+    * @param role The object describing the role to be removed.
+    * @throws DataBackendException if there was an error accessing the data
+    *         backend.
+    * @throws UnknownEntityException if the role does not exist.
+    */
+    @Override
+	public synchronized void removeRole(Role role) throws DataBackendException, UnknownEntityException
+    {
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">        if (checkExists(role))</span>
+        {
+            try
+            {
+<span class="fc" id="L177">                ((TorqueAbstractSecurityEntity)role).delete();</span>
+            }
+<span class="nc" id="L179">            catch (TorqueException e)</span>
+            {
+<span class="nc" id="L181">                throw new DataBackendException(&quot;Removing Role '&quot; + role.getName() + &quot;' failed&quot;, e);</span>
+<span class="fc" id="L182">            }</span>
+        }
+        else
+        {
+<span class="nc" id="L186">            throw new UnknownEntityException(&quot;Unknown role '&quot; + role.getName() + &quot;'&quot;);</span>
+        }
+<span class="fc" id="L188">    }</span>
+
+    /**
+      * Determines if the &lt;code&gt;Role&lt;/code&gt; exists in the security system.
+      *
+      * @param roleName a &lt;code&gt;Role&lt;/code&gt; value
+      * @return true if the role name exists in the system, false otherwise
+      * @throws DataBackendException when more than one Role with
+      *         the same name exists.
+      */
+    @Override
+	public boolean checkExists(String roleName) throws DataBackendException
+    {
+<span class="fc" id="L201">        boolean exists = false;</span>
+
+<span class="fc" id="L203">        Connection con = null;</span>
+
+        try
+        {
+<span class="fc" id="L207">            con = Transaction.begin();</span>
+
+<span class="fc" id="L209">            doSelectByName(roleName, con);</span>
+
+<span class="fc" id="L211">            Transaction.commit(con);</span>
+<span class="fc" id="L212">            con = null;</span>
+
+<span class="fc" id="L214">            exists = true;</span>
+        }
+<span class="fc" id="L216">        catch (NoRowsException e)</span>
+        {
+<span class="fc" id="L218">            exists = false;</span>
+        }
+<span class="nc" id="L220">        catch (TooManyRowsException e)</span>
+        {
+<span class="nc" id="L222">            throw new DataBackendException(&quot;Multiple roles with same name '&quot; + roleName + &quot;'&quot;);</span>
+        }
+<span class="nc" id="L224">        catch (TorqueException e)</span>
+        {
+<span class="nc" id="L226">            throw new DataBackendException(&quot;Error retrieving role information&quot;, e);</span>
+        }
+        finally
+        {
+<span class="fc bfc" id="L230" title="All 2 branches covered.">            if (con != null)</span>
+            {
+<span class="fc" id="L232">                Transaction.safeRollback(con);</span>
+            }
+        }
+
+<span class="fc" id="L236">        return exists;</span>
+    }
+
+    /**
+     * Retrieves all roles defined in the system.
+     *
+     * @return the names of all roles defined in the system.
+     * @throws DataBackendException if there was an error accessing the
+     *         data backend.
+     */
+    @Override
+	public RoleSet getAllRoles() throws DataBackendException
+    {
+<span class="fc" id="L249">        RoleSet roleSet = new RoleSet();</span>
+<span class="fc" id="L250">        Connection con = null;</span>
+
+        try
+        {
+<span class="fc" id="L254">            con = Transaction.begin();</span>
+
+<span class="fc" id="L256">            List&lt;Role&gt; roles = doSelectAllRoles(con);</span>
+
+<span class="fc bfc" id="L258" title="All 2 branches covered.">            for (Role role : roles)</span>
+            {
+               // Add attached objects if they exist
+<span class="fc" id="L261">               ((TorqueAbstractSecurityEntity)role).retrieveAttachedObjects(con, getLazyLoading());</span>
+
+<span class="fc" id="L263">                roleSet.add(role);</span>
+<span class="fc" id="L264">            }</span>
+
+<span class="fc" id="L266">            Transaction.commit(con);</span>
+<span class="fc" id="L267">            con = null;</span>
+        }
+<span class="nc" id="L269">        catch (TorqueException e)</span>
+        {
+<span class="nc" id="L271">            throw new DataBackendException(&quot;Error retrieving role information&quot;, e);</span>
+        }
+        finally
+        {
+<span class="pc bpc" id="L275" title="1 of 2 branches missed.">            if (con != null)</span>
+            {
+<span class="nc" id="L277">                Transaction.safeRollback(con);</span>
+            }
+        }
+
+<span class="fc" id="L281">        return roleSet;</span>
+    }
+
+    /**
+     * Retrieve a Role object with specified id.
+     *
+     * @param id
+     *            the id of the Role.
+     * @return an object representing the Role with specified id.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the role does not exist.
+     */
+    @Override
+	public &lt;T extends Role&gt; T getRoleById(Object id) throws DataBackendException, UnknownEntityException
+    {
+        T role;
+
+<span class="pc bpc" id="L300" title="2 of 4 branches missed.">        if (id != null &amp;&amp; id instanceof Integer)</span>
+        {
+<span class="fc" id="L302">            Connection con = null;</span>
+
+            try
+            {
+<span class="fc" id="L306">                con = Transaction.begin();</span>
+
+<span class="fc" id="L308">                role = doSelectById((Integer)id, con);</span>
+
+                // Add attached objects if they exist
+<span class="fc" id="L311">                ((TorqueAbstractSecurityEntity)role).retrieveAttachedObjects(con, getLazyLoading());</span>
+
+<span class="fc" id="L313">                Transaction.commit(con);</span>
+<span class="fc" id="L314">                con = null;</span>
+            }
+<span class="fc" id="L316">            catch (NoRowsException e)</span>
+            {
+<span class="fc" id="L318">                throw new UnknownEntityException(&quot;Role with id '&quot; + id + &quot;' does not exist.&quot;, e);</span>
+            }
+<span class="nc" id="L320">            catch (TorqueException e)</span>
+            {
+<span class="nc" id="L322">                throw new DataBackendException(&quot;Error retrieving role information&quot;, e);</span>
+            }
+            finally
+            {
+<span class="fc bfc" id="L326" title="All 2 branches covered.">                if (con != null)</span>
+                {
+<span class="fc" id="L328">                    Transaction.safeRollback(con);</span>
+                }
+            }
+<span class="fc" id="L331">        }</span>
+        else
+        {
+<span class="nc" id="L334">            throw new UnknownEntityException(&quot;Invalid role id '&quot; + id + &quot;'&quot;);</span>
+        }
+
+<span class="fc" id="L337">        return role;</span>
+    }
+
+    /**
+     * Retrieve a Role object with specified name.
+     *
+     * @param name the name of the Role.
+     * @return an object representing the Role with specified name.
+     * @throws DataBackendException if there was an error accessing the
+     *         data backend.
+     * @throws UnknownEntityException if the role does not exist.
+     */
+    @Override
+	public &lt;T extends Role&gt; T getRoleByName(String name) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L352">        T role = null;</span>
+<span class="fc" id="L353">        Connection con = null;</span>
+
+        try
+        {
+<span class="fc" id="L357">            con = Transaction.begin();</span>
+
+<span class="fc" id="L359">            role = doSelectByName(name, con);</span>
+
+            // Add attached objects if they exist
+<span class="fc" id="L362">            ((TorqueAbstractSecurityEntity)role).retrieveAttachedObjects(con, getLazyLoading());</span>
+
+<span class="fc" id="L364">            Transaction.commit(con);</span>
+<span class="fc" id="L365">            con = null;</span>
+        }
+<span class="nc" id="L367">        catch (NoRowsException e)</span>
+        {
+<span class="nc" id="L369">            throw new UnknownEntityException(&quot;Could not find role&quot; + name);</span>
+        }
+<span class="nc" id="L371">        catch (TooManyRowsException e)</span>
+        {
+<span class="nc" id="L373">            throw new DataBackendException(&quot;Multiple Roles with same name '&quot; + name + &quot;'&quot;);</span>
+        }
+<span class="nc" id="L375">        catch (TorqueException e)</span>
+        {
+<span class="nc" id="L377">            throw new DataBackendException(&quot;Error retrieving role information&quot;, e);</span>
+        }
+        finally
+        {
+<span class="pc bpc" id="L381" title="1 of 2 branches missed.">            if (con != null)</span>
+            {
+<span class="nc" id="L383">                Transaction.safeRollback(con);</span>
+            }
+        }
+
+<span class="fc" id="L387">        return role;</span>
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.LazyLoadable#getLazyLoading()
+     */
+    @Override
+    public Boolean getLazyLoading()
+    {
+<span class="fc" id="L397">        return lazyLoading;</span>
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.LazyLoadable#setLazyLoading(java.lang.Boolean)
+     */
+    @Override
+    public void setLazyLoading( Boolean lazyLoading )
+    {
+<span class="nc" id="L407">        this.lazyLoading = lazyLoading;</span>
+<span class="nc" id="L408">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

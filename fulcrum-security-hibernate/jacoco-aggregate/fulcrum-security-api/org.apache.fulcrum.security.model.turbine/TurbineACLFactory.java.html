@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>TurbineACLFactory.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Fulcrum Security Hibernate Impl</a> &gt; <a href="../index.html" class="el_bundle">fulcrum-security-api</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.model.turbine</a> &gt; <span class="el_source">TurbineACLFactory.java</span></div><h1>TurbineACLFactory.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.model.turbine;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.util.Set;
+
+import org.apache.avalon.framework.service.ServiceException;
+import org.apache.fulcrum.security.GroupManager;
+import org.apache.fulcrum.security.ModelManager;
+import org.apache.fulcrum.security.RoleManager;
+import org.apache.fulcrum.security.acl.AccessControlList;
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.ACLFactory;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
+import org.apache.fulcrum.security.spi.AbstractManager;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityExistsException;
+import org.apache.fulcrum.security.util.FulcrumSecurityException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+
+/**
+ *
+ * This factory creates instance of the TurbineAccessControlList
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id: DynamicACLFactory.java 1374616 2012-08-18 17:26:07Z tv $
+ */
+<span class="fc" id="L46">public class TurbineACLFactory extends AbstractManager implements ACLFactory</span>
+{
+	
+    private TurbineModelManager modelManager;
+    
+    /**
+     * @return A model manager
+     * @throws DataBackendException generic exception
+     */
+    protected TurbineModelManager getTurbineModelManager() throws DataBackendException
+    {
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        if (modelManager == null)</span>
+        {
+            try
+            {
+<span class="nc" id="L61">            	modelManager = (TurbineModelManager) manager.lookup(ModelManager.ROLE);</span>
+
+            }
+<span class="nc" id="L64">            catch (ServiceException ce)</span>
+            {
+<span class="nc" id="L66">                throw new DataBackendException(ce.getMessage(), ce);</span>
+<span class="nc" id="L67">            }</span>
+        }
+<span class="nc" id="L69">        return modelManager;</span>
+    }
+	
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.model.ACLFactory#getAccessControlList(org.apache.fulcrum.security.entity.User)
+     */
+    @Override
+    public &lt;T extends AccessControlList&gt; T getAccessControlList(User user)
+    {
+        try
+        {
+<span class="fc" id="L80">            TurbineUser tu = (TurbineUser)user;</span>
+<span class="fc" id="L81">            Set&lt;TurbineUserGroupRole&gt; tugr = tu.getUserGroupRoleSet();</span>
+            
+            @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L84">			T aclInstance = (T) getAclInstance(tugr);</span>
+<span class="fc" id="L85">			return aclInstance;</span>
+        }
+<span class="nc" id="L87">        catch (UnknownEntityException uue)</span>
+        {
+<span class="nc" id="L89">            throw new RuntimeException(uue.getMessage(), uue);</span>
+        }
+<span class="nc" id="L91">        catch ( DataBackendException e )</span>
+        {
+<span class="nc" id="L93">            throw new RuntimeException(e.getMessage(), e);</span>
+        }
+    }
+
+    /**
+     * Construct a new ACL object.
+     *
+     * This constructs a new ACL object from the configured class and
+     * initializes it with the supplied roles and permissions.
+     *
+     * @param turbineUserGroupRoleSet
+     *            The set of user/group/role relations that this acl is built from
+     *
+     * @return an object implementing ACL interface.
+     * @throws UnknownEntityException
+     *             if the object could not be instantiated.
+     */
+    private TurbineAccessControlList getAclInstance(Set&lt;? extends TurbineUserGroupRole&gt; turbineUserGroupRoleSet) throws UnknownEntityException
+    {
+<span class="fc" id="L112">    	GroupManager groupManager = null;</span>
+<span class="fc" id="L113">        RoleManager roleManager = null;</span>
+<span class="fc" id="L114">        TurbineModelManager modelManager = null;</span>
+
+    	try
+    	{
+<span class="nc" id="L118">    	    roleManager = getRoleManager();</span>
+<span class="nc" id="L119">			groupManager = getGroupManager();</span>
+<span class="nc" id="L120">			modelManager = getTurbineModelManager();</span>
+
+	        // make sure the global group exists
+<span class="nc bnc" id="L123" title="All 2 branches missed.">	        if (groupManager != null)</span>
+	        {
+<span class="nc" id="L125">	            Group g = null;</span>
+	            try
+	            {
+<span class="nc" id="L128">	                g = groupManager.getGroupByName(modelManager.getGlobalGroupName());</span>
+	            }
+<span class="nc" id="L130">	            catch (UnknownEntityException uee)</span>
+	            {
+<span class="nc" id="L132">	                g = groupManager.getGroupInstance(modelManager.getGlobalGroupName());</span>
+	                try
+	                {
+<span class="nc" id="L135">	                    groupManager.addGroup(g);</span>
+	                }
+<span class="nc" id="L137">	                catch (EntityExistsException eee)</span>
+	                {
+<span class="nc" id="L139">	                    throw new DataBackendException(eee.getMessage(), eee);</span>
+<span class="nc" id="L140">	                }</span>
+<span class="nc" id="L141">	            }</span>
+	        }
+    	}
+<span class="fc" id="L144">    	catch (DataBackendException e)</span>
+    	{
+    		// ignore
+<span class="nc" id="L147">		}</span>
+
+    	TurbineAccessControlList accessControlList;
+        try
+        {
+<span class="fc" id="L152">            accessControlList =</span>
+                new TurbineAccessControlListImpl(turbineUserGroupRoleSet,
+<span class="fc" id="L154">                        groupManager, roleManager, modelManager, getLogger());</span>
+        }
+<span class="nc" id="L156">        catch (FulcrumSecurityException e)</span>
+        {
+<span class="nc" id="L158">            throw new UnknownEntityException(&quot;Failed to instantiate an ACL implementation object&quot;, e);</span>
+<span class="fc" id="L159">        }</span>
+<span class="fc" id="L160">        return accessControlList;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

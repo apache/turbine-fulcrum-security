@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>TurbineUserImpl.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Fulcrum Security Hibernate Impl</a> &gt; <a href="../index.html" class="el_bundle">fulcrum-security-api</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.model.turbine.entity.impl</a> &gt; <span class="el_source">TurbineUserImpl.java</span></div><h1>TurbineUserImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.model.turbine.entity.impl;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
+
+/**
+ * Represents the &quot;turbine&quot; model where permissions are in a many to many
+ * relationship to roles, roles are related to groups are related to users, all
+ * in many to many relationships.
+ *
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id: TurbineUser.java 437451 2006-08-27 20:20:44Z tv $
+ */
+<span class="fc" id="L33">public class TurbineUserImpl extends AbstractTurbineSecurityEntityImpl implements TurbineUser</span>
+{
+    /**
+     * Serial number
+     */
+    private static final long serialVersionUID = -7309619325167081811L;
+
+    private String password;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private transient byte[] objectData;
+
+    /**
+     * Get the password
+     *
+     * @return the password
+     */
+    @Override
+	public String getPassword()
+    {
+<span class="fc" id="L54">        return password;</span>
+    }
+
+    /**
+     * Set the password
+     *
+     * @param password the new password
+     */
+    @Override
+	public void setPassword(String password)
+    {
+<span class="fc" id="L65">        this.password = password;</span>
+<span class="fc" id="L66">    }</span>
+
+    /**
+     * Returns the first name of the User
+     *
+     * @return The first name of the User
+     */
+    @Override
+	public String getFirstName()
+    {
+<span class="fc" id="L76">        return this.firstName;</span>
+    }
+
+    /**
+     * Sets the first name of the User
+     *
+     * @param firstName The new first name of the User
+     */
+    @Override
+	public void setFirstName(String firstName)
+    {
+<span class="fc" id="L87">        this.firstName = firstName;</span>
+<span class="fc" id="L88">    }</span>
+
+    /**
+     * Returns the last name of the User
+     *
+     * @return The last name of the User
+     */
+    @Override
+	public String getLastName()
+    {
+<span class="fc" id="L98">        return this.lastName;</span>
+    }
+
+    /**
+     * Sets the last name of User
+     *
+     * @param lastName The new last name of the User
+     */
+    @Override
+	public void setLastName(String lastName)
+    {
+<span class="fc" id="L109">        this.lastName = lastName;</span>
+<span class="fc" id="L110">    }</span>
+
+    /**
+     * Returns the email address of the user
+     *
+     * @return The email address of the user
+     */
+    @Override
+	public String getEmail()
+    {
+<span class="fc" id="L120">        return this.email;</span>
+    }
+
+    /**
+     * Sets the new email address of the user
+     *
+     * @param email The new email address of the user
+     */
+    @Override
+	public void setEmail(String email)
+    {
+<span class="fc" id="L131">        this.email = email;</span>
+<span class="fc" id="L132">    }</span>
+
+    /**
+     * Returns the value of the objectdata for this user.
+     * Objectdata is a storage area used
+     * to store the permanent storage table from the User
+     * object.
+     *
+     * @return The bytes in the objectdata for this user
+     */
+    @Override
+	public byte[] getObjectdata()
+    {
+<span class="fc" id="L145">        return this.objectData;</span>
+    }
+
+    /**
+     * Sets the value of the objectdata for the user
+     *
+     * @param objectdata The new permanent storage for the user
+     */
+    @Override
+	public void setObjectdata(byte[] objectdata)
+    {
+<span class="fc" id="L156">        this.objectData = objectdata;</span>
+<span class="fc" id="L157">    }</span>
+
+    /**
+     * Calculate a hash code for this object
+     *
+     * @see org.apache.fulcrum.security.entity.impl.SecurityEntityImpl#hashCode()
+     */
+    @Override
+    public int hashCode()
+    {
+<span class="fc" id="L167">        return new HashCodeBuilder(41, 15)</span>
+<span class="fc" id="L168">            .append(getPassword())</span>
+<span class="fc" id="L169">            .append(getFirstName())</span>
+<span class="fc" id="L170">            .append(getLastName())</span>
+<span class="fc" id="L171">            .append(getEmail())</span>
+<span class="fc" id="L172">            .appendSuper(super.hashCode()).toHashCode();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

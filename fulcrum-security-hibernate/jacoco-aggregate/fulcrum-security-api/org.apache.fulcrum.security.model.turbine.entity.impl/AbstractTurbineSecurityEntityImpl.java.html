@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>AbstractTurbineSecurityEntityImpl.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Fulcrum Security Hibernate Impl</a> &gt; <a href="../index.html" class="el_bundle">fulcrum-security-api</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.model.turbine.entity.impl</a> &gt; <span class="el_source">AbstractTurbineSecurityEntityImpl.java</span></div><h1>AbstractTurbineSecurityEntityImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.model.turbine.entity.impl;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.util.HashSet;
+import java.util.Set;
+
+import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRoleEntity;
+
+/**
+ * Represents the &quot;turbine&quot; model where permissions are in a many to many
+ * relationship to roles, roles are related to groups are related to users, all
+ * in many to many relationships.
+ * 
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh &lt;/a&gt;
+ * @version $Id: TurbineGroup.java 223081 2004-10-07 15:11:58Z epugh $
+ */
+<span class="fc" id="L37">public abstract class AbstractTurbineSecurityEntityImpl extends SecurityEntityImpl implements TurbineUserGroupRoleEntity</span>
+{
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+<span class="fc" id="L43">    private Set&lt;? extends TurbineUserGroupRole&gt; userGroupRoleSet = new HashSet&lt;TurbineUserGroupRole&gt;();</span>
+
+    /**
+     * Get the User/Group/Role set associated with this entity
+     * 
+     * @return a set of User/Group/Role relations
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public &lt;T extends TurbineUserGroupRole&gt; Set&lt;T&gt; getUserGroupRoleSet()
+    {
+<span class="fc" id="L53">        return (Set&lt;T&gt;) userGroupRoleSet;</span>
+    }
+
+    /**
+     * Get the User/Group/Role set associated with this entity
+     * 
+     * @param userGroupRoleSet
+     *            a set of User/Group/Role relations
+     */
+    public &lt;T extends TurbineUserGroupRole&gt; void setUserGroupRoleSet(Set&lt;T&gt; userGroupRoleSet)
+    {
+<span class="fc" id="L64">        this.userGroupRoleSet = userGroupRoleSet;</span>
+<span class="fc" id="L65">    }</span>
+
+    /**
+     * Add a User/Group/Role relation to this entity
+     * 
+     * @param userGroupRole
+     *            a User/Group/Role relation to add
+     */
+    public void addUserGroupRole(TurbineUserGroupRole userGroupRole)
+    {
+<span class="fc" id="L75">        getUserGroupRoleSet().add(userGroupRole);</span>
+<span class="fc" id="L76">    }</span>
+
+    /**
+     * Remove a User/Group/Role relation from this entity
+     * 
+     * @param userGroupRole
+     *            a User/Group/Role relation to remove
+     */
+    public void removeUserGroupRole(TurbineUserGroupRole userGroupRole)
+    {
+<span class="fc" id="L86">        getUserGroupRoleSet().remove(userGroupRole);</span>
+<span class="fc" id="L87">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

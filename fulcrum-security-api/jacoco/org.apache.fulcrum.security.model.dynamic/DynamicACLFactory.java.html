@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DynamicACLFactory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security API</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.model.dynamic</a> &gt; <span class="el_source">DynamicACLFactory.java</span></div><h1>DynamicACLFactory.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.model.dynamic;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.fulcrum.security.acl.AccessControlList;
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.ACLFactory;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
+import org.apache.fulcrum.security.spi.AbstractManager;
+import org.apache.fulcrum.security.util.PermissionSet;
+import org.apache.fulcrum.security.util.RoleSet;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+
+/**
+ *
+ * This factory creates instance of the DynamicAccessControlList
+ *
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh &lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:ben@gidley.co.uk&quot;&gt;Ben Gidley &lt;/a&gt;
+ * @version $Id$
+ */
+<span class="fc" id="L47">public class DynamicACLFactory extends AbstractManager implements ACLFactory</span>
+{
+    /**
+     * @see org.apache.fulcrum.security.model.ACLFactory#getAccessControlList(org.apache.fulcrum.security.entity.User)
+     */
+    public &lt;T extends AccessControlList&gt; T getAccessControlList(User user)
+    {
+<span class="fc" id="L54">        Map&lt;Group, RoleSet&gt; roleSets = new HashMap&lt;Group, RoleSet&gt;();</span>
+<span class="fc" id="L55">        Map&lt;Role, PermissionSet&gt; permissionSets = new HashMap&lt;Role, PermissionSet&gt;();</span>
+
+<span class="fc" id="L57">        Set&lt;DynamicUser&gt; users = new HashSet&lt;DynamicUser&gt;();</span>
+
+        // add the root user
+<span class="fc" id="L60">        users.add((DynamicUser) user);</span>
+<span class="fc" id="L61">        addDelegators((DynamicUser) user, users);</span>
+
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        for (DynamicUser aUser : users)</span>
+        {
+<span class="fc" id="L65">            addRolesAndPermissions(aUser, roleSets, permissionSets);</span>
+<span class="fc" id="L66">        }</span>
+
+        try
+        {
+            @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L71">			T aclInstance = (T) getAclInstance(roleSets, permissionSets);</span>
+<span class="fc" id="L72">			return aclInstance;</span>
+        }
+<span class="nc" id="L74">        catch (UnknownEntityException uue)</span>
+        {
+<span class="nc" id="L76">            throw new RuntimeException(uue.getMessage(), uue);</span>
+        }
+    }
+
+    /**
+     * Construct a new ACL object.
+     *
+     * This constructs a new ACL object from the configured class and
+     * initializes it with the supplied roles and permissions.
+     *
+     * @param roles
+     *            The roles that this ACL should contain
+     * @param permissions
+     *            The permissions for this ACL
+     *
+     * @return an object implementing ACL interface.
+     * @throws UnknownEntityException
+     *             if the object could not be instantiated.
+     */
+    private DynamicAccessControlList getAclInstance(Map&lt;? extends Group, ? extends RoleSet&gt; roles,
+            Map&lt;? extends Role, ? extends PermissionSet&gt; permissions) throws UnknownEntityException
+    {
+    	DynamicAccessControlList accessControlList;
+        try
+        {
+<span class="fc" id="L101">            accessControlList = new DynamicAccessControlListImpl(roles, permissions);</span>
+        }
+<span class="nc" id="L103">        catch (Exception e)</span>
+        {
+<span class="nc" id="L105">            throw new UnknownEntityException(&quot;Failed to instantiate an ACL implementation object&quot;, e);</span>
+<span class="fc" id="L106">        }</span>
+<span class="fc" id="L107">        return accessControlList;</span>
+    }
+
+    /**
+     * Add delegators to the user list
+     *
+     * @param user
+     *            the user to add to
+     * @param users
+     *            the set of delegators
+     */
+    public &lt;T extends DynamicUser&gt; void addDelegators(DynamicUser user, Set&lt;T&gt; users)
+    {
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        for (User u : user.getDelegators())</span>
+        {
+            @SuppressWarnings(&quot;unchecked&quot;)
+<span class="nc" id="L123">            T delegatorUser = (T) u;</span>
+
+<span class="nc bnc" id="L125" title="All 2 branches missed.">            if (users.add(delegatorUser))</span>
+            {
+                // Only come here if user NOT in users
+<span class="nc" id="L128">                addDelegators(delegatorUser, users);</span>
+            }
+<span class="nc" id="L130">        }</span>
+<span class="fc" id="L131">    }</span>
+
+    /**
+     * Adds the passed users roles and permissions to the sets As maps overwrite
+     * duplicates we just put it in an let it overwrite it is probably quicker
+     * than checking for duplicates
+     *
+     * @param user
+     * @param roleSets
+     * @param permissionSets
+     */
+    private void addRolesAndPermissions(User user, Map&lt;Group, RoleSet&gt; roleSets, Map&lt;Role, PermissionSet&gt; permissionSets)
+    {
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        for (Group group : ((DynamicUser) user).getGroups())</span>
+        {
+<span class="fc" id="L146">            RoleSet roleSet = ((DynamicGroup) group).getRoles();</span>
+<span class="fc" id="L147">            roleSets.put(group, roleSet);</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">            for (Role r : roleSet)</span>
+            {
+<span class="fc" id="L150">                DynamicRole role = (DynamicRole) r;</span>
+<span class="fc" id="L151">                permissionSets.put(role, role.getPermissions());</span>
+<span class="fc" id="L152">            }</span>
+<span class="fc" id="L153">        }</span>
+<span class="fc" id="L154">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

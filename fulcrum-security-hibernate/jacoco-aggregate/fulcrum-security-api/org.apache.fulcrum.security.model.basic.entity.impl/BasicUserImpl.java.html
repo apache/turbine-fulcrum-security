@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>BasicUserImpl.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Fulcrum Security Hibernate Impl</a> &gt; <a href="../index.html" class="el_bundle">fulcrum-security-api</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.model.basic.entity.impl</a> &gt; <span class="el_source">BasicUserImpl.java</span></div><h1>BasicUserImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.model.basic.entity.impl;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.util.Set;
+
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
+import org.apache.fulcrum.security.model.basic.entity.BasicUser;
+import org.apache.fulcrum.security.util.GroupSet;
+
+/**
+ * Represents the &quot;basic&quot; model where users can be part of multiple groups
+ * directly, with no roles or permissions.
+ *
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id: BasicUser.java 437451 2006-08-27 20:20:44Z tv $
+ */
+<span class="fc" id="L38">public class BasicUserImpl extends SecurityEntityImpl implements BasicUser</span>
+{
+    /**
+     * Serial number
+     */
+    private static final long serialVersionUID = 7911631916604987203L;
+
+    /** The password */
+    private String password;
+
+    /** Set of related groups */
+<span class="fc" id="L49">    private Set&lt;? extends Group&gt; groupSet = new GroupSet();</span>
+
+    /**
+     * Returns the user's password. This method should not be used by the
+     * application directly, because it's meaning depends upon the
+     * implementation of UserManager that manages this particular user object.
+     * Some implementations will use this attribute for storing a password
+     * encrypted in some way, other will not use it at all, when user entered
+     * password is presented to some external authority (like NT domain
+     * controller) to validate it. See also
+     * {@link org.apache.fulcrum.security.UserManager#authenticate(User,String)}
+     * .
+     *
+     * @return A String with the password for the user.
+     */
+    @Override
+    public String getPassword()
+    {
+<span class="fc" id="L67">        return password;</span>
+    }
+
+    /**
+     * Set password. Application should not use this method directly, see
+     * {@link #getPassword()}. See also
+     * {@link org.apache.fulcrum.security.UserManager#changePassword(User,String,String)}
+     * .
+     *
+     * @param password
+     *            The new password.
+     */
+    @Override
+    public void setPassword(String password)
+    {
+<span class="fc" id="L82">        this.password = password;</span>
+<span class="fc" id="L83">    }</span>
+
+    /**
+     * Get the groups this user is part of
+     *
+     * @return a set of groups
+     */
+    @Override
+    public GroupSet getGroups()
+    {
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (groupSet instanceof GroupSet)</span>
+        {
+<span class="fc" id="L95">            return (GroupSet) groupSet;</span>
+        }
+        else
+        {
+<span class="fc" id="L99">            groupSet = new GroupSet(groupSet);</span>
+<span class="fc" id="L100">            return (GroupSet) groupSet;</span>
+        }
+    }
+
+    /**
+     * Set the groups this user is part of
+     *
+     * @param groups
+     *            the set of groups
+     */
+    @Override
+    public void setGroups(GroupSet groups)
+    {
+<span class="nc bnc" id="L113" title="All 2 branches missed.">        if (groups != null)</span>
+        {
+<span class="nc" id="L115">            this.groupSet = groups;</span>
+        }
+        else
+        {
+<span class="nc" id="L119">            this.groupSet = new GroupSet();</span>
+        }
+<span class="nc" id="L121">    }</span>
+
+    /**
+     * Remove the group from the list of groups
+     *
+     * @param group
+     *            the group to remove
+     */
+    @Override
+    public void removeGroup(Group group)
+    {
+<span class="fc" id="L132">        getGroups().remove(group);</span>
+<span class="fc" id="L133">    }</span>
+
+    /**
+     * Add the group to the list of groups
+     *
+     * @param group
+     *            the group to add
+     */
+    @Override
+    public void addGroup(Group group)
+    {
+<span class="fc" id="L144">        getGroups().add(group);</span>
+<span class="fc" id="L145">    }</span>
+
+    /**
+     * Set the groups this user is part of as a Set
+     *
+     * @param groups
+     *            the set of groups
+     */
+    @Override
+    public &lt;T extends Group&gt; void setGroupsAsSet(Set&lt;T&gt; groups)
+    {
+<span class="fc" id="L156">        this.groupSet = groups;</span>
+<span class="fc" id="L157">    }</span>
+
+    /**
+     * Get the groups this user is part of as a Set
+     *
+     * @return a set of groups
+     */
+    @Override
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public &lt;T extends Group&gt; Set&lt;T&gt; getGroupsAsSet()
+    {
+<span class="fc" id="L168">        return (Set&lt;T&gt;) groupSet;</span>
+    }
+
+    /**
+     * Calculate a hash code for this object
+     *
+     * @see org.apache.fulcrum.security.entity.impl.SecurityEntityImpl#hashCode()
+     */
+    @Override
+    public int hashCode()
+    {
+<span class="fc" id="L179">        return new HashCodeBuilder(43, 19).append(getPassword()).appendSuper(super.hashCode()).toHashCode();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

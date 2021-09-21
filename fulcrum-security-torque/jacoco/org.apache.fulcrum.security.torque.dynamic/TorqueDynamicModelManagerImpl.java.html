@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TorqueDynamicModelManagerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.torque.dynamic</a> &gt; <span class="el_source">TorqueDynamicModelManagerImpl.java</span></div><h1>TorqueDynamicModelManagerImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.torque.dynamic;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.sql.Connection;
+
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.Permission;
+import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.dynamic.AbstractDynamicModelManager;
+import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
+import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.apache.torque.TorqueException;
+import org.apache.torque.util.Transaction;
+
+/**
+ * This implementation persists to a database via Torque.
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id:$
+ */
+<span class="fc" id="L45">public class TorqueDynamicModelManagerImpl extends AbstractDynamicModelManager implements DynamicModelManager {</span>
+	
+	/**
+	 * Serial ID
+	 */
+	private static final long serialVersionUID = -4102444603078107928L;
+
+	/**
+	 * Revokes a Role from a Group.
+	 *
+	 * @param group the Group.
+	 * @param role  the Role.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if group or role is not present.
+	 */
+	@Override
+	public synchronized void revoke(Group group, Role role) throws DataBackendException, UnknownEntityException {
+<span class="fc" id="L63">		boolean groupExists = getGroupManager().checkExists(group);</span>
+<span class="fc" id="L64">		boolean roleExists = getRoleManager().checkExists(role);</span>
+
+<span class="pc bpc" id="L66" title="2 of 4 branches missed.">		if (groupExists &amp;&amp; roleExists) {</span>
+<span class="fc" id="L67">			((DynamicGroup) group).removeRole(role);</span>
+<span class="fc" id="L68">			((DynamicRole) role).removeGroup(group);</span>
+
+<span class="fc" id="L70">			Connection con = null;</span>
+
+			try {
+<span class="fc" id="L73">				con = Transaction.begin();</span>
+
+<span class="fc" id="L75">				((TorqueAbstractSecurityEntity) role).update(con);</span>
+<span class="fc" id="L76">				((TorqueAbstractSecurityEntity) group).update(con);</span>
+
+<span class="fc" id="L78">				Transaction.commit(con);</span>
+<span class="fc" id="L79">				con = null;</span>
+<span class="nc" id="L80">			} catch (TorqueException e) {</span>
+<span class="nc" id="L81">				throw new DataBackendException(&quot;revoke('&quot; + group.getName() + &quot;', '&quot; + role.getName() + &quot;') failed&quot;, e);</span>
+			} finally {
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">				if (con != null) {</span>
+<span class="nc" id="L84">					Transaction.safeRollback(con);</span>
+				}
+			}
+
+<span class="fc" id="L88">			return;</span>
+		}
+
+<span class="nc bnc" id="L91" title="All 2 branches missed.">		if (!groupExists) {</span>
+<span class="nc" id="L92">			throw new UnknownEntityException(&quot;Unknown group '&quot; + group.getName() + &quot;'&quot;);</span>
+		}
+
+<span class="nc bnc" id="L95" title="All 2 branches missed.">		if (!roleExists) {</span>
+<span class="nc" id="L96">			throw new UnknownEntityException(&quot;Unknown role '&quot; + role.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc" id="L98">	}</span>
+
+	/**
+	 * Grants a Role a Permission
+	 *
+	 * @param role       the Role.
+	 * @param permission the Permission.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if role or permission is not present.
+	 */
+	@Override
+	public synchronized void grant(Role role, Permission permission)
+			throws DataBackendException, UnknownEntityException {
+<span class="fc" id="L112">		boolean roleExists = getRoleManager().checkExists(role);</span>
+<span class="fc" id="L113">		boolean permissionExists = getPermissionManager().checkExists(permission);</span>
+
+<span class="pc bpc" id="L115" title="2 of 4 branches missed.">		if (roleExists &amp;&amp; permissionExists) {</span>
+<span class="fc" id="L116">			((DynamicRole) role).addPermission(permission);</span>
+<span class="fc" id="L117">			((DynamicPermission) permission).addRole(role);</span>
+
+<span class="fc" id="L119">			Connection con = null;</span>
+
+			try {
+<span class="fc" id="L122">				con = Transaction.begin();</span>
+
+<span class="fc" id="L124">				((TorqueAbstractSecurityEntity) role).update(con);</span>
+<span class="fc" id="L125">				((TorqueAbstractSecurityEntity) permission).update(con);</span>
+
+<span class="fc" id="L127">				Transaction.commit(con);</span>
+<span class="fc" id="L128">				con = null;</span>
+<span class="nc" id="L129">			} catch (TorqueException e) {</span>
+<span class="nc" id="L130">				throw new DataBackendException(&quot;grant('&quot; + role.getName() + &quot;', '&quot; + permission.getName() + &quot;') failed&quot;,</span>
+						e);
+			} finally {
+<span class="pc bpc" id="L133" title="1 of 2 branches missed.">				if (con != null) {</span>
+<span class="nc" id="L134">					Transaction.safeRollback(con);</span>
+				}
+			}
+
+<span class="fc" id="L138">			return;</span>
+		}
+
+<span class="nc bnc" id="L141" title="All 2 branches missed.">		if (!roleExists) {</span>
+<span class="nc" id="L142">			throw new UnknownEntityException(&quot;Unknown role '&quot; + role.getName() + &quot;'&quot;);</span>
+		}
+
+<span class="nc bnc" id="L145" title="All 2 branches missed.">		if (!permissionExists) {</span>
+<span class="nc" id="L146">			throw new UnknownEntityException(&quot;Unknown permission '&quot; + permission.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc" id="L148">	}</span>
+
+	/**
+	 * Revokes a Permission from a Role.
+	 *
+	 * @param role       the Role.
+	 * @param permission the Permission.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if role or permission is not present.
+	 */
+	@Override
+	public synchronized void revoke(Role role, Permission permission)
+			throws DataBackendException, UnknownEntityException {
+<span class="fc" id="L162">		boolean roleExists = getRoleManager().checkExists(role);</span>
+<span class="fc" id="L163">		boolean permissionExists = getPermissionManager().checkExists(permission);</span>
+
+<span class="pc bpc" id="L165" title="2 of 4 branches missed.">		if (roleExists &amp;&amp; permissionExists) {</span>
+<span class="fc" id="L166">			((DynamicRole) role).removePermission(permission);</span>
+<span class="fc" id="L167">			((DynamicPermission) permission).removeRole(role);</span>
+
+<span class="fc" id="L169">			Connection con = null;</span>
+
+			try {
+<span class="fc" id="L172">				con = Transaction.begin();</span>
+				;
+
+<span class="fc" id="L175">				((TorqueAbstractSecurityEntity) role).update(con);</span>
+<span class="fc" id="L176">				((TorqueAbstractSecurityEntity) permission).update(con);</span>
+
+<span class="fc" id="L178">				Transaction.commit(con);</span>
+<span class="fc" id="L179">				con = null;</span>
+<span class="nc" id="L180">			} catch (TorqueException e) {</span>
+<span class="nc" id="L181">				throw new DataBackendException(</span>
+<span class="nc" id="L182">						&quot;revoke('&quot; + role.getName() + &quot;', '&quot; + permission.getName() + &quot;') failed&quot;, e);</span>
+			} finally {
+<span class="pc bpc" id="L184" title="1 of 2 branches missed.">				if (con != null) {</span>
+<span class="nc" id="L185">					Transaction.safeRollback(con);</span>
+				}
+			}
+
+<span class="fc" id="L189">			return;</span>
+		}
+
+<span class="nc bnc" id="L192" title="All 2 branches missed.">		if (!roleExists) {</span>
+<span class="nc" id="L193">			throw new UnknownEntityException(&quot;Unknown role '&quot; + role.getName() + &quot;'&quot;);</span>
+		}
+
+<span class="nc bnc" id="L196" title="All 2 branches missed.">		if (!permissionExists) {</span>
+<span class="nc" id="L197">			throw new UnknownEntityException(&quot;Unknown permission '&quot; + permission.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc" id="L199">	}</span>
+
+	/**
+	 * Puts a user in a group.
+	 *
+	 * This method is used when adding a user to a group
+	 *
+	 * @param user  the User.
+	 * @param group the Group
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if the account is not present.
+	 */
+	@Override
+	public synchronized void grant(User user, Group group) throws DataBackendException, UnknownEntityException {
+<span class="fc" id="L214">		boolean groupExists = getGroupManager().checkExists(group);</span>
+<span class="fc" id="L215">		boolean userExists = getUserManager().checkExists(user);</span>
+
+<span class="pc bpc" id="L217" title="2 of 4 branches missed.">		if (groupExists &amp;&amp; userExists) {</span>
+<span class="fc" id="L218">			((DynamicUser) user).addGroup(group);</span>
+<span class="fc" id="L219">			((DynamicGroup) group).addUser(user);</span>
+
+<span class="fc" id="L221">			Connection con = null;</span>
+
+			try {
+<span class="fc" id="L224">				con = Transaction.begin();</span>
+
+<span class="fc" id="L226">				((TorqueAbstractSecurityEntity) user).update(con);</span>
+<span class="fc" id="L227">				((TorqueAbstractSecurityEntity) group).update(con);</span>
+
+<span class="fc" id="L229">				Transaction.commit(con);</span>
+<span class="fc" id="L230">				con = null;</span>
+<span class="nc" id="L231">			} catch (TorqueException e) {</span>
+<span class="nc" id="L232">				throw new DataBackendException(&quot;grant('&quot; + user.getName() + &quot;', '&quot; + group.getName() + &quot;') failed&quot;, e);</span>
+			} finally {
+<span class="pc bpc" id="L234" title="1 of 2 branches missed.">				if (con != null) {</span>
+<span class="nc" id="L235">					Transaction.safeRollback(con);</span>
+				}
+			}
+
+<span class="fc" id="L239">			return;</span>
+		}
+
+<span class="nc bnc" id="L242" title="All 2 branches missed.">		if (!groupExists) {</span>
+<span class="nc" id="L243">			throw new UnknownEntityException(&quot;Unknown group '&quot; + group.getName() + &quot;'&quot;);</span>
+		}
+
+<span class="nc bnc" id="L246" title="All 2 branches missed.">		if (!userExists) {</span>
+<span class="nc" id="L247">			throw new UnknownEntityException(&quot;Unknown user '&quot; + user.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc" id="L249">	}</span>
+
+	/**
+	 * Removes a user in a group.
+	 *
+	 * This method is used when removing a user to a group
+	 *
+	 * @param user  the User.
+	 * @param group the Group
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if the user or group is not present.
+	 */
+	@Override
+	public synchronized void revoke(User user, Group group) throws DataBackendException, UnknownEntityException {
+<span class="fc" id="L264">		boolean groupExists = getGroupManager().checkExists(group);</span>
+<span class="fc" id="L265">		boolean userExists = getUserManager().checkExists(user);</span>
+
+<span class="pc bpc" id="L267" title="2 of 4 branches missed.">		if (groupExists &amp;&amp; userExists) {</span>
+<span class="fc" id="L268">			((DynamicUser) user).removeGroup(group);</span>
+<span class="fc" id="L269">			((DynamicGroup) group).removeUser(user);</span>
+
+<span class="fc" id="L271">			Connection con = null;</span>
+
+			try {
+<span class="fc" id="L274">				con = Transaction.begin();</span>
+
+<span class="fc" id="L276">				((TorqueAbstractSecurityEntity) user).update(con);</span>
+<span class="fc" id="L277">				((TorqueAbstractSecurityEntity) group).update(con);</span>
+
+<span class="fc" id="L279">				Transaction.commit(con);</span>
+<span class="fc" id="L280">				con = null;</span>
+<span class="nc" id="L281">			} catch (TorqueException e) {</span>
+<span class="nc" id="L282">				throw new DataBackendException(&quot;revoke('&quot; + user.getName() + &quot;', '&quot; + group.getName() + &quot;') failed&quot;, e);</span>
+			} finally {
+<span class="pc bpc" id="L284" title="1 of 2 branches missed.">				if (con != null) {</span>
+<span class="nc" id="L285">					Transaction.safeRollback(con);</span>
+				}
+			}
+
+<span class="fc" id="L289">			return;</span>
+		}
+
+<span class="nc bnc" id="L292" title="All 2 branches missed.">		if (!groupExists) {</span>
+<span class="nc" id="L293">			throw new UnknownEntityException(&quot;Unknown group '&quot; + group.getName() + &quot;'&quot;);</span>
+		}
+
+<span class="nc bnc" id="L296" title="All 2 branches missed.">		if (!userExists) {</span>
+<span class="nc" id="L297">			throw new UnknownEntityException(&quot;Unknown user '&quot; + user.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc" id="L299">	}</span>
+
+	/**
+	 * Grants a Group a Role
+	 *
+	 * @param group the Group.
+	 * @param role  the Role.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if group or role is not present.
+	 */
+	@Override
+	public synchronized void grant(Group group, Role role) throws DataBackendException, UnknownEntityException {
+<span class="fc" id="L312">		boolean groupExists = getGroupManager().checkExists(group);</span>
+<span class="fc" id="L313">		boolean roleExists = getRoleManager().checkExists(role);</span>
+
+<span class="pc bpc" id="L315" title="2 of 4 branches missed.">		if (groupExists &amp;&amp; roleExists) {</span>
+<span class="fc" id="L316">			((DynamicGroup) group).addRole(role);</span>
+<span class="fc" id="L317">			((DynamicRole) role).addGroup(group);</span>
+
+<span class="fc" id="L319">			Connection con = null;</span>
+
+			try {
+<span class="fc" id="L322">				con = Transaction.begin();</span>
+
+<span class="fc" id="L324">				((TorqueAbstractSecurityEntity) role).update(con);</span>
+<span class="fc" id="L325">				((TorqueAbstractSecurityEntity) group).update(con);</span>
+
+<span class="fc" id="L327">				Transaction.commit(con);</span>
+<span class="fc" id="L328">				con = null;</span>
+<span class="nc" id="L329">			} catch (TorqueException e) {</span>
+<span class="nc" id="L330">				throw new DataBackendException(&quot;grant('&quot; + group.getName() + &quot;', '&quot; + role.getName() + &quot;') failed&quot;, e);</span>
+			} finally {
+<span class="pc bpc" id="L332" title="1 of 2 branches missed.">				if (con != null) {</span>
+<span class="nc" id="L333">					Transaction.safeRollback(con);</span>
+				}
+			}
+
+<span class="fc" id="L337">			return;</span>
+		}
+
+<span class="nc bnc" id="L340" title="All 2 branches missed.">		if (!groupExists) {</span>
+<span class="nc" id="L341">			throw new UnknownEntityException(&quot;Unknown group '&quot; + group.getName() + &quot;'&quot;);</span>
+		}
+
+<span class="nc bnc" id="L344" title="All 2 branches missed.">		if (!roleExists) {</span>
+<span class="nc" id="L345">			throw new UnknownEntityException(&quot;Unknown role '&quot; + role.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc" id="L347">	}</span>
+
+	/**
+	 * Allow B to assumes A's roles, groups and permissions
+	 * 
+	 * @param delegator A
+	 * @param delegatee B
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if delegator or delagatee is not present.
+	 */
+	@Override
+	public synchronized void addDelegate(User delegator, User delegatee)
+			throws DataBackendException, UnknownEntityException {
+<span class="fc" id="L361">		boolean delegatorExists = getUserManager().checkExists(delegator);</span>
+<span class="fc" id="L362">		boolean delegateeExists = getUserManager().checkExists(delegatee);</span>
+
+<span class="pc bpc" id="L364" title="2 of 4 branches missed.">		if (delegatorExists &amp;&amp; delegateeExists) {</span>
+<span class="fc" id="L365">			super.addDelegate(delegator, delegatee);</span>
+
+<span class="fc" id="L367">			Connection con = null;</span>
+
+			try {
+<span class="fc" id="L370">				con = Transaction.begin();</span>
+
+<span class="fc" id="L372">				((TorqueAbstractSecurityEntity) delegator).update(con);</span>
+<span class="fc" id="L373">				((TorqueAbstractSecurityEntity) delegatee).update(con);</span>
+
+<span class="fc" id="L375">				Transaction.commit(con);</span>
+<span class="fc" id="L376">				con = null;</span>
+<span class="nc" id="L377">			} catch (TorqueException e) {</span>
+<span class="nc" id="L378">				throw new DataBackendException(</span>
+<span class="nc" id="L379">						&quot;addDelegate('&quot; + delegator.getName() + &quot;', '&quot; + delegatee.getName() + &quot;') failed&quot;, e);</span>
+			} finally {
+<span class="pc bpc" id="L381" title="1 of 2 branches missed.">				if (con != null) {</span>
+<span class="nc" id="L382">					Transaction.safeRollback(con);</span>
+				}
+			}
+
+<span class="fc" id="L386">			return;</span>
+		}
+
+<span class="nc bnc" id="L389" title="All 2 branches missed.">		if (!delegatorExists) {</span>
+<span class="nc" id="L390">			throw new UnknownEntityException(&quot;Unknown user '&quot; + delegator.getName() + &quot;'&quot;);</span>
+		}
+
+<span class="nc bnc" id="L393" title="All 2 branches missed.">		if (!delegateeExists) {</span>
+<span class="nc" id="L394">			throw new UnknownEntityException(&quot;Unknown user '&quot; + delegatee.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc" id="L396">	}</span>
+
+	/**
+	 * Stop A having B's roles, groups and permissions
+	 * 
+	 * @param delegator  A
+	 * @param delegatee  B
+	 * 
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if delegator or delagatee is not present.
+	 */
+	@Override
+	public synchronized void removeDelegate(User delegator, User delegatee)
+			throws DataBackendException, UnknownEntityException {
+<span class="fc" id="L411">		boolean delegatorExists = getUserManager().checkExists(delegator);</span>
+<span class="fc" id="L412">		boolean delegateeExists = getUserManager().checkExists(delegatee);</span>
+
+<span class="pc bpc" id="L414" title="2 of 4 branches missed.">		if (delegatorExists &amp;&amp; delegateeExists) {</span>
+<span class="fc" id="L415">			super.removeDelegate(delegator, delegatee);</span>
+
+<span class="fc" id="L417">			Connection con = null;</span>
+
+			try {
+<span class="fc" id="L420">				con = Transaction.begin();</span>
+
+<span class="fc" id="L422">				((TorqueAbstractSecurityEntity) delegator).update(con);</span>
+<span class="fc" id="L423">				((TorqueAbstractSecurityEntity) delegatee).update(con);</span>
+
+<span class="fc" id="L425">				Transaction.commit(con);</span>
+<span class="fc" id="L426">				con = null;</span>
+<span class="nc" id="L427">			} catch (TorqueException e) {</span>
+<span class="nc" id="L428">				throw new DataBackendException(</span>
+<span class="nc" id="L429">						&quot;removeDelegate('&quot; + delegator.getName() + &quot;', '&quot; + delegatee.getName() + &quot;') failed&quot;, e);</span>
+			} finally {
+<span class="pc bpc" id="L431" title="1 of 2 branches missed.">				if (con != null) {</span>
+<span class="nc" id="L432">					Transaction.safeRollback(con);</span>
+				}
+			}
+
+<span class="fc" id="L436">			return;</span>
+		}
+
+<span class="nc bnc" id="L439" title="All 2 branches missed.">		if (!delegatorExists) {</span>
+<span class="nc" id="L440">			throw new UnknownEntityException(&quot;Unknown user '&quot; + delegator.getName() + &quot;'&quot;);</span>
+		}
+
+<span class="nc bnc" id="L443" title="All 2 branches missed.">		if (!delegateeExists) {</span>
+<span class="nc" id="L444">			throw new UnknownEntityException(&quot;Unknown user '&quot; + delegatee.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc" id="L446">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

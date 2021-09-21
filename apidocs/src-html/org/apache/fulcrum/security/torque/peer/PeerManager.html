@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html lang="de">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<main role="main">
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span><a id="line.1">package org.apache.fulcrum.security.torque.peer;</a>
+<span class="sourceLineNo">002</span><a id="line.2">/*</a>
+<span class="sourceLineNo">003</span><a id="line.3"> * Licensed to the Apache Software Foundation (ASF) under one</a>
+<span class="sourceLineNo">004</span><a id="line.4"> * or more contributor license agreements.  See the NOTICE file</a>
+<span class="sourceLineNo">005</span><a id="line.5"> * distributed with this work for additional information</a>
+<span class="sourceLineNo">006</span><a id="line.6"> * regarding copyright ownership.  The ASF licenses this file</a>
+<span class="sourceLineNo">007</span><a id="line.7"> * to you under the Apache License, Version 2.0 (the</a>
+<span class="sourceLineNo">008</span><a id="line.8"> * "License"); you may not use this file except in compliance</a>
+<span class="sourceLineNo">009</span><a id="line.9"> * with the License.  You may obtain a copy of the License at</a>
+<span class="sourceLineNo">010</span><a id="line.10"> *</a>
+<span class="sourceLineNo">011</span><a id="line.11"> *   http://www.apache.org/licenses/LICENSE-2.0</a>
+<span class="sourceLineNo">012</span><a id="line.12"> *</a>
+<span class="sourceLineNo">013</span><a id="line.13"> * Unless required by applicable law or agreed to in writing,</a>
+<span class="sourceLineNo">014</span><a id="line.14"> * software distributed under the License is distributed on an</a>
+<span class="sourceLineNo">015</span><a id="line.15"> * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</a>
+<span class="sourceLineNo">016</span><a id="line.16"> * KIND, either express or implied.  See the License for the</a>
+<span class="sourceLineNo">017</span><a id="line.17"> * specific language governing permissions and limitations</a>
+<span class="sourceLineNo">018</span><a id="line.18"> * under the License.</a>
+<span class="sourceLineNo">019</span><a id="line.19"> */</a>
+<span class="sourceLineNo">020</span><a id="line.20">import java.io.Serializable;</a>
+<span class="sourceLineNo">021</span><a id="line.21"></a>
+<span class="sourceLineNo">022</span><a id="line.22">import org.apache.fulcrum.security.spi.AbstractEntityManager;</a>
+<span class="sourceLineNo">023</span><a id="line.23">import org.apache.fulcrum.security.util.DataBackendException;</a>
+<span class="sourceLineNo">024</span><a id="line.24"></a>
+<span class="sourceLineNo">025</span><a id="line.25"></a>
+<span class="sourceLineNo">026</span><a id="line.26">/**</a>
+<span class="sourceLineNo">027</span><a id="line.27"> * Use this manager in role-list, if you want to swap default peer classes.</a>
+<span class="sourceLineNo">028</span><a id="line.28"> * It gets automatically registered in {@literal TorqueTurbine&lt;Type&gt;ManagerImpl classes. &lt;Types&gt; are: &lt;User&gt;, &lt;Group&gt;, &lt;Permission&gt;, &lt;Role&gt;}.</a>
+<span class="sourceLineNo">029</span><a id="line.29"> * You have to register your {@literal &lt;Type&gt;PeerImpl classes} by adding the {@link TorqueTurbinePeer} interface.</a>
+<span class="sourceLineNo">030</span><a id="line.30"> * </a>
+<span class="sourceLineNo">031</span><a id="line.31"> * If generating your ORM-classes from a Torque schema, you may have to delete or provide your own baseClasses in the schema.</a>
+<span class="sourceLineNo">032</span><a id="line.32"> * </a>
+<span class="sourceLineNo">033</span><a id="line.33"> * @see &lt;a href="http://db.apache.org/torque/torque-4.0/documentation/orm-reference/database-4-0.xsd" target=_blank&gt;Torque 4.0 Schema&lt;/a&gt;</a>
+<span class="sourceLineNo">034</span><a id="line.34"> * @see org.apache.fulcrum.security.torque.turbine TorqueTurbine&amp;lt;Type&amp;gt;ManagerImpl referencing manager classes.</a>
+<span class="sourceLineNo">035</span><a id="line.35"> *  </a>
+<span class="sourceLineNo">036</span><a id="line.36"> * @author &lt;a href="mailto:gk@apache.org"&gt;Georg Kallidis&lt;/a&gt;</a>
+<span class="sourceLineNo">037</span><a id="line.37"> * @version $Id$</a>
+<span class="sourceLineNo">038</span><a id="line.38"> */</a>
+<span class="sourceLineNo">039</span><a id="line.39">public interface PeerManager extends Serializable</a>
+<span class="sourceLineNo">040</span><a id="line.40">{</a>
+<span class="sourceLineNo">041</span><a id="line.41"></a>
+<span class="sourceLineNo">042</span><a id="line.42">    String ROLE = PeerManager.class.getName(); </a>
+<span class="sourceLineNo">043</span><a id="line.43"></a>
+<span class="sourceLineNo">044</span><a id="line.44">    /**</a>
+<span class="sourceLineNo">045</span><a id="line.45">     * Expects the class name of a Torque Peer class, which could be instantiated. </a>
+<span class="sourceLineNo">046</span><a id="line.46">     * {@link org.apache.fulcrum.security.spi.AbstractEntityManager#getClassName()}</a>
+<span class="sourceLineNo">047</span><a id="line.47">     *  </a>
+<span class="sourceLineNo">048</span><a id="line.48">     * @param peerClassName the peerClassName</a>
+<span class="sourceLineNo">049</span><a id="line.49">     * @return a cached peer class instance</a>
+<span class="sourceLineNo">050</span><a id="line.50">     * @throws DataBackendException data backend exception</a>
+<span class="sourceLineNo">051</span><a id="line.51">     */</a>
+<span class="sourceLineNo">052</span><a id="line.52">    public abstract &lt;P extends Peer&gt; P getPeerInstance(String peerClassName)</a>
+<span class="sourceLineNo">053</span><a id="line.53">        throws DataBackendException;</a>
+<span class="sourceLineNo">054</span><a id="line.54"></a>
+<span class="sourceLineNo">055</span><a id="line.55">    /**</a>
+<span class="sourceLineNo">056</span><a id="line.56">     * This method is provided to get more helpful exception messages.</a>
+<span class="sourceLineNo">057</span><a id="line.57">     * </a>
+<span class="sourceLineNo">058</span><a id="line.58">     * @param peerClassName the peerClassName</a>
+<span class="sourceLineNo">059</span><a id="line.59">     * @param class1 expected class the peers should implement </a>
+<span class="sourceLineNo">060</span><a id="line.60">     * @param className target class, i.e. the data object class type of the Peer object. The data object for which the peer is provided. </a>
+<span class="sourceLineNo">061</span><a id="line.61">     * @return peer instance</a>
+<span class="sourceLineNo">062</span><a id="line.62">     * @throws DataBackendException data backend exception</a>
+<span class="sourceLineNo">063</span><a id="line.63">     */</a>
+<span class="sourceLineNo">064</span><a id="line.64">    public abstract &lt;P extends Peer&gt; P getPeerInstance( String peerClassName, Class&lt;? extends Peer&gt; class1, String className ) throws DataBackendException;</a>
+<span class="sourceLineNo">065</span><a id="line.65"></a>
+<span class="sourceLineNo">066</span><a id="line.66"></a>
+<span class="sourceLineNo">067</span><a id="line.67">}</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FulcrumAbstractTurbinePermission.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.torque.turbine</a> &gt; <span class="el_source">FulcrumAbstractTurbinePermission.java</span></div><h1>FulcrumAbstractTurbinePermission.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.torque.turbine;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.sql.Connection;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.model.turbine.entity.TurbinePermission;
+import org.apache.fulcrum.security.torque.om.TorqueTurbinePermissionPeer;
+import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePermission;
+import org.apache.fulcrum.security.torque.om.TorqueTurbineRolePermissionPeer;
+import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.RoleSet;
+import org.apache.torque.TorqueException;
+import org.apache.torque.criteria.Criteria;
+import org.apache.torque.om.SimpleKey;
+/**
+ * This abstract class provides the SecurityInterface to the managers.
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id:$
+ */
+<span class="fc" id="L41">public abstract class FulcrumAbstractTurbinePermission extends TorqueAbstractSecurityEntity</span>
+    implements TurbinePermission
+{
+    /** Serial version */
+	private static final long serialVersionUID = -5313324873688923207L;
+
+	/** a cache of role objects */
+<span class="fc" id="L48">    private Set&lt;Role&gt; roleSet = null;</span>
+
+    /**
+     * Forward reference to generated code
+     *
+     * Get a list of association objects, pre-populated with their TorqueTurbineRole
+     * objects.
+     *
+     * @param criteria Criteria to define the selection of records
+     * @param con a database connection
+     * @throws TorqueException  if any database error occurs
+     *
+     * @return a list of Role/Permission relations
+     */
+    protected List&lt;TorqueTurbineRolePermission&gt; getTorqueTurbineRolePermissionsJoinTorqueTurbineRole(Criteria criteria, Connection con)
+        throws TorqueException
+    {
+<span class="nc" id="L65">        criteria.and(TorqueTurbineRolePermissionPeer.PERMISSION_ID, getEntityId() );</span>
+<span class="nc" id="L66">        return TorqueTurbineRolePermissionPeer.doSelectJoinTorqueTurbineRole(criteria, con);</span>
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.model.turbine.entity.TurbinePermission#addRole(org.apache.fulcrum.security.entity.Role)
+     */
+    public void addRole(Role role)
+    {
+<span class="fc" id="L74">        getRoles().add(role);</span>
+<span class="fc" id="L75">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.model.turbine.entity.TurbinePermission#getRoles()
+     */
+    public RoleSet getRoles()
+    {
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (roleSet == null)</span>
+        {
+<span class="fc" id="L84">            roleSet = new RoleSet();</span>
+        }
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        else if(!(roleSet instanceof RoleSet))</span>
+        {
+<span class="nc" id="L88">            roleSet = new RoleSet(roleSet);</span>
+        }
+
+<span class="fc" id="L91">        return (RoleSet)roleSet;</span>
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.model.turbine.entity.TurbinePermission#getRolesAsSet()
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Role&gt; Set&lt;T&gt; getRolesAsSet()
+    {
+<span class="nc" id="L100">        return (Set&lt;T&gt;)roleSet;</span>
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.model.turbine.entity.TurbinePermission#removeRole(org.apache.fulcrum.security.entity.Role)
+     */
+    public void removeRole(Role role)
+    {
+<span class="fc" id="L108">        getRoles().remove(role);</span>
+<span class="fc" id="L109">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.model.turbine.entity.TurbinePermission#setRoles(org.apache.fulcrum.security.util.RoleSet)
+     */
+    public void setRoles(RoleSet roleSet)
+    {
+<span class="nc bnc" id="L116" title="All 2 branches missed.">        if (roleSet != null)</span>
+        {
+<span class="nc" id="L118">            this.roleSet = roleSet;</span>
+        }
+        else
+        {
+<span class="nc" id="L122">            this.roleSet = new RoleSet();</span>
+        }
+<span class="nc" id="L124">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.model.turbine.entity.TurbinePermission#setRolesAsSet(java.util.Set)
+     */
+    public &lt;T extends Role&gt; void setRolesAsSet(Set&lt;T&gt; roles)
+    {
+<span class="nc" id="L131">        setRoles(new RoleSet(roles));</span>
+<span class="nc" id="L132">    }</span>
+
+    /**
+     * @return the database name
+     */
+    public String getDatabaseName()
+    {
+<span class="nc" id="L139">        return TorqueTurbinePermissionPeer.DATABASE_NAME;</span>
+    }
+    
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)
+     */
+    @Override
+    public void retrieveAttachedObjects( Connection con )
+        throws DataBackendException
+    {
+<span class="nc" id="L149">        retrieveAttachedObjects( con, false );</span>
+<span class="nc" id="L150">    }</span>
+
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection, java.lang.Boolean)
+     */
+    @Override
+    public void retrieveAttachedObjects( Connection con, Boolean lazy )
+        throws DataBackendException
+    {
+<span class="nc" id="L159">        this.roleSet = new RoleSet();</span>
+
+        try {
+<span class="nc" id="L162">            List&lt;TorqueTurbineRolePermission&gt; rolepermissions = getTorqueTurbineRolePermissionsJoinTorqueTurbineRole(new Criteria(), con);</span>
+    
+<span class="nc bnc" id="L164" title="All 2 branches missed.">            for (TorqueTurbineRolePermission ttrp : rolepermissions)</span>
+            {
+<span class="nc" id="L166">                roleSet.add(ttrp.getTorqueTurbineRole());</span>
+<span class="nc" id="L167">            }</span>
+<span class="nc" id="L168">        } catch (TorqueException e ) {</span>
+<span class="nc" id="L169">            throw new DataBackendException( e.getMessage(),e );</span>
+<span class="nc" id="L170">        }</span>
+<span class="nc" id="L171">    }</span>
+
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#update(java.sql.Connection)
+     */
+    public void update(Connection con) throws TorqueException
+    {
+<span class="pc bpc" id="L178" title="1 of 2 branches missed.">        if (roleSet != null)</span>
+        {
+<span class="fc" id="L180">            Criteria criteria = new Criteria();</span>
+
+            /* remove old entries */
+<span class="fc" id="L183">            criteria.where(TorqueTurbineRolePermissionPeer.PERMISSION_ID, getEntityId());</span>
+<span class="fc" id="L184">            TorqueTurbineRolePermissionPeer.doDelete(criteria, con);</span>
+
+<span class="fc bfc" id="L186" title="All 2 branches covered.">            for (Role r : roleSet)</span>
+            {
+<span class="fc" id="L188">                TorqueTurbineRolePermission rp = new TorqueTurbineRolePermission();</span>
+<span class="fc" id="L189">                rp.setRoleId((Integer)r.getId());</span>
+<span class="fc" id="L190">                rp.setPermissionId(getEntityId());</span>
+<span class="fc" id="L191">                rp.save(con);</span>
+<span class="fc" id="L192">            }</span>
+        }
+
+        try
+        {
+<span class="fc" id="L197">            save(con);</span>
+        }
+<span class="nc" id="L199">        catch (Exception e)</span>
+        {
+<span class="nc" id="L201">            throw new TorqueException(e);</span>
+<span class="fc" id="L202">        }</span>
+<span class="fc" id="L203">    }</span>
+
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#delete()
+     */
+    public void delete() throws TorqueException
+    {
+<span class="nc" id="L210">        TorqueTurbinePermissionPeer.doDelete(SimpleKey.keyFor(getEntityId()));</span>
+<span class="nc" id="L211">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

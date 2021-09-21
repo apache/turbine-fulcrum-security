@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BaseSecurityService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security API</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security</a> &gt; <span class="el_source">BaseSecurityService.java</span></div><h1>BaseSecurityService.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.framework.service.ServiceException;
+import org.apache.avalon.framework.service.ServiceManager;
+import org.apache.avalon.framework.service.Serviceable;
+import org.apache.avalon.framework.thread.ThreadSafe;
+
+/**
+ * This a basis implementation of the Fulcrum security service.
+ * 
+ * Provided functionality includes:
+ * &lt;ul&gt;
+ * &lt;li&gt;methods for retrieving different types of managers.
+ * &lt;li&gt;avalon lifecyle managers.
+ * &lt;/ul&gt;
+ * 
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric PUgh&lt;/a&gt;
+ * @version $Id$
+ */
+<span class="nc" id="L41">public class BaseSecurityService extends AbstractLogEnabled implements SecurityService, Initializable, Serviceable, ThreadSafe</span>
+{
+<span class="nc" id="L43">    private ServiceManager manager = null;</span>
+    // management of Groups/Role/Permissions
+
+    // temporary storage of the classnames prior to initialization
+    String userClassName;
+    String groupClassName;
+    String permissionClassName;
+    String roleClassName;
+    String aclClassName;
+    /** The instance of UserManager the SecurityService uses */
+<span class="nc" id="L53">    protected UserManager userManager = null;</span>
+    /** The instance of RoleManager the SecurityService uses */
+<span class="nc" id="L55">    protected RoleManager roleManager = null;</span>
+    /** The instance of GroupManager the SecurityService uses */
+<span class="nc" id="L57">    protected GroupManager groupManager = null;</span>
+    /** The instance of PermissionManager the SecurityService uses */
+<span class="nc" id="L59">    protected PermissionManager permissionManager = null;</span>
+    /** The instance of ModelManager the SecurityService uses */
+<span class="nc" id="L61">    protected ModelManager modelManager = null;</span>
+
+    /**
+     * Returns the configured UserManager.
+     * 
+     * @return An UserManager object
+     */
+    public UserManager getUserManager()
+    {
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        if (userManager == null)</span>
+        {
+            try
+            {
+<span class="nc" id="L74">                userManager = (UserManager) manager.lookup(UserManager.ROLE);</span>
+            }
+<span class="nc" id="L76">            catch (ServiceException ce)</span>
+            {
+<span class="nc" id="L78">                throw new RuntimeException(ce.getMessage(), ce);</span>
+<span class="nc" id="L79">            }</span>
+        }
+<span class="nc" id="L81">        return userManager;</span>
+    }
+
+    /**
+     * Returns the configured GroupManager.
+     * 
+     * @return An UserManager object
+     */
+    public GroupManager getGroupManager()
+    {
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        if (groupManager == null)</span>
+        {
+            try
+            {
+<span class="nc" id="L95">                groupManager = (GroupManager) manager.lookup(GroupManager.ROLE);</span>
+            }
+<span class="nc" id="L97">            catch (ServiceException ce)</span>
+            {
+<span class="nc" id="L99">                throw new RuntimeException(ce.getMessage(), ce);</span>
+<span class="nc" id="L100">            }</span>
+        }
+<span class="nc" id="L102">        return groupManager;</span>
+    }
+
+    /**
+     * Returns the configured RoleManager.
+     * 
+     * @return An RoleManager object
+     */
+    public RoleManager getRoleManager()
+    {
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        if (roleManager == null)</span>
+        {
+            try
+            {
+<span class="nc" id="L116">                roleManager = (RoleManager) manager.lookup(RoleManager.ROLE);</span>
+            }
+<span class="nc" id="L118">            catch (ServiceException ce)</span>
+            {
+<span class="nc" id="L120">                throw new RuntimeException(ce.getMessage(), ce);</span>
+<span class="nc" id="L121">            }</span>
+        }
+<span class="nc" id="L123">        return roleManager;</span>
+    }
+
+    /**
+     * Returns the configured PermissionManager.
+     * 
+     * @return An PermissionManager object
+     */
+    public PermissionManager getPermissionManager()
+    {
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        if (permissionManager == null)</span>
+        {
+            try
+            {
+<span class="nc" id="L137">                permissionManager = (PermissionManager) manager.lookup(PermissionManager.ROLE);</span>
+            }
+<span class="nc" id="L139">            catch (ServiceException ce)</span>
+            {
+<span class="nc" id="L141">                throw new RuntimeException(ce.getMessage(), ce);</span>
+<span class="nc" id="L142">            }</span>
+        }
+<span class="nc" id="L144">        return permissionManager;</span>
+    }
+
+    /**
+     * Returns the configured ModelManager.
+     * 
+     * @return An ModelManager object
+     */
+    public ModelManager getModelManager()
+    {
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        if (modelManager == null)</span>
+        {
+            try
+            {
+<span class="nc" id="L158">                modelManager = (ModelManager) manager.lookup(ModelManager.ROLE);</span>
+            }
+<span class="nc" id="L160">            catch (ServiceException ce)</span>
+            {
+<span class="nc" id="L162">                throw new RuntimeException(ce.getMessage(), ce);</span>
+<span class="nc" id="L163">            }</span>
+        }
+<span class="nc" id="L165">        return modelManager;</span>
+    }
+
+    /**
+     * Configure a new role Manager.
+     * 
+     * @param permissionManager
+     *            An PermissionManager object
+     */
+    // void setPermissionManager(PermissionManager permissionManager);
+
+    /**
+     * Avalon Service lifecycle method
+     */
+    public void service(ServiceManager manager) throws ServiceException
+    {
+<span class="nc" id="L181">        this.manager = manager;</span>
+<span class="nc" id="L182">    }</span>
+
+    /**
+     * Avalon Service lifecycle method Initializes the SecurityService, locating
+     * the appropriate UserManager
+     * 
+     * @throws Exception
+     *             A Problem occurred while initializing the User Manager.
+     */
+    public void initialize() throws Exception
+    {
+<span class="nc" id="L193">        userClassName = null;</span>
+<span class="nc" id="L194">        groupClassName = null;</span>
+<span class="nc" id="L195">        permissionClassName = null;</span>
+<span class="nc" id="L196">        roleClassName = null;</span>
+<span class="nc" id="L197">        aclClassName = null;</span>
+<span class="nc" id="L198">    }</span>
+
+    /**
+     * Avalon Service lifecycle method
+     */
+    public void dispose()
+    {
+<span class="nc" id="L205">        manager.release(userManager);</span>
+<span class="nc" id="L206">        manager.release(roleManager);</span>
+<span class="nc" id="L207">        manager.release(groupManager);</span>
+<span class="nc" id="L208">        manager.release(permissionManager);</span>
+<span class="nc" id="L209">        manager.release(modelManager);</span>
+<span class="nc" id="L210">        manager = null;</span>
+<span class="nc" id="L211">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

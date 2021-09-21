@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>BasicGroupImpl.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Fulcrum Security Memory Impl</a> &gt; <a href="../index.html" class="el_bundle">fulcrum-security-api</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.model.basic.entity.impl</a> &gt; <span class="el_source">BasicGroupImpl.java</span></div><h1>BasicGroupImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.model.basic.entity.impl;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.util.Set;
+
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.entity.impl.SecurityEntityImpl;
+import org.apache.fulcrum.security.model.basic.entity.BasicGroup;
+import org.apache.fulcrum.security.util.UserSet;
+
+/**
+ * Represents the &quot;basic&quot; model where users are part of groups, but nothing
+ * else.
+ * 
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id: BasicGroup.java 223057 2004-07-05 19:28:23Z epugh $
+ */
+<span class="fc" id="L36">public class BasicGroupImpl extends SecurityEntityImpl implements BasicGroup</span>
+{
+    /**
+	 * Serial version
+	 */
+	private static final long serialVersionUID = 8754093174457116551L;
+	
+	/** User set **/
+<span class="fc" id="L44">	private Set&lt;? extends User&gt; userSet = new UserSet&lt;&gt;();</span>
+
+    /**
+     * Get the users that are part of this group
+     * 
+     * @return a set of users
+     */
+    public UserSet&lt;?&gt; getUsers()
+    {
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (userSet instanceof UserSet)</span>
+        {
+<span class="fc" id="L55">            return (UserSet&lt;?&gt;) userSet;</span>
+        }
+        else
+        {
+<span class="nc" id="L59">            userSet = new UserSet&lt;&gt;(userSet);</span>
+<span class="nc" id="L60">            return (UserSet&lt;?&gt;) userSet;</span>
+        }
+    }
+
+    /**
+     * Set the users that are part of this group
+     * 
+     * @param userSet
+     *            a set of users
+     */
+    public void setUsers(UserSet userSet)
+    {
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        if (userSet != null)</span>
+        {
+<span class="nc" id="L74">            this.userSet = userSet;</span>
+        }
+        else
+        {
+<span class="nc" id="L78">            this.userSet = new UserSet&lt;&gt;();</span>
+        }
+<span class="nc" id="L80">    }</span>
+
+    /**
+     * Get the users that are part of this group as a Set
+     * 
+     * @return a set of users
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public &lt;T extends User&gt; Set&lt;T&gt; getUsersAsSet()
+    {
+<span class="fc" id="L90">        return (Set&lt;T&gt;) userSet;</span>
+    }
+
+    /**
+     * Set the users that are part of this group as a Set
+     * 
+     * @param users
+     *            a set of users
+     */
+    public &lt;T extends User&gt; void setUsersAsSet(Set&lt;T&gt; users)
+    {
+<span class="nc" id="L101">        this.userSet = users;</span>
+<span class="nc" id="L102">    }</span>
+
+    /**
+     * Add a user to this group
+     * 
+     * @param user
+     *            the user to add
+     */
+    public void addUser(User user)
+    {
+<span class="fc" id="L112">        getUsers().add(user);</span>
+<span class="fc" id="L113">    }</span>
+
+    /**
+     * Remove a user from this group
+     * 
+     * @param user
+     *            the user to remove
+     */
+    public void removeUser(User user)
+    {
+<span class="fc" id="L123">        getUsers().remove(user);</span>
+<span class="fc" id="L124">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

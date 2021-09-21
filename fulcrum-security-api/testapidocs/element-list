@@ -1,0 +1,8 @@
+org.apache.fulcrum.security.authenticator
+org.apache.fulcrum.security.entity.impl
+org.apache.fulcrum.security.model
+org.apache.fulcrum.security.model.basic.test
+org.apache.fulcrum.security.model.dynamic.test
+org.apache.fulcrum.security.model.test
+org.apache.fulcrum.security.model.turbine.test
+org.apache.fulcrum.security.util

@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HibernateModelManagerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Hibernate Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.hibernate.turbine</a> &gt; <span class="el_source">HibernateModelManagerImpl.java</span></div><h1>HibernateModelManagerImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.hibernate.turbine;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.Permission;
+import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.hibernate.PersistenceHelper;
+import org.apache.fulcrum.security.model.turbine.AbstractTurbineModelManager;
+import org.apache.fulcrum.security.model.turbine.TurbineModelManager;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineGroup;
+import org.apache.fulcrum.security.model.turbine.entity.TurbinePermission;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineRole;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+
+/**
+ * This implementation persists to a database via Hibernate.
+ * 
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id: HibernateModelManagerImpl.java 1374014 2012-08-16 19:47:27Z tv
+ *          $
+ */
+<span class="fc" id="L43">public class HibernateModelManagerImpl extends AbstractTurbineModelManager implements TurbineModelManager</span>
+{
+    private PersistenceHelper persistenceHelper;
+
+    /**
+     * Grants a Role a Permission
+     * 
+     * @param role
+     *            the Role.
+     * @param permission
+     *            the Permission.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if role or permission is not present.
+     */
+    public synchronized void grant(Role role, Permission permission) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L61">        boolean roleExists = false;</span>
+<span class="fc" id="L62">        boolean permissionExists = false;</span>
+        try
+        {
+<span class="fc" id="L65">            roleExists = getRoleManager().checkExists(role);</span>
+<span class="fc" id="L66">            permissionExists = getPermissionManager().checkExists(permission);</span>
+
+<span class="pc bpc" id="L68" title="2 of 4 branches missed.">            if (roleExists &amp;&amp; permissionExists)</span>
+            {
+<span class="fc" id="L70">                ((TurbineRole) role).addPermission(permission);</span>
+<span class="fc" id="L71">                ((TurbinePermission) permission).addRole(role);</span>
+<span class="fc" id="L72">                getPersistenceHelper().updateEntity(permission);</span>
+<span class="fc" id="L73">                getPersistenceHelper().updateEntity(role);</span>
+<span class="fc" id="L74">                return;</span>
+            }
+        }
+<span class="nc" id="L77">        catch (Exception e)</span>
+        {
+<span class="nc" id="L79">            throw new DataBackendException(&quot;grant(Role,Permission) failed&quot;, e);</span>
+<span class="nc" id="L80">        }</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        if (!roleExists)</span>
+        {
+<span class="nc" id="L83">            throw new UnknownEntityException(&quot;Unknown role '&quot; + role.getName() + &quot;'&quot;);</span>
+        }
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (!permissionExists)</span>
+        {
+<span class="nc" id="L87">            throw new UnknownEntityException(&quot;Unknown permission '&quot; + permission.getName() + &quot;'&quot;);</span>
+        }
+<span class="nc" id="L89">    }</span>
+
+    /**
+     * Revokes a Permission from a Role.
+     * 
+     * @param role
+     *            the Role.
+     * @param permission
+     *            the Permission.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if role or permission is not present.
+     */
+    public synchronized void revoke(Role role, Permission permission) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L105">        boolean roleExists = false;</span>
+<span class="fc" id="L106">        boolean permissionExists = false;</span>
+        try
+        {
+<span class="fc" id="L109">            roleExists = getRoleManager().checkExists(role);</span>
+<span class="fc" id="L110">            permissionExists = getPermissionManager().checkExists(permission);</span>
+<span class="pc bpc" id="L111" title="2 of 4 branches missed.">            if (roleExists &amp;&amp; permissionExists)</span>
+            {
+<span class="fc" id="L113">                ((TurbineRole) role).removePermission(permission);</span>
+<span class="fc" id="L114">                ((TurbinePermission) permission).removeRole(role);</span>
+<span class="fc" id="L115">                getPersistenceHelper().updateEntity(role);</span>
+<span class="fc" id="L116">                getPersistenceHelper().updateEntity(permission);</span>
+            }
+        }
+<span class="nc" id="L119">        catch (DataBackendException e)</span>
+        {
+<span class="nc" id="L121">            throw new DataBackendException(&quot;revoke(Role,Permission) failed&quot;, e);</span>
+<span class="fc" id="L122">        }</span>
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">        if (!roleExists)</span>
+        {
+<span class="nc" id="L125">            throw new UnknownEntityException(&quot;Unknown role '&quot; + role.getName() + &quot;'&quot;);</span>
+        }
+<span class="pc bpc" id="L127" title="1 of 2 branches missed.">        if (!permissionExists)</span>
+        {
+<span class="nc" id="L129">            throw new UnknownEntityException(&quot;Unknown permission '&quot; + permission.getName() + &quot;'&quot;);</span>
+        }
+<span class="fc" id="L131">    }</span>
+
+    /**
+     * @return Returns the persistenceHelper.
+     */
+    public PersistenceHelper getPersistenceHelper()
+    {
+<span class="fc bfc" id="L138" title="All 2 branches covered.">        if (persistenceHelper == null)</span>
+        {
+<span class="fc" id="L140">            persistenceHelper = (PersistenceHelper) resolve(PersistenceHelper.ROLE);</span>
+        }
+<span class="fc" id="L142">        return persistenceHelper;</span>
+    }
+
+    /**
+     * Grant an User a Role in a Group.
+     * 
+     * @param user
+     *            the user.
+     * @param group
+     *            the group.
+     * @param role
+     *            the role.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if user account, group or role is not present.
+     */
+    public void grant(User user, Group group, Role role) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L161">        boolean roleExists = false;</span>
+<span class="fc" id="L162">        boolean userExists = false;</span>
+<span class="fc" id="L163">        boolean groupExists = false;</span>
+        try
+        {
+<span class="fc" id="L166">            roleExists = getRoleManager().checkExists(role);</span>
+<span class="fc" id="L167">            userExists = getUserManager().checkExists(user);</span>
+<span class="fc" id="L168">            groupExists = getGroupManager().checkExists(group);</span>
+<span class="pc bpc" id="L169" title="3 of 6 branches missed.">            if (roleExists &amp;&amp; groupExists &amp;&amp; userExists)</span>
+            {
+<span class="fc" id="L171">                TurbineUserGroupRole ugr = new TurbineUserGroupRole();</span>
+<span class="fc" id="L172">                ugr.setGroup(group);</span>
+<span class="fc" id="L173">                ugr.setRole(role);</span>
+<span class="fc" id="L174">                ugr.setUser(user);</span>
+<span class="fc" id="L175">                ((TurbineUser) user).addUserGroupRole(ugr);</span>
+<span class="fc" id="L176">                ((TurbineGroup) group).addUserGroupRole(ugr);</span>
+<span class="fc" id="L177">                ((TurbineRole) role).addUserGroupRole(ugr);</span>
+<span class="fc" id="L178">                getPersistenceHelper().updateEntity(user);</span>
+<span class="fc" id="L179">                getPersistenceHelper().updateEntity(group);</span>
+<span class="fc" id="L180">                getPersistenceHelper().updateEntity(role);</span>
+            }
+        }
+<span class="nc" id="L183">        catch (DataBackendException e)</span>
+        {
+<span class="nc" id="L185">            throw new DataBackendException(&quot;grant(User,Group,Role) failed&quot;, e);</span>
+<span class="fc" id="L186">        }</span>
+<span class="pc bpc" id="L187" title="1 of 2 branches missed.">        if (!roleExists)</span>
+        {
+<span class="nc" id="L189">            throw new UnknownEntityException(&quot;Unknown role '&quot; + role.getName() + &quot;'&quot;);</span>
+        }
+<span class="pc bpc" id="L191" title="1 of 2 branches missed.">        if (!groupExists)</span>
+        {
+<span class="nc" id="L193">            throw new UnknownEntityException(&quot;Unknown group '&quot; + group.getName() + &quot;'&quot;);</span>
+        }
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">        if (!userExists)</span>
+        {
+<span class="nc" id="L197">            throw new UnknownEntityException(&quot;Unknown user '&quot; + user.getName() + &quot;'&quot;);</span>
+        }
+<span class="fc" id="L199">    }</span>
+
+    /**
+     * Revoke a Role in a Group from an User.
+     * 
+     * @param user
+     *            the user.
+     * @param group
+     *            the group.
+     * @param role
+     *            the role.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if user account, group or role is not present.
+     */
+    public void revoke(User user, Group group, Role role) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L217">        boolean roleExists = false;</span>
+<span class="fc" id="L218">        boolean userExists = false;</span>
+<span class="fc" id="L219">        boolean groupExists = false;</span>
+        try
+        {
+<span class="fc" id="L222">            roleExists = getRoleManager().checkExists(role);</span>
+<span class="fc" id="L223">            userExists = getUserManager().checkExists(user);</span>
+<span class="fc" id="L224">            groupExists = getGroupManager().checkExists(group);</span>
+<span class="pc bpc" id="L225" title="3 of 6 branches missed.">            if (roleExists &amp;&amp; groupExists &amp;&amp; userExists)</span>
+            {
+<span class="fc" id="L227">                boolean ugrFound = false;</span>
+<span class="pc bpc" id="L228" title="1 of 2 branches missed.">                for (TurbineUserGroupRole ugr : ((TurbineUser) user).getUserGroupRoleSet())</span>
+                {
+<span class="pc bpc" id="L230" title="3 of 6 branches missed.">                    if (ugr.getUser().equals(user) &amp;&amp; ugr.getGroup().equals(group) &amp;&amp; ugr.getRole().equals(role))</span>
+                    {
+<span class="fc" id="L232">                        ugrFound = true;</span>
+
+<span class="fc" id="L234">                        ((TurbineUser) user).removeUserGroupRole(ugr);</span>
+<span class="fc" id="L235">                        ((TurbineGroup) group).removeUserGroupRole(ugr);</span>
+<span class="fc" id="L236">                        ((TurbineRole) role).removeUserGroupRole(ugr);</span>
+
+<span class="fc" id="L238">                        getPersistenceHelper().updateEntity(user);</span>
+<span class="fc" id="L239">                        getPersistenceHelper().updateEntity(group);</span>
+<span class="fc" id="L240">                        getPersistenceHelper().updateEntity(role);</span>
+
+<span class="fc" id="L242">                        break;</span>
+                    }
+<span class="nc" id="L244">                }</span>
+<span class="pc bpc" id="L245" title="1 of 2 branches missed.">                if (!ugrFound)</span>
+                {
+<span class="nc" id="L247">                    throw new UnknownEntityException(&quot;Could not find User/Group/Role&quot;);</span>
+                }
+
+<span class="fc" id="L250">                return;</span>
+            }
+        }
+<span class="nc" id="L253">        catch (DataBackendException e)</span>
+        {
+<span class="nc" id="L255">            throw new DataBackendException(&quot;revoke(User,Group,Role) failed&quot;, e);</span>
+<span class="nc" id="L256">        }</span>
+<span class="nc bnc" id="L257" title="All 2 branches missed.">        if (!roleExists)</span>
+        {
+<span class="nc" id="L259">            throw new UnknownEntityException(&quot;Unknown role '&quot; + role.getName() + &quot;'&quot;);</span>
+        }
+<span class="nc bnc" id="L261" title="All 2 branches missed.">        if (!groupExists)</span>
+        {
+<span class="nc" id="L263">            throw new UnknownEntityException(&quot;Unknown group '&quot; + group.getName() + &quot;'&quot;);</span>
+        }
+<span class="nc bnc" id="L265" title="All 2 branches missed.">        if (!userExists)</span>
+        {
+<span class="nc" id="L267">            throw new UnknownEntityException(&quot;Unknown user '&quot; + user.getName() + &quot;'&quot;);</span>
+        }
+<span class="nc" id="L269">    }</span>
+
+    @Override
+    public void replace( User user, Role oldRole, Role newRole )
+        throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L275">        Group group = getGlobalGroup();</span>
+<span class="fc" id="L276">        revoke( user, group, oldRole );</span>
+<span class="fc" id="L277">        grant( user, group, newRole );</span>
+<span class="fc" id="L278">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

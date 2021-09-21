@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TorqueTurbinePermissionManagerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.torque.turbine</a> &gt; <span class="el_source">TorqueTurbinePermissionManagerImpl.java</span></div><h1>TorqueTurbinePermissionManagerImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.torque.turbine;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.sql.Connection;
+import java.util.List;
+
+import org.apache.fulcrum.security.entity.Permission;
+import org.apache.fulcrum.security.torque.om.TorqueTurbinePermissionPeer;
+import org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer;
+import org.apache.fulcrum.security.torque.peer.managers.PeerPermissionManager;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.torque.NoRowsException;
+import org.apache.torque.TooManyRowsException;
+import org.apache.torque.TorqueException;
+import org.apache.torque.criteria.Criteria;
+/**
+ * This implementation persists to a database via Torque.
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id:$
+ */
+<span class="fc" id="L38">public class TorqueTurbinePermissionManagerImpl extends PeerPermissionManager </span>
+{
+    
+    
+	/** Serial version */
+	private static final long serialVersionUID = 1L;
+
+	/**
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager#doSelectAllPermissions(java.sql.Connection)
+     */
+    @Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	protected &lt;T extends Permission&gt; List&lt;T&gt; doSelectAllPermissions(Connection con) throws TorqueException
+    {
+<span class="nc" id="L52">        Criteria criteria = new Criteria();</span>
+        
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        if ( (getCustomPeer())) {</span>
+            try
+            {
+<span class="nc" id="L57">            	TorqueTurbinePeer&lt;T&gt; peerInstance = (TorqueTurbinePeer&lt;T&gt;)getPeerInstance();</span>
+<span class="nc" id="L58">                return peerInstance.doSelect( criteria, con );</span>
+            }
+<span class="nc" id="L60">            catch ( DataBackendException e )</span>
+            {
+<span class="nc" id="L62">                throw new TorqueException( e );</span>
+            }
+        } else {
+<span class="nc" id="L65">            return (List&lt;T&gt;)TorqueTurbinePermissionPeer.doSelect(criteria, con);</span>
+        }
+
+       
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager#doSelectById(java.lang.Integer, java.sql.Connection)
+     */
+    @Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	protected &lt;T extends Permission&gt; T doSelectById(Integer id, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        if ( (getCustomPeer())) {</span>
+            try
+            {
+<span class="nc" id="L81">            	TorqueTurbinePeer&lt;T&gt; peerInstance = (TorqueTurbinePeer&lt;T&gt;)getPeerInstance();</span>
+<span class="nc" id="L82">                return peerInstance.retrieveByPK(id, con);</span>
+            }
+<span class="nc" id="L84">            catch ( DataBackendException e )</span>
+            {
+<span class="nc" id="L86">                throw new TorqueException( e );</span>
+            }
+        } else {
+<span class="nc" id="L89">            return (T) TorqueTurbinePermissionPeer.retrieveByPK(id, con);</span>
+        } 
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager#doSelectByName(java.lang.String, java.sql.Connection)
+     */
+    @Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	protected &lt;T extends Permission&gt; T doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    {
+<span class="fc" id="L100">        Criteria criteria = new Criteria();</span>
+       
+<span class="fc" id="L102">        criteria.setIgnoreCase(true);</span>
+<span class="fc" id="L103">        criteria.setSingleRecord(true);</span>
+        
+<span class="fc" id="L105">        List&lt;T&gt; permissions = null;</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        if ( (getCustomPeer())) {</span>
+            try
+            {
+<span class="fc" id="L109">            	TorqueTurbinePeer&lt;T&gt; peerInstance = (TorqueTurbinePeer&lt;T&gt;)getPeerInstance();</span>
+<span class="fc" id="L110">            	criteria.where(peerInstance.getTableMap().getColumn(getColumnName()), name);</span>
+<span class="fc" id="L111">            	permissions = peerInstance.doSelect( criteria, con );</span>
+                
+            }
+<span class="nc" id="L114">            catch ( DataBackendException e )</span>
+            {
+<span class="nc" id="L116">                throw new TorqueException( e );</span>
+<span class="fc" id="L117">            }</span>
+        } else {
+<span class="fc" id="L119">        	 criteria.where(TorqueTurbinePermissionPeer.PERMISSION_NAME, name);</span>
+<span class="fc" id="L120">            permissions = (List&lt;T&gt;) TorqueTurbinePermissionPeer.doSelect(criteria, con);</span>
+        } 
+
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        if (permissions.isEmpty())</span>
+        {
+<span class="fc" id="L125">            throw new NoRowsException(name);</span>
+        }
+
+<span class="fc" id="L128">        return permissions.get(0);</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

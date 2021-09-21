@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TorqueDynamicRoleManagerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.torque.dynamic</a> &gt; <span class="el_source">TorqueDynamicRoleManagerImpl.java</span></div><h1>TorqueDynamicRoleManagerImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.torque.dynamic;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.sql.Connection;
+import java.util.List;
+
+import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.torque.TorqueAbstractRoleManager;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicRole;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePeer;
+import org.apache.torque.NoRowsException;
+import org.apache.torque.TooManyRowsException;
+import org.apache.torque.TorqueException;
+import org.apache.torque.criteria.Criteria;
+/**
+ * This implementation persists to a database via Torque.
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id:$
+ */
+<span class="fc" id="L37">public class TorqueDynamicRoleManagerImpl extends TorqueAbstractRoleManager</span>
+{
+    /**
+	 * Serial
+	 */
+	private static final long serialVersionUID = 907083674412091946L;
+
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractRoleManager#doSelectAllRoles(java.sql.Connection)
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+	protected &lt;T extends Role&gt; List&lt;T&gt; doSelectAllRoles(Connection con) throws TorqueException
+    {
+<span class="fc" id="L50">        Criteria criteria = new Criteria(TorqueDynamicRolePeer.DATABASE_NAME);</span>
+
+<span class="fc" id="L52">        return (List&lt;T&gt;)TorqueDynamicRolePeer.doSelect(criteria, con);</span>
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractRoleManager#doSelectById(java.lang.Integer, java.sql.Connection)
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+	protected &lt;T extends Role&gt; T doSelectById(Integer id, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    {
+<span class="fc" id="L61">        return (T) TorqueDynamicRolePeer.retrieveByPK(id, con);</span>
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractRoleManager#doSelectByName(java.lang.String, java.sql.Connection)
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+	protected &lt;T extends Role&gt; T doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    {
+<span class="fc" id="L70">        Criteria criteria = new Criteria(TorqueDynamicRolePeer.DATABASE_NAME);</span>
+<span class="fc" id="L71">        criteria.where(TorqueDynamicRolePeer.ROLE_NAME, name);</span>
+<span class="fc" id="L72">        criteria.setIgnoreCase(true);</span>
+<span class="fc" id="L73">        criteria.setSingleRecord(true);</span>
+
+<span class="fc" id="L75">        List&lt;TorqueDynamicRole&gt; roles = TorqueDynamicRolePeer.doSelect(criteria, con);</span>
+
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (roles.isEmpty())</span>
+        {
+<span class="fc" id="L79">            throw new NoRowsException(name);</span>
+        }
+
+<span class="fc" id="L82">        return (T) roles.get(0);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

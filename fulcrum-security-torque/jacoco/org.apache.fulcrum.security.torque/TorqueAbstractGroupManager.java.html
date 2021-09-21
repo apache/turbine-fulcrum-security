@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TorqueAbstractGroupManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.torque</a> &gt; <span class="el_source">TorqueAbstractGroupManager.java</span></div><h1>TorqueAbstractGroupManager.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.torque;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.sql.Connection;
+import java.util.List;
+
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.spi.AbstractGroupManager;
+import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityExistsException;
+import org.apache.fulcrum.security.util.GroupSet;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.apache.torque.NoRowsException;
+import org.apache.torque.TooManyRowsException;
+import org.apache.torque.TorqueException;
+import org.apache.torque.util.Transaction;
+
+/**
+ * This implementation persists to a database via Torque.
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id:$
+ */
+<span class="fc" id="L43">public abstract class TorqueAbstractGroupManager extends AbstractGroupManager implements LazyLoadable </span>
+{
+    
+	/** Serial version */
+	private static final long serialVersionUID = -3735730556110100621L;
+	
+    private static final String LAZY_LOADING = &quot;lazy&quot;;
+<span class="fc" id="L50">    protected Boolean lazyLoading = false;</span>
+	
+    /**
+     * Avalon Service lifecycle method
+     */
+    @Override
+    public void configure(Configuration conf) throws ConfigurationException
+    {
+<span class="fc" id="L58">       super.configure( conf );</span>
+<span class="fc" id="L59">       lazyLoading = conf.getAttributeAsBoolean( LAZY_LOADING, false);</span>
+<span class="fc" id="L60">       getLogger().debug(&quot;setting lazyLoading: &quot; + lazyLoading);</span>
+<span class="fc" id="L61">    }</span>
+    
+    /**
+     * Get all specialized Groups
+     *
+     * @param con a database connection
+     *
+     * @return a List of Group instances
+     *
+     * @throws TorqueException  if any database error occurs
+     */
+    protected abstract &lt;T extends Group&gt; List&lt;T&gt; doSelectAllGroups(Connection con)
+        throws TorqueException;
+
+    /**
+     * Get a specialized Group by name
+     *
+     * @param name the name of the group
+     * @param con a database connection
+     *
+     * @return a Group instance
+     *
+     * @throws NoRowsException if no such group exists
+     * @throws TooManyRowsException if multiple groups with the given name exist
+     * @throws TorqueException  if any database error occurs if any other database error occurs
+     */
+    protected abstract &lt;T extends Group&gt; T doSelectByName(String name, Connection con)
+        throws NoRowsException, TooManyRowsException, TorqueException;
+
+    /**
+     * Get a specialized Group by id
+     *
+     * @param id the id of the group
+     * @param con a database connection
+     *
+     * @return a Group instance
+     *
+     * @throws NoRowsException if no such group exists
+     * @throws TooManyRowsException if multiple groups with the given id exist
+     * @throws TorqueException  if any database error occurs if any other database error occurs
+     */
+    protected abstract &lt;T extends Group&gt; T doSelectById(Integer id, Connection con)
+        throws NoRowsException, TooManyRowsException, TorqueException;
+
+    /**
+    * Creates a new group with specified attributes.
+    *
+    * @param group the object describing the group to be created.
+    * @return a new Group object that has id set up properly.
+    * @throws DataBackendException if there was an error accessing the data
+    *         backend.
+    */
+    @Override
+	protected synchronized &lt;T extends Group&gt; T persistNewGroup(T group) throws DataBackendException
+    {
+        try
+        {
+        	
+<span class="fc" id="L119">            ((TorqueAbstractSecurityEntity)group).save();</span>
+        }
+<span class="nc" id="L121">        catch (Exception e)</span>
+        {
+<span class="nc" id="L123">            throw new DataBackendException(&quot;Adding Group '&quot; + group.getName() + &quot;' failed&quot;, e);</span>
+<span class="fc" id="L124">        }</span>
+
+<span class="fc" id="L126">        return group;</span>
+    }
+
+    /**
+    * Renames an existing Group.
+    *
+    * @param group The object describing the group to be renamed.
+    * @param name the new name for the group.
+    * @throws DataBackendException if there was an error accessing the data
+    *         backend.
+    * @throws UnknownEntityException if the group does not exist.
+    */
+    @Override
+	public synchronized void renameGroup(Group group, String name) throws DataBackendException, UnknownEntityException
+    {
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">        if (checkExists(group))</span>
+        {
+<span class="fc" id="L143">            group.setName(name);</span>
+
+            try
+            {
+<span class="fc" id="L147">                TorqueAbstractSecurityEntity g = (TorqueAbstractSecurityEntity)group;</span>
+<span class="fc" id="L148">                g.setNew(false);</span>
+<span class="fc" id="L149">                g.save();</span>
+            }
+<span class="nc" id="L151">            catch (Exception e)</span>
+            {
+<span class="nc" id="L153">                throw new DataBackendException(&quot;Renaming Group '&quot; + group.getName() + &quot;' failed&quot;, e);</span>
+<span class="fc" id="L154">            }</span>
+        }
+        else
+        {
+<span class="nc" id="L158">            throw new UnknownEntityException(&quot;Unknown group '&quot; + group.getName() + &quot;'&quot;);</span>
+        }
+<span class="fc" id="L160">    }</span>
+
+    /**
+    * Removes a Group from the system.
+    *
+    * @param group The object describing the group to be removed.
+    * @throws DataBackendException if there was an error accessing the data
+    *         backend.
+    * @throws UnknownEntityException if the group does not exist.
+    */
+    @Override
+	public synchronized void removeGroup(Group group) throws DataBackendException, UnknownEntityException
+    {
+        try
+        {
+<span class="fc" id="L175">            ((TorqueAbstractSecurityEntity)group).delete();</span>
+        }
+<span class="nc" id="L177">        catch (TorqueException e)</span>
+        {
+<span class="nc" id="L179">            throw new DataBackendException(&quot;Removing Group '&quot; + group.getName() + &quot;' failed&quot;, e);</span>
+<span class="fc" id="L180">        }</span>
+<span class="fc" id="L181">    }</span>
+
+    /**
+     * Retrieve a Group object with specified name.
+     *
+     * @param name the name of the Group.
+     * @return an object representing the Group with specified name.
+     * @throws DataBackendException if there was an error accessing the
+     *         data backend.
+     * @throws UnknownEntityException if the group does not exist.
+     */
+    @Override
+	public &lt;T extends Group&gt; T getGroupByName(String name) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L195">        T group = null;</span>
+<span class="fc" id="L196">        Connection con = null;</span>
+
+        try
+        {
+<span class="fc" id="L200">            con = Transaction.begin();</span>
+
+<span class="fc" id="L202">            group = doSelectByName(name, con);</span>
+
+            // Add dependent objects if they exist
+<span class="fc" id="L205">            ((TorqueAbstractSecurityEntity)group).retrieveAttachedObjects(con, getLazyLoading());</span>
+
+<span class="fc" id="L207">            Transaction.commit(con);</span>
+<span class="fc" id="L208">            con = null;</span>
+        }
+<span class="fc" id="L210">        catch (NoRowsException e)</span>
+        {
+<span class="fc" id="L212">            throw new UnknownEntityException(&quot;Could not find group &quot; + name);</span>
+        }
+<span class="nc" id="L214">        catch (TooManyRowsException e)</span>
+        {
+<span class="nc" id="L216">            throw new DataBackendException(&quot;Multiple Groups with same name '&quot; + name + &quot;'&quot;);</span>
+        }
+<span class="nc" id="L218">        catch (TorqueException e)</span>
+        {
+<span class="nc" id="L220">            throw new DataBackendException(&quot;Error retrieving group information&quot;, e);</span>
+        }
+        finally
+        {
+<span class="fc bfc" id="L224" title="All 2 branches covered.">            if (con != null)</span>
+            {
+<span class="fc" id="L226">                Transaction.safeRollback(con);</span>
+            }
+        }
+
+<span class="fc" id="L230">        return group;</span>
+    }
+
+    /**
+     * Retrieves all groups defined in the system.
+     *
+     * @return the names of all groups defined in the system.
+     * @throws DataBackendException if there was an error accessing the
+     *         data backend.
+     */
+    @Override
+	public GroupSet getAllGroups() throws DataBackendException
+    {
+<span class="fc" id="L243">        GroupSet groupSet = new GroupSet();</span>
+<span class="fc" id="L244">        Connection con = null;</span>
+
+        try
+        {
+        
+<span class="fc" id="L249">            con = Transaction.begin();</span>
+
+<span class="fc" id="L251">            List&lt;Group&gt; groups = doSelectAllGroups(con);</span>
+
+<span class="fc bfc" id="L253" title="All 2 branches covered.">            for (Group group : groups)</span>
+            {
+                // Add dependent objects if they exist
+<span class="fc" id="L256">                ((TorqueAbstractSecurityEntity)group).retrieveAttachedObjects(con, getLazyLoading());</span>
+
+<span class="fc" id="L258">                groupSet.add(group);</span>
+<span class="fc" id="L259">            }</span>
+
+<span class="fc" id="L261">            Transaction.commit(con);</span>
+<span class="fc" id="L262">            con = null;</span>
+        }
+<span class="nc" id="L264">        catch (TorqueException e)</span>
+        {
+<span class="nc" id="L266">            throw new DataBackendException(&quot;Error retrieving group information&quot;, e);</span>
+        }
+        finally
+        {
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">            if (con != null)</span>
+            {
+<span class="nc" id="L272">                Transaction.safeRollback(con);</span>
+            }
+        }
+
+<span class="fc" id="L276">        return groupSet;</span>
+    }
+
+    /**
+     * Determines if the &lt;code&gt;Group&lt;/code&gt; exists in the security system.
+     *
+     * @param groupName a &lt;code&gt;Group&lt;/code&gt; value
+     * @return true if the group name exists in the system, false otherwise
+     * @throws DataBackendException when more than one Group with
+     *         the same name exists.
+     */
+    @Override
+	public boolean checkExists(String groupName) throws DataBackendException
+    {
+<span class="fc" id="L290">        boolean exists = false;</span>
+
+<span class="fc" id="L292">        Connection con = null;</span>
+
+        try
+        {
+<span class="fc" id="L296">            con = Transaction.begin();</span>
+
+<span class="fc" id="L298">            doSelectByName(groupName, con);</span>
+
+<span class="fc" id="L300">            Transaction.commit(con);</span>
+<span class="fc" id="L301">            con = null;</span>
+
+<span class="fc" id="L303">            exists = true;</span>
+        }
+<span class="fc" id="L305">        catch (NoRowsException e)</span>
+        {
+<span class="fc" id="L307">            exists = false;</span>
+        }
+<span class="nc" id="L309">        catch (TooManyRowsException e)</span>
+        {
+<span class="nc" id="L311">            throw new DataBackendException(</span>
+                    &quot;Multiple groups with same name '&quot; + groupName + &quot;'&quot;);
+        }
+<span class="nc" id="L314">        catch (TorqueException e)</span>
+        {
+<span class="nc" id="L316">            throw new DataBackendException(&quot;Error retrieving group information&quot;, e);</span>
+        }
+        finally
+        {
+<span class="fc bfc" id="L320" title="All 2 branches covered.">            if (con != null)</span>
+            {
+<span class="fc" id="L322">                Transaction.safeRollback(con);</span>
+            }
+        }
+
+<span class="fc" id="L326">        return exists;</span>
+    }
+
+    /**
+     * Retrieve a Group object with specified id.
+     *
+     * @param id
+     *            the id of the Group.
+     * @return an object representing the Group with specified id.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the group does not exist.
+     */
+    @Override
+	public &lt;T extends Group&gt; T getGroupById(Object id) throws DataBackendException, UnknownEntityException
+    {
+        T group;
+
+<span class="pc bpc" id="L345" title="2 of 4 branches missed.">        if (id != null &amp;&amp; id instanceof Integer)</span>
+        {
+<span class="fc" id="L347">            Connection con = null;</span>
+
+            try
+            {
+<span class="fc" id="L351">                con = Transaction.begin();</span>
+
+<span class="fc" id="L353">                group = doSelectById((Integer)id, con);</span>
+
+                // Add dependent objects if they exist
+<span class="fc" id="L356">                ((TorqueAbstractSecurityEntity)group).retrieveAttachedObjects(con, getLazyLoading());</span>
+
+<span class="fc" id="L358">                Transaction.commit(con);</span>
+<span class="fc" id="L359">                con = null;</span>
+            }
+<span class="fc" id="L361">            catch (NoRowsException e)</span>
+            {
+<span class="fc" id="L363">                throw new UnknownEntityException(&quot;Group with id '&quot; + id + &quot;' does not exist.&quot;, e);</span>
+            }
+<span class="nc" id="L365">            catch (TorqueException e)</span>
+            {
+<span class="nc" id="L367">                throw new DataBackendException(&quot;Error retrieving group information&quot;, e);</span>
+            }
+            finally
+            {
+<span class="fc bfc" id="L371" title="All 2 branches covered.">                if (con != null)</span>
+                {
+<span class="fc" id="L373">                    Transaction.safeRollback(con);</span>
+                }
+            }
+<span class="fc" id="L376">        }</span>
+        else
+        {
+<span class="nc" id="L379">            throw new UnknownEntityException(&quot;Invalid group id '&quot; + id + &quot;'&quot;);</span>
+        }
+
+<span class="fc" id="L382">        return group;</span>
+    }
+
+    public Boolean getLazyLoading()
+    {
+<span class="fc" id="L387">        return lazyLoading;</span>
+    }
+
+    public void setLazyLoading( Boolean lazyLoading )
+    {
+<span class="nc" id="L392">        this.lazyLoading = lazyLoading;</span>
+<span class="nc" id="L393">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

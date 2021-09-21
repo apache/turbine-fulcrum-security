@@ -1,0 +1,5 @@
+org.apache.fulcrum.security
+org.apache.fulcrum.security.acl
+org.apache.fulcrum.security.memory.basic
+org.apache.fulcrum.security.memory.dynamic
+org.apache.fulcrum.security.memory.turbine

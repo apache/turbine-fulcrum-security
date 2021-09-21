@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MemoryRoleManagerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Memory Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.memory</a> &gt; <span class="el_source">MemoryRoleManagerImpl.java</span></div><h1>MemoryRoleManagerImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.memory;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.spi.AbstractRoleManager;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityExistsException;
+import org.apache.fulcrum.security.util.RoleSet;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+
+/**
+ *
+ * This implementation keeps all objects in memory. This is mostly meant to help
+ * with testing and prototyping of ideas.
+ *
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id$
+ */
+public class MemoryRoleManagerImpl extends AbstractRoleManager
+{
+    /** List to store all our roles in */
+<span class="fc" id="L42">    private static List&lt;Role&gt; roles = new ArrayList&lt;Role&gt;();</span>
+    
+<span class="fc" id="L44">    public MemoryRoleManagerImpl() {</span>
+        // reset
+<span class="fc" id="L46">        roles.clear();</span>
+<span class="fc" id="L47">    }</span>
+
+    /** Our Unique ID counter */
+    // private static int uniqueId = 0;
+
+    /**
+     * Renames an existing Role.
+     *
+     * @param role
+     *            The object describing the role to be renamed.
+     * @param name
+     *            the new name for the role.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the role does not exist.
+     */
+    public synchronized void renameRole(Role role, String name) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L66">        boolean roleExists = false;</span>
+        try
+        {
+<span class="fc" id="L69">            roleExists = checkExists(role);</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">            if (roleExists)</span>
+            {
+<span class="fc" id="L72">                roles.remove(role);</span>
+<span class="fc" id="L73">                role.setName(name);</span>
+<span class="fc" id="L74">                roles.add(role);</span>
+<span class="fc" id="L75">                return;</span>
+            }
+        }
+<span class="nc" id="L78">        catch (DataBackendException e)</span>
+        {
+<span class="nc" id="L80">            throw new DataBackendException(&quot;renameRole(Role,String)&quot;, e);</span>
+<span class="nc" id="L81">        }</span>
+
+<span class="nc" id="L83">        throw new UnknownEntityException(&quot;Unknown role '&quot; + role + &quot;'&quot;);</span>
+    }
+
+    /**
+     * Determines if the &lt;code&gt;Role&lt;/code&gt; exists in the security system.
+     *
+     * @param roleName
+     *            a &lt;code&gt;String&lt;/code&gt; value
+     * @return true if the role exists in the system, false otherwise
+     */
+    public boolean checkExists(String roleName)
+    {
+<span class="fc" id="L95">        return MemoryHelper.checkExists(roles, roleName);</span>
+    }
+
+    /**
+     * Retrieves all roles defined in the system.
+     *
+     * @return the names of all roles defined in the system.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     */
+    public RoleSet getAllRoles() throws DataBackendException
+    {
+<span class="fc" id="L107">        return new RoleSet(roles);</span>
+    }
+
+    /**
+     * Creates a new role with specified attributes.
+     *
+     * @param role
+     *            the object describing the role to be created.
+     * @return a new Role object that has id set up properly.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     */
+    @Override
+    protected synchronized &lt;T extends Role&gt; T persistNewRole(T role) throws DataBackendException
+    {
+<span class="fc" id="L122">        role.setId(MemoryHelper.getUniqueId());</span>
+<span class="fc" id="L123">        roles.add(role);</span>
+        // add the role to system-wide cache
+<span class="fc" id="L125">        getAllRoles().add(role);</span>
+        // return the object with correct id
+<span class="fc" id="L127">        return role;</span>
+    }
+
+    /**
+     * Removes a Role from the system.
+     *
+     * @param role
+     *            The object describing the role to be removed.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the role does not exist.
+     */
+    public synchronized void removeRole(Role role) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L142">        boolean roleExists = false;</span>
+        try
+        {
+<span class="fc" id="L145">            roleExists = checkExists(role);</span>
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">            if (roleExists)</span>
+            {
+<span class="fc" id="L148">                roles.remove(role);</span>
+<span class="fc" id="L149">                getAllRoles().remove(role);</span>
+<span class="fc" id="L150">                return;</span>
+            }
+        }
+<span class="nc" id="L153">        catch (DataBackendException e)</span>
+        {
+<span class="nc" id="L155">            throw new DataBackendException(&quot;removeRole(Role)&quot;, e);</span>
+<span class="nc" id="L156">        }</span>
+
+<span class="nc" id="L158">        throw new UnknownEntityException(&quot;Unknown role '&quot; + role + &quot;'&quot;);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

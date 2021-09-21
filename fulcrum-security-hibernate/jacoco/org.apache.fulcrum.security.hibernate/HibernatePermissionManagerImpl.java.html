@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HibernatePermissionManagerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Hibernate Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.hibernate</a> &gt; <span class="el_source">HibernatePermissionManagerImpl.java</span></div><h1>HibernatePermissionManagerImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.hibernate;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.util.List;
+
+import org.apache.fulcrum.security.entity.Permission;
+import org.apache.fulcrum.security.spi.AbstractPermissionManager;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityExistsException;
+import org.apache.fulcrum.security.util.PermissionSet;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.hibernate.HibernateException;
+
+/**
+ * This implementation persists to a database via Hibernate.
+ * 
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id: HibernatePermissionManagerImpl.java 1374014 2012-08-16
+ *          19:47:27Z tv $
+ */
+@SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L39">public class HibernatePermissionManagerImpl extends AbstractPermissionManager</span>
+{
+    private PersistenceHelper persistenceHelper;
+
+    /**
+     * Retrieves all permissions defined in the system.
+     * 
+     * @return the names of all roles defined in the system.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     */
+    public PermissionSet getAllPermissions() throws DataBackendException
+    {
+<span class="fc" id="L52">        PermissionSet permissionSet = new PermissionSet();</span>
+        try
+        {
+<span class="fc" id="L55">            List&lt;Permission&gt; permissions = getPersistenceHelper().retrieveSession().createQuery(&quot;from &quot; + Permission.class.getName()).list();</span>
+<span class="fc" id="L56">            permissionSet.add(permissions);</span>
+        }
+<span class="nc" id="L58">        catch (HibernateException e)</span>
+        {
+<span class="nc" id="L60">            throw new DataBackendException(&quot;Error retrieving permission information&quot;, e);</span>
+<span class="fc" id="L61">        }</span>
+<span class="fc" id="L62">        return permissionSet;</span>
+    }
+
+    /**
+     * Renames an existing Permission.
+     * 
+     * @param permission
+     *            The object describing the permission to be renamed.
+     * @param name
+     *            the new name for the permission.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the permission does not exist.
+     */
+    public synchronized void renamePermission(Permission permission, String name) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L79">        boolean permissionExists = false;</span>
+<span class="fc" id="L80">        permissionExists = checkExists(permission);</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        if (permissionExists)</span>
+        {
+<span class="fc" id="L83">            permission.setName(name);</span>
+<span class="fc" id="L84">            getPersistenceHelper().updateEntity(permission);</span>
+        }
+        else
+        {
+<span class="nc" id="L88">            throw new UnknownEntityException(&quot;Unknown permission '&quot; + permission + &quot;'&quot;);</span>
+        }
+<span class="fc" id="L90">    }</span>
+
+    /**
+     * Determines if the &lt;code&gt;Permission&lt;/code&gt; exists in the security system.
+     * 
+     * @param permissionName
+     *            a &lt;code&gt;Permission&lt;/code&gt; value
+     * @return true if the permission name exists in the system, false otherwise
+     * @throws DataBackendException
+     *             when more than one Permission with the same name exists.
+     */
+    public boolean checkExists(String permissionName) throws DataBackendException
+    {
+        List&lt;Permission&gt; permissions;
+        try
+        {
+<span class="fc" id="L106">            permissions = getPersistenceHelper().retrieveSession()</span>
+<span class="fc" id="L107">                    .createQuery(&quot;from &quot; + Permission.class.getName() + &quot; sp where sp.name=:name&quot;).setString(&quot;name&quot;, permissionName).list();</span>
+        }
+<span class="nc" id="L109">        catch (HibernateException e)</span>
+        {
+<span class="nc" id="L111">            throw new DataBackendException(&quot;Error retrieving permission information&quot;, e);</span>
+<span class="fc" id="L112">        }</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        if (permissions.size() &gt; 1)</span>
+        {
+<span class="nc" id="L115">            throw new DataBackendException(&quot;Multiple permissions with same name '&quot; + permissionName + &quot;'&quot;);</span>
+        }
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        return (permissions.size() == 1);</span>
+    }
+
+    /**
+     * Removes a Permission from the system.
+     * 
+     * @param permission
+     *            The object describing the permission to be removed.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the permission does not exist.
+     */
+    public synchronized void removePermission(Permission permission) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L132">        boolean permissionExists = false;</span>
+<span class="fc" id="L133">        permissionExists = checkExists(permission);</span>
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        if (permissionExists)</span>
+        {
+<span class="fc" id="L136">            getPersistenceHelper().removeEntity(permission);</span>
+        }
+        else
+        {
+<span class="nc" id="L140">            throw new UnknownEntityException(&quot;Unknown permission '&quot; + permission + &quot;'&quot;);</span>
+        }
+<span class="fc" id="L142">    }</span>
+
+    /**
+     * Creates a new permission with specified attributes.
+     * 
+     * @param permission
+     *            the object describing the permission to be created.
+     * @return a new Permission object that has id set up properly.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     */
+    @Override
+    protected synchronized Permission persistNewPermission(Permission permission) throws DataBackendException
+    {
+<span class="fc" id="L156">        getPersistenceHelper().addEntity(permission);</span>
+<span class="fc" id="L157">        return permission;</span>
+    }
+
+    /**
+     * @return Returns the persistenceHelper.
+     */
+    public PersistenceHelper getPersistenceHelper()
+    {
+<span class="fc bfc" id="L165" title="All 2 branches covered.">        if (persistenceHelper == null)</span>
+        {
+<span class="fc" id="L167">            persistenceHelper = (PersistenceHelper) resolve(PersistenceHelper.ROLE);</span>
+        }
+<span class="fc" id="L169">        return persistenceHelper;</span>
+    }
+
+    /**
+     * Retrieve a Permission object with specified id.
+     * 
+     * @param id
+     *            the id of the Permission.
+     * @return an object representing the Permission with specified id.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the permission does not exist.
+     */
+    @Override
+    public Permission getPermissionById(Object id) throws DataBackendException, UnknownEntityException
+    {
+
+<span class="fc" id="L187">        Permission permission = null;</span>
+
+<span class="pc bpc" id="L189" title="1 of 2 branches missed.">        if (id != null)</span>
+        {
+            try
+            {
+<span class="fc" id="L193">                List&lt;Permission&gt; permissions = getPersistenceHelper().retrieveSession()</span>
+<span class="fc" id="L194">                        .createQuery(&quot;from &quot; + Permission.class.getName() + &quot; sp where sp.id=:id&quot;).setLong(&quot;id&quot;, ((Long) id).longValue())</span>
+<span class="fc" id="L195">                        .list();</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">                if (permissions.size() == 0)</span>
+                {
+<span class="fc" id="L198">                    throw new UnknownEntityException(&quot;Could not find permission by id &quot; + id);</span>
+                }
+<span class="fc" id="L200">                permission = permissions.get(0);</span>
+
+            }
+<span class="nc" id="L203">            catch (HibernateException e)</span>
+            {
+<span class="nc" id="L205">                throw new DataBackendException(&quot;Error retrieving permission information&quot;, e);</span>
+<span class="fc" id="L206">            }</span>
+        }
+
+<span class="fc" id="L209">        return permission;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

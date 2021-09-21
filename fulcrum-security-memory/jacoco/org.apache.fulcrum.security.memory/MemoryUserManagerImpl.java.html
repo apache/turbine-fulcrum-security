@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MemoryUserManagerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Memory Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.memory</a> &gt; <span class="el_source">MemoryUserManagerImpl.java</span></div><h1>MemoryUserManagerImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.memory;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.spi.AbstractUserManager;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.apache.fulcrum.security.util.UserSet;
+
+/**
+ * This implementation keeps all objects in memory. This is mostly meant to help
+ * with testing and prototyping of ideas.
+ *
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id$
+ */
+public class MemoryUserManagerImpl extends AbstractUserManager {
+
+	// TODO Need to load up Crypto component and actually encrypt passwords!
+
+<span class="fc" id="L41">	private static List&lt;User&gt; users = new ArrayList&lt;User&gt;();</span>
+	
+<span class="fc" id="L43">	public MemoryUserManagerImpl() {</span>
+        // reset
+<span class="fc" id="L45">	    users.clear();</span>
+<span class="fc" id="L46">    }</span>
+
+	/** Our Unique ID counter */
+	// private static int uniqueId = 0;
+
+	/**
+	 * Check whether a specified user's account exists.
+	 *
+	 * The login name is used for looking up the account.
+	 *
+	 * @param userName The name of the user to be checked.
+	 * @return true if the specified account exists
+	 * @throws DataBackendException if there was an error accessing the data
+	 *                              backend.
+	 */
+	public boolean checkExists(String userName) throws DataBackendException {
+<span class="fc" id="L62">		return MemoryHelper.checkExists(users, userName);</span>
+	}
+
+	/**
+	 * Retrieves all users defined in the system.
+	 *
+	 * @return the names of all users defined in the system.
+	 * @throws DataBackendException if there was an error accessing the data
+	 *                              backend.
+	 */
+	public UserSet getAllUsers() throws DataBackendException {
+<span class="fc" id="L73">		return new UserSet(users);</span>
+	}
+
+	/**
+	 * Removes an user account from the system.
+	 *
+	 * @param user the object describing the account to be removed.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if the user account is not present.
+	 */
+	public void removeUser(User user) throws DataBackendException, UnknownEntityException {
+<span class="nc" id="L85">		users.remove(user);</span>
+<span class="nc" id="L86">	}</span>
+
+	/**
+	 * Creates new user account with specified attributes.
+	 *
+	 * @param user the object describing account to be created.
+	 * @throws DataBackendException if there was an error accessing the data
+	 *                              backend.
+	 */
+	@Override
+	protected &lt;T extends User&gt; T persistNewUser(T user) throws DataBackendException {
+<span class="fc" id="L97">		users.remove(user);</span>
+<span class="fc" id="L98">		user.setId(MemoryHelper.getUniqueId());</span>
+<span class="fc" id="L99">		users.add(user);</span>
+<span class="fc" id="L100">		return user;</span>
+	}
+
+	/**
+	 * Stores User attributes. The User is required to exist in the system.
+	 *
+	 * @param user The User to be stored.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend
+	 * @throws UnknownEntityException if the role does not exist.
+	 */
+	public void saveUser(User user) throws DataBackendException, UnknownEntityException {
+<span class="fc" id="L112">		boolean userExists = false;</span>
+<span class="fc" id="L113">		userExists = checkExists(user);</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">		if (userExists) {</span>
+<span class="fc" id="L115">			users.remove(user);</span>
+<span class="fc" id="L116">			users.add(user);</span>
+		} else {
+<span class="nc" id="L118">			throw new UnknownEntityException(&quot;Unknown user '&quot; + user + &quot;'&quot;);</span>
+		}
+<span class="fc" id="L120">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

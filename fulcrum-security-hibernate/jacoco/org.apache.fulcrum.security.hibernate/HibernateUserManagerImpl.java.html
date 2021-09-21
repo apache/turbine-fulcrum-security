@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HibernateUserManagerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Hibernate Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.hibernate</a> &gt; <span class="el_source">HibernateUserManagerImpl.java</span></div><h1>HibernateUserManagerImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.hibernate;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.util.List;
+
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.spi.AbstractUserManager;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityExistsException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.apache.fulcrum.security.util.UserSet;
+import org.hibernate.HibernateException;
+
+/**
+ * This implementation persists to a database via Hibernate.
+ * 
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id$
+ */
+@SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L38">public class HibernateUserManagerImpl extends AbstractUserManager</span>
+{
+    private PersistenceHelper persistenceHelper;
+
+    /**
+     * Check whether a specified user's account exists.
+     * 
+     * The login name is used for looking up the account.
+     * 
+     * @param userName
+     *            The name of the user to be checked.
+     * @return true if the specified account exists
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     */
+    public boolean checkExists(String userName) throws DataBackendException
+    {
+<span class="fc" id="L55">        List&lt;User&gt; users = null;</span>
+        try
+        {
+<span class="fc" id="L58">            users = getPersistenceHelper().retrieveSession().createQuery(&quot;from &quot; + User.class.getName() + &quot; su where su.name=:name&quot;)</span>
+<span class="fc" id="L59">                    .setString(&quot;name&quot;, userName.toLowerCase()).list();</span>
+        }
+<span class="nc" id="L61">        catch (HibernateException e)</span>
+        {
+<span class="nc" id="L63">            throw new DataBackendException(&quot;Error retrieving user information&quot;, e);</span>
+<span class="fc" id="L64">        }</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (users.size() &gt; 1)</span>
+        {
+<span class="nc" id="L67">            throw new DataBackendException(&quot;Multiple Users with same username '&quot; + userName + &quot;'&quot;);</span>
+        }
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        return (users.size() == 1);</span>
+    }
+
+    /**
+     * Retrieve a user from persistent storage using username as the key.
+     * 
+     * @param userName
+     *            the name of the user.
+     * @return an User object.
+     * @exception UnknownEntityException
+     *                if the user's account does not exist in the database.
+     * @exception DataBackendException
+     *                if there is a problem accessing the storage.
+     */
+    @Override
+    public User getUser(String userName) throws UnknownEntityException, DataBackendException
+    {
+<span class="fc" id="L86">        List&lt;User&gt; users = null;</span>
+        try
+        {
+<span class="fc" id="L89">            users = getPersistenceHelper().retrieveSession().createQuery(&quot;from &quot; + User.class.getName() + &quot; su where su.name=:name&quot;)</span>
+<span class="fc" id="L90">                    .setString(&quot;name&quot;, userName.toLowerCase()).list();</span>
+        }
+<span class="nc" id="L92">        catch (HibernateException e)</span>
+        {
+<span class="nc" id="L94">            throw new DataBackendException(&quot;Error retrieving user information&quot;, e);</span>
+<span class="fc" id="L95">        }</span>
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if (users.size() &gt; 1)</span>
+        {
+<span class="nc" id="L98">            throw new DataBackendException(&quot;Multiple Users with same username '&quot; + userName + &quot;'&quot;);</span>
+        }
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        if (users.size() == 1)</span>
+        {
+<span class="fc" id="L102">            return users.get(0);</span>
+        }
+<span class="nc" id="L104">        throw new UnknownEntityException(&quot;Unknown user '&quot; + userName + &quot;'&quot;);</span>
+    }
+
+    /**
+     * Retrieves all users defined in the system.
+     * 
+     * @return the names of all users defined in the system.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     */
+    public UserSet getAllUsers() throws DataBackendException
+    {
+<span class="fc" id="L116">        UserSet userSet = new UserSet();</span>
+        try
+        {
+<span class="fc" id="L119">            List&lt;User&gt; users = getPersistenceHelper().retrieveSession().createQuery(&quot;from &quot; + User.class.getName()).list();</span>
+<span class="fc" id="L120">            userSet.add(users);</span>
+        }
+<span class="nc" id="L122">        catch (HibernateException e)</span>
+        {
+<span class="nc" id="L124">            throw new DataBackendException(&quot;Error retrieving all users&quot;, e);</span>
+<span class="fc" id="L125">        }</span>
+<span class="fc" id="L126">        return userSet;</span>
+    }
+
+    /**
+     * Removes an user account from the system.
+     * 
+     * @param user
+     *            the object describing the account to be removed.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the user account is not present.
+     */
+    public void removeUser(User user) throws DataBackendException, UnknownEntityException
+    {
+<span class="nc" id="L141">        getPersistenceHelper().removeEntity(user);</span>
+<span class="nc" id="L142">    }</span>
+
+    /**
+     * Creates new user account with specified attributes.
+     * 
+     * @param user
+     *            the object describing account to be created.
+     * 
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     */
+    @Override
+    public User persistNewUser(User user) throws DataBackendException
+    {
+<span class="fc" id="L156">        getPersistenceHelper().addEntity(user);</span>
+<span class="fc" id="L157">        return user;</span>
+    }
+
+    /**
+     * Stores User attributes. The User is required to exist in the system.
+     * 
+     * @param user
+     *            The User to be stored.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the role does not exist.
+     */
+    public void saveUser(User user) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L172">        boolean userExists = false;</span>
+<span class="fc" id="L173">        userExists = checkExists(user);</span>
+<span class="pc bpc" id="L174" title="1 of 2 branches missed.">        if (userExists)</span>
+        {
+<span class="fc" id="L176">            getPersistenceHelper().updateEntity(user);</span>
+        }
+        else
+        {
+<span class="nc" id="L180">            throw new UnknownEntityException(&quot;Unknown user '&quot; + user + &quot;'&quot;);</span>
+        }
+<span class="fc" id="L182">    }</span>
+
+    /**
+     * @return Returns the persistenceHelper.
+     */
+    public PersistenceHelper getPersistenceHelper()
+    {
+<span class="fc bfc" id="L189" title="All 2 branches covered.">        if (persistenceHelper == null)</span>
+        {
+<span class="fc" id="L191">            persistenceHelper = (PersistenceHelper) resolve(PersistenceHelper.ROLE);</span>
+        }
+<span class="fc" id="L193">        return persistenceHelper;</span>
+    }
+
+    /**
+     * Retrieve a User object with specified id.
+     * 
+     * @param id
+     *            the id of the User.
+     * @return an object representing the User with specified id.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the user does not exist.
+     */
+    @Override
+    public User getUserById(Object id) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L210">        User user = null;</span>
+
+<span class="pc bpc" id="L212" title="1 of 2 branches missed.">        if (id != null)</span>
+        {
+            try
+            {
+<span class="fc" id="L216">                List&lt;User&gt; users = getPersistenceHelper().retrieveSession()</span>
+<span class="fc" id="L217">                        .createQuery(&quot;from &quot; + User.class.getName() + &quot; su where su.id=:id&quot;).setLong(&quot;id&quot;, ((Long) id).longValue()).list();</span>
+<span class="pc bpc" id="L218" title="1 of 2 branches missed.">                if (users.size() == 0)</span>
+                {
+<span class="nc" id="L220">                    throw new UnknownEntityException(&quot;Could not find user by id &quot; + id);</span>
+                }
+<span class="fc" id="L222">                user = users.get(0);</span>
+                // session.close();
+            }
+<span class="nc" id="L225">            catch (HibernateException e)</span>
+            {
+<span class="nc" id="L227">                throw new DataBackendException(&quot;Error retrieving user information&quot;, e);</span>
+<span class="fc" id="L228">            }</span>
+        }
+
+<span class="fc" id="L231">        return user;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

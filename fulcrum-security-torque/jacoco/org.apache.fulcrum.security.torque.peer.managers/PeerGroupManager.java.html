@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PeerGroupManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.torque.peer.managers</a> &gt; <span class="el_source">PeerGroupManager.java</span></div><h1>PeerGroupManager.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.torque.peer.managers;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.fulcrum.security.torque.TorqueAbstractGroupManager;
+import org.apache.fulcrum.security.torque.peer.Peer;
+import org.apache.fulcrum.security.torque.peer.PeerManagable;
+import org.apache.fulcrum.security.torque.peer.PeerManager;
+import org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer;
+import org.apache.fulcrum.security.util.DataBackendException;
+
+/**
+ * This implementation persists to a database via Torque.
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id:$
+ */
+<span class="fc" id="L35">public abstract class PeerGroupManager extends TorqueAbstractGroupManager implements PeerManagable</span>
+{
+    
+<span class="fc" id="L38">    private Boolean customPeer = false;  //  used for torque which uses per object peer classes</span>
+    private String peerClassName;
+    transient PeerManager peerManager;
+    private static final String PEER_CLASS_NAME_KEY = &quot;peerClassName&quot;;
+    
+<span class="fc" id="L43">    private String columnName = &quot;GROUP_NAME&quot;;</span>
+    
+    /**
+     * Avalon Service lifecycle method
+     */
+    @Override
+	public void configure(Configuration conf) throws ConfigurationException
+    {
+<span class="fc" id="L51">       super.configure( conf );</span>
+       
+<span class="fc" id="L53">        peerClassName = conf.getChild( PEER_CLASS_NAME_KEY).getValue( null );</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (peerClassName != null) {</span>
+<span class="fc" id="L55">            setPeerClassName( peerClassName );</span>
+<span class="fc" id="L56">            setCustomPeer(true);</span>
+        } 
+<span class="fc" id="L58">    }</span>
+    
+    @Override
+   	public Peer getPeerInstance() throws DataBackendException {
+<span class="fc" id="L62">           return getPeerManager().getPeerInstance(getPeerClassName(), TorqueTurbinePeer.class, getClassName());</span>
+    }
+       
+       /**
+        * @return Returns the persistenceHelper.
+        */
+       @Override
+   	public PeerManager getPeerManager()
+       {
+<span class="fc bfc" id="L71" title="All 2 branches covered.">           if (peerManager == null)</span>
+           {
+<span class="fc" id="L73">               peerManager = (PeerManager) resolve(PeerManager.ROLE);</span>
+           }
+<span class="fc" id="L75">           return peerManager;</span>
+       }
+
+   	public String getColumnName() {
+<span class="fc" id="L79">   		return columnName;</span>
+   	}
+
+   	public void setColumnName(String columnName) {
+<span class="nc" id="L83">   		this.columnName = columnName;</span>
+<span class="nc" id="L84">   	}</span>
+    
+    @Override
+	public Boolean getCustomPeer()
+    {
+<span class="fc" id="L89">        return customPeer;</span>
+    }
+
+    @Override
+	public void setCustomPeer( Boolean customPeer )
+    {
+<span class="fc" id="L95">        this.customPeer = customPeer;</span>
+<span class="fc" id="L96">    }</span>
+
+    @Override
+	public String getPeerClassName()
+    {
+<span class="fc" id="L101">        return peerClassName;</span>
+    }
+
+    @Override
+	public void setPeerClassName( String peerClassName )
+    {
+<span class="fc" id="L107">        this.peerClassName = peerClassName;</span>
+<span class="fc" id="L108">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

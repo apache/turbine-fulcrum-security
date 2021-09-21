@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PeerUserManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.torque.peer.managers</a> &gt; <span class="el_source">PeerUserManager.java</span></div><h1>PeerUserManager.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.torque.peer.managers;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.fulcrum.security.torque.TorqueAbstractUserManager;
+import org.apache.fulcrum.security.torque.peer.Peer;
+import org.apache.fulcrum.security.torque.peer.PeerManagable;
+import org.apache.fulcrum.security.torque.peer.PeerManager;
+import org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer;
+import org.apache.fulcrum.security.torque.peer.TorqueTurbineUserGroupRolePeer;
+import org.apache.fulcrum.security.util.DataBackendException;
+/**
+ * This implementation persists to a database via Torque.
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id:$
+ */
+<span class="fc" id="L35">public abstract class PeerUserManager extends TorqueAbstractUserManager implements PeerManagable</span>
+{
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
+	 * if set, the generic implementation is used (by setting @link {@link #PEER_CLASS_NAME_KEY} in configuration file.
+	 */
+<span class="fc" id="L45">    private Boolean customPeer = false;  //  used for torque which uses per object peer classes</span>
+    
+    private String peerClassName;
+    private static final String PEER_CLASS_NAME_KEY = &quot;peerClassName&quot;;
+    transient PeerManager peerManager;
+    
+<span class="fc" id="L51">	private String columnName = &quot;LOGIN_NAME&quot;;</span>
+	
+<span class="fc" id="L53">	private String columnName4UserGroupRole = &quot;USER_ID&quot;;</span>
+
+    private String userGroupRolePeerClassName;
+    
+    /**
+     * Avalon Service lifecycle method
+     */
+    @Override
+	public void configure(Configuration conf) throws ConfigurationException
+    {
+<span class="fc" id="L63">       super.configure( conf );</span>
+       
+//        peerClassName = conf.getChild( PEER_CLASS_NAME_KEY).getValue( &quot;org.apache.fulcrum.security.torque.om.TorqueTurbineUserPeer&quot; );
+<span class="fc" id="L66">        peerClassName = conf.getChild( PEER_CLASS_NAME_KEY).getValue( null );</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (peerClassName != null) {</span>
+<span class="fc" id="L68">            setPeerClassName( peerClassName );</span>
+<span class="fc" id="L69">            setCustomPeer(true);</span>
+        } 
+        
+<span class="fc" id="L72">        Configuration[]  userGroupRoleConf = conf.getChild( &quot;userGroupRoleManager&quot;).getChildren();</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        for ( int i = 0; i &lt; userGroupRoleConf.length; i++ )</span>
+        {
+<span class="fc" id="L75">            Configuration configuration = userGroupRoleConf[i];</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">            if ( configuration.getName().equals(PEER_CLASS_NAME_KEY) ) {</span>
+<span class="fc" id="L77">                userGroupRolePeerClassName = configuration.getValue( null );</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">                if (userGroupRolePeerClassName != null) {</span>
+<span class="fc" id="L79">                    setUserGroupRolePeerClassName( userGroupRolePeerClassName );</span>
+<span class="fc" id="L80">                    setCustomPeer(true);</span>
+                } 
+            }  
+        }
+<span class="pc bpc" id="L84" title="1 of 4 branches missed.">        if (peerClassName != null &amp;&amp; userGroupRolePeerClassName == null) {</span>
+            //peerClassName.replace( &quot;TurbineUserPeerImpl&quot;, &quot;TurbineUserPeerImpl )
+<span class="nc" id="L86">            throw new ConfigurationException(&quot;If using peers in component configuration (xml) the element userManager expects to have a userGroupRoleManager child element with peerClassName child element.&quot;);</span>
+        }
+
+<span class="fc" id="L89">    }</span>
+  
+    
+    @Override
+	public Peer getPeerInstance() throws DataBackendException {
+<span class="fc" id="L94">        return getPeerManager().getPeerInstance(getPeerClassName(), TorqueTurbinePeer.class, getClassName());</span>
+    }
+    
+    public Peer getUserGroupRolePeerInstance() throws DataBackendException {
+<span class="fc" id="L98">        return getPeerManager().getPeerInstance(getUserGroupRolePeerClassName(), TorqueTurbineUserGroupRolePeer.class, getClassName());</span>
+    }
+    
+    /**
+     * @return Returns the persistenceHelper.
+     */
+    @Override
+    public PeerManager getPeerManager()
+    {
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        if (peerManager == null)</span>
+        {
+<span class="fc" id="L109">            peerManager = (PeerManager) resolve(PeerManager.ROLE);</span>
+        }
+<span class="fc" id="L111">        return peerManager;</span>
+    }
+
+	public String getColumnName() {
+<span class="fc" id="L115">		return columnName;</span>
+	}
+
+	public void setColumnName(String columnName) {
+<span class="nc" id="L119">		this.columnName = columnName;</span>
+<span class="nc" id="L120">	}</span>
+    
+    /**
+     * 
+     * @return if &lt;code&gt;true&lt;/code&gt;, the generic implementation is used.
+     */
+    @Override
+	public Boolean getCustomPeer()
+    {
+<span class="fc" id="L129">        return customPeer;</span>
+    }
+
+    @Override
+	public void setCustomPeer( Boolean customPeer )
+    {
+<span class="fc" id="L135">        this.customPeer = customPeer;</span>
+<span class="fc" id="L136">    }</span>
+
+    @Override
+	public String getPeerClassName()
+    {
+<span class="fc" id="L141">        return peerClassName;</span>
+    }
+
+    @Override
+	public void setPeerClassName( String peerClassName )
+    {
+<span class="fc" id="L147">        this.peerClassName = peerClassName;</span>
+<span class="fc" id="L148">    }</span>
+
+
+    public String getUserGroupRolePeerClassName()
+    {
+<span class="fc" id="L153">        return userGroupRolePeerClassName;</span>
+    }
+
+
+    public void setUserGroupRolePeerClassName( String userGroupRolePeerClassName )
+    {
+<span class="fc" id="L159">        this.userGroupRolePeerClassName = userGroupRolePeerClassName;</span>
+<span class="fc" id="L160">    }</span>
+
+
+    public String getColumnName4UserGroupRole()
+    {
+<span class="fc" id="L165">        return columnName4UserGroupRole;</span>
+    }
+
+
+    public void setColumnName4UserGroupRole( String columnName4UserGroupRole )
+    {
+<span class="nc" id="L171">        this.columnName4UserGroupRole = columnName4UserGroupRole;</span>
+<span class="nc" id="L172">    }</span>
+   
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

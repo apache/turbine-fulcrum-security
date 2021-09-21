@@ -1,0 +1,198 @@
+<!DOCTYPE HTML>
+<html lang="de">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<main role="main">
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span><a id="line.1">package org.apache.fulcrum.security.util;</a>
+<span class="sourceLineNo">002</span><a id="line.2"></a>
+<span class="sourceLineNo">003</span><a id="line.3">/*</a>
+<span class="sourceLineNo">004</span><a id="line.4"> * Licensed to the Apache Software Foundation (ASF) under one</a>
+<span class="sourceLineNo">005</span><a id="line.5"> * or more contributor license agreements.  See the NOTICE file</a>
+<span class="sourceLineNo">006</span><a id="line.6"> * distributed with this work for additional information</a>
+<span class="sourceLineNo">007</span><a id="line.7"> * regarding copyright ownership.  The ASF licenses this file</a>
+<span class="sourceLineNo">008</span><a id="line.8"> * to you under the Apache License, Version 2.0 (the</a>
+<span class="sourceLineNo">009</span><a id="line.9"> * "License"); you may not use this file except in compliance</a>
+<span class="sourceLineNo">010</span><a id="line.10"> * with the License.  You may obtain a copy of the License at</a>
+<span class="sourceLineNo">011</span><a id="line.11"> *</a>
+<span class="sourceLineNo">012</span><a id="line.12"> *   http://www.apache.org/licenses/LICENSE-2.0</a>
+<span class="sourceLineNo">013</span><a id="line.13"> *</a>
+<span class="sourceLineNo">014</span><a id="line.14"> * Unless required by applicable law or agreed to in writing,</a>
+<span class="sourceLineNo">015</span><a id="line.15"> * software distributed under the License is distributed on an</a>
+<span class="sourceLineNo">016</span><a id="line.16"> * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</a>
+<span class="sourceLineNo">017</span><a id="line.17"> * KIND, either express or implied.  See the License for the</a>
+<span class="sourceLineNo">018</span><a id="line.18"> * specific language governing permissions and limitations</a>
+<span class="sourceLineNo">019</span><a id="line.19"> * under the License.</a>
+<span class="sourceLineNo">020</span><a id="line.20"> */</a>
+<span class="sourceLineNo">021</span><a id="line.21">import junit.framework.TestCase;</a>
+<span class="sourceLineNo">022</span><a id="line.22"></a>
+<span class="sourceLineNo">023</span><a id="line.23">import org.apache.fulcrum.security.entity.Group;</a>
+<span class="sourceLineNo">024</span><a id="line.24">import org.apache.fulcrum.security.model.dynamic.entity.impl.DynamicGroupImpl;</a>
+<span class="sourceLineNo">025</span><a id="line.25"></a>
+<span class="sourceLineNo">026</span><a id="line.26">/**</a>
+<span class="sourceLineNo">027</span><a id="line.27"> * Test using a SecuritySet. Useing various subclasses since it is Abstract.</a>
+<span class="sourceLineNo">028</span><a id="line.28"> *</a>
+<span class="sourceLineNo">029</span><a id="line.29"> * @author &lt;a href="mailto:epugh@upstate.com"&gt;Eric Pugh&lt;/a&gt;</a>
+<span class="sourceLineNo">030</span><a id="line.30"> * @version $Id$</a>
+<span class="sourceLineNo">031</span><a id="line.31"> */</a>
+<span class="sourceLineNo">032</span><a id="line.32">public class SecuritySetTest extends TestCase</a>
+<span class="sourceLineNo">033</span><a id="line.33">{</a>
+<span class="sourceLineNo">034</span><a id="line.34"></a>
+<span class="sourceLineNo">035</span><a id="line.35">    /**</a>
+<span class="sourceLineNo">036</span><a id="line.36">     * Defines the testcase name for JUnit.</a>
+<span class="sourceLineNo">037</span><a id="line.37">     *</a>
+<span class="sourceLineNo">038</span><a id="line.38">     * @param name</a>
+<span class="sourceLineNo">039</span><a id="line.39">     *            the testcase's name.</a>
+<span class="sourceLineNo">040</span><a id="line.40">     */</a>
+<span class="sourceLineNo">041</span><a id="line.41">    public SecuritySetTest(String name)</a>
+<span class="sourceLineNo">042</span><a id="line.42">    {</a>
+<span class="sourceLineNo">043</span><a id="line.43">        super(name);</a>
+<span class="sourceLineNo">044</span><a id="line.44">    }</a>
+<span class="sourceLineNo">045</span><a id="line.45"></a>
+<span class="sourceLineNo">046</span><a id="line.46">    public void testNull() throws Exception</a>
+<span class="sourceLineNo">047</span><a id="line.47">    {</a>
+<span class="sourceLineNo">048</span><a id="line.48">        SecuritySet&lt;Group&gt; securitySet = new GroupSet();</a>
+<span class="sourceLineNo">049</span><a id="line.49">        assertFalse(securitySet.contains(null));</a>
+<span class="sourceLineNo">050</span><a id="line.50">    }</a>
+<span class="sourceLineNo">051</span><a id="line.51"></a>
+<span class="sourceLineNo">052</span><a id="line.52">    public void testContainsName()</a>
+<span class="sourceLineNo">053</span><a id="line.53">    {</a>
+<span class="sourceLineNo">054</span><a id="line.54">        SecuritySet&lt;Group&gt; securitySet = new GroupSet();</a>
+<span class="sourceLineNo">055</span><a id="line.55">        assertFalse(securitySet.containsName(null));</a>
+<span class="sourceLineNo">056</span><a id="line.56">        Group g = new DynamicGroupImpl();</a>
+<span class="sourceLineNo">057</span><a id="line.57">        g.setName("BOB");</a>
+<span class="sourceLineNo">058</span><a id="line.58"></a>
+<span class="sourceLineNo">059</span><a id="line.59">        ((GroupSet) securitySet).add(g);</a>
+<span class="sourceLineNo">060</span><a id="line.60">        assertTrue(((GroupSet) securitySet).containsName("bob"));</a>
+<span class="sourceLineNo">061</span><a id="line.61">        assertTrue(((GroupSet) securitySet).containsName("BOB"));</a>
+<span class="sourceLineNo">062</span><a id="line.62"></a>
+<span class="sourceLineNo">063</span><a id="line.63">    }</a>
+<span class="sourceLineNo">064</span><a id="line.64"></a>
+<span class="sourceLineNo">065</span><a id="line.65">    public void testRemoveAll()</a>
+<span class="sourceLineNo">066</span><a id="line.66">    {</a>
+<span class="sourceLineNo">067</span><a id="line.67">        SecuritySet&lt;Group&gt; securitySet = new GroupSet();</a>
+<span class="sourceLineNo">068</span><a id="line.68">        assertFalse(securitySet.containsName(null));</a>
+<span class="sourceLineNo">069</span><a id="line.69">        Group g = new DynamicGroupImpl();</a>
+<span class="sourceLineNo">070</span><a id="line.70">        g.setName("BOB");</a>
+<span class="sourceLineNo">071</span><a id="line.71">        g.setId("BOB");</a>
+<span class="sourceLineNo">072</span><a id="line.72"></a>
+<span class="sourceLineNo">073</span><a id="line.73">        ((GroupSet) securitySet).add(g);</a>
+<span class="sourceLineNo">074</span><a id="line.74"></a>
+<span class="sourceLineNo">075</span><a id="line.75">        SecuritySet&lt;Group&gt; securitySet2 = new GroupSet();</a>
+<span class="sourceLineNo">076</span><a id="line.76">        assertFalse(securitySet.containsName(null));</a>
+<span class="sourceLineNo">077</span><a id="line.77">        g = new DynamicGroupImpl();</a>
+<span class="sourceLineNo">078</span><a id="line.78">        g.setName("BOB");</a>
+<span class="sourceLineNo">079</span><a id="line.79">        g.setId("BOB");</a>
+<span class="sourceLineNo">080</span><a id="line.80"></a>
+<span class="sourceLineNo">081</span><a id="line.81">        ((GroupSet) securitySet2).add(g);</a>
+<span class="sourceLineNo">082</span><a id="line.82">        securitySet.removeAll(securitySet2);</a>
+<span class="sourceLineNo">083</span><a id="line.83">        assertEquals(0, securitySet.size());</a>
+<span class="sourceLineNo">084</span><a id="line.84">    }</a>
+<span class="sourceLineNo">085</span><a id="line.85"></a>
+<span class="sourceLineNo">086</span><a id="line.86">    public void testToArray() throws Exception</a>
+<span class="sourceLineNo">087</span><a id="line.87">    {</a>
+<span class="sourceLineNo">088</span><a id="line.88">        SecuritySet&lt;Group&gt; securitySet = getTestData();</a>
+<span class="sourceLineNo">089</span><a id="line.89">        Object array[] = securitySet.toArray();</a>
+<span class="sourceLineNo">090</span><a id="line.90">        assertEquals(2, array.length);</a>
+<span class="sourceLineNo">091</span><a id="line.91">        Object array2[] = new Object[2];</a>
+<span class="sourceLineNo">092</span><a id="line.92">        array2[0] = "hi";</a>
+<span class="sourceLineNo">093</span><a id="line.93">        Object array3[] = securitySet.toArray(array2);</a>
+<span class="sourceLineNo">094</span><a id="line.94">        assertEquals(2, array3.length);</a>
+<span class="sourceLineNo">095</span><a id="line.95">    }</a>
+<span class="sourceLineNo">096</span><a id="line.96"></a>
+<span class="sourceLineNo">097</span><a id="line.97">    public void testAdd() throws Exception</a>
+<span class="sourceLineNo">098</span><a id="line.98">    {</a>
+<span class="sourceLineNo">099</span><a id="line.99">        GroupSet securitySet = (GroupSet) getTestData();</a>
+<span class="sourceLineNo">100</span><a id="line.100">        Group g = new DynamicGroupImpl();</a>
+<span class="sourceLineNo">101</span><a id="line.101">        g.setName("Michael");</a>
+<span class="sourceLineNo">102</span><a id="line.102">        g.setId("Michael");</a>
+<span class="sourceLineNo">103</span><a id="line.103">        assertTrue(securitySet.add(g));</a>
+<span class="sourceLineNo">104</span><a id="line.104">    }</a>
+<span class="sourceLineNo">105</span><a id="line.105"></a>
+<span class="sourceLineNo">106</span><a id="line.106">    private SecuritySet&lt;Group&gt; getTestData()</a>
+<span class="sourceLineNo">107</span><a id="line.107">    {</a>
+<span class="sourceLineNo">108</span><a id="line.108">        SecuritySet&lt;Group&gt; securitySet = new GroupSet();</a>
+<span class="sourceLineNo">109</span><a id="line.109">        assertFalse(securitySet.containsName(null));</a>
+<span class="sourceLineNo">110</span><a id="line.110">        Group g = new DynamicGroupImpl();</a>
+<span class="sourceLineNo">111</span><a id="line.111">        g.setName("JOE");</a>
+<span class="sourceLineNo">112</span><a id="line.112">        g.setId("JOE");</a>
+<span class="sourceLineNo">113</span><a id="line.113"></a>
+<span class="sourceLineNo">114</span><a id="line.114">        Group g2 = new DynamicGroupImpl();</a>
+<span class="sourceLineNo">115</span><a id="line.115">        g2.setName("RICK");</a>
+<span class="sourceLineNo">116</span><a id="line.116">        g2.setId("RICK");</a>
+<span class="sourceLineNo">117</span><a id="line.117"></a>
+<span class="sourceLineNo">118</span><a id="line.118">        ((GroupSet) securitySet).add(g);</a>
+<span class="sourceLineNo">119</span><a id="line.119">        ((GroupSet) securitySet).add(g2);</a>
+<span class="sourceLineNo">120</span><a id="line.120"></a>
+<span class="sourceLineNo">121</span><a id="line.121">        return securitySet;</a>
+<span class="sourceLineNo">122</span><a id="line.122">    }</a>
+<span class="sourceLineNo">123</span><a id="line.123"></a>
+<span class="sourceLineNo">124</span><a id="line.124">}</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DynamicAccessControlListImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security API</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.model.dynamic</a> &gt; <span class="el_source">DynamicAccessControlListImpl.java</span></div><h1>DynamicAccessControlListImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.model.dynamic;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.util.Map;
+
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.Permission;
+import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.util.GroupSet;
+import org.apache.fulcrum.security.util.PermissionSet;
+import org.apache.fulcrum.security.util.RoleSet;
+
+/**
+ * This is a control class that makes it easy to find out if a particular User
+ * has a given Permission. It also determines if a User has a a particular Role.
+ *
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id$
+ */
+public class DynamicAccessControlListImpl implements DynamicAccessControlList 
+{
+	// TODO Need to rethink the two maps.. Why not just a single list of groups?
+	// That would then cascade down to all the other roles and so on..
+
+	/**
+	 * Serial number
+	 */
+	private static final long serialVersionUID = -5180551537096244085L;
+
+	/** The sets of roles that the user has in different groups */
+	private Map&lt;? extends Group, ? extends RoleSet&gt; roleSets;
+	
+	/** The sets of permissions that the user has in different groups */
+	private Map&lt;? extends Role, ? extends PermissionSet&gt; permissionSets;
+	
+	/** The distinct list of groups that this user is part of */
+<span class="fc" id="L55">	private GroupSet groupSet = new GroupSet();</span>
+	
+	/** The distinct list of roles that this user is part of */
+<span class="fc" id="L58">	private RoleSet roleSet = new RoleSet();</span>
+	
+	/** the distinct list of permissions that this user has */
+<span class="fc" id="L61">	private PermissionSet permissionSet = new PermissionSet();</span>
+
+	/**
+	 * Constructs a new AccessControlList.
+	 *
+	 * This class follows 'immutable' pattern - it's objects can't be modified once
+	 * they are created. This means that the permissions the users have are in
+	 * effect form the moment they log in to the moment they log out, and changes
+	 * made to the security settings in that time are not reflected in the state of
+	 * this object. If you need to reset an user's permissions you need to
+	 * invalidate his session. &lt;br&gt;
+	 * The objects that constructs an AccessControlList must supply hashtables of
+	 * role/permission sets keyed with group objects. &lt;br&gt;
+	 *
+	 * @param roleSets       a hashtable containing RoleSet objects keyed with Group
+	 *                       objects
+	 * @param permissionSets a hashtable containing PermissionSet objects keyed with
+	 *                       Roles objects
+	 */
+	public DynamicAccessControlListImpl(Map&lt;? extends Group, ? extends RoleSet&gt; roleSets,
+<span class="fc" id="L81">			Map&lt;? extends Role, ? extends PermissionSet&gt; permissionSets) {</span>
+<span class="fc" id="L82">		this.roleSets = roleSets;</span>
+<span class="fc" id="L83">		this.permissionSets = permissionSets;</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">		for (Map.Entry&lt;? extends Group, ? extends RoleSet&gt; entry : roleSets.entrySet()) </span>
+		{
+<span class="fc" id="L86">			Group group = entry.getKey();</span>
+<span class="fc" id="L87">			groupSet.add(group);</span>
+<span class="fc" id="L88">			RoleSet rs = entry.getValue();</span>
+<span class="fc" id="L89">			roleSet.add(rs);</span>
+<span class="fc" id="L90">		}</span>
+		
+<span class="fc bfc" id="L92" title="All 2 branches covered.">		for (Map.Entry&lt;? extends Role, ? extends PermissionSet&gt; entry : permissionSets.entrySet()) </span>
+		{
+<span class="fc" id="L94">			Role role = entry.getKey();</span>
+<span class="fc" id="L95">			roleSet.add(role);</span>
+<span class="fc" id="L96">			PermissionSet ps = entry.getValue();</span>
+<span class="fc" id="L97">			permissionSet.add(ps);</span>
+<span class="fc" id="L98">		}</span>
+<span class="fc" id="L99">	}</span>
+
+	/**
+	 * Retrieves a set of Roles an user is assigned in a Group.
+	 *
+	 * @param group the Group
+	 * @return the set of Roles this user has within the Group.
+	 */
+	public RoleSet getRoles(Group group) {
+<span class="nc bnc" id="L108" title="All 2 branches missed.">		if (group == null) </span>
+		{
+<span class="nc" id="L110">			return null;</span>
+		}
+
+<span class="nc" id="L113">		return roleSets.get(group);</span>
+	}
+
+	/**
+	 * Retrieves a set of Roles an user is assigned in the global Group.
+	 *
+	 * @return the set of Roles this user has within the global Group.
+	 */
+	public RoleSet getRoles() {
+<span class="nc" id="L122">		return roleSet;</span>
+	}
+
+	/**
+	 * Retrieves a set of Permissions an user is assigned in a Group.
+	 *
+	 * @param group the Group
+	 * @return the set of Permissions this user has within the Group.
+	 */
+	public PermissionSet getPermissions(Group group) {
+<span class="nc" id="L132">		PermissionSet permissionSet = new PermissionSet();</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">		if (roleSets.containsKey(group)) </span>
+		{
+<span class="nc bnc" id="L135" title="All 2 branches missed.">			for (Role role : roleSets.get(group)) </span>
+			{
+<span class="nc bnc" id="L137" title="All 2 branches missed.">				if (permissionSets.containsKey(role)) </span>
+				{
+<span class="nc" id="L139">					permissionSet.add(permissionSets.get(role));</span>
+				}
+<span class="nc" id="L141">			}</span>
+		}
+<span class="nc" id="L143">		return permissionSet;</span>
+	}
+
+	/**
+	 * Retrieves a set of Permissions an user is assigned in the global Group.
+	 *
+	 * @return the set of Permissions this user has within the global Group.
+	 */
+	public PermissionSet getPermissions() {
+<span class="nc" id="L152">		return permissionSet;</span>
+	}
+
+	/**
+	 * Checks if the user is assigned a specific Role in the Group.
+	 *
+	 * @param role  the Role
+	 * @param group the Group
+	 * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Role in the Group.
+	 */
+	public boolean hasRole(Role role, Group group) {
+<span class="nc" id="L163">		RoleSet set = getRoles(group);</span>
+<span class="nc bnc" id="L164" title="All 4 branches missed.">		if (set == null || role == null) </span>
+		{
+<span class="nc" id="L166">			return false;</span>
+		}
+<span class="nc" id="L168">		return set.contains(role);</span>
+	}
+
+	/**
+	 * Checks if the user is assigned a specific Role in any of the given Groups
+	 *
+	 * @param role     the Role
+	 * @param groupset a Groupset
+	 * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Role in any of the
+	 *         given Groups.
+	 */
+	public boolean hasRole(Role role, GroupSet groupset) {
+<span class="nc bnc" id="L180" title="All 2 branches missed.">		if (role == null) </span>
+		{
+<span class="nc" id="L182">			return false;</span>
+		}
+
+<span class="nc bnc" id="L185" title="All 2 branches missed.">		for (Group group : groupset) </span>
+		{
+<span class="nc" id="L187">			RoleSet roles = getRoles(group);</span>
+<span class="nc bnc" id="L188" title="All 4 branches missed.">			if (roles != null &amp;&amp; roles.contains(role)) </span>
+			{
+<span class="nc" id="L190">				return true;</span>
+			}
+<span class="nc" id="L192">		}</span>
+<span class="nc" id="L193">		return false;</span>
+	}
+
+	/**
+	 * Checks if the user is assigned a specific Role in the Group.
+	 *
+	 * @param role  the Role
+	 * @param group the Group
+	 * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Role in the Group.
+	 */
+	public boolean hasRole(String role, String group) {
+<span class="nc" id="L204">		boolean roleFound = false;</span>
+		try 
+		{
+<span class="nc bnc" id="L207" title="All 2 branches missed.">			for (Map.Entry&lt;? extends Group, ? extends RoleSet&gt; entry : roleSets.entrySet()) </span>
+			{
+<span class="nc" id="L209">				Group g = entry.getKey();</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">				if (g.getName().equalsIgnoreCase(group)) </span>
+				{
+<span class="nc" id="L212">					RoleSet rs = entry.getValue();</span>
+<span class="nc" id="L213">					roleFound = rs.containsName(role);</span>
+				}
+<span class="nc" id="L215">			}</span>
+		} 
+<span class="nc" id="L217">		catch (Exception e) </span>
+		{
+<span class="nc" id="L219">			roleFound = false;</span>
+<span class="nc" id="L220">		}</span>
+<span class="nc" id="L221">		return roleFound;</span>
+	}
+
+	/**
+	 * Checks if the user is assigned a specific Role in any of the given Groups
+	 *
+	 * @param rolename the name of the Role
+	 * @param groupset a Groupset
+	 * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Role in any of the
+	 *         given Groups.
+	 */
+	public boolean hasRole(String rolename, GroupSet groupset) {
+		Role role;
+		try 
+		{
+<span class="nc" id="L236">			role = roleSet.getByName(rolename);</span>
+		} 
+<span class="nc" id="L238">		catch (Exception e) </span>
+		{
+<span class="nc" id="L240">			return false;</span>
+<span class="nc" id="L241">		}</span>
+		
+<span class="nc bnc" id="L243" title="All 2 branches missed.">		if (role == null) </span>
+		{
+<span class="nc" id="L245">			return false;</span>
+		}
+		
+<span class="nc bnc" id="L248" title="All 2 branches missed.">		for (Group group : groupset) </span>
+		{
+<span class="nc" id="L250">			RoleSet roles = getRoles(group);</span>
+<span class="nc bnc" id="L251" title="All 4 branches missed.">			if (roles != null &amp;&amp; roles.contains(role)) </span>
+			{
+<span class="nc" id="L253">				return true;</span>
+			}
+<span class="nc" id="L255">		}</span>
+<span class="nc" id="L256">		return false;</span>
+	}
+
+	/**
+	 * Checks if the user is assigned a specific Role
+	 *
+	 * @param role the Role
+	 * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Role in the global
+	 *         Group.
+	 */
+	public boolean hasRole(Role role) {
+<span class="nc" id="L267">		return roleSet.contains(role);</span>
+	}
+
+	/**
+	 * Checks if the user is assigned a specific Role .
+	 *
+	 * @param role the Role
+	 * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Role .
+	 */
+	public boolean hasRole(String role) {
+		try 
+		{
+<span class="nc" id="L279">			return roleSet.containsName(role);</span>
+		} 
+<span class="nc" id="L281">		catch (Exception e) </span>
+		{
+<span class="nc" id="L283">			return false;</span>
+		}
+	}
+
+	/**
+	 * Checks if the user is assigned a specific Permission in the Group.
+	 *
+	 * @param permission the Permission
+	 * @param group      the Group
+	 * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in the
+	 *         Group.
+	 */
+	public boolean hasPermission(Permission permission, Group group) {
+<span class="nc" id="L296">		PermissionSet set = getPermissions(group);</span>
+<span class="nc bnc" id="L297" title="All 4 branches missed.">		if (set == null || permission == null) </span>
+		{
+<span class="nc" id="L299">			return false;</span>
+		}
+<span class="nc" id="L301">		return set.contains(permission);</span>
+	}
+
+	/**
+	 * Checks if the user is assigned a specific Permission in any of the given
+	 * Groups
+	 *
+	 * @param permission the Permission
+	 * @param groupset   a Groupset
+	 * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in any of
+	 *         the given Groups.
+	 */
+	public boolean hasPermission(Permission permission, GroupSet groupset) {
+<span class="nc bnc" id="L314" title="All 2 branches missed.">		if (permission == null) </span>
+		{
+<span class="nc" id="L316">			return false;</span>
+		}
+		
+<span class="nc bnc" id="L319" title="All 2 branches missed.">		for (Group group : groupset) </span>
+		{
+<span class="nc" id="L321">			PermissionSet permissions = getPermissions(group);</span>
+<span class="nc bnc" id="L322" title="All 4 branches missed.">			if (permissions != null &amp;&amp; permissions.contains(permission)) </span>
+			{
+<span class="nc" id="L324">				return true;</span>
+			}
+<span class="nc" id="L326">		}</span>
+<span class="nc" id="L327">		return false;</span>
+	}
+
+	/**
+	 * Checks if the user is assigned a specific Permission in the Group.
+	 *
+	 * @param permission the Permission
+	 * @param group      the Group
+	 * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in the
+	 *         Group.
+	 */
+	public boolean hasPermission(String permission, String group) {
+		try 
+		{
+<span class="nc" id="L341">			return hasPermission(permissionSet.getByName(permission), groupSet.getByName(group));</span>
+		} 
+<span class="nc" id="L343">		catch (Exception e) </span>
+		{
+<span class="nc" id="L345">			return false;</span>
+		}
+	}
+
+	/**
+	 * Checks if the user is assigned a specific Permission in the Group.
+	 *
+	 * @param permission the Permission
+	 * @param group      the Group
+	 * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in the
+	 *         Group.
+	 */
+	public boolean hasPermission(String permission, Group group) {
+		try 
+		{
+<span class="nc" id="L360">			return hasPermission(permissionSet.getByName(permission), group);</span>
+		} 
+<span class="nc" id="L362">		catch (Exception e) </span>
+		{
+<span class="nc" id="L364">			return false;</span>
+		}
+	}
+
+	/**
+	 * Checks if the user is assigned a specific Permission in any of the given
+	 * Groups
+	 *
+	 * @param permissionName the name of the Permission
+	 * @param groupset       a Groupset
+	 * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in any of
+	 *         the given Groups.
+	 */
+	public boolean hasPermission(String permissionName, GroupSet groupset) {
+		Permission permission;
+		try 
+		{
+<span class="nc" id="L381">			permission = permissionSet.getByName(permissionName);</span>
+<span class="nc" id="L382">		} catch (Exception e) {</span>
+<span class="nc" id="L383">			return false;</span>
+<span class="nc" id="L384">		}</span>
+		
+<span class="nc bnc" id="L386" title="All 2 branches missed.">		if (permission == null) </span>
+		{
+<span class="nc" id="L388">			return false;</span>
+		}
+		
+<span class="nc bnc" id="L391" title="All 2 branches missed.">		for (Group group : groupset) </span>
+		{
+<span class="nc" id="L393">			PermissionSet permissions = getPermissions(group);</span>
+<span class="nc bnc" id="L394" title="All 4 branches missed.">			if (permissions != null &amp;&amp; permissions.contains(permission)) </span>
+			{
+<span class="nc" id="L396">				return true;</span>
+			}
+<span class="nc" id="L398">		}</span>
+<span class="nc" id="L399">		return false;</span>
+	}
+
+	/**
+	 * Checks if the user is assigned a specific Permission.
+	 *
+	 * @param permission the Permission
+	 * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission .
+	 */
+	public boolean hasPermission(Permission permission) {
+<span class="fc" id="L409">		return permissionSet.contains(permission);</span>
+	}
+
+	/**
+	 * Checks if the user is assigned a specific Permission in the global Group.
+	 *
+	 * @param permission the Permission
+	 * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in the
+	 *         global Group.
+	 */
+	public boolean hasPermission(String permission) {
+		try 
+		{
+<span class="nc" id="L422">			return permissionSet.containsName(permission);</span>
+		} 
+<span class="nc" id="L424">		catch (Exception e) </span>
+		{
+<span class="nc" id="L426">			return false;</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

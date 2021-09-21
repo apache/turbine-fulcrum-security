@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>AbstractUserManager.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Fulcrum Security Memory Impl</a> &gt; <a href="../index.html" class="el_bundle">fulcrum-security-api</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.spi</a> &gt; <span class="el_source">AbstractUserManager.java</span></div><h1>AbstractUserManager.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.spi;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import org.apache.commons.lang3.StringUtils;
+import org.apache.fulcrum.security.UserManager;
+import org.apache.fulcrum.security.acl.AccessControlList;
+import org.apache.fulcrum.security.authenticator.Authenticator;
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.ACLFactory;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityExistsException;
+import org.apache.fulcrum.security.util.PasswordMismatchException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+
+/**
+ * This implementation keeps all objects in memory. This is mostly meant to help
+ * with testing and prototyping of ideas.
+ * 
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id$
+ */
+
+// TODO Need to load up Crypto component and actually encrypt passwords!
+
+<span class="fc" id="L42">public abstract class AbstractUserManager extends AbstractEntityManager implements UserManager</span>
+{
+    /** ID **/
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * @param user user to persist
+     * @param &lt;T&gt; User type
+     * @return a User object
+     * @throws DataBackendException if fail to connect
+     */
+    protected abstract &lt;T extends User&gt; T persistNewUser(T user) throws DataBackendException;
+
+    private ACLFactory aclFactory;
+    private Authenticator authenticator;
+
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.UserManager#getACL(org.apache.fulcrum.security.entity.User)
+     */
+    @Override
+	public &lt;T extends AccessControlList&gt; T getACL(User user) throws UnknownEntityException
+    {
+<span class="fc" id="L64">        return getACLFactory().getAccessControlList(user);</span>
+    }
+
+    /**
+     * Check whether a specified user's account exists.
+     *
+     * The login name is used for looking up the account.
+     *
+     * @param user
+     *            The user to be checked.
+     * @return true if the specified account exists
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     */
+    @Override
+	public boolean checkExists(User user) throws DataBackendException
+    {
+<span class="fc" id="L81">        return checkExists(user.getName());</span>
+    }
+
+    /**
+     * Retrieve a user from persistent storage using username as the key, and
+     * authenticate the user. The implementation may chose to authenticate to
+     * the server as the user whose data is being retrieved.
+     *
+     * @param userName
+     *            the name of the user.
+     * @param password
+     *            the user supplied password.
+     * @return an User object.
+     * @exception PasswordMismatchException
+     *                if the supplied password was incorrect.
+     * @exception UnknownEntityException
+     *                if the user's account does not exist in the database.
+     * @exception DataBackendException
+     *                if there is a problem accessing the storage.
+     */
+    @Override
+	public &lt;T extends User&gt; T getUser(String userName, String password) throws PasswordMismatchException, UnknownEntityException, DataBackendException
+    {
+<span class="fc" id="L104">        T user = getUser(userName);</span>
+<span class="fc" id="L105">        authenticate(user, password);</span>
+<span class="fc" id="L106">        return user;</span>
+    }
+
+    @Override
+	public &lt;T extends User&gt; T getUser(String name) throws DataBackendException, UnknownEntityException
+    {
+        @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L113">		T user = (T)getAllUsers().getByName(name);</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">        if (user == null)</span>
+        {
+<span class="nc" id="L116">            throw new UnknownEntityException(&quot;The specified user does not exist&quot;);</span>
+        }
+<span class="fc" id="L118">        return user;</span>
+    }
+
+    /**
+     * Retrieve a User object with specified Id.
+     *
+     * @param id
+     *            the id of the User.
+     *
+     * @return an object representing the User with specified id.
+     *
+     * @throws UnknownEntityException
+     *             if the user does not exist in the database.
+     * @throws DataBackendException
+     *             if there is a problem accessing the storage.
+     */
+    @Override
+	public &lt;T extends User&gt; T getUserById(Object id) throws DataBackendException, UnknownEntityException
+    {
+        @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L138">		T user = (T)getAllUsers().getById(id);</span>
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">        if (user == null)</span>
+        {
+<span class="nc" id="L141">            throw new UnknownEntityException(&quot;The specified user does not exist&quot;);</span>
+        }
+<span class="fc" id="L143">        return user;</span>
+    }
+
+    /**
+     * Authenticate an User with the specified password. If authentication is
+     * successful the method returns nothing. If there are any problems,
+     * exception was thrown.
+     *
+     * @param user
+     *            an User object to authenticate.
+     * @param password
+     *            the user supplied password.
+     * @exception PasswordMismatchException
+     *                if the supplied password was incorrect.
+     * @exception UnknownEntityException
+     *                if the user's account does not exist in the database.
+     * @exception DataBackendException
+     *                if there is a problem accessing the storage.
+     */
+    @Override
+	public void authenticate(User user, String password) throws PasswordMismatchException, UnknownEntityException, DataBackendException
+    {
+<span class="fc bfc" id="L165" title="All 2 branches covered.">        if (authenticator == null)</span>
+        {
+<span class="fc" id="L167">            authenticator = (Authenticator) resolve(Authenticator.ROLE);</span>
+
+        }
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        if (!authenticator.authenticate(user, password))</span>
+        {
+<span class="fc" id="L172">            throw new PasswordMismatchException(&quot;Can not authenticate user.&quot;);</span>
+        }
+<span class="fc" id="L174">    }</span>
+
+    /**
+     * Change the password for an User. The user must have supplied the old
+     * password to allow the change.
+     *
+     * @param user
+     *            an User to change password for.
+     * @param oldPassword
+     *            The old password to verify
+     * @param newPassword
+     *            The new password to set
+     * @exception PasswordMismatchException
+     *                if the supplied password was incorrect.
+     * @exception UnknownEntityException
+     *                if the user's account does not exist in the database.
+     * @exception DataBackendException
+     *                if there is a problem accessing the storage.
+     */
+    @Override
+	public void changePassword(User user, String oldPassword, String newPassword) throws PasswordMismatchException, UnknownEntityException,
+            DataBackendException
+    {
+<span class="pc bpc" id="L197" title="1 of 2 branches missed.">        if (!checkExists(user))</span>
+        {
+<span class="nc" id="L199">            throw new UnknownEntityException(&quot;The account '&quot; + user.getName() + &quot;' does not exist&quot;);</span>
+        }
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        if (!oldPassword.equals(user.getPassword()))</span>
+        {
+<span class="fc" id="L203">            throw new PasswordMismatchException(&quot;The supplied old password for '&quot; + user.getName() + &quot;' was incorrect&quot;);</span>
+        }
+<span class="fc" id="L205">        user.setPassword(newPassword);</span>
+        // save the changes in the database immediately, to prevent the password
+        // being 'reverted' to the old value if the user data is lost somehow
+        // before it is saved at session's expiry.
+<span class="fc" id="L209">        saveUser(user);</span>
+<span class="fc" id="L210">    }</span>
+
+    /**
+     * Forcibly sets new password for an User.
+     *
+     * This is supposed by the administrator to change the forgotten or
+     * compromised passwords. Certain implementatations of this feature would
+     * require administrative level access to the authenticating server /
+     * program.
+     *
+     * @param user
+     *            an User to change password for.
+     * @param password
+     *            the new password.
+     * @exception UnknownEntityException
+     *                if the user's record does not exist in the database.
+     * @exception DataBackendException
+     *                if there is a problem accessing the storage.
+     */
+    @Override
+	public void forcePassword(User user, String password) throws UnknownEntityException, DataBackendException
+    {
+<span class="pc bpc" id="L232" title="1 of 2 branches missed.">        if (!checkExists(user))</span>
+        {
+<span class="nc" id="L234">            throw new UnknownEntityException(&quot;The account '&quot; + user.getName() + &quot;' does not exist&quot;);</span>
+        }
+<span class="fc" id="L236">        user.setPassword(password);</span>
+        // save the changes in the database immediately, to prevent the
+        // password being 'reverted' to the old value if the user data
+        // is lost somehow before it is saved at session's expiry.
+<span class="fc" id="L240">        saveUser(user);</span>
+<span class="fc" id="L241">    }</span>
+
+    /**
+     * Construct a blank User object.
+     *
+     * This method calls getUserClass, and then creates a new object using the
+     * default constructor.
+     *
+     * @return an object implementing User interface.
+     * @throws DataBackendException
+     *             if the object could not be instantiated.
+     */
+    @Override
+	public &lt;T extends User&gt; T getUserInstance() throws DataBackendException
+    {
+        try
+        {
+            @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L259">			T user = (T) Class.forName(getClassName()).newInstance();</span>
+<span class="fc" id="L260">            return user;</span>
+        }
+<span class="nc" id="L262">        catch (Exception e)</span>
+        {
+<span class="nc" id="L264">            throw new DataBackendException(&quot;Problem creating instance of class &quot; + getClassName(), e);</span>
+        }
+    }
+
+    /**
+     * Construct a blank User object.
+     *
+     * This method calls getUserClass, and then creates a new object using the
+     * default constructor.
+     *
+     * @param userName
+     *            The name of the user.
+     *
+     * @return an object implementing User interface.
+     *
+     * @throws DataBackendException
+     *             if the object could not be instantiated.
+     */
+    @Override
+	public &lt;T extends User&gt; T getUserInstance(String userName) throws DataBackendException
+    {
+<span class="fc" id="L285">        T user = getUserInstance();</span>
+<span class="fc" id="L286">        user.setName(userName);</span>
+<span class="fc" id="L287">        return user;</span>
+    }
+
+    /**
+     * Creates new user account with specified attributes.
+     *
+     * @param user
+     *            the object describing account to be created.
+     * @param password
+     *            The password to use for the account.
+     *
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws EntityExistsException
+     *             if the user account already exists.
+     */
+    @Override
+	public &lt;T extends User&gt; T addUser(T user, String password) throws DataBackendException, EntityExistsException
+    {
+<span class="pc bpc" id="L306" title="1 of 2 branches missed.">        if (StringUtils.isEmpty(user.getName()))</span>
+        {
+<span class="nc" id="L308">            throw new DataBackendException(&quot;Could not create &quot; + &quot;an user with empty name!&quot;);</span>
+        }
+<span class="pc bpc" id="L310" title="1 of 2 branches missed.">        if (checkExists(user))</span>
+        {
+<span class="nc" id="L312">            throw new EntityExistsException(&quot;The account '&quot; + user.getName() + &quot;' already exists&quot;);</span>
+        }
+<span class="fc" id="L314">        user.setPassword(password);</span>
+        try
+        {
+<span class="fc" id="L317">            return persistNewUser(user);</span>
+        }
+<span class="nc" id="L319">        catch (Exception e)</span>
+        {
+<span class="nc" id="L321">            throw new DataBackendException(&quot;Failed to create account '&quot; + user.getName() + &quot;'&quot;, e);</span>
+        }
+    }
+
+    /**
+     * @return Returns the ACLFactory.
+     */
+    public ACLFactory getACLFactory()
+    {
+<span class="fc bfc" id="L330" title="All 2 branches covered.">        if (aclFactory == null)</span>
+        {
+<span class="fc" id="L332">            aclFactory = (ACLFactory) resolve(ACLFactory.ROLE);</span>
+        }
+<span class="fc" id="L334">        return aclFactory;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

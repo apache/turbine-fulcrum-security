@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TorqueAbstractSecurityEntity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.torque.security</a> &gt; <span class="el_source">TorqueAbstractSecurityEntity.java</span></div><h1>TorqueAbstractSecurityEntity.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.torque.security;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.io.Serializable;
+import java.sql.Connection;
+
+import org.apache.fulcrum.security.entity.SecurityEntity;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.torque.TorqueException;
+import org.apache.torque.om.Persistent;
+/**
+ * This abstract class provides the SecurityInterface to the managers.
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id:$
+ */
+<span class="fc" id="L33">public abstract class TorqueAbstractSecurityEntity</span>
+    implements SecurityEntity, Serializable, Persistent
+{
+    /** Serial version */
+	private static final long serialVersionUID = -4052254585021044275L;
+
+	/**
+     * Get a numeric entity id
+     *
+     * @return numeric id of this entity
+     */
+    public abstract Integer getEntityId();
+
+    /**
+     * Set a numeric entity id
+     *
+     * @param id numeric id of this entity
+     * @throws TorqueException database not found exception
+     */
+    public abstract void setEntityId(Integer id) throws TorqueException;
+
+    /**
+     * Get the name of the entity
+     *
+     * @return name of this entity
+     */
+    public abstract String getEntityName();
+
+    /**
+     * Set the name of the entity
+     *
+     * @param name the name of the entity
+     */
+    public abstract void setEntityName(String name);
+     
+    /**
+     * Retrieve attached objects such as users, permissions, ...
+     * 
+     * @param con A database connection
+     * @param lazy if &lt;code&gt;true&lt;/code&gt;, may load some or all relationships later
+     * @throws TorqueException database not found exception
+     */
+    public abstract void retrieveAttachedObjects(Connection con, Boolean lazy) throws DataBackendException, TorqueException;
+    
+    
+    /**
+     * old contract, lazy is set to &lt;code&gt;false&lt;/code&gt;.
+     *
+     * @param con A database connection
+     * @throws DataBackendException wrapper exception: user information not found exception
+     * @throws TorqueException 
+     */
+    public abstract void retrieveAttachedObjects(Connection con) throws DataBackendException, TorqueException;
+
+    /**
+     * Update this instance to the database with all dependent objects
+     *
+     * @param con A database connection
+     * @throws TorqueException database not found exception
+     */
+    public abstract void update(Connection con) throws TorqueException;
+    
+    /**
+     * Delete this entity
+     *
+     * @throws TorqueException  if any database error occurs if any database operation fails
+     */
+    public abstract void delete() throws TorqueException;
+
+    /**
+     * @see org.apache.fulcrum.security.entity.SecurityEntity#getId()
+     */
+    @Override
+    public Object getId()
+    {
+<span class="fc" id="L108">        return getEntityId();</span>
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.entity.SecurityEntity#setId(java.lang.Object)
+     */
+    @Override
+    public void setId(Object id)
+    {
+        try
+        {
+<span class="fc" id="L119">            setEntityId((Integer)id);</span>
+        }
+<span class="nc" id="L121">        catch (TorqueException e)</span>
+        {
+            // should not happen
+<span class="fc" id="L124">        }</span>
+<span class="fc" id="L125">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.entity.SecurityEntity#getName()
+     */
+    @Override
+    public String getName()
+    {
+<span class="fc" id="L133">        return getEntityName();</span>
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.entity.SecurityEntity#setName(java.lang.String)
+     */
+    @Override
+    public void setName(String name)
+    {
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">        if (name != null)</span>
+        {
+<span class="fc" id="L144">            setEntityName(name.toLowerCase());</span>
+        }
+<span class="fc" id="L146">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

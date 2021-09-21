@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TorqueDynamicPermissionManagerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.torque.dynamic</a> &gt; <span class="el_source">TorqueDynamicPermissionManagerImpl.java</span></div><h1>TorqueDynamicPermissionManagerImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.torque.dynamic;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.sql.Connection;
+import java.util.List;
+
+import org.apache.fulcrum.security.entity.Permission;
+import org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicPermission;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicPermissionPeer;
+import org.apache.torque.NoRowsException;
+import org.apache.torque.TooManyRowsException;
+import org.apache.torque.TorqueException;
+import org.apache.torque.criteria.Criteria;
+/**
+ * This implementation persists to a database via Torque.
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id:$
+ */
+<span class="fc" id="L37">public class TorqueDynamicPermissionManagerImpl extends TorqueAbstractPermissionManager</span>
+{
+    /**
+	 * Serial ID
+	 */
+	private static final long serialVersionUID = -4831283855331325456L;
+
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager#doSelectAllPermissions(java.sql.Connection)
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+	protected &lt;T extends Permission&gt; List&lt;T&gt; doSelectAllPermissions(Connection con) throws TorqueException
+    {
+<span class="fc" id="L50">        Criteria criteria = new Criteria(TorqueDynamicPermissionPeer.DATABASE_NAME);</span>
+
+<span class="fc" id="L52">        return (List&lt;T&gt;)TorqueDynamicPermissionPeer.doSelect(criteria, con);</span>
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager#doSelectById(java.lang.Integer, java.sql.Connection)
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+	protected &lt;T extends Permission&gt; T doSelectById(Integer id, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    {
+<span class="fc" id="L61">        return (T) TorqueDynamicPermissionPeer.retrieveByPK(id, con);</span>
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractPermissionManager#doSelectByName(java.lang.String, java.sql.Connection)
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+	protected &lt;T extends Permission&gt; T doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    {
+<span class="fc" id="L70">        Criteria criteria = new Criteria(TorqueDynamicPermissionPeer.DATABASE_NAME);</span>
+<span class="fc" id="L71">        criteria.where(TorqueDynamicPermissionPeer.PERMISSION_NAME, name);</span>
+<span class="fc" id="L72">        criteria.setIgnoreCase(true);</span>
+<span class="fc" id="L73">        criteria.setSingleRecord(true);</span>
+
+<span class="fc" id="L75">        List&lt;TorqueDynamicPermission&gt; permissions = TorqueDynamicPermissionPeer.doSelect(criteria, con);</span>
+
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (permissions.isEmpty())</span>
+        {
+<span class="fc" id="L79">            throw new NoRowsException(name);</span>
+        }
+
+<span class="fc" id="L82">        return (T) permissions.get(0);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

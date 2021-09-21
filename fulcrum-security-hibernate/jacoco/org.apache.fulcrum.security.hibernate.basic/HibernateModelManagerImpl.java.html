@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HibernateModelManagerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Hibernate Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.hibernate.basic</a> &gt; <span class="el_source">HibernateModelManagerImpl.java</span></div><h1>HibernateModelManagerImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.hibernate.basic;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.hibernate.PersistenceHelper;
+import org.apache.fulcrum.security.model.basic.BasicModelManager;
+import org.apache.fulcrum.security.model.basic.entity.BasicGroup;
+import org.apache.fulcrum.security.model.basic.entity.BasicUser;
+import org.apache.fulcrum.security.spi.AbstractManager;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+/**
+ * This implementation persists to a database via Hibernate.
+ * 
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id: HibernateModelManagerImpl.java 1374014 2012-08-16 19:47:27Z tv
+ *          $
+ */
+<span class="fc" id="L40">public class HibernateModelManagerImpl extends AbstractManager implements BasicModelManager</span>
+{
+    private PersistenceHelper persistenceHelper;
+
+    /**
+     * Puts a user in a group.
+     * 
+     * This method is used when adding a user to a group
+     * 
+     * @param user
+     *            the User.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the account is not present.
+     */
+    public synchronized void grant(User user, Group group) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L58">        boolean groupExists = false;</span>
+<span class="fc" id="L59">        boolean userExists = false;</span>
+<span class="fc" id="L60">        Transaction transaction = null;</span>
+
+        try
+        {
+<span class="fc" id="L64">            groupExists = getGroupManager().checkExists(group);</span>
+<span class="fc" id="L65">            userExists = getUserManager().checkExists(user);</span>
+<span class="pc bpc" id="L66" title="2 of 4 branches missed.">            if (groupExists &amp;&amp; userExists)</span>
+            {
+<span class="fc" id="L68">                Session session = getPersistenceHelper().retrieveSession();</span>
+<span class="fc" id="L69">                transaction = session.beginTransaction();</span>
+<span class="fc" id="L70">                ((BasicUser) user).addGroup(group);</span>
+<span class="fc" id="L71">                ((BasicGroup) group).addUser(user);</span>
+<span class="fc" id="L72">                session.update(user);</span>
+<span class="fc" id="L73">                session.update(group);</span>
+<span class="fc" id="L74">                transaction.commit();</span>
+<span class="fc" id="L75">                transaction = null;</span>
+            }
+        }
+<span class="nc" id="L78">        catch (Exception e)</span>
+        {
+<span class="nc" id="L80">            throw new DataBackendException(&quot;grant(Role,Permission) failed&quot;, e);</span>
+        }
+        finally
+        {
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">            if (transaction != null)</span>
+            {
+<span class="nc" id="L86">                transaction.rollback();</span>
+            }
+        }
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        if (!groupExists)</span>
+        {
+<span class="nc" id="L91">            throw new UnknownEntityException(&quot;Unknown group '&quot; + group.getName() + &quot;'&quot;);</span>
+        }
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">        if (!userExists)</span>
+        {
+<span class="nc" id="L95">            throw new UnknownEntityException(&quot;Unknown user '&quot; + user.getName() + &quot;'&quot;);</span>
+        }
+<span class="fc" id="L97">    }</span>
+
+    /**
+     * Removes a user in a group.
+     * 
+     * This method is used when removing a user to a group
+     * 
+     * @param user
+     *            the User.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the user or group is not present.
+     */
+    public synchronized void revoke(User user, Group group) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L113">        boolean groupExists = false;</span>
+<span class="fc" id="L114">        boolean userExists = false;</span>
+<span class="fc" id="L115">        Transaction transaction = null;</span>
+
+        try
+        {
+<span class="fc" id="L119">            groupExists = getGroupManager().checkExists(group);</span>
+<span class="fc" id="L120">            userExists = getUserManager().checkExists(user);</span>
+<span class="pc bpc" id="L121" title="2 of 4 branches missed.">            if (groupExists &amp;&amp; userExists)</span>
+            {
+<span class="fc" id="L123">                Session session = getPersistenceHelper().retrieveSession();</span>
+<span class="fc" id="L124">                transaction = session.beginTransaction();</span>
+<span class="fc" id="L125">                ((BasicUser) user).removeGroup(group);</span>
+<span class="fc" id="L126">                ((BasicGroup) group).removeUser(user);</span>
+<span class="fc" id="L127">                session.update(user);</span>
+<span class="fc" id="L128">                session.update(group);</span>
+<span class="fc" id="L129">                transaction.commit();</span>
+<span class="fc" id="L130">                transaction = null;</span>
+            }
+        }
+<span class="nc" id="L133">        catch (Exception e)</span>
+        {
+<span class="nc" id="L135">            throw new DataBackendException(&quot;grant(Role,Permission) failed&quot;, e);</span>
+        }
+        finally
+        {
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">            if (transaction != null)</span>
+            {
+<span class="nc" id="L141">                transaction.rollback();</span>
+            }
+        }
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">        if (!groupExists)</span>
+        {
+<span class="nc" id="L146">            throw new UnknownEntityException(&quot;Unknown group '&quot; + group.getName() + &quot;'&quot;);</span>
+        }
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">        if (!userExists)</span>
+        {
+<span class="nc" id="L150">            throw new UnknownEntityException(&quot;Unknown user '&quot; + user.getName() + &quot;'&quot;);</span>
+        }
+<span class="fc" id="L152">    }</span>
+
+    /**
+     * Revokes all groups from a user
+     * 
+     * This method is used when deleting an account.
+     * 
+     * @param user
+     *            the User.
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     * @throws UnknownEntityException
+     *             if the account is not present.
+     */
+    public synchronized void revokeAll(User user) throws DataBackendException, UnknownEntityException
+    {
+<span class="fc" id="L168">        boolean userExists = false;</span>
+<span class="fc" id="L169">        userExists = getUserManager().checkExists(user);</span>
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">        if (userExists)</span>
+        {
+<span class="fc" id="L172">            Object groups[] = ((BasicUser) user).getGroups().toArray();</span>
+
+<span class="fc bfc" id="L174" title="All 2 branches covered.">            for (Object group2 : groups)</span>
+            {
+<span class="fc" id="L176">                Group group = (Group) group2;</span>
+<span class="fc" id="L177">                revoke(user, group);</span>
+            }
+
+<span class="fc" id="L180">            return;</span>
+        }
+        else
+        {
+<span class="nc" id="L184">            throw new UnknownEntityException(&quot;Unknown user '&quot; + user.getName() + &quot;'&quot;);</span>
+        }
+    }
+
+    /**
+     * @return Returns the persistenceHelper.
+     */
+    public PersistenceHelper getPersistenceHelper()
+    {
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        if (persistenceHelper == null)</span>
+        {
+<span class="fc" id="L195">            persistenceHelper = (PersistenceHelper) resolve(PersistenceHelper.ROLE);</span>
+        }
+<span class="fc" id="L197">        return persistenceHelper;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

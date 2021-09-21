@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"org.apache.fulcrum.security.hibernate"},{"l":"org.apache.fulcrum.security.hibernate.basic"},{"l":"org.apache.fulcrum.security.hibernate.dynamic"},{"l":"org.apache.fulcrum.security.hibernate.dynamic.entity"},{"l":"org.apache.fulcrum.security.hibernate.turbine"}]

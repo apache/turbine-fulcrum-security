@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TorqueAbstractDynamicUser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.torque.dynamic</a> &gt; <span class="el_source">TorqueAbstractDynamicUser.java</span></div><h1>TorqueAbstractDynamicUser.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.torque.dynamic;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.sql.Connection;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicUserDelegates;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicUserDelegatesPeer;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicUserGroup;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicUserGroupPeer;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicUserPeer;
+import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.GroupSet;
+import org.apache.fulcrum.security.util.UserSet;
+import org.apache.torque.TorqueException;
+import org.apache.torque.criteria.Criteria;
+import org.apache.torque.om.SimpleKey;
+
+/**
+ * This abstract class provides the SecurityInterface to the managers.
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id:$
+ */
+<span class="fc" id="L47">public abstract class TorqueAbstractDynamicUser extends TorqueAbstractSecurityEntity implements DynamicUser {</span>
+    /** Serial version */
+    private static final long serialVersionUID = -7307211992287876455L;
+
+    /** a cache of group objects */
+<span class="fc" id="L52">    private Set&lt;Group&gt; groupSet = null;</span>
+
+    /** a cache of delegator (user) objects */
+<span class="fc" id="L55">    private Set&lt;User&gt; delegators = null;</span>
+
+    /** a cache of delegatee(user) objects */
+<span class="fc" id="L58">    private Set&lt;User&gt; delegatees = null;</span>
+
+    /**
+     * Forward reference to generated code
+     *
+     * Get a list of association objects, pre-populated with their
+     * TorqueDynamicGroup objects.
+     *
+     * @param criteria Criteria to define the selection of records
+     * @param con      a database connection
+     * @throws TorqueException if any database error occurs
+     *
+     * @return a list of User/Group relations
+     */
+    protected List&lt;TorqueDynamicUserGroup&gt; getTorqueDynamicUserGroupsJoinTorqueDynamicGroup(Criteria criteria,
+            Connection con) throws TorqueException {
+<span class="nc" id="L74">        criteria.and(TorqueDynamicUserGroupPeer.USER_ID, getEntityId());</span>
+<span class="nc" id="L75">        return TorqueDynamicUserGroupPeer.doSelectJoinTorqueDynamicGroup(criteria, con);</span>
+    }
+
+    /**
+     * Forward reference to generated code
+     *
+     * Get a list of delegator association objects, pre-populated with their
+     * TorqueDynamicUserDelegates objects.
+     *
+     * @param criteria Criteria to define the selection of records
+     * @param con      a database connection
+     * @throws TorqueException if any database error occurs
+     *
+     * @return a list of User/Delegator relations
+     */
+    protected List&lt;TorqueDynamicUserDelegates&gt; getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(
+            Criteria criteria, Connection con) throws TorqueException {
+<span class="fc" id="L92">        criteria.and(TorqueDynamicUserDelegatesPeer.DELEGATEE_USER_ID, getEntityId());</span>
+<span class="fc" id="L93">        return TorqueDynamicUserDelegatesPeer.doSelectJoinTorqueDynamicUserRelatedByDelegatorUserId(criteria, con);</span>
+    }
+
+    /**
+     * Forward reference to generated code
+     *
+     * Get a list of delegatee association objects, pre-populated with their
+     * TorqueDynamicUserDelegates objects.
+     *
+     * @param criteria Criteria to define the selection of records
+     * @param con      a database connection
+     * @throws TorqueException if any database error occurs
+     *
+     * @return a list of User/Delegator relations
+     */
+    protected List&lt;TorqueDynamicUserDelegates&gt; getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(
+            Criteria criteria, Connection con) throws TorqueException {
+<span class="fc" id="L110">        criteria.and(TorqueDynamicUserDelegatesPeer.DELEGATOR_USER_ID, getEntityId());</span>
+<span class="fc" id="L111">        return TorqueDynamicUserDelegatesPeer.doSelectJoinTorqueDynamicUserRelatedByDelegateeUserId(criteria, con);</span>
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.fulcrum.security.model.basic.entity.BasicUser#addGroup(org.apache.
+     * fulcrum.security.entity.Group)
+     */
+    public void addGroup(Group group) {
+<span class="fc" id="L122">        getGroups().add(group);</span>
+<span class="fc" id="L123">    }</span>
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#getGroups()
+     */
+    public GroupSet getGroups() {
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        if (groupSet == null) {</span>
+<span class="fc" id="L132">            groupSet = new GroupSet();</span>
+<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        } else if (!(groupSet instanceof GroupSet)) {</span>
+<span class="nc" id="L134">            groupSet = new GroupSet(groupSet);</span>
+        }
+
+<span class="fc" id="L137">        return (GroupSet) groupSet;</span>
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.fulcrum.security.model.basic.entity.BasicUser#getGroupsAsSet()
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public &lt;T extends Group&gt; Set&lt;T&gt; getGroupsAsSet() {
+<span class="nc" id="L148">        return (Set&lt;T&gt;) groupSet;</span>
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.fulcrum.security.model.basic.entity.BasicUser#removeGroup(org.
+     * apache.fulcrum.security.entity.Group)
+     */
+    public void removeGroup(Group group) {
+<span class="fc" id="L159">        getGroups().remove(group);</span>
+<span class="fc" id="L160">    }</span>
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.fulcrum.security.model.basic.entity.BasicUser#setGroups(org.apache
+     * .fulcrum.security.util.GroupSet)
+     */
+    public void setGroups(GroupSet groups) {
+<span class="nc bnc" id="L170" title="All 2 branches missed.">        if (groups != null) {</span>
+<span class="nc" id="L171">            this.groupSet = groups;</span>
+        } else {
+<span class="nc" id="L173">            this.groupSet = new GroupSet();</span>
+        }
+<span class="nc" id="L175">    }</span>
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.fulcrum.security.model.basic.entity.BasicUser#setGroupsAsSet(java.
+     * util.Set)
+     */
+    public &lt;T extends Group&gt; void setGroupsAsSet(Set&lt;T&gt; groups) {
+<span class="nc" id="L185">        setGroups(new GroupSet(groups));</span>
+<span class="nc" id="L186">    }</span>
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.fulcrum.security.model.dynamic.entity.DynamicUser#getDelegatees()
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public &lt;T extends User&gt; Set&lt;T&gt; getDelegatees() {
+<span class="fc bfc" id="L196" title="All 2 branches covered.">        if (delegatees == null) {</span>
+<span class="fc" id="L197">            delegatees = new UserSet&lt;T&gt;();</span>
+        }
+
+<span class="fc" id="L200">        return (Set&lt;T&gt;) delegatees;</span>
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.fulcrum.security.model.dynamic.entity.DynamicUser#getDelegators()
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public &lt;T extends User&gt; Set&lt;T&gt; getDelegators() {
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        if (delegators == null) {</span>
+<span class="fc" id="L212">            delegators = new UserSet&lt;T&gt;();</span>
+        }
+
+<span class="fc" id="L215">        return (Set&lt;T&gt;) delegators;</span>
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.fulcrum.security.model.dynamic.entity.DynamicUser#setDelegatees(
+     * java.util.Set)
+     */
+    public &lt;T extends User&gt; void setDelegatees(Set&lt;T&gt; delegatees) {
+<span class="nc bnc" id="L226" title="All 2 branches missed.">        if (delegatees != null) {</span>
+<span class="nc" id="L227">            this.delegatees = new UserSet&lt;T&gt;(delegatees);</span>
+        } else {
+<span class="nc" id="L229">            this.delegatees = new UserSet&lt;T&gt;();</span>
+        }
+<span class="nc" id="L231">    }</span>
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.fulcrum.security.model.dynamic.entity.DynamicUser#setDelegators(
+     * java.util.Set)
+     */
+    public &lt;T extends User&gt; void setDelegators(Set&lt;T&gt; delegates) {
+<span class="nc bnc" id="L241" title="All 2 branches missed.">        if (delegators != null) {</span>
+<span class="nc" id="L242">            this.delegators = new UserSet&lt;T&gt;(delegates);</span>
+        } else {
+<span class="nc" id="L244">            this.delegators = new UserSet&lt;T&gt;();</span>
+        }
+<span class="nc" id="L246">    }</span>
+
+    /**
+     * @return the database name
+     */
+    public String getDatabaseName() {
+<span class="nc" id="L252">        return TorqueDynamicUserPeer.DATABASE_NAME;</span>
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#
+     * retrieveAttachedObjects(java.sql.Connection)
+     */
+    @Override
+    public void retrieveAttachedObjects(Connection con) throws DataBackendException {
+<span class="nc" id="L264">        retrieveAttachedObjects(con, false);</span>
+<span class="nc" id="L265">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(Connection,
+     *      Boolean)
+     */
+    @Override
+    public void retrieveAttachedObjects(Connection con, Boolean lazy) throws DataBackendException {
+        
+<span class="fc" id="L274">        this.groupSet = new GroupSet();</span>
+
+        try {
+            
+<span class="fc" id="L278">            List&lt;TorqueDynamicUserGroup&gt; usergroups = getTorqueDynamicUserGroupsJoinTorqueDynamicGroup(new Criteria(), con);</span>
+    
+<span class="fc bfc" id="L280" title="All 2 branches covered.">            for (TorqueDynamicUserGroup tdug : usergroups) {</span>
+<span class="fc" id="L281">                groupSet.add(tdug.getTorqueDynamicGroup());</span>
+<span class="fc" id="L282">            }</span>
+    
+<span class="fc" id="L284">            this.delegators = new UserSet&lt;User&gt;();</span>
+    
+<span class="fc" id="L286">            List&lt;TorqueDynamicUserDelegates&gt; delegatorlist = getTorqueDynamicUserDelegatessRelatedByDelegateeUserIdJoinTorqueDynamicUserRelatedByDelegatorUserId(</span>
+                    new Criteria(), con);
+    
+<span class="fc bfc" id="L289" title="All 2 branches covered.">            for (TorqueDynamicUserDelegates tdud : delegatorlist) {</span>
+<span class="fc" id="L290">                delegators.add(tdud.getTorqueDynamicUserRelatedByDelegatorUserId());</span>
+<span class="fc" id="L291">            }</span>
+    
+<span class="fc" id="L293">            this.delegatees = new UserSet&lt;User&gt;();</span>
+    
+<span class="fc" id="L295">            List&lt;TorqueDynamicUserDelegates&gt; delegateelist = getTorqueDynamicUserDelegatessRelatedByDelegatorUserIdJoinTorqueDynamicUserRelatedByDelegateeUserId(</span>
+                    new Criteria(), con);
+    
+<span class="fc bfc" id="L298" title="All 2 branches covered.">            for (TorqueDynamicUserDelegates tdud : delegateelist) {</span>
+<span class="fc" id="L299">                delegatees.add(tdud.getTorqueDynamicUserRelatedByDelegateeUserId());</span>
+<span class="fc" id="L300">            }</span>
+            
+<span class="nc" id="L302">        } catch (TorqueException e ) {</span>
+<span class="nc" id="L303">            throw new DataBackendException( e.getMessage(),e );</span>
+<span class="fc" id="L304">        }</span>
+<span class="fc" id="L305">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#update(java.sql.Connection)
+     */
+    public void update(Connection con) throws TorqueException {
+<span class="fc bfc" id="L311" title="All 2 branches covered.">        if (groupSet != null) {</span>
+<span class="fc" id="L312">            Criteria criteria = new Criteria();</span>
+
+            /* remove old entries */
+<span class="fc" id="L315">            criteria.where(TorqueDynamicUserGroupPeer.USER_ID, getEntityId());</span>
+<span class="fc" id="L316">            TorqueDynamicUserGroupPeer.doDelete(criteria, con);</span>
+
+<span class="fc bfc" id="L318" title="All 2 branches covered.">            for (Group g : groupSet) {</span>
+<span class="fc" id="L319">                TorqueDynamicUserGroup ug = new TorqueDynamicUserGroup();</span>
+<span class="fc" id="L320">                ug.setUserId(getEntityId());</span>
+<span class="fc" id="L321">                ug.setGroupId((Integer) g.getId());</span>
+<span class="fc" id="L322">                ug.save(con);</span>
+<span class="fc" id="L323">            }</span>
+        }
+
+<span class="fc bfc" id="L326" title="All 2 branches covered.">        if (delegators != null) {</span>
+<span class="fc" id="L327">            Criteria criteria = new Criteria();</span>
+
+            /* remove old entries */
+<span class="fc" id="L330">            criteria.where(TorqueDynamicUserDelegatesPeer.DELEGATEE_USER_ID, getEntityId());</span>
+<span class="fc" id="L331">            TorqueDynamicUserDelegatesPeer.doDelete(criteria, con);</span>
+
+<span class="fc bfc" id="L333" title="All 2 branches covered.">            for (User u : delegators) {</span>
+<span class="fc" id="L334">                TorqueDynamicUserDelegates ud = new TorqueDynamicUserDelegates();</span>
+<span class="fc" id="L335">                ud.setDelegateeUserId(getEntityId());</span>
+<span class="fc" id="L336">                ud.setDelegatorUserId((Integer) u.getId());</span>
+<span class="fc" id="L337">                ud.save(con);</span>
+<span class="fc" id="L338">            }</span>
+        }
+
+<span class="fc bfc" id="L341" title="All 2 branches covered.">        if (delegatees != null) {</span>
+<span class="fc" id="L342">            Criteria criteria = new Criteria();</span>
+
+            /* remove old entries */
+<span class="fc" id="L345">            criteria.where(TorqueDynamicUserDelegatesPeer.DELEGATOR_USER_ID, getEntityId());</span>
+<span class="fc" id="L346">            TorqueDynamicUserDelegatesPeer.doDelete(criteria, con);</span>
+
+<span class="fc bfc" id="L348" title="All 2 branches covered.">            for (User u : delegatees) {</span>
+<span class="fc" id="L349">                TorqueDynamicUserDelegates ud = new TorqueDynamicUserDelegates();</span>
+<span class="fc" id="L350">                ud.setDelegatorUserId(getEntityId());</span>
+<span class="fc" id="L351">                ud.setDelegateeUserId((Integer) u.getId());</span>
+<span class="fc" id="L352">                ud.save(con);</span>
+<span class="fc" id="L353">            }</span>
+        }
+
+        try {
+<span class="fc" id="L357">            save(con);</span>
+<span class="nc" id="L358">        } catch (Exception e) {</span>
+<span class="nc" id="L359">            throw new TorqueException(e);</span>
+<span class="fc" id="L360">        }</span>
+<span class="fc" id="L361">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#delete()
+     */
+    public void delete() throws TorqueException {
+<span class="nc" id="L367">        TorqueDynamicUserPeer.doDelete(SimpleKey.keyFor(getEntityId()));</span>
+<span class="nc" id="L368">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

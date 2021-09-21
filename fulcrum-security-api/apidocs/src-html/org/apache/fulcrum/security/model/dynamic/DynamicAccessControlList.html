@@ -1,0 +1,301 @@
+<!DOCTYPE HTML>
+<html lang="de">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<main role="main">
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span><a id="line.1">package org.apache.fulcrum.security.model.dynamic;</a>
+<span class="sourceLineNo">002</span><a id="line.2"></a>
+<span class="sourceLineNo">003</span><a id="line.3">/*</a>
+<span class="sourceLineNo">004</span><a id="line.4"> * Licensed to the Apache Software Foundation (ASF) under one</a>
+<span class="sourceLineNo">005</span><a id="line.5"> * or more contributor license agreements.  See the NOTICE file</a>
+<span class="sourceLineNo">006</span><a id="line.6"> * distributed with this work for additional information</a>
+<span class="sourceLineNo">007</span><a id="line.7"> * regarding copyright ownership.  The ASF licenses this file</a>
+<span class="sourceLineNo">008</span><a id="line.8"> * to you under the Apache License, Version 2.0 (the</a>
+<span class="sourceLineNo">009</span><a id="line.9"> * "License"); you may not use this file except in compliance</a>
+<span class="sourceLineNo">010</span><a id="line.10"> * with the License.  You may obtain a copy of the License at</a>
+<span class="sourceLineNo">011</span><a id="line.11"> *</a>
+<span class="sourceLineNo">012</span><a id="line.12"> *   http://www.apache.org/licenses/LICENSE-2.0</a>
+<span class="sourceLineNo">013</span><a id="line.13"> *</a>
+<span class="sourceLineNo">014</span><a id="line.14"> * Unless required by applicable law or agreed to in writing,</a>
+<span class="sourceLineNo">015</span><a id="line.15"> * software distributed under the License is distributed on an</a>
+<span class="sourceLineNo">016</span><a id="line.16"> * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</a>
+<span class="sourceLineNo">017</span><a id="line.17"> * KIND, either express or implied.  See the License for the</a>
+<span class="sourceLineNo">018</span><a id="line.18"> * specific language governing permissions and limitations</a>
+<span class="sourceLineNo">019</span><a id="line.19"> * under the License.</a>
+<span class="sourceLineNo">020</span><a id="line.20"> */</a>
+<span class="sourceLineNo">021</span><a id="line.21"></a>
+<span class="sourceLineNo">022</span><a id="line.22">import java.io.Serializable;</a>
+<span class="sourceLineNo">023</span><a id="line.23"></a>
+<span class="sourceLineNo">024</span><a id="line.24">import org.apache.fulcrum.security.acl.AccessControlList;</a>
+<span class="sourceLineNo">025</span><a id="line.25">import org.apache.fulcrum.security.entity.Group;</a>
+<span class="sourceLineNo">026</span><a id="line.26">import org.apache.fulcrum.security.entity.Permission;</a>
+<span class="sourceLineNo">027</span><a id="line.27">import org.apache.fulcrum.security.entity.Role;</a>
+<span class="sourceLineNo">028</span><a id="line.28">import org.apache.fulcrum.security.util.GroupSet;</a>
+<span class="sourceLineNo">029</span><a id="line.29">import org.apache.fulcrum.security.util.PermissionSet;</a>
+<span class="sourceLineNo">030</span><a id="line.30">import org.apache.fulcrum.security.util.RoleSet;</a>
+<span class="sourceLineNo">031</span><a id="line.31"></a>
+<span class="sourceLineNo">032</span><a id="line.32">/**</a>
+<span class="sourceLineNo">033</span><a id="line.33"> * This interface describes a control class that makes it easy to find out if a</a>
+<span class="sourceLineNo">034</span><a id="line.34"> * particular User has a given Permission. It also determines if a User has a a</a>
+<span class="sourceLineNo">035</span><a id="line.35"> * particular Role.</a>
+<span class="sourceLineNo">036</span><a id="line.36"> * </a>
+<span class="sourceLineNo">037</span><a id="line.37"> * @author &lt;a href="mailto:epugh@upstate.com"&gt;Eric Pugh&lt;/a&gt;</a>
+<span class="sourceLineNo">038</span><a id="line.38"> * @author &lt;a href="mailto:bmclaugh@algx.net"&gt;Brett McLaughlin&lt;/a&gt;</a>
+<span class="sourceLineNo">039</span><a id="line.39"> * @author &lt;a href="mailto:greg@shwoop.com"&gt;Greg Ritter&lt;/a&gt;</a>
+<span class="sourceLineNo">040</span><a id="line.40"> * @author &lt;a href="mailto:Rafal.Krzewski@e-point.pl"&gt;Rafal Krzewski&lt;/a&gt;</a>
+<span class="sourceLineNo">041</span><a id="line.41"> * @author &lt;a href="mailto:hps@intermeta.de"&gt;Henning P. Schmiedehausen&lt;/a&gt;</a>
+<span class="sourceLineNo">042</span><a id="line.42"> * @author &lt;a href="mailto:marco@intermeta.de"&gt;Marco Kn&amp;uuml;ttel&lt;/a&gt;</a>
+<span class="sourceLineNo">043</span><a id="line.43"> * @version $Id$</a>
+<span class="sourceLineNo">044</span><a id="line.44"> */</a>
+<span class="sourceLineNo">045</span><a id="line.45">public interface DynamicAccessControlList extends Serializable, AccessControlList</a>
+<span class="sourceLineNo">046</span><a id="line.46">{</a>
+<span class="sourceLineNo">047</span><a id="line.47"></a>
+<span class="sourceLineNo">048</span><a id="line.48">    /**</a>
+<span class="sourceLineNo">049</span><a id="line.49">     * Retrieves a set of Roles an user is assigned in a Group.</a>
+<span class="sourceLineNo">050</span><a id="line.50">     * </a>
+<span class="sourceLineNo">051</span><a id="line.51">     * @param group</a>
+<span class="sourceLineNo">052</span><a id="line.52">     *            the Group</a>
+<span class="sourceLineNo">053</span><a id="line.53">     * @return the set of Roles this user has within the Group.</a>
+<span class="sourceLineNo">054</span><a id="line.54">     */</a>
+<span class="sourceLineNo">055</span><a id="line.55">    RoleSet getRoles(Group group);</a>
+<span class="sourceLineNo">056</span><a id="line.56"></a>
+<span class="sourceLineNo">057</span><a id="line.57">    /**</a>
+<span class="sourceLineNo">058</span><a id="line.58">     * Retrieves all roles for a user</a>
+<span class="sourceLineNo">059</span><a id="line.59">     * </a>
+<span class="sourceLineNo">060</span><a id="line.60">     * @return the set of Roles this user has</a>
+<span class="sourceLineNo">061</span><a id="line.61">     */</a>
+<span class="sourceLineNo">062</span><a id="line.62">    RoleSet getRoles();</a>
+<span class="sourceLineNo">063</span><a id="line.63"></a>
+<span class="sourceLineNo">064</span><a id="line.64">    /**</a>
+<span class="sourceLineNo">065</span><a id="line.65">     * Retrieves a set of Permissions an user is assigned in a Group.</a>
+<span class="sourceLineNo">066</span><a id="line.66">     * </a>
+<span class="sourceLineNo">067</span><a id="line.67">     * @param group</a>
+<span class="sourceLineNo">068</span><a id="line.68">     *            the Group</a>
+<span class="sourceLineNo">069</span><a id="line.69">     * @return the set of Permissions this user has within the Group.</a>
+<span class="sourceLineNo">070</span><a id="line.70">     */</a>
+<span class="sourceLineNo">071</span><a id="line.71">    PermissionSet getPermissions(Group group);</a>
+<span class="sourceLineNo">072</span><a id="line.72"></a>
+<span class="sourceLineNo">073</span><a id="line.73">    /**</a>
+<span class="sourceLineNo">074</span><a id="line.74">     * Retrieves a set of Permissions an user is assigned</a>
+<span class="sourceLineNo">075</span><a id="line.75">     * </a>
+<span class="sourceLineNo">076</span><a id="line.76">     * @return the set of Permissions this user has.</a>
+<span class="sourceLineNo">077</span><a id="line.77">     */</a>
+<span class="sourceLineNo">078</span><a id="line.78">    PermissionSet getPermissions();</a>
+<span class="sourceLineNo">079</span><a id="line.79"></a>
+<span class="sourceLineNo">080</span><a id="line.80">    /**</a>
+<span class="sourceLineNo">081</span><a id="line.81">     * Checks if the user is assigned a specific Role in the Group.</a>
+<span class="sourceLineNo">082</span><a id="line.82">     * </a>
+<span class="sourceLineNo">083</span><a id="line.83">     * @param role</a>
+<span class="sourceLineNo">084</span><a id="line.84">     *            the Role</a>
+<span class="sourceLineNo">085</span><a id="line.85">     * @param group</a>
+<span class="sourceLineNo">086</span><a id="line.86">     *            the Group</a>
+<span class="sourceLineNo">087</span><a id="line.87">     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Role in the Group.</a>
+<span class="sourceLineNo">088</span><a id="line.88">     */</a>
+<span class="sourceLineNo">089</span><a id="line.89">    boolean hasRole(Role role, Group group);</a>
+<span class="sourceLineNo">090</span><a id="line.90"></a>
+<span class="sourceLineNo">091</span><a id="line.91">    /**</a>
+<span class="sourceLineNo">092</span><a id="line.92">     * Checks if the user is assigned a specific Role in any of the given Groups</a>
+<span class="sourceLineNo">093</span><a id="line.93">     * </a>
+<span class="sourceLineNo">094</span><a id="line.94">     * @param role</a>
+<span class="sourceLineNo">095</span><a id="line.95">     *            the Role</a>
+<span class="sourceLineNo">096</span><a id="line.96">     * @param groupset</a>
+<span class="sourceLineNo">097</span><a id="line.97">     *            a Groupset</a>
+<span class="sourceLineNo">098</span><a id="line.98">     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Role in any of the</a>
+<span class="sourceLineNo">099</span><a id="line.99">     *         given Groups.</a>
+<span class="sourceLineNo">100</span><a id="line.100">     */</a>
+<span class="sourceLineNo">101</span><a id="line.101">    boolean hasRole(Role role, GroupSet groupset);</a>
+<span class="sourceLineNo">102</span><a id="line.102"></a>
+<span class="sourceLineNo">103</span><a id="line.103">    /**</a>
+<span class="sourceLineNo">104</span><a id="line.104">     * Checks if the user is assigned a specific Role in the Group.</a>
+<span class="sourceLineNo">105</span><a id="line.105">     * </a>
+<span class="sourceLineNo">106</span><a id="line.106">     * @param role</a>
+<span class="sourceLineNo">107</span><a id="line.107">     *            the Role</a>
+<span class="sourceLineNo">108</span><a id="line.108">     * @param group</a>
+<span class="sourceLineNo">109</span><a id="line.109">     *            the Group</a>
+<span class="sourceLineNo">110</span><a id="line.110">     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Role in the Group.</a>
+<span class="sourceLineNo">111</span><a id="line.111">     */</a>
+<span class="sourceLineNo">112</span><a id="line.112">    boolean hasRole(String role, String group);</a>
+<span class="sourceLineNo">113</span><a id="line.113"></a>
+<span class="sourceLineNo">114</span><a id="line.114">    /**</a>
+<span class="sourceLineNo">115</span><a id="line.115">     * Checks if the user is assigned a specifie Role in any of the given Groups</a>
+<span class="sourceLineNo">116</span><a id="line.116">     * </a>
+<span class="sourceLineNo">117</span><a id="line.117">     * @param rolename</a>
+<span class="sourceLineNo">118</span><a id="line.118">     *            the name of the Role</a>
+<span class="sourceLineNo">119</span><a id="line.119">     * @param groupset</a>
+<span class="sourceLineNo">120</span><a id="line.120">     *            a Groupset</a>
+<span class="sourceLineNo">121</span><a id="line.121">     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Role in any of the</a>
+<span class="sourceLineNo">122</span><a id="line.122">     *         given Groups.</a>
+<span class="sourceLineNo">123</span><a id="line.123">     */</a>
+<span class="sourceLineNo">124</span><a id="line.124">    boolean hasRole(String rolename, GroupSet groupset);</a>
+<span class="sourceLineNo">125</span><a id="line.125"></a>
+<span class="sourceLineNo">126</span><a id="line.126">    /**</a>
+<span class="sourceLineNo">127</span><a id="line.127">     * Checks if the user is assigned a specific Role in the global Group.</a>
+<span class="sourceLineNo">128</span><a id="line.128">     * </a>
+<span class="sourceLineNo">129</span><a id="line.129">     * @param role</a>
+<span class="sourceLineNo">130</span><a id="line.130">     *            the Role</a>
+<span class="sourceLineNo">131</span><a id="line.131">     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Role in the global</a>
+<span class="sourceLineNo">132</span><a id="line.132">     *         Group.</a>
+<span class="sourceLineNo">133</span><a id="line.133">     */</a>
+<span class="sourceLineNo">134</span><a id="line.134">    boolean hasRole(Role role);</a>
+<span class="sourceLineNo">135</span><a id="line.135"></a>
+<span class="sourceLineNo">136</span><a id="line.136">    /**</a>
+<span class="sourceLineNo">137</span><a id="line.137">     * Checks if the user is assigned a specific Role.</a>
+<span class="sourceLineNo">138</span><a id="line.138">     * </a>
+<span class="sourceLineNo">139</span><a id="line.139">     * @param role</a>
+<span class="sourceLineNo">140</span><a id="line.140">     *            the Role</a>
+<span class="sourceLineNo">141</span><a id="line.141">     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Role.</a>
+<span class="sourceLineNo">142</span><a id="line.142">     */</a>
+<span class="sourceLineNo">143</span><a id="line.143">    boolean hasRole(String role);</a>
+<span class="sourceLineNo">144</span><a id="line.144"></a>
+<span class="sourceLineNo">145</span><a id="line.145">    /**</a>
+<span class="sourceLineNo">146</span><a id="line.146">     * Checks if the user is assigned a specific Permission in the Group.</a>
+<span class="sourceLineNo">147</span><a id="line.147">     * </a>
+<span class="sourceLineNo">148</span><a id="line.148">     * @param permission</a>
+<span class="sourceLineNo">149</span><a id="line.149">     *            the Permission</a>
+<span class="sourceLineNo">150</span><a id="line.150">     * @param group</a>
+<span class="sourceLineNo">151</span><a id="line.151">     *            the Group</a>
+<span class="sourceLineNo">152</span><a id="line.152">     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in the</a>
+<span class="sourceLineNo">153</span><a id="line.153">     *         Group.</a>
+<span class="sourceLineNo">154</span><a id="line.154">     */</a>
+<span class="sourceLineNo">155</span><a id="line.155">    boolean hasPermission(Permission permission, Group group);</a>
+<span class="sourceLineNo">156</span><a id="line.156"></a>
+<span class="sourceLineNo">157</span><a id="line.157">    /**</a>
+<span class="sourceLineNo">158</span><a id="line.158">     * Checks if the user is assigned a specific Permission in any of the given</a>
+<span class="sourceLineNo">159</span><a id="line.159">     * Groups</a>
+<span class="sourceLineNo">160</span><a id="line.160">     * </a>
+<span class="sourceLineNo">161</span><a id="line.161">     * @param permission</a>
+<span class="sourceLineNo">162</span><a id="line.162">     *            the Permission</a>
+<span class="sourceLineNo">163</span><a id="line.163">     * @param groupset</a>
+<span class="sourceLineNo">164</span><a id="line.164">     *            a Groupset</a>
+<span class="sourceLineNo">165</span><a id="line.165">     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in any</a>
+<span class="sourceLineNo">166</span><a id="line.166">     *         of the given Groups.</a>
+<span class="sourceLineNo">167</span><a id="line.167">     */</a>
+<span class="sourceLineNo">168</span><a id="line.168">    boolean hasPermission(Permission permission, GroupSet groupset);</a>
+<span class="sourceLineNo">169</span><a id="line.169"></a>
+<span class="sourceLineNo">170</span><a id="line.170">    /**</a>
+<span class="sourceLineNo">171</span><a id="line.171">     * Checks if the user is assigned a specific Permission in the Group.</a>
+<span class="sourceLineNo">172</span><a id="line.172">     * </a>
+<span class="sourceLineNo">173</span><a id="line.173">     * @param permission</a>
+<span class="sourceLineNo">174</span><a id="line.174">     *            the Permission</a>
+<span class="sourceLineNo">175</span><a id="line.175">     * @param group</a>
+<span class="sourceLineNo">176</span><a id="line.176">     *            the Group</a>
+<span class="sourceLineNo">177</span><a id="line.177">     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in the</a>
+<span class="sourceLineNo">178</span><a id="line.178">     *         Group.</a>
+<span class="sourceLineNo">179</span><a id="line.179">     */</a>
+<span class="sourceLineNo">180</span><a id="line.180">    boolean hasPermission(String permission, String group);</a>
+<span class="sourceLineNo">181</span><a id="line.181"></a>
+<span class="sourceLineNo">182</span><a id="line.182">    /**</a>
+<span class="sourceLineNo">183</span><a id="line.183">     * Checks if the user is assigned a specific Permission in the Group.</a>
+<span class="sourceLineNo">184</span><a id="line.184">     * </a>
+<span class="sourceLineNo">185</span><a id="line.185">     * @param permission</a>
+<span class="sourceLineNo">186</span><a id="line.186">     *            the Permission</a>
+<span class="sourceLineNo">187</span><a id="line.187">     * @param group</a>
+<span class="sourceLineNo">188</span><a id="line.188">     *            the Group</a>
+<span class="sourceLineNo">189</span><a id="line.189">     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in the</a>
+<span class="sourceLineNo">190</span><a id="line.190">     *         Group.</a>
+<span class="sourceLineNo">191</span><a id="line.191">     */</a>
+<span class="sourceLineNo">192</span><a id="line.192">    boolean hasPermission(String permission, Group group);</a>
+<span class="sourceLineNo">193</span><a id="line.193"></a>
+<span class="sourceLineNo">194</span><a id="line.194">    /**</a>
+<span class="sourceLineNo">195</span><a id="line.195">     * Checks if the user is assigned a specifie Permission in any of the given</a>
+<span class="sourceLineNo">196</span><a id="line.196">     * Groups</a>
+<span class="sourceLineNo">197</span><a id="line.197">     * </a>
+<span class="sourceLineNo">198</span><a id="line.198">     * @param permissionName</a>
+<span class="sourceLineNo">199</span><a id="line.199">     *            the name of the Permission</a>
+<span class="sourceLineNo">200</span><a id="line.200">     * @param groupset</a>
+<span class="sourceLineNo">201</span><a id="line.201">     *            a Groupset</a>
+<span class="sourceLineNo">202</span><a id="line.202">     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in any</a>
+<span class="sourceLineNo">203</span><a id="line.203">     *         of the given Groups.</a>
+<span class="sourceLineNo">204</span><a id="line.204">     */</a>
+<span class="sourceLineNo">205</span><a id="line.205">    boolean hasPermission(String permissionName, GroupSet groupset);</a>
+<span class="sourceLineNo">206</span><a id="line.206"></a>
+<span class="sourceLineNo">207</span><a id="line.207">    /**</a>
+<span class="sourceLineNo">208</span><a id="line.208">     * Checks if the user is assigned a specific Permission in the global Group.</a>
+<span class="sourceLineNo">209</span><a id="line.209">     * </a>
+<span class="sourceLineNo">210</span><a id="line.210">     * @param permission</a>
+<span class="sourceLineNo">211</span><a id="line.211">     *            the Permission</a>
+<span class="sourceLineNo">212</span><a id="line.212">     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in the</a>
+<span class="sourceLineNo">213</span><a id="line.213">     *         global Group.</a>
+<span class="sourceLineNo">214</span><a id="line.214">     */</a>
+<span class="sourceLineNo">215</span><a id="line.215">    boolean hasPermission(Permission permission);</a>
+<span class="sourceLineNo">216</span><a id="line.216"></a>
+<span class="sourceLineNo">217</span><a id="line.217">    /**</a>
+<span class="sourceLineNo">218</span><a id="line.218">     * Checks if the user is assigned a specific Permission in the global Group.</a>
+<span class="sourceLineNo">219</span><a id="line.219">     * </a>
+<span class="sourceLineNo">220</span><a id="line.220">     * @param permission</a>
+<span class="sourceLineNo">221</span><a id="line.221">     *            the Permission</a>
+<span class="sourceLineNo">222</span><a id="line.222">     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in the</a>
+<span class="sourceLineNo">223</span><a id="line.223">     *         global Group.</a>
+<span class="sourceLineNo">224</span><a id="line.224">     */</a>
+<span class="sourceLineNo">225</span><a id="line.225">    boolean hasPermission(String permission);</a>
+<span class="sourceLineNo">226</span><a id="line.226"></a>
+<span class="sourceLineNo">227</span><a id="line.227">}</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</main>
+</body>
+</html>

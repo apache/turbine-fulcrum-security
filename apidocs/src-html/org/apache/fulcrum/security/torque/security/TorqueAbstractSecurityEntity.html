@@ -1,0 +1,222 @@
+<!DOCTYPE HTML>
+<html lang="de">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<main role="main">
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span><a id="line.1">package org.apache.fulcrum.security.torque.security;</a>
+<span class="sourceLineNo">002</span><a id="line.2">/*</a>
+<span class="sourceLineNo">003</span><a id="line.3"> * Licensed to the Apache Software Foundation (ASF) under one</a>
+<span class="sourceLineNo">004</span><a id="line.4"> * or more contributor license agreements.  See the NOTICE file</a>
+<span class="sourceLineNo">005</span><a id="line.5"> * distributed with this work for additional information</a>
+<span class="sourceLineNo">006</span><a id="line.6"> * regarding copyright ownership.  The ASF licenses this file</a>
+<span class="sourceLineNo">007</span><a id="line.7"> * to you under the Apache License, Version 2.0 (the</a>
+<span class="sourceLineNo">008</span><a id="line.8"> * "License"); you may not use this file except in compliance</a>
+<span class="sourceLineNo">009</span><a id="line.9"> * with the License.  You may obtain a copy of the License at</a>
+<span class="sourceLineNo">010</span><a id="line.10"> *</a>
+<span class="sourceLineNo">011</span><a id="line.11"> *   http://www.apache.org/licenses/LICENSE-2.0</a>
+<span class="sourceLineNo">012</span><a id="line.12"> *</a>
+<span class="sourceLineNo">013</span><a id="line.13"> * Unless required by applicable law or agreed to in writing,</a>
+<span class="sourceLineNo">014</span><a id="line.14"> * software distributed under the License is distributed on an</a>
+<span class="sourceLineNo">015</span><a id="line.15"> * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</a>
+<span class="sourceLineNo">016</span><a id="line.16"> * KIND, either express or implied.  See the License for the</a>
+<span class="sourceLineNo">017</span><a id="line.17"> * specific language governing permissions and limitations</a>
+<span class="sourceLineNo">018</span><a id="line.18"> * under the License.</a>
+<span class="sourceLineNo">019</span><a id="line.19"> */</a>
+<span class="sourceLineNo">020</span><a id="line.20">import java.io.Serializable;</a>
+<span class="sourceLineNo">021</span><a id="line.21">import java.sql.Connection;</a>
+<span class="sourceLineNo">022</span><a id="line.22"></a>
+<span class="sourceLineNo">023</span><a id="line.23">import org.apache.fulcrum.security.entity.SecurityEntity;</a>
+<span class="sourceLineNo">024</span><a id="line.24">import org.apache.fulcrum.security.util.DataBackendException;</a>
+<span class="sourceLineNo">025</span><a id="line.25">import org.apache.torque.TorqueException;</a>
+<span class="sourceLineNo">026</span><a id="line.26">import org.apache.torque.om.Persistent;</a>
+<span class="sourceLineNo">027</span><a id="line.27">/**</a>
+<span class="sourceLineNo">028</span><a id="line.28"> * This abstract class provides the SecurityInterface to the managers.</a>
+<span class="sourceLineNo">029</span><a id="line.29"> *</a>
+<span class="sourceLineNo">030</span><a id="line.30"> * @author &lt;a href="mailto:tv@apache.org"&gt;Thomas Vandahl&lt;/a&gt;</a>
+<span class="sourceLineNo">031</span><a id="line.31"> * @version $Id:$</a>
+<span class="sourceLineNo">032</span><a id="line.32"> */</a>
+<span class="sourceLineNo">033</span><a id="line.33">public abstract class TorqueAbstractSecurityEntity</a>
+<span class="sourceLineNo">034</span><a id="line.34">    implements SecurityEntity, Serializable, Persistent</a>
+<span class="sourceLineNo">035</span><a id="line.35">{</a>
+<span class="sourceLineNo">036</span><a id="line.36">    /** Serial version */</a>
+<span class="sourceLineNo">037</span><a id="line.37">        private static final long serialVersionUID = -4052254585021044275L;</a>
+<span class="sourceLineNo">038</span><a id="line.38"></a>
+<span class="sourceLineNo">039</span><a id="line.39">        /**</a>
+<span class="sourceLineNo">040</span><a id="line.40">     * Get a numeric entity id</a>
+<span class="sourceLineNo">041</span><a id="line.41">     *</a>
+<span class="sourceLineNo">042</span><a id="line.42">     * @return numeric id of this entity</a>
+<span class="sourceLineNo">043</span><a id="line.43">     */</a>
+<span class="sourceLineNo">044</span><a id="line.44">    public abstract Integer getEntityId();</a>
+<span class="sourceLineNo">045</span><a id="line.45"></a>
+<span class="sourceLineNo">046</span><a id="line.46">    /**</a>
+<span class="sourceLineNo">047</span><a id="line.47">     * Set a numeric entity id</a>
+<span class="sourceLineNo">048</span><a id="line.48">     *</a>
+<span class="sourceLineNo">049</span><a id="line.49">     * @param id numeric id of this entity</a>
+<span class="sourceLineNo">050</span><a id="line.50">     * @throws TorqueException database not found exception</a>
+<span class="sourceLineNo">051</span><a id="line.51">     */</a>
+<span class="sourceLineNo">052</span><a id="line.52">    public abstract void setEntityId(Integer id) throws TorqueException;</a>
+<span class="sourceLineNo">053</span><a id="line.53"></a>
+<span class="sourceLineNo">054</span><a id="line.54">    /**</a>
+<span class="sourceLineNo">055</span><a id="line.55">     * Get the name of the entity</a>
+<span class="sourceLineNo">056</span><a id="line.56">     *</a>
+<span class="sourceLineNo">057</span><a id="line.57">     * @return name of this entity</a>
+<span class="sourceLineNo">058</span><a id="line.58">     */</a>
+<span class="sourceLineNo">059</span><a id="line.59">    public abstract String getEntityName();</a>
+<span class="sourceLineNo">060</span><a id="line.60"></a>
+<span class="sourceLineNo">061</span><a id="line.61">    /**</a>
+<span class="sourceLineNo">062</span><a id="line.62">     * Set the name of the entity</a>
+<span class="sourceLineNo">063</span><a id="line.63">     *</a>
+<span class="sourceLineNo">064</span><a id="line.64">     * @param name the name of the entity</a>
+<span class="sourceLineNo">065</span><a id="line.65">     */</a>
+<span class="sourceLineNo">066</span><a id="line.66">    public abstract void setEntityName(String name);</a>
+<span class="sourceLineNo">067</span><a id="line.67">     </a>
+<span class="sourceLineNo">068</span><a id="line.68">    /**</a>
+<span class="sourceLineNo">069</span><a id="line.69">     * Retrieve attached objects such as users, permissions, ...</a>
+<span class="sourceLineNo">070</span><a id="line.70">     * </a>
+<span class="sourceLineNo">071</span><a id="line.71">     * @param con A database connection</a>
+<span class="sourceLineNo">072</span><a id="line.72">     * @param lazy if &lt;code&gt;true&lt;/code&gt;, may load some or all relationships later</a>
+<span class="sourceLineNo">073</span><a id="line.73">     * @throws TorqueException database not found exception</a>
+<span class="sourceLineNo">074</span><a id="line.74">     */</a>
+<span class="sourceLineNo">075</span><a id="line.75">    public abstract void retrieveAttachedObjects(Connection con, Boolean lazy) throws DataBackendException, TorqueException;</a>
+<span class="sourceLineNo">076</span><a id="line.76">    </a>
+<span class="sourceLineNo">077</span><a id="line.77">    </a>
+<span class="sourceLineNo">078</span><a id="line.78">    /**</a>
+<span class="sourceLineNo">079</span><a id="line.79">     * old contract, lazy is set to &lt;code&gt;false&lt;/code&gt;.</a>
+<span class="sourceLineNo">080</span><a id="line.80">     *</a>
+<span class="sourceLineNo">081</span><a id="line.81">     * @param con A database connection</a>
+<span class="sourceLineNo">082</span><a id="line.82">     * @throws DataBackendException wrapper exception: user information not found exception</a>
+<span class="sourceLineNo">083</span><a id="line.83">     * @throws TorqueException </a>
+<span class="sourceLineNo">084</span><a id="line.84">     */</a>
+<span class="sourceLineNo">085</span><a id="line.85">    public abstract void retrieveAttachedObjects(Connection con) throws DataBackendException, TorqueException;</a>
+<span class="sourceLineNo">086</span><a id="line.86"></a>
+<span class="sourceLineNo">087</span><a id="line.87">    /**</a>
+<span class="sourceLineNo">088</span><a id="line.88">     * Update this instance to the database with all dependent objects</a>
+<span class="sourceLineNo">089</span><a id="line.89">     *</a>
+<span class="sourceLineNo">090</span><a id="line.90">     * @param con A database connection</a>
+<span class="sourceLineNo">091</span><a id="line.91">     * @throws TorqueException database not found exception</a>
+<span class="sourceLineNo">092</span><a id="line.92">     */</a>
+<span class="sourceLineNo">093</span><a id="line.93">    public abstract void update(Connection con) throws TorqueException;</a>
+<span class="sourceLineNo">094</span><a id="line.94">    </a>
+<span class="sourceLineNo">095</span><a id="line.95">    /**</a>
+<span class="sourceLineNo">096</span><a id="line.96">     * Delete this entity</a>
+<span class="sourceLineNo">097</span><a id="line.97">     *</a>
+<span class="sourceLineNo">098</span><a id="line.98">     * @throws TorqueException  if any database error occurs if any database operation fails</a>
+<span class="sourceLineNo">099</span><a id="line.99">     */</a>
+<span class="sourceLineNo">100</span><a id="line.100">    public abstract void delete() throws TorqueException;</a>
+<span class="sourceLineNo">101</span><a id="line.101"></a>
+<span class="sourceLineNo">102</span><a id="line.102">    /**</a>
+<span class="sourceLineNo">103</span><a id="line.103">     * @see org.apache.fulcrum.security.entity.SecurityEntity#getId()</a>
+<span class="sourceLineNo">104</span><a id="line.104">     */</a>
+<span class="sourceLineNo">105</span><a id="line.105">    @Override</a>
+<span class="sourceLineNo">106</span><a id="line.106">    public Object getId()</a>
+<span class="sourceLineNo">107</span><a id="line.107">    {</a>
+<span class="sourceLineNo">108</span><a id="line.108">        return getEntityId();</a>
+<span class="sourceLineNo">109</span><a id="line.109">    }</a>
+<span class="sourceLineNo">110</span><a id="line.110"></a>
+<span class="sourceLineNo">111</span><a id="line.111">    /**</a>
+<span class="sourceLineNo">112</span><a id="line.112">     * @see org.apache.fulcrum.security.entity.SecurityEntity#setId(java.lang.Object)</a>
+<span class="sourceLineNo">113</span><a id="line.113">     */</a>
+<span class="sourceLineNo">114</span><a id="line.114">    @Override</a>
+<span class="sourceLineNo">115</span><a id="line.115">    public void setId(Object id)</a>
+<span class="sourceLineNo">116</span><a id="line.116">    {</a>
+<span class="sourceLineNo">117</span><a id="line.117">        try</a>
+<span class="sourceLineNo">118</span><a id="line.118">        {</a>
+<span class="sourceLineNo">119</span><a id="line.119">            setEntityId((Integer)id);</a>
+<span class="sourceLineNo">120</span><a id="line.120">        }</a>
+<span class="sourceLineNo">121</span><a id="line.121">        catch (TorqueException e)</a>
+<span class="sourceLineNo">122</span><a id="line.122">        {</a>
+<span class="sourceLineNo">123</span><a id="line.123">            // should not happen</a>
+<span class="sourceLineNo">124</span><a id="line.124">        }</a>
+<span class="sourceLineNo">125</span><a id="line.125">    }</a>
+<span class="sourceLineNo">126</span><a id="line.126"></a>
+<span class="sourceLineNo">127</span><a id="line.127">    /**</a>
+<span class="sourceLineNo">128</span><a id="line.128">     * @see org.apache.fulcrum.security.entity.SecurityEntity#getName()</a>
+<span class="sourceLineNo">129</span><a id="line.129">     */</a>
+<span class="sourceLineNo">130</span><a id="line.130">    @Override</a>
+<span class="sourceLineNo">131</span><a id="line.131">    public String getName()</a>
+<span class="sourceLineNo">132</span><a id="line.132">    {</a>
+<span class="sourceLineNo">133</span><a id="line.133">        return getEntityName();</a>
+<span class="sourceLineNo">134</span><a id="line.134">    }</a>
+<span class="sourceLineNo">135</span><a id="line.135"></a>
+<span class="sourceLineNo">136</span><a id="line.136">    /**</a>
+<span class="sourceLineNo">137</span><a id="line.137">     * @see org.apache.fulcrum.security.entity.SecurityEntity#setName(java.lang.String)</a>
+<span class="sourceLineNo">138</span><a id="line.138">     */</a>
+<span class="sourceLineNo">139</span><a id="line.139">    @Override</a>
+<span class="sourceLineNo">140</span><a id="line.140">    public void setName(String name)</a>
+<span class="sourceLineNo">141</span><a id="line.141">    {</a>
+<span class="sourceLineNo">142</span><a id="line.142">        if (name != null)</a>
+<span class="sourceLineNo">143</span><a id="line.143">        {</a>
+<span class="sourceLineNo">144</span><a id="line.144">            setEntityName(name.toLowerCase());</a>
+<span class="sourceLineNo">145</span><a id="line.145">        }</a>
+<span class="sourceLineNo">146</span><a id="line.146">    }</a>
+<span class="sourceLineNo">147</span><a id="line.147"></a>
+<span class="sourceLineNo">148</span><a id="line.148">}</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</main>
+</body>
+</html>

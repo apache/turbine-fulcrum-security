@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TorqueAbstractUserManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.torque</a> &gt; <span class="el_source">TorqueAbstractUserManager.java</span></div><h1>TorqueAbstractUserManager.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.torque;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.sql.Connection;
+import java.util.List;
+
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.spi.AbstractUserManager;
+import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.apache.fulcrum.security.util.UserSet;
+import org.apache.torque.NoRowsException;
+import org.apache.torque.TooManyRowsException;
+import org.apache.torque.TorqueException;
+import org.apache.torque.util.Transaction;
+
+/**
+ * This implementation persists to a database via Torque.
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id:$
+ */
+<span class="fc" id="L43">public abstract class TorqueAbstractUserManager extends AbstractUserManager {</span>
+
+	/** Serial version */
+	private static final long serialVersionUID = 2050218990148719292L;
+
+	/**
+	 * Avalon Service lifecycle method
+	 */
+	@Override
+	public void configure(Configuration conf) throws ConfigurationException {
+<span class="fc" id="L53">		super.configure(conf);</span>
+<span class="fc" id="L54">	}</span>
+
+	/**
+	 * Get all specialized Users
+	 *
+	 * @param con a database connection
+	 *
+	 * @return a List of User instances
+	 *
+	 * @throws TorqueException if any database error occurs
+	 */
+	protected abstract &lt;T extends User&gt; List&lt;T&gt; doSelectAllUsers(Connection con) throws TorqueException;
+
+	/**
+	 * Get a specialized User by name
+	 *
+	 * @param name the name of the group
+	 * @param con  a database connection
+	 *
+	 * @return a User instance
+	 *
+	 * @throws NoRowsException      if no such group exists
+	 * @throws TooManyRowsException if multiple groups with the given name exist
+	 * @throws TorqueException      if any database error occurs if any other
+	 *                              database error occurs
+	 */
+	protected abstract &lt;T extends User&gt; T doSelectByName(String name, Connection con)
+			throws NoRowsException, TooManyRowsException, TorqueException;
+
+	/**
+	 * Get a specialized User by id
+	 *
+	 * @param id  the id of the group
+	 * @param con a database connection
+	 *
+	 * @return a User instance
+	 *
+	 * @throws NoRowsException      if no such group exists
+	 * @throws TooManyRowsException if multiple groups with the given id exist
+	 * @throws TorqueException      if any database error occurs if any other
+	 *                              database error occurs
+	 */
+	protected abstract &lt;T extends User&gt; T doSelectById(Integer id, Connection con)
+			throws NoRowsException, TooManyRowsException, TorqueException;
+
+	/**
+	 * Removes an user account from the system.
+	 *
+	 * @param user the object describing the account to be removed.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if the user account is not present.
+	 */
+	@Override
+	public synchronized void removeUser(User user) throws DataBackendException, UnknownEntityException {
+		try {
+<span class="fc" id="L110">			((TorqueAbstractSecurityEntity) user).delete();</span>
+<span class="nc" id="L111">		} catch (TorqueException e) {</span>
+<span class="nc" id="L112">			throw new DataBackendException(&quot;Removing User '&quot; + user.getName() + &quot;' failed&quot;, e);</span>
+<span class="fc" id="L113">		}</span>
+<span class="fc" id="L114">	}</span>
+
+	/**
+	 * Creates new user account with specified attributes.
+	 *
+	 * @param user the object describing account to be created.
+	 *
+	 * @throws DataBackendException if there was an error accessing the data
+	 *                              backend.
+	 */
+	@Override
+	protected synchronized &lt;T extends User&gt; T persistNewUser(T user) throws DataBackendException {
+		try {
+<span class="fc" id="L127">			TorqueAbstractSecurityEntity u = (TorqueAbstractSecurityEntity) user;</span>
+<span class="fc" id="L128">			u.save();</span>
+<span class="nc" id="L129">		} catch (Exception e) {</span>
+<span class="nc" id="L130">			throw new DataBackendException(&quot;Adding User '&quot; + user.getName() + &quot;' failed&quot;, e);</span>
+<span class="fc" id="L131">		}</span>
+
+<span class="fc" id="L133">		return user;</span>
+	}
+
+	/**
+	 * Stores User attributes. The User is required to exist in the system.
+	 *
+	 * @param user The User to be stored.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if the role does not exist.
+	 */
+	@Override
+	public synchronized void saveUser(User user) throws DataBackendException, UnknownEntityException {
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">		if (checkExists(user)) {</span>
+			try {
+<span class="fc" id="L148">				TorqueAbstractSecurityEntity u = (TorqueAbstractSecurityEntity) user;</span>
+<span class="fc" id="L149">				u.setNew(false);</span>
+<span class="fc" id="L150">				u.save();</span>
+<span class="nc" id="L151">			} catch (Exception e) {</span>
+<span class="nc" id="L152">				throw new DataBackendException(&quot;Saving User '&quot; + user.getName() + &quot;' failed&quot;, e);</span>
+<span class="fc" id="L153">			}</span>
+		} else {
+<span class="nc" id="L155">			throw new UnknownEntityException(&quot;Unknown user '&quot; + user + &quot;'&quot;);</span>
+		}
+<span class="fc" id="L157">	}</span>
+
+	/**
+	 * Check whether a specified user's account exists.
+	 *
+	 * The login name is used for looking up the account.
+	 *
+	 * @param userName The name of the user to be checked.
+	 * @return true if the specified account exists
+	 * @throws DataBackendException if there was an error accessing the data
+	 *                              backend.
+	 */
+	@Override
+	public boolean checkExists(String userName) throws DataBackendException {
+<span class="fc" id="L171">		boolean exists = false;</span>
+
+<span class="fc" id="L173">		Connection con = null;</span>
+
+		try {
+<span class="fc" id="L176">			con = Transaction.begin();</span>
+
+<span class="fc" id="L178">			doSelectByName(userName, con);</span>
+
+<span class="fc" id="L180">			Transaction.commit(con);</span>
+<span class="fc" id="L181">			con = null;</span>
+
+<span class="fc" id="L183">			exists = true;</span>
+<span class="fc" id="L184">		} catch (NoRowsException e) {</span>
+<span class="fc" id="L185">			exists = false;</span>
+<span class="nc" id="L186">		} catch (TooManyRowsException e) {</span>
+<span class="nc" id="L187">			throw new DataBackendException(&quot;Multiple Users with same username '&quot; + userName + &quot;'&quot;);</span>
+<span class="nc" id="L188">		} catch (TorqueException e) {</span>
+<span class="nc" id="L189">			throw new DataBackendException(&quot;Error retrieving user information&quot;, e);</span>
+		} finally {
+<span class="fc bfc" id="L191" title="All 2 branches covered.">			if (con != null) {</span>
+<span class="fc" id="L192">				Transaction.safeRollback(con);</span>
+			}
+		}
+
+<span class="fc" id="L196">		return exists;</span>
+	}
+
+	/**
+	 * Retrieve a user from persistent storage using username as the key.
+	 * 
+	 * Additionally retrieves all attached objects from {@link TorqueAbstractSecurityEntity#retrieveAttachedObjects(Connection, Boolean)}
+	 *
+	 * @param userName the name of the user.
+	 * @return an User object.
+	 * @exception UnknownEntityException if the user's account does not exist in the
+	 *                                   database.
+	 * @exception DataBackendException   if there is a problem accessing the
+	 *                                   storage.
+	 */
+	@Override
+	public &lt;T extends User&gt; T getUser(String userName) throws UnknownEntityException, DataBackendException {
+<span class="fc" id="L213">		T user = null;</span>
+<span class="fc" id="L214">		Connection con = null;</span>
+
+		try {
+<span class="fc" id="L217">			con = Transaction.begin();</span>
+
+<span class="fc" id="L219">			user = doSelectByName(userName.toLowerCase(), con);</span>
+
+			// Add attached objects if they exist
+<span class="fc" id="L222">			((TorqueAbstractSecurityEntity) user).retrieveAttachedObjects(con, false);</span>
+
+<span class="fc" id="L224">			Transaction.commit(con);</span>
+<span class="fc" id="L225">			con = null;</span>
+<span class="nc" id="L226">		} catch (NoRowsException e) {</span>
+<span class="nc" id="L227">			throw new UnknownEntityException(&quot;Unknown user '&quot; + userName + &quot;'&quot;);</span>
+<span class="nc" id="L228">		} catch (TooManyRowsException e) {</span>
+<span class="nc" id="L229">			throw new DataBackendException(&quot;Multiple Users with same username '&quot; + userName + &quot;'&quot;);</span>
+<span class="nc" id="L230">		} catch (TorqueException e) {</span>
+<span class="nc" id="L231">			throw new DataBackendException(&quot;Error retrieving user information&quot;, e);</span>
+		} finally {
+<span class="pc bpc" id="L233" title="1 of 2 branches missed.">			if (con != null) {</span>
+<span class="nc" id="L234">				Transaction.safeRollback(con);</span>
+			}
+		}
+
+<span class="fc" id="L238">		return user;</span>
+	}
+
+	/**
+	 * Retrieves all users defined in the system.
+	 *
+	 * @return the names of all users defined in the system.
+	 * @throws DataBackendException if there was an error accessing the data
+	 *                              backend.
+	 */
+	@Override
+	public &lt;T extends User&gt; UserSet&lt;T&gt; getAllUsers() throws DataBackendException {
+<span class="fc" id="L250">		UserSet&lt;T&gt; userSet = new UserSet&lt;T&gt;();</span>
+<span class="fc" id="L251">		Connection con = null;</span>
+
+		try {
+<span class="fc" id="L254">			con = Transaction.begin();</span>
+
+<span class="fc" id="L256">			List&lt;User&gt; users = doSelectAllUsers(con);</span>
+
+<span class="fc bfc" id="L258" title="All 2 branches covered.">			for (User user : users) {</span>
+				// Add attached objects if they exist
+<span class="fc" id="L260">				((TorqueAbstractSecurityEntity) user).retrieveAttachedObjects(con, false);</span>
+
+<span class="fc" id="L262">				userSet.add(user);</span>
+<span class="fc" id="L263">			}</span>
+
+<span class="fc" id="L265">			Transaction.commit(con);</span>
+<span class="fc" id="L266">			con = null;</span>
+<span class="nc" id="L267">		} catch (TorqueException e) {</span>
+<span class="nc" id="L268">			throw new DataBackendException(&quot;Error retrieving all users&quot;, e);</span>
+		} finally {
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">			if (con != null) {</span>
+<span class="nc" id="L271">				Transaction.safeRollback(con);</span>
+			}
+		}
+
+<span class="fc" id="L275">		return userSet;</span>
+	}
+
+	/**
+	 * Retrieve a User object with specified id.
+	 *
+	 * @param id the id of the User.
+	 * @return an object representing the User with specified id.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if the user does not exist.
+	 */
+	@Override
+	public &lt;T extends User&gt; T getUserById(Object id) throws DataBackendException, UnknownEntityException {
+		T user;
+
+<span class="pc bpc" id="L291" title="2 of 4 branches missed.">		if (id != null &amp;&amp; id instanceof Integer) {</span>
+<span class="fc" id="L292">			Connection con = null;</span>
+
+			try {
+<span class="fc" id="L295">				con = Transaction.begin();</span>
+
+<span class="fc" id="L297">				user = doSelectById((Integer) id, con);</span>
+
+				// Add attached objects if they exist
+<span class="fc" id="L300">				((TorqueAbstractSecurityEntity) user).retrieveAttachedObjects(con, false); //</span>
+
+<span class="fc" id="L302">				Transaction.commit(con);</span>
+<span class="fc" id="L303">				con = null;</span>
+<span class="nc" id="L304">			} catch (NoRowsException e) {</span>
+<span class="nc" id="L305">				throw new UnknownEntityException(&quot;User with id '&quot; + id + &quot;' does not exist.&quot;, e);</span>
+<span class="nc" id="L306">			} catch (TorqueException e) {</span>
+<span class="nc" id="L307">				throw new DataBackendException(&quot;Error retrieving user information&quot;, e);</span>
+			} finally {
+<span class="pc bpc" id="L309" title="1 of 2 branches missed.">				if (con != null) {</span>
+<span class="nc" id="L310">					Transaction.safeRollback(con);</span>
+				}
+			}
+<span class="fc" id="L313">		} else {</span>
+<span class="nc" id="L314">			throw new UnknownEntityException(&quot;Invalid user id '&quot; + id + &quot;'&quot;);</span>
+		}
+
+<span class="fc" id="L317">		return user;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

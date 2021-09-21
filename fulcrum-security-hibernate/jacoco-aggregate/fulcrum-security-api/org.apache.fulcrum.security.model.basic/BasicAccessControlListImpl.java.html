@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>BasicAccessControlListImpl.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Fulcrum Security Hibernate Impl</a> &gt; <a href="../index.html" class="el_bundle">fulcrum-security-api</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.model.basic</a> &gt; <span class="el_source">BasicAccessControlListImpl.java</span></div><h1>BasicAccessControlListImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.model.basic;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.util.GroupSet;
+
+/**
+ * This is a control class that makes it easy to find out if a particular User
+ * has a given Permission. It also determines if a User has a a particular Role.
+ * 
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id: BasicAccessControlListImpl.java 535465 2007-05-05 06:58:06Z tv
+ */
+public class BasicAccessControlListImpl implements BasicAccessControlList
+{
+	// TODO Need to rethink the two maps.. Why not just a single list of groups?
+	// That would then cascade down to all the other roles and so on..
+
+    /**
+     * Serial number
+     */
+    private static final long serialVersionUID = 2911747448261740381L;
+
+    /** The distinct list of groups that this user is part of */
+<span class="fc" id="L42">    private GroupSet groupSet = new GroupSet();</span>
+
+    /**
+     * Constructs a new AccessControlList.
+     * 
+     * This class follows 'immutable' pattern - it's objects can't be modified
+     * once they are created. This means that the permissions the users have are
+     * in effect form the moment they log in to the moment they log out, and
+     * changes made to the security settings in that time are not reflected in
+     * the state of this object. If you need to reset an user's permissions you
+     * need to invalidate his session. &lt;br&gt;
+     * The objects that constructs an AccessControlList must supply hashtables
+     * of role/permission sets keyed with group objects. &lt;br&gt;
+     * 
+     * @param groupSet
+     *            a hashtable containing GroupSet objects
+     */
+    public BasicAccessControlListImpl(GroupSet groupSet)
+<span class="fc" id="L60">    {</span>
+<span class="fc" id="L61">        this.groupSet = groupSet;</span>
+<span class="fc" id="L62">    }</span>
+
+    /**
+     * Retrieves a set of Groups an user is assigned
+     * 
+     * @return the set of Groups
+     */
+    public GroupSet getGroups()
+    {
+<span class="nc" id="L71">        return groupSet;</span>
+    }
+
+    /**
+     * Checks if the user is assigned a specific Group
+     * 
+     * @param group
+     *            the Group
+     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Group
+     */
+    public boolean hasGroup(Group group)
+    {
+<span class="fc" id="L83">        return groupSet.contains(group);</span>
+    }
+
+    /**
+     * Checks if the user is assigned a specific Group
+     * 
+     * @param group
+     *            the Group name
+     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Group
+     */
+    public boolean hasGroup(String group)
+    {
+        try
+        {
+<span class="nc" id="L97">            return groupSet.containsName(group);</span>
+        }
+<span class="nc" id="L99">        catch (Exception e)</span>
+        {
+<span class="nc" id="L101">            return false;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

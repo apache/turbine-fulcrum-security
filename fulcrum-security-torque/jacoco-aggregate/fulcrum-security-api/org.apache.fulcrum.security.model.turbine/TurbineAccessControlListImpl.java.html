@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>TurbineAccessControlListImpl.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="../index.html" class="el_bundle">fulcrum-security-api</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.model.turbine</a> &gt; <span class="el_source">TurbineAccessControlListImpl.java</span></div><h1>TurbineAccessControlListImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.model.turbine;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.avalon.framework.logger.Logger;
+import org.apache.fulcrum.security.GroupManager;
+import org.apache.fulcrum.security.RoleManager;
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.Permission;
+import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineRole;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
+import org.apache.fulcrum.security.util.FulcrumSecurityException;
+import org.apache.fulcrum.security.util.GroupSet;
+import org.apache.fulcrum.security.util.PermissionSet;
+import org.apache.fulcrum.security.util.RoleSet;
+
+/**
+ * This is a control class that makes it easy to find out if a
+ * particular User has a given Permission.  It also determines if a
+ * User has a a particular Role.
+ *
+ * @author &lt;a href=&quot;mailto:jmcnally@collab.net&quot;&gt;John D. McNally&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:bmclaugh@algx.net&quot;&gt;Brett McLaughlin&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:greg@shwoop.com&quot;&gt;Greg Ritter&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:Rafal.Krzewski@e-point.pl&quot;&gt;Rafal Krzewski&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:hps@intermeta.de&quot;&gt;Henning P. Schmiedehausen&lt;/a&gt;
+ * @author &lt;a href=&quot;mailto:marco@intermeta.de&quot;&gt;Marco Kn&amp;uuml;ttel&lt;/a&gt;
+ * @version $Id: TurbineAccessControlList.java 1096130 2019-03-25 10:37:19Z painter $
+ */
+@SuppressWarnings(&quot;rawtypes&quot;)
+public class TurbineAccessControlListImpl
+        implements TurbineAccessControlList
+{
+    /** Serial version */
+	private static final long serialVersionUID = 2678947159949477950L;
+
+    /** The sets of roles that the user has in different groups */
+    private Map&lt;Group, RoleSet&gt; roleSets;
+    
+    /** The sets of permissions that the user has in different groups */
+    private Map&lt;Group, PermissionSet&gt; permissionSets;
+    
+    /** The global group */
+    private Group globalGroup;
+    
+    /** The group manager */
+    private GroupManager groupManager;
+    
+    /** The distinct list of groups that this user is part of */
+<span class="fc" id="L72">    private GroupSet groupSet = new GroupSet();</span>
+    
+    /** The distinct list of roles that this user is part of */
+<span class="fc" id="L75">    private RoleSet roleSet = new RoleSet();</span>
+    
+    /** the distinct list of permissions that this user has */
+<span class="fc" id="L78">    private PermissionSet permissionSet = new PermissionSet();</span>
+    
+    /** the Avalon logger */
+    private transient Logger logger;
+
+    /**
+     * Constructs a new AccessControlList.
+     *
+     * This class follows 'immutable' pattern - it's objects can't be modified
+     * once they are created. This means that the permissions the users have are
+     * in effect form the moment they log in to the moment they log out, and
+     * changes made to the security settings in that time are not reflected
+     * in the state of this object. If you need to reset an user's permissions
+     * you need to invalidate his session. &lt;br&gt;
+     *
+     * @param turbineUserGroupRoleSet
+     *            The set of user/group/role relations that this acl is built from
+     * @param groupManager the Group manager
+     * @param roleManager the Role manager
+     * @param modelManager the model Manager
+     * @param logger 
+     *
+     * @throws FulcrumSecurityException if the global group cannot be retrieved
+     */
+    public TurbineAccessControlListImpl(
+    		Set&lt;? extends TurbineUserGroupRole&gt; turbineUserGroupRoleSet,
+    		GroupManager groupManager, RoleManager roleManager, TurbineModelManager modelManager, Logger logger) throws FulcrumSecurityException
+<span class="fc" id="L105">    {</span>
+<span class="fc" id="L106">        this.roleSets = new HashMap&lt;Group, RoleSet&gt;();</span>
+<span class="fc" id="L107">        this.permissionSets = new HashMap&lt;Group, PermissionSet&gt;();</span>
+<span class="fc" id="L108">        this.groupManager = groupManager;</span>
+        
+<span class="fc" id="L110">        this.logger = logger;</span>
+
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        for (TurbineUserGroupRole ugr : turbineUserGroupRoleSet)</span>
+        {
+<span class="fc" id="L114">            Group group = ugr.getGroup();</span>
+            // check if group matches
+<span class="pc bpc" id="L116" title="2 of 6 branches missed.">            if (this.logger != null &amp;&amp; this.groupManager != null &amp;&amp; group.getClass() != this.groupManager.getGroupInstance().getClass()) {</span>
+<span class="nc" id="L117">                this.logger.warn( &quot;Turbine group classes do not match, some lookup might fail, check in componentConfiguration.xml. Expected class: &quot; +</span>
+<span class="nc" id="L118">                        this.groupManager.getGroupInstance().getClass() + &quot;, actual class: &quot; +group.getClass()</span>
+            );
+            }
+<span class="fc" id="L121">            groupSet.add(group);</span>
+
+<span class="fc" id="L123">            Role role = ugr.getRole();</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">            if (!roleSet.containsId(role.getId()))</span>
+            {
+                // get fresh reference from role manager to make sure the related
+                // permissions are populated
+<span class="fc bfc" id="L128" title="All 2 branches covered.">                if (roleManager != null)</span>
+                {
+<span class="fc" id="L130">                    role = roleManager.getRoleById(role.getId());</span>
+                }
+<span class="fc" id="L132">                roleSet.add(role);</span>
+            }
+            else
+            {
+<span class="fc" id="L136">                role = roleSet.getById(role.getId());</span>
+            }
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">            if (roleSets.containsKey(group))</span>
+            {
+<span class="nc" id="L140">            	roleSets.get(group).add(role);</span>
+            }
+            else
+            {
+<span class="fc" id="L144">            	RoleSet rs = new RoleSet();</span>
+<span class="fc" id="L145">            	rs.add(role);</span>
+<span class="fc" id="L146">            	roleSets.put(group, rs);</span>
+            }
+            // if required, otherwise skip
+<span class="pc bpc" id="L149" title="1 of 2 branches missed.">            if (role instanceof TurbineRole) {</span>
+<span class="fc" id="L150">	            PermissionSet ps = ((TurbineRole) role).getPermissions();</span>
+<span class="fc" id="L151">	            permissionSet.add(ps);</span>
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">	            if (permissionSets.containsKey(group))</span>
+	            {
+<span class="nc" id="L154">	            	permissionSets.get(group).add(ps);</span>
+	            }
+	            else
+	            {
+<span class="fc" id="L158">	            	permissionSets.put(group, ps);</span>
+	            }
+            }
+<span class="fc" id="L161">        }</span>
+        // this check might be not needed any more, required for custom group
+<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (modelManager != null)</span>
+        {
+<span class="fc" id="L165">        	this.globalGroup = modelManager.getGlobalGroup();</span>
+        }
+<span class="fc" id="L167">    }</span>
+
+    /**
+     * Retrieves a set of Roles an user is assigned in a Group.
+     *
+     * @param group the Group
+     * @return the set of Roles this user has within the Group.
+     */
+    @Override
+    public RoleSet getRoles(Group group)
+    {
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        if (group == null)</span>
+        {
+<span class="fc" id="L180">            return null;</span>
+        }
+<span class="fc" id="L182">        return roleSets.get(group);</span>
+    }
+
+    /**
+     * Retrieves a set of Roles an user is assigned in the global Group.
+     *
+     * @return the set of Roles this user has within the global Group or null.
+     */
+    @Override
+    public RoleSet getRoles()
+    {
+<span class="fc" id="L193">        return getRoles(globalGroup);</span>
+    }
+
+    /**
+     * Retrieves a set of Permissions an user is assigned in a Group.
+     *
+     * @param group the Group
+     * @return the set of Permissions this user has within the Group.
+     */
+    @Override
+    public PermissionSet getPermissions(Group group)
+    {
+<span class="pc bpc" id="L205" title="1 of 2 branches missed.">        if (group == null)</span>
+        {
+<span class="nc" id="L207">            return null;</span>
+        }
+<span class="fc" id="L209">        return permissionSets.get(group);</span>
+    }
+
+    /**
+     * Retrieves a set of Permissions an user is assigned in the global Group.
+     *
+     * @return the set of Permissions this user has within the global Group.
+     */
+    @Override
+    public PermissionSet getPermissions()
+    {
+<span class="nc" id="L220">        return getPermissions(globalGroup);</span>
+    }
+
+    /**
+     * Checks if the user is assigned a specific Role in the Group.
+     *
+     * @param role the Role
+     * @param group the Group
+     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Role in the Group.
+     */
+    @Override
+    public boolean hasRole(Role role, Group group)
+    {
+<span class="fc" id="L233">        RoleSet set = getRoles(group);</span>
+<span class="pc bpc" id="L234" title="2 of 4 branches missed.">        if (set == null || role == null)</span>
+        {
+<span class="nc" id="L236">            return false;</span>
+        }
+<span class="fc" id="L238">        return set.contains(role);</span>
+    }
+
+    /**
+     * Checks if the user is assigned a specific Role in any of the given
+     * Groups
+     *
+     * @param role the Role
+     * @param groupset a Groupset
+     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Role in any of
+     *         the given Groups.
+     */
+    @Override
+    public boolean hasRole(Role role, GroupSet groupset)
+    {
+<span class="nc bnc" id="L253" title="All 2 branches missed.">        if (role == null)</span>
+        {
+<span class="nc" id="L255">            return false;</span>
+        }
+
+<span class="nc bnc" id="L258" title="All 2 branches missed.">        for (Group group : groupset)</span>
+        {
+<span class="nc" id="L260">            RoleSet roles = getRoles(group);</span>
+<span class="nc bnc" id="L261" title="All 4 branches missed.">            if (roles != null &amp;&amp; roles.contains(role))</span>
+            {
+<span class="nc" id="L263">                return true;</span>
+            }
+<span class="nc" id="L265">        }</span>
+
+<span class="nc" id="L267">        return false;</span>
+    }
+
+    /**
+     * Checks if the user is assigned a specific Role in the Group.
+     *
+     * @param roleName the Role name
+     * @param groupName the Group name
+     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Role in the Group.
+     */
+    @Override
+    public boolean hasRole(String roleName, String groupName)
+    {
+        try
+        {
+<span class="nc" id="L282">        	return hasRole(roleSet.getByName(roleName), groupSet.getByName(groupName));</span>
+        }
+<span class="nc" id="L284">        catch (Exception e)</span>
+        {
+<span class="nc" id="L286">            return false;</span>
+        }
+    }
+
+    /**
+     * Checks if the user is assigned a specific Role in any of the given
+     * Groups
+     *
+     * @param rolename the name of the Role
+     * @param groupset a Groupset
+     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Role in any of
+     *         the given Groups.
+     */
+    @Override
+    public boolean hasRole(String rolename, GroupSet groupset)
+    {
+        try
+        {
+<span class="nc" id="L304">        	return hasRole(roleSet.getByName(rolename), groupset);</span>
+        }
+<span class="nc" id="L306">        catch (Exception e)</span>
+        {
+<span class="nc" id="L308">            return false;</span>
+        }
+    }
+
+    /**
+     * Checks if the user is assigned a specific Role in the global Group.
+     *
+     * @param role the Role
+     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Role in the global Group.
+     */
+    @Override
+    public boolean hasRole(Role role)
+    {
+<span class="fc" id="L321">        return hasRole(role, globalGroup);</span>
+    }
+
+    /**
+     * Checks if the user is assigned a specific Role in the global Group.
+     *
+     * @param role the Role
+     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Role in the global Group.
+     */
+    @Override
+    public boolean hasRole(String role)
+    {
+        try
+        {
+<span class="nc" id="L335">            return hasRole(roleSet.getByName(role));</span>
+        }
+<span class="nc" id="L337">        catch (Exception e)</span>
+        {
+<span class="nc" id="L339">            return false;</span>
+        }
+    }
+
+    /**
+     * Checks if the user is assigned a specific Permission in the Group.
+     *
+     * @param permission the Permission
+     * @param group the Group
+     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in the Group.
+     */
+    @Override
+    public boolean hasPermission(Permission permission, Group group)
+    {
+<span class="fc" id="L353">        PermissionSet set = getPermissions(group);</span>
+<span class="pc bpc" id="L354" title="2 of 4 branches missed.">        if (set == null || permission == null)</span>
+        {
+<span class="nc" id="L356">            return false;</span>
+        }
+<span class="fc" id="L358">        return set.contains(permission);</span>
+    }
+
+    /**
+     * Checks if the user is assigned a specific Permission in any of the given
+     * Groups
+     *
+     * @param permission the Permission
+     * @param groupset a Groupset
+     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in any
+     *         of the given Groups.
+     */
+    @Override
+    public boolean hasPermission(Permission permission, GroupSet groupset)
+    {
+<span class="nc bnc" id="L373" title="All 2 branches missed.">        if (permission == null)</span>
+        {
+<span class="nc" id="L375">            return false;</span>
+        }
+
+<span class="nc bnc" id="L378" title="All 2 branches missed.">        for (Group group : groupset)</span>
+        {
+<span class="nc" id="L380">            PermissionSet permissions = getPermissions(group);</span>
+<span class="nc bnc" id="L381" title="All 4 branches missed.">            if (permissions != null &amp;&amp; permissions.contains(permission))</span>
+            {
+<span class="nc" id="L383">                return true;</span>
+            }
+<span class="nc" id="L385">        }</span>
+
+<span class="nc" id="L387">        return false;</span>
+    }
+
+    /**
+     * Checks if the user is assigned a specific Permission in the Group.
+     *
+     * @param permission the Permission
+     * @param group the Group
+     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in the Group.
+     */
+    @Override
+    public boolean hasPermission(String permission, String group)
+    {
+        try
+        {
+<span class="nc" id="L402">            return hasPermission(permissionSet.getByName(permission), groupSet.getByName(group));</span>
+        }
+<span class="nc" id="L404">        catch (Exception e)</span>
+        {
+<span class="nc" id="L406">            return false;</span>
+        }
+    }
+
+    /**
+     * Checks if the user is assigned a specific Permission in the Group.
+     *
+     * @param permission the Permission
+     * @param group the Group
+     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in the Group.
+     */
+    @Override
+    public boolean hasPermission(String permission, Group group)
+    {
+        try
+        {
+<span class="nc" id="L422">            return hasPermission(permissionSet.getByName(permission), group);</span>
+        }
+<span class="nc" id="L424">        catch (Exception e)</span>
+        {
+<span class="nc" id="L426">            return false;</span>
+        }
+    }
+
+    /**
+     * Checks if the user is assigned a specific Permission in any of the given
+     * Groups
+     *
+     * @param permissionName the name of the Permission
+     * @param groupset a Groupset
+     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in any
+     *         of the given Groups.
+     */
+    @Override
+    public boolean hasPermission(String permissionName, GroupSet groupset)
+    {
+        Permission permission;
+        try
+        {
+<span class="nc" id="L445">            permission = permissionSet.getByName(permissionName);</span>
+        }
+<span class="nc" id="L447">        catch (Exception e)</span>
+        {
+<span class="nc" id="L449">            return false;</span>
+<span class="nc" id="L450">        }</span>
+        
+<span class="nc bnc" id="L452" title="All 2 branches missed.">        if (permission == null)</span>
+        {
+<span class="nc" id="L454">            return false;</span>
+        }
+        
+<span class="nc bnc" id="L457" title="All 2 branches missed.">        for (Group group : groupset)</span>
+        {
+<span class="nc" id="L459">            PermissionSet permissions = getPermissions(group);</span>
+<span class="nc bnc" id="L460" title="All 4 branches missed.">            if (permissions != null &amp;&amp; permissions.contains(permission))</span>
+            {
+<span class="nc" id="L462">            	return true;</span>
+            }
+<span class="nc" id="L464">        }</span>
+<span class="nc" id="L465">        return false;</span>
+    }
+
+    /**
+     * Checks if the user is assigned a specific Permission in the global Group.
+     *
+     * @param permission the Permission
+     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in the global Group.
+     */
+    @Override
+    public boolean hasPermission(Permission permission)
+    {
+<span class="nc" id="L477">        return hasPermission(permission, globalGroup);</span>
+    }
+
+    /**
+     * Checks if the user is assigned a specific Permission in the global Group.
+     *
+     * @param permission the Permission
+     * @return &lt;code&gt;true&lt;/code&gt; if the user is assigned the Permission in the global Group.
+     */
+    @Override
+    public boolean hasPermission(String permission)
+    {
+        try
+        {
+<span class="nc" id="L491">            return hasPermission(permissionSet.getByName(permission));</span>
+        }
+<span class="nc" id="L493">        catch (Exception e)</span>
+        {
+<span class="nc" id="L495">            return false;</span>
+        }
+    }
+
+    /**
+     * Returns all groups defined in the system.
+     *
+     * This is useful for debugging, when you want to display all roles
+     * and permissions an user is assigned. This method is needed
+     * because you can't call static methods of TurbineSecurity class
+     * from within WebMacro/Velocity template
+     *
+     * @return A Group [] of all groups in the system.
+     */
+    @Override
+    public Group[] getAllGroups()
+    {
+        try
+        {
+<span class="pc bpc" id="L514" title="1 of 2 branches missed.">            return (groupManager != null)? groupManager.getAllGroups().toArray(new Group[0])</span>
+<span class="fc" id="L515">                    : new Group[0];</span>
+        }
+<span class="nc" id="L517">        catch (FulcrumSecurityException e)</span>
+        {
+<span class="nc" id="L519">            return new Group[0];</span>
+        }
+    }
+
+    @Override
+    public GroupSet getGroupSet()
+    {
+<span class="fc" id="L526">        return groupSet;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

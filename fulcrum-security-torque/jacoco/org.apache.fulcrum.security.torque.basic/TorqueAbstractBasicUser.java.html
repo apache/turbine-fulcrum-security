@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TorqueAbstractBasicUser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.torque.basic</a> &gt; <span class="el_source">TorqueAbstractBasicUser.java</span></div><h1>TorqueAbstractBasicUser.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.torque.basic;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.sql.Connection;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.model.basic.entity.BasicUser;
+import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroup;
+import org.apache.fulcrum.security.torque.om.TorqueBasicUserGroupPeer;
+import org.apache.fulcrum.security.torque.om.TorqueBasicUserPeer;
+import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.GroupSet;
+import org.apache.torque.TorqueException;
+import org.apache.torque.criteria.Criteria;
+import org.apache.torque.om.SimpleKey;
+
+/**
+ * This abstract class provides the SecurityInterface to the managers.
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id:$
+ */
+<span class="fc" id="L42">public abstract class TorqueAbstractBasicUser extends TorqueAbstractSecurityEntity</span>
+    implements BasicUser
+{
+    /** Serial version */
+	private static final long serialVersionUID = 7669398253522416329L;
+	/** a cache of group objects */
+<span class="fc" id="L48">    private Set&lt;Group&gt; groupSet = null;</span>
+
+    /**
+     * Forward reference to generated code
+     *
+     * Get a list of association objects, pre-populated with their TorqueBasicGroup
+     * objects.
+     *
+     * @param criteria Criteria to define the selection of records
+     * @param con a database connection
+     * @throws TorqueException  if any database error occurs
+     *
+     * @return a list of User/Group relations
+     */
+    protected List&lt;TorqueBasicUserGroup&gt; getTorqueBasicUserGroupsJoinTorqueBasicGroup(Criteria criteria, Connection con)
+        throws TorqueException
+    {
+<span class="nc" id="L65">        criteria.and(TorqueBasicUserGroupPeer.USER_ID, getEntityId() );</span>
+<span class="nc" id="L66">        return TorqueBasicUserGroupPeer.doSelectJoinTorqueBasicGroup(criteria, con);</span>
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#addGroup(org.apache.fulcrum.security.entity.Group)
+     */
+    public void addGroup(Group group)
+    {
+<span class="fc" id="L74">        getGroups().add(group);</span>
+<span class="fc" id="L75">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#getGroups()
+     */
+    public GroupSet getGroups()
+    {
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (groupSet == null)</span>
+        {
+<span class="fc" id="L84">            groupSet = new GroupSet();</span>
+        }
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        else if(!(groupSet instanceof GroupSet))</span>
+        {
+<span class="nc" id="L88">            groupSet = new GroupSet(groupSet);</span>
+        }
+
+<span class="fc" id="L91">        return (GroupSet)groupSet;</span>
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#getGroupsAsSet()
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Group&gt; Set&lt;T&gt; getGroupsAsSet()
+    {
+<span class="nc" id="L100">        return (Set&lt;T&gt;)groupSet;</span>
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#removeGroup(org.apache.fulcrum.security.entity.Group)
+     */
+    public void removeGroup(Group group)
+    {
+<span class="fc" id="L108">        getGroups().remove(group);</span>
+<span class="fc" id="L109">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#setGroups(org.apache.fulcrum.security.util.GroupSet)
+     */
+    public void setGroups(GroupSet groups)
+    {
+<span class="nc bnc" id="L116" title="All 2 branches missed.">        if(groups != null)</span>
+        {
+<span class="nc" id="L118">            this.groupSet = groups;</span>
+        }
+        else
+        {
+<span class="nc" id="L122">            this.groupSet = new GroupSet();</span>
+        }
+<span class="nc" id="L124">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.model.basic.entity.BasicUser#setGroupsAsSet(java.util.Set)
+     */
+    public &lt;T extends Group&gt; void setGroupsAsSet(Set&lt;T&gt; groups)
+    {
+<span class="nc" id="L131">        setGroups(new GroupSet(groups));</span>
+<span class="nc" id="L132">    }</span>
+    /**
+     * Retrieve attached objects such as users, permissions,....
+     */
+    @Override
+    public void retrieveAttachedObjects( Connection con )
+        throws DataBackendException
+    {
+<span class="nc" id="L140">        retrieveAttachedObjects( con, false );</span>
+<span class="nc" id="L141">    }</span>
+
+    /**
+     * Retrieve attached objects such as users, permissions,....
+     */
+    @Override
+    public void retrieveAttachedObjects( Connection con, Boolean lazy )
+        throws DataBackendException
+    {
+<span class="fc" id="L150">        this.groupSet = new GroupSet();</span>
+
+        try {
+<span class="fc" id="L153">            List&lt;TorqueBasicUserGroup&gt; usergroups = getTorqueBasicUserGroupsJoinTorqueBasicGroup(new Criteria(), con);</span>
+    
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">            for (TorqueBasicUserGroup tbug : usergroups)</span>
+            {
+<span class="nc" id="L157">                groupSet.add(tbug.getTorqueBasicGroup());</span>
+<span class="nc" id="L158">            }</span>
+<span class="nc" id="L159">        } catch (TorqueException e ) {</span>
+<span class="nc" id="L160">            throw new DataBackendException( e.getMessage(),e );</span>
+<span class="fc" id="L161">        }</span>
+<span class="fc" id="L162">    }</span>
+
+    /**
+     * Update this instance to the database with all dependent objects
+     *
+     * @param con A database connection
+     */
+    public void update(Connection con) throws TorqueException
+    {
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">        if (groupSet != null)</span>
+        {
+<span class="fc" id="L173">            Criteria criteria = new Criteria();</span>
+
+            /* remove old entries */
+<span class="fc" id="L176">            criteria.where(TorqueBasicUserGroupPeer.USER_ID, getEntityId());</span>
+<span class="fc" id="L177">            TorqueBasicUserGroupPeer.doDelete(criteria, con);</span>
+
+<span class="fc bfc" id="L179" title="All 2 branches covered.">            for (Group g : groupSet)</span>
+            {
+<span class="fc" id="L181">                TorqueBasicUserGroup ug = new TorqueBasicUserGroup();</span>
+<span class="fc" id="L182">                ug.setUserId(getEntityId());</span>
+<span class="fc" id="L183">                ug.setGroupId((Integer)g.getId());</span>
+<span class="fc" id="L184">                ug.save(con);</span>
+<span class="fc" id="L185">            }</span>
+        }
+
+        try
+        {
+<span class="fc" id="L190">            save(con);</span>
+        }
+<span class="nc" id="L192">        catch (Exception e)</span>
+        {
+<span class="nc" id="L194">            throw new TorqueException(e);</span>
+<span class="fc" id="L195">        }</span>
+<span class="fc" id="L196">    }</span>
+
+    /**
+     * Get the name of the connnection pool associated to this object
+     *
+     * @return the logical Torque database name
+     */
+    public String getDatabaseName()
+    {
+<span class="nc" id="L205">        return TorqueBasicUserPeer.DATABASE_NAME;</span>
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#delete()
+     */
+    public void delete() throws TorqueException
+    {
+<span class="nc" id="L213">        TorqueBasicUserPeer.doDelete(SimpleKey.keyFor(getEntityId()));</span>
+<span class="nc" id="L214">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

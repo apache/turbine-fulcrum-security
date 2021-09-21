@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DefaultAbstractTurbineUser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.torque.turbine</a> &gt; <span class="el_source">DefaultAbstractTurbineUser.java</span></div><h1>DefaultAbstractTurbineUser.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.torque.turbine;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.sql.Connection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
+import org.apache.fulcrum.security.torque.om.TurbineUserGroupRolePeer;
+import org.apache.fulcrum.security.torque.om.TurbineUserPeer;
+import org.apache.fulcrum.security.torque.peer.TurbineUserGroupRoleModelPeerMapper;
+import org.apache.fulcrum.security.torque.security.turbine.TorqueAbstractTurbineTurbineSecurityEntityDefault;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.torque.TorqueException;
+import org.apache.torque.criteria.Criteria;
+import org.apache.torque.om.SimpleKey;
+
+/**
+ * This abstract class provides the SecurityInterface to the managers.
+ * 
+ * An implementing class is required to implement {@link User} at least. Most probably the OM classes allow to implement {@link TurbineUser}, which includes User.
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id:$
+ */
+<span class="fc" id="L45">public abstract class DefaultAbstractTurbineUser extends TorqueAbstractTurbineTurbineSecurityEntityDefault</span>
+{
+    /** Serial version */
+	private static final long serialVersionUID = -7255623655281852566L;
+    
+    /**
+     * Forward reference to module generated code
+     *
+     * Get a list of association objects, pre-populated with their TurbineGroup
+     * objects.
+     * 
+     * Does intentionally not initialize the cache collTurbineUserGroupRoles for referenced objects. 
+     * 
+     * Be careful not to call any of the generated getTurbineUserGroupRoles methods in derived classes,
+     * the link {@link #save()} method otherwise might not update the right relationships.
+     *
+     * @param criteria Criteria to define the selection of records
+     * @param con a database connection
+     * @throws DataBackendException  
+     *
+     * @return a list of User/Group/Role relations
+     * @throws TorqueException if any database error occurs
+     */
+    protected &lt;T extends TurbineUserGroupRoleModelPeerMapper&gt; List&lt;T&gt; getTurbineUserGroupRolesJoinTurbineGroup(Criteria criteria, Connection con)
+        throws TorqueException, DataBackendException
+    {
+<span class="nc" id="L71">        criteria.and(TurbineUserGroupRolePeer.USER_ID, getEntityId() );</span>
+        try {
+<span class="nc" id="L73">            return (List&lt;T&gt;) TurbineUserGroupRolePeer.doSelectJoinTurbineGroup(criteria, con);</span>
+<span class="nc" id="L74">        } catch (  TorqueException e) {</span>
+<span class="nc" id="L75">            throw new DataBackendException( e.getMessage(), e );</span>
+        }
+    }
+    
+    /** 
+     * @see org.apache.fulcrum.security.torque.security.turbine.TorqueAbstractTurbineTurbineSecurityEntityDefault#retrieveAttachedObjects(java.sql.Connection, java.lang.Boolean, java.util.List)
+     */
+    @Override
+    public &lt;T extends TurbineUserGroupRoleModelPeerMapper&gt; void retrieveAttachedObjects( Connection con, Boolean lazy, List&lt;T&gt; ugrs ) throws DataBackendException, TorqueException
+    {
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        if (!lazy ) { </span>
+<span class="fc" id="L86">            Set&lt;TurbineUserGroupRole&gt; userGroupRoleSet = new HashSet&lt;TurbineUserGroupRole&gt;();</span>
+    
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">            if (ugrs == null) { // default </span>
+                // the groups are the keys in roleset, roles are not expected to be used as keys
+<span class="nc" id="L90">                ugrs = getTurbineUserGroupRolesJoinTurbineGroup(new Criteria(), con);</span>
+            } 
+    
+<span class="fc" id="L93">            maptoModel( con, userGroupRoleSet, ugrs );</span>
+            
+<span class="fc" id="L95">            setUserGroupRoleSet(userGroupRoleSet);</span>
+        }
+<span class="fc" id="L97">    }</span>
+    
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection, java.lang.Boolean)
+     */
+    @Override
+    public void retrieveAttachedObjects( Connection con, Boolean lazy ) throws TorqueException, DataBackendException
+    {
+<span class="nc bnc" id="L105" title="All 2 branches missed.">        if (!lazy) {</span>
+<span class="nc" id="L106">            Set&lt;TurbineUserGroupRole&gt; userGroupRoleSet = new HashSet&lt;TurbineUserGroupRole&gt;();</span>
+            
+<span class="nc" id="L108">            List&lt;TurbineUserGroupRoleModelPeerMapper&gt; ugrs = getTurbineUserGroupRolesJoinTurbineGroup(new Criteria(), con);</span>
+    
+            // TODO: Need to call this too to fetch right role object? getTurbineUserGroupRolesJoinTurbineRole
+            // org.apache.fulcrum.security.torque.om.TurbineUserGroupRole
+<span class="nc" id="L112">            maptoModel( con, userGroupRoleSet, ugrs );</span>
+    
+<span class="nc" id="L114">            setUserGroupRoleSet(userGroupRoleSet);</span>
+        }
+<span class="nc" id="L116">    }</span>
+
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(java.sql.Connection)
+     */
+    @Override
+    public void retrieveAttachedObjects( Connection con )
+        throws DataBackendException, TorqueException
+    {
+<span class="nc" id="L125">        retrieveAttachedObjects( con, false );</span>
+<span class="nc" id="L126">    }</span>
+
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#update(java.sql.Connection)
+     */
+    @Override
+	public void update(Connection con) throws TorqueException
+    {
+        try
+        {
+<span class="fc" id="L136">            Set&lt;TurbineUserGroupRole&gt; userGroupRoleSet = getUserGroupRoleSet();</span>
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">            if ( userGroupRoleSet != null ) //&amp;&amp; !userGroupRoleSet.isEmpty() commented allow delete/empty </span>
+            {
+<span class="fc" id="L139">                Criteria criteria = new Criteria();</span>
+
+                /* remove old entries */
+<span class="fc" id="L142">                criteria.where(TurbineUserGroupRolePeer.USER_ID, getEntityId());</span>
+<span class="fc" id="L143">                TurbineUserGroupRolePeer.doDelete(criteria, con);</span>
+
+<span class="fc bfc" id="L145" title="All 2 branches covered.">                for (TurbineUserGroupRole ugr : userGroupRoleSet)</span>
+                {
+<span class="fc" id="L147">                    org.apache.fulcrum.security.torque.om.TurbineUserGroupRole ttugr = new org.apache.fulcrum.security.torque.om.TurbineUserGroupRole();</span>
+<span class="fc" id="L148">                    ttugr.setGroupId((Integer)ugr.getGroup().getId());</span>
+<span class="fc" id="L149">                    ttugr.setUserId((Integer)ugr.getUser().getId());</span>
+<span class="fc" id="L150">                    ttugr.setRoleId((Integer)ugr.getRole().getId());</span>
+<span class="fc" id="L151">                    ttugr.save(con);</span>
+<span class="fc" id="L152">                }</span>
+            }
+<span class="fc" id="L154">            save(con);</span>
+        }
+<span class="nc" id="L156">        catch (Exception e)</span>
+        {
+<span class="nc" id="L158">            throw new TorqueException(e);</span>
+<span class="fc" id="L159">        }</span>
+<span class="fc" id="L160">    }</span>
+
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#delete()
+     */
+    @Override
+	public void delete() throws TorqueException
+    {
+<span class="fc" id="L168">        TurbineUserPeer.doDelete(SimpleKey.keyFor(getEntityId()));</span>
+<span class="fc" id="L169">    }</span>
+    
+    /**
+     * @param con data connection
+     * @param userGroupRoleSet U/G/R to be set / target object
+     * @param ugrs list of all ugrs
+     * @throws TorqueException if data connection could not be found
+     */
+    private &lt;T extends TurbineUserGroupRoleModelPeerMapper&gt; void maptoModel( Connection con, 
+            Set&lt;TurbineUserGroupRole&gt; userGroupRoleSet,
+                             List&lt;T&gt; ugrs )
+        throws DataBackendException
+    {
+        try {
+<span class="fc bfc" id="L183" title="All 2 branches covered.">            for (TurbineUserGroupRoleModelPeerMapper ttugr : ugrs)</span>
+            {
+<span class="fc" id="L185">                TurbineUserGroupRole ugr = new TurbineUserGroupRole();</span>
+<span class="fc" id="L186">                ugr.setUser((User) this);</span>
+<span class="fc" id="L187">                ugr.setRole(ttugr.getTurbineRole(con));</span>
+                
+                // org.apache.fulcrum.security.torque.om.TurbineGroup implements 
+                // org.apache.fulcrum.security.model.turbine.entity.TurbineGroup
+                // but may be hides it? 
+<span class="fc" id="L192">                ugr.setGroup(ttugr.getTurbineGroup(con));</span>
+<span class="fc" id="L193">                userGroupRoleSet.add(ugr);</span>
+<span class="fc" id="L194">            }</span>
+<span class="nc" id="L195">        } catch (TorqueException e ) {</span>
+<span class="nc" id="L196">            throw new DataBackendException( e.getMessage(),e );</span>
+<span class="fc" id="L197">        }</span>
+<span class="fc" id="L198">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

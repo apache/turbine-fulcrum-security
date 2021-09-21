@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MemoryModelManagerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Memory Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.memory.dynamic</a> &gt; <span class="el_source">MemoryModelManagerImpl.java</span></div><h1>MemoryModelManagerImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.memory.dynamic;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.Permission;
+import org.apache.fulcrum.security.entity.Role;
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.dynamic.AbstractDynamicModelManager;
+import org.apache.fulcrum.security.model.dynamic.DynamicModelManager;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicGroup;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicPermission;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicUser;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+
+/**
+ * This implementation keeps all objects in memory. This is mostly meant to help
+ * with testing and prototyping of ideas.
+ * 
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id$
+ */
+<span class="fc" id="L41">public class MemoryModelManagerImpl extends AbstractDynamicModelManager implements DynamicModelManager {</span>
+	/**
+	 * Puts a user in a group.
+	 * 
+	 * This method is used when adding a user to a group
+	 * 
+	 * @param user  the User.
+	 * @param group the Group
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if the account is not present.
+	 */
+	public void grant(User user, Group group) throws DataBackendException, UnknownEntityException {
+<span class="fc" id="L54">		boolean groupExists = false;</span>
+<span class="fc" id="L55">		boolean userExists = false;</span>
+		try {
+<span class="fc" id="L57">			groupExists = getGroupManager().checkExists(group);</span>
+<span class="fc" id="L58">			userExists = getUserManager().checkExists(user);</span>
+<span class="pc bpc" id="L59" title="2 of 4 branches missed.">			if (groupExists &amp;&amp; userExists) {</span>
+<span class="fc" id="L60">				((DynamicUser) user).addGroup(group);</span>
+<span class="fc" id="L61">				((DynamicGroup) group).addUser(user);</span>
+<span class="fc" id="L62">				return;</span>
+			}
+<span class="nc" id="L64">		} catch (Exception e) {</span>
+<span class="nc" id="L65">			throw new DataBackendException(&quot;grant(Role,Permission) failed&quot;, e);</span>
+<span class="nc" id="L66">		}</span>
+
+<span class="nc bnc" id="L68" title="All 2 branches missed.">		if (!groupExists) {</span>
+<span class="nc" id="L69">			throw new UnknownEntityException(&quot;Unknown group '&quot; + group.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc bnc" id="L71" title="All 2 branches missed.">		if (!userExists) {</span>
+<span class="nc" id="L72">			throw new UnknownEntityException(&quot;Unknown user '&quot; + user.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc" id="L74">	}</span>
+
+	/**
+	 * Revokes a user from a group
+	 * 
+	 * @param user  the User.
+	 * @param group the Group
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend
+	 * @throws UnknownEntityException if the user or group is not present.
+	 */
+	public void revoke(User user, Group group) throws DataBackendException, UnknownEntityException {
+<span class="fc" id="L86">		boolean groupExists = false;</span>
+<span class="fc" id="L87">		boolean userExists = false;</span>
+		try {
+<span class="fc" id="L89">			groupExists = getGroupManager().checkExists(group);</span>
+<span class="fc" id="L90">			userExists = getUserManager().checkExists(user);</span>
+<span class="pc bpc" id="L91" title="2 of 4 branches missed.">			if (groupExists &amp;&amp; userExists) {</span>
+<span class="fc" id="L92">				((DynamicUser) user).removeGroup(group);</span>
+<span class="fc" id="L93">				((DynamicGroup) group).removeUser(user);</span>
+<span class="fc" id="L94">				return;</span>
+			}
+<span class="nc" id="L96">		} catch (Exception e) {</span>
+<span class="nc" id="L97">			throw new DataBackendException(&quot;grant(Role,Permission) failed&quot;, e);</span>
+<span class="nc" id="L98">		}</span>
+
+<span class="nc bnc" id="L100" title="All 2 branches missed.">		if (!groupExists) {</span>
+<span class="nc" id="L101">			throw new UnknownEntityException(&quot;Unknown group '&quot; + group.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc bnc" id="L103" title="All 2 branches missed.">		if (!userExists) {</span>
+<span class="nc" id="L104">			throw new UnknownEntityException(&quot;Unknown user '&quot; + user.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc" id="L106">	}</span>
+
+	/**
+	 * Grants a Role to a Group
+	 * 
+	 * @param group the Group.
+	 * @param role  the Role.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if group or role is not present.
+	 */
+	public synchronized void grant(Group group, Role role) throws DataBackendException, UnknownEntityException {
+<span class="fc" id="L118">		boolean groupExists = false;</span>
+<span class="fc" id="L119">		boolean roleExists = false;</span>
+		try {
+<span class="fc" id="L121">			groupExists = getGroupManager().checkExists(group);</span>
+<span class="fc" id="L122">			roleExists = getRoleManager().checkExists(role);</span>
+<span class="pc bpc" id="L123" title="2 of 4 branches missed.">			if (groupExists &amp;&amp; roleExists) {</span>
+<span class="fc" id="L124">				((DynamicGroup) group).addRole(role);</span>
+<span class="fc" id="L125">				((DynamicRole) role).addGroup(group);</span>
+<span class="fc" id="L126">				return;</span>
+			}
+<span class="nc" id="L128">		} catch (Exception e) {</span>
+<span class="nc" id="L129">			throw new DataBackendException(&quot;grant(Group,Role) failed&quot;, e);</span>
+<span class="nc" id="L130">		}</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">		if (!groupExists) {</span>
+<span class="nc" id="L132">			throw new UnknownEntityException(&quot;Unknown group '&quot; + group.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc bnc" id="L134" title="All 2 branches missed.">		if (!roleExists) {</span>
+<span class="nc" id="L135">			throw new UnknownEntityException(&quot;Unknown role '&quot; + role.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc" id="L137">	}</span>
+
+	/**
+	 * Revokes a Role from a Group.
+	 * 
+	 * @param group the Group.
+	 * @param role  the Role.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if group or role is not present.
+	 */
+	public synchronized void revoke(Group group, Role role) throws DataBackendException, UnknownEntityException {
+<span class="fc" id="L149">		boolean groupExists = false;</span>
+<span class="fc" id="L150">		boolean roleExists = false;</span>
+		try {
+<span class="fc" id="L152">			groupExists = getGroupManager().checkExists(group);</span>
+<span class="fc" id="L153">			roleExists = getRoleManager().checkExists(role);</span>
+<span class="pc bpc" id="L154" title="2 of 4 branches missed.">			if (groupExists &amp;&amp; roleExists) {</span>
+<span class="fc" id="L155">				((DynamicGroup) group).removeRole(role);</span>
+<span class="fc" id="L156">				((DynamicRole) role).removeGroup(group);</span>
+<span class="fc" id="L157">				return;</span>
+			}
+<span class="nc" id="L159">		} catch (Exception e) {</span>
+<span class="nc" id="L160">			throw new DataBackendException(&quot;revoke(Group,Role) failed&quot;, e);</span>
+<span class="nc" id="L161">		}</span>
+
+<span class="nc bnc" id="L163" title="All 2 branches missed.">		if (!groupExists) {</span>
+<span class="nc" id="L164">			throw new UnknownEntityException(&quot;Unknown group '&quot; + group.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc bnc" id="L166" title="All 2 branches missed.">		if (!roleExists) {</span>
+<span class="nc" id="L167">			throw new UnknownEntityException(&quot;Unknown role '&quot; + role.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc" id="L169">	}</span>
+
+	/**
+	 * Grants a Role a Permission
+	 * 
+	 * @param role       the Role.
+	 * @param permission the Permission.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if role or permission is not present.
+	 */
+	public synchronized void grant(Role role, Permission permission)
+			throws DataBackendException, UnknownEntityException {
+<span class="fc" id="L182">		boolean roleExists = false;</span>
+<span class="fc" id="L183">		boolean permissionExists = false;</span>
+		try {
+<span class="fc" id="L185">			roleExists = getRoleManager().checkExists(role);</span>
+<span class="fc" id="L186">			permissionExists = getPermissionManager().checkExists(permission);</span>
+<span class="pc bpc" id="L187" title="2 of 4 branches missed.">			if (roleExists &amp;&amp; permissionExists) {</span>
+<span class="fc" id="L188">				((DynamicRole) role).addPermission(permission);</span>
+<span class="fc" id="L189">				((DynamicPermission) permission).addRole(role);</span>
+<span class="fc" id="L190">				return;</span>
+			}
+<span class="nc" id="L192">		} catch (Exception e) {</span>
+<span class="nc" id="L193">			throw new DataBackendException(&quot;grant(Role,Permission) failed&quot;, e);</span>
+<span class="nc" id="L194">		}</span>
+
+<span class="nc bnc" id="L196" title="All 2 branches missed.">		if (!roleExists) {</span>
+<span class="nc" id="L197">			throw new UnknownEntityException(&quot;Unknown role '&quot; + role.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc bnc" id="L199" title="All 2 branches missed.">		if (!permissionExists) {</span>
+<span class="nc" id="L200">			throw new UnknownEntityException(&quot;Unknown permission '&quot; + permission.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc" id="L202">	}</span>
+
+	/**
+	 * Revokes a Permission from a Role.
+	 * 
+	 * @param role       the Role.
+	 * @param permission the Permission.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if role or permission is not present.
+	 */
+	public synchronized void revoke(Role role, Permission permission)
+			throws DataBackendException, UnknownEntityException {
+<span class="fc" id="L215">		boolean roleExists = false;</span>
+<span class="fc" id="L216">		boolean permissionExists = false;</span>
+		try {
+<span class="fc" id="L218">			roleExists = getRoleManager().checkExists(role);</span>
+<span class="fc" id="L219">			permissionExists = getPermissionManager().checkExists(permission);</span>
+<span class="pc bpc" id="L220" title="2 of 4 branches missed.">			if (roleExists &amp;&amp; permissionExists) {</span>
+<span class="fc" id="L221">				((DynamicRole) role).removePermission(permission);</span>
+<span class="fc" id="L222">				((DynamicPermission) permission).removeRole(role);</span>
+<span class="fc" id="L223">				return;</span>
+			}
+<span class="nc" id="L225">		} catch (Exception e) {</span>
+<span class="nc" id="L226">			throw new DataBackendException(&quot;revoke(Role,Permission) failed&quot;, e);</span>
+<span class="nc" id="L227">		}</span>
+
+<span class="nc bnc" id="L229" title="All 2 branches missed.">		if (!roleExists) {</span>
+<span class="nc" id="L230">			throw new UnknownEntityException(&quot;Unknown role '&quot; + role.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc bnc" id="L232" title="All 2 branches missed.">		if (!permissionExists) {</span>
+<span class="nc" id="L233">			throw new UnknownEntityException(&quot;Unknown permission '&quot; + permission.getName() + &quot;'&quot;);</span>
+		}
+<span class="nc" id="L235">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

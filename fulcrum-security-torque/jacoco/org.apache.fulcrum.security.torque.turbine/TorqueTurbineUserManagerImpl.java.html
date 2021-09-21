@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TorqueTurbineUserManagerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.torque.turbine</a> &gt; <span class="el_source">TorqueTurbineUserManagerImpl.java</span></div><h1>TorqueTurbineUserManagerImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.torque.turbine;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.sql.Connection;
+import java.util.List;
+
+import org.apache.fulcrum.security.entity.User;
+import org.apache.fulcrum.security.model.turbine.TurbineUserManager;
+import org.apache.fulcrum.security.torque.om.TorqueTurbineUserPeer;
+import org.apache.fulcrum.security.torque.peer.TorqueTurbinePeer;
+import org.apache.fulcrum.security.torque.peer.TorqueTurbineUserGroupRolePeer;
+import org.apache.fulcrum.security.torque.peer.TurbineUserGroupRoleModelPeerMapper;
+import org.apache.fulcrum.security.torque.peer.managers.PeerUserManager;
+import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.torque.security.turbine.TorqueAbstractTurbineTurbineSecurityEntityDefault;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.apache.fulcrum.security.util.UserSet;
+import org.apache.torque.NoRowsException;
+import org.apache.torque.TooManyRowsException;
+import org.apache.torque.TorqueException;
+import org.apache.torque.criteria.Criteria;
+import org.apache.torque.util.Transaction;
+/**
+ * This implementation persists to a database via Torque.
+ * 
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id$
+ */
+<span class="fc" id="L47">public class TorqueTurbineUserManagerImpl extends PeerUserManager implements TurbineUserManager</span>
+{
+
+	/** Serial version */
+	private static final long serialVersionUID = 1L;
+	private static final String ANON = &quot;anon&quot;;
+
+    /**
+     * Default implementation.
+     */
+    @Override
+    public &lt;T extends User&gt; T getAnonymousUser()
+        throws UnknownEntityException
+    {
+        try
+        {
+<span class="nc" id="L63">            T anonUser =  getUser( ANON );</span>
+            // add more, if needed
+<span class="nc" id="L65">            return anonUser;</span>
+        }
+<span class="nc" id="L67">        catch ( DataBackendException e )</span>
+        {
+<span class="nc" id="L69">            throw new UnknownEntityException( &quot;Failed to load anonymous user&quot;,e);</span>
+        } 
+    }
+
+    /**
+     * Default implementation.
+     */
+    @Override
+    public boolean isAnonymousUser( User u )
+    {
+        try
+        {
+<span class="nc" id="L81">            User anon = getAnonymousUser();</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">            if (u.equals( anon )) </span>
+                {
+<span class="nc" id="L84">                 return true;</span>
+                }
+        }
+<span class="nc" id="L87">        catch ( Exception e )</span>
+        {
+<span class="nc" id="L89">            getLogger().error( &quot;Failed to check user:&quot; + e.getMessage(),e);</span>
+<span class="nc" id="L90">        }</span>
+<span class="nc" id="L91">        return false;</span>
+    }
+    
+    /**
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractUserManager#doSelectAllUsers(java.sql.Connection)
+     */
+   
+    @Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	protected &lt;T extends User&gt; List&lt;T&gt; doSelectAllUsers(Connection con) throws TorqueException
+    {
+<span class="fc" id="L102">        Criteria criteria = new Criteria();</span>
+        
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        if ( (getCustomPeer())) {</span>
+            try
+            {
+<span class="fc" id="L107">            	TorqueTurbinePeer&lt;T&gt; peerInstance = (TorqueTurbinePeer&lt;T&gt;)getPeerInstance();</span>
+<span class="fc" id="L108">                return peerInstance.doSelect( criteria, con );</span>
+            }
+<span class="nc" id="L110">            catch ( DataBackendException e )</span>
+            {
+<span class="nc" id="L112">                throw new TorqueException( e );</span>
+            }
+        } else {
+<span class="fc" id="L115">            return (List&lt;T&gt;) TorqueTurbineUserPeer.doSelect(criteria, con);</span>
+        }
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractUserManager#doSelectById(java.lang.Integer, java.sql.Connection)
+     */
+    @Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	protected &lt;T extends User&gt; T doSelectById(Integer id, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    {
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        if ( (getCustomPeer())) {</span>
+            try
+            {
+<span class="fc" id="L129">            	TorqueTurbinePeer&lt;T&gt; peerInstance = (TorqueTurbinePeer&lt;T&gt;)getPeerInstance();</span>
+<span class="fc" id="L130">                return peerInstance.retrieveByPK( id, con );</span>
+            }
+<span class="nc" id="L132">            catch ( DataBackendException e )</span>
+            {
+<span class="nc" id="L134">                throw new TorqueException( e );</span>
+            }
+        } else {
+<span class="fc" id="L137">            return  (T)  TorqueTurbineUserPeer.retrieveByPK(id, con);</span>
+        }
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.torque.TorqueAbstractUserManager#doSelectByName(java.lang.String, java.sql.Connection)
+     */
+    @Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	protected &lt;T extends User&gt; T doSelectByName(String name, Connection con) throws NoRowsException, TooManyRowsException, TorqueException
+    {
+<span class="fc" id="L148">        Criteria criteria = new Criteria();</span>
+        
+<span class="fc" id="L150">        criteria.setIgnoreCase(true);</span>
+<span class="fc" id="L151">        criteria.setSingleRecord(true);</span>
+        
+<span class="fc" id="L153">        List&lt;T&gt; users = null;</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        if ( (getCustomPeer())) {</span>
+            try
+            {
+<span class="fc" id="L157">            	TorqueTurbinePeer&lt;T&gt; peerInstance = (TorqueTurbinePeer&lt;T&gt;)getPeerInstance();</span>
+<span class="fc" id="L158">            	criteria.where(peerInstance.getTableMap().getColumn(getColumnName() ), name);</span>
+<span class="fc" id="L159">                users = peerInstance.doSelect( criteria, con );</span>
+            }
+<span class="nc" id="L161">            catch ( DataBackendException e )</span>
+            {
+<span class="nc" id="L163">                throw new TorqueException( e );</span>
+<span class="fc" id="L164">            }</span>
+        } else {
+<span class="fc" id="L166">        	criteria.where(TorqueTurbineUserPeer.LOGIN_NAME, name);</span>
+<span class="fc" id="L167">        	users = (List&lt;T&gt;) TorqueTurbineUserPeer.doSelect(criteria, con);</span>
+        }
+
+
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        if (users.isEmpty())</span>
+        {
+<span class="fc" id="L173">            throw new NoRowsException(name);</span>
+        }
+        
+<span class="fc" id="L176">        return users.get(0);</span>
+    }
+    
+    /**
+     * Retrieve a user from persistent storage using username as the
+     * key. Also retrieves all attached objects (user group role relationships).
+     *
+     * @param userName the name of the user.
+     * @return an User object.
+     * @exception UnknownEntityException if the user's account does not
+     *            exist in the database.
+     * @exception DataBackendException if there is a problem accessing the
+     *            storage.
+     */
+    @Override
+    public &lt;T extends User&gt; T getUser(String userName) throws UnknownEntityException, DataBackendException
+    {
+<span class="fc" id="L193">        T user = null;</span>
+<span class="fc" id="L194">        Connection con = null;</span>
+
+        try
+        {
+<span class="fc" id="L198">            con = Transaction.begin();</span>
+
+<span class="fc" id="L200">            user = doSelectByName(userName.toLowerCase(), con);</span>
+            
+            // Add attached objects if they exist
+<span class="fc" id="L203">            attachRelatedObjects( user, con ); </span>
+
+<span class="fc" id="L205">            Transaction.commit(con);</span>
+<span class="fc" id="L206">            con = null;</span>
+        }
+<span class="fc" id="L208">        catch (NoRowsException e)</span>
+        {
+<span class="fc" id="L210">            throw new UnknownEntityException(&quot;Unknown user '&quot; + userName + &quot;'&quot;);</span>
+        }
+<span class="nc" id="L212">        catch (TooManyRowsException e)</span>
+        {
+<span class="nc" id="L214">            throw new DataBackendException(&quot;Multiple Users with same username '&quot; + userName + &quot;'&quot;);</span>
+        }
+<span class="nc" id="L216">        catch (TorqueException e)</span>
+        {
+<span class="nc" id="L218">            throw new DataBackendException(&quot;Error retrieving user information&quot;, e);</span>
+        }
+        finally
+        {
+<span class="fc bfc" id="L222" title="All 2 branches covered.">            if (con != null)</span>
+            {
+<span class="fc" id="L224">                Transaction.safeRollback(con);</span>
+            }
+        }
+
+<span class="fc" id="L228">        return user;</span>
+    }
+    
+    /**
+     * Retrieves all users with attached related objects (user group role relationships) defined in the system.
+     *
+     * @return the names of all users defined in the system.
+     * @throws DataBackendException if there was an error accessing the data
+     *         backend.
+     */
+  @Override
+  public &lt;T extends User&gt; UserSet&lt;T&gt; getAllUsers() throws DataBackendException
+  {
+<span class="fc" id="L241">      UserSet&lt;T&gt; userSet = new UserSet&lt;T&gt;();</span>
+<span class="fc" id="L242">      Connection con = null;</span>
+
+      try
+      {
+<span class="fc" id="L246">          con = Transaction.begin();</span>
+
+<span class="fc" id="L248">          List&lt;User&gt; users = doSelectAllUsers(con);</span>
+
+<span class="fc bfc" id="L250" title="All 2 branches covered.">          for (User user : users)</span>
+          {
+              // Add attached objects if they exist
+<span class="fc" id="L253">              attachRelatedObjects( user, con ); </span>
+
+<span class="fc" id="L255">              userSet.add(user);</span>
+<span class="fc" id="L256">          }</span>
+
+<span class="fc" id="L258">          Transaction.commit(con);</span>
+<span class="fc" id="L259">          con = null;</span>
+      }
+<span class="nc" id="L261">      catch (TorqueException e)</span>
+      {
+<span class="nc" id="L263">          throw new DataBackendException(&quot;Error retrieving all users&quot;, e);</span>
+      }
+      finally
+      {
+<span class="pc bpc" id="L267" title="1 of 2 branches missed.">          if (con != null)</span>
+          {
+<span class="nc" id="L269">              Transaction.safeRollback(con);</span>
+          }
+      }
+
+<span class="fc" id="L273">      return userSet;</span>
+  }
+
+  /**
+   * Retrieve a User object with specified id and all attached objects (user group role relationships).
+   *
+   * @param id
+   *            the id of the User.
+   * @return an object representing the User with specified id.
+   * @throws DataBackendException
+   *             if there was an error accessing the data backend.
+   * @throws UnknownEntityException
+   *             if the user does not exist.
+   */
+  @Override
+  public &lt;T extends User&gt; T getUserById(Object id) throws DataBackendException, UnknownEntityException
+  {
+      T user;
+
+<span class="pc bpc" id="L292" title="2 of 4 branches missed.">      if (id != null &amp;&amp; id instanceof Integer)</span>
+      {
+<span class="fc" id="L294">          Connection con = null;</span>
+
+          try
+          {
+<span class="fc" id="L298">              con = Transaction.begin();</span>
+
+<span class="fc" id="L300">              user = doSelectById((Integer)id, con);</span>
+
+              // Add attached objects if they exist
+<span class="fc" id="L303">              attachRelatedObjects( user, con ); </span>
+
+<span class="fc" id="L305">              Transaction.commit(con);</span>
+<span class="fc" id="L306">              con = null;</span>
+          }
+<span class="nc" id="L308">          catch (NoRowsException e)</span>
+          {
+<span class="nc" id="L310">              throw new UnknownEntityException(&quot;User with id '&quot; + id + &quot;' does not exist.&quot;, e);</span>
+          }
+<span class="nc" id="L312">          catch (TorqueException e)</span>
+          {
+<span class="nc" id="L314">              throw new DataBackendException(&quot;Error retrieving user information&quot;, e);</span>
+          }
+          finally
+          {
+<span class="pc bpc" id="L318" title="1 of 2 branches missed.">              if (con != null)</span>
+              {
+<span class="nc" id="L320">                  Transaction.safeRollback(con);</span>
+              }
+          }
+<span class="fc" id="L323">      }</span>
+      else
+      {
+<span class="nc" id="L326">          throw new UnknownEntityException(&quot;Invalid user id '&quot; + id + &quot;'&quot;);</span>
+      }
+
+<span class="fc" id="L329">      return user;</span>
+  }
+  
+  /**
+   * Retrieves all related objects (user group roles). If the objects not exists {@link DataBackendException} is wrapped in a new TorqueException.
+   * 
+   * @param user
+   * @param con
+   * @throws TorqueException
+   */
+  private &lt;T extends User&gt; void attachRelatedObjects( T user, Connection con ) throws TorqueException
+  {
+<span class="pc bpc" id="L341" title="1 of 2 branches missed.">      if (user instanceof TorqueAbstractSecurityEntity) {</span>
+<span class="fc bfc" id="L342" title="All 2 branches covered.">          if (getCustomPeer()) {</span>
+              try
+              {
+<span class="fc" id="L345">                  TorqueTurbineUserGroupRolePeer&lt;TurbineUserGroupRoleModelPeerMapper&gt; peerInstance = </span>
+<span class="fc" id="L346">                                  (TorqueTurbineUserGroupRolePeer&lt;TurbineUserGroupRoleModelPeerMapper&gt;) getUserGroupRolePeerInstance();</span>
+<span class="fc" id="L347">                  Criteria criteria = new Criteria();</span>
+                  // expecting the same name in any custom implementation
+<span class="fc" id="L349">                  criteria.where(peerInstance.getTableMap().getColumn(getColumnName4UserGroupRole() ), ( (TorqueAbstractSecurityEntity) user ).getEntityId() );                        </span>
+<span class="fc" id="L350">                  List&lt;TurbineUserGroupRoleModelPeerMapper&gt; ugrs = peerInstance.doSelectJoinTurbineGroup( criteria, con );</span>
+                  
+<span class="pc bpc" id="L352" title="1 of 2 branches missed.">                  if (user instanceof TorqueAbstractTurbineTurbineSecurityEntityDefault) {</span>
+<span class="fc" id="L353">                      ((TorqueAbstractTurbineTurbineSecurityEntityDefault)user).retrieveAttachedObjects(con, false, ugrs);</span>
+                  }
+              }
+<span class="nc" id="L356">              catch ( DataBackendException e )</span>
+              {
+<span class="nc" id="L358">                  throw new TorqueException( e );</span>
+<span class="fc" id="L359">              }</span>
+          } else {
+              try
+              {
+<span class="fc" id="L363">                ((TorqueAbstractSecurityEntity)user).retrieveAttachedObjects(con);</span>
+              }
+<span class="nc" id="L365">              catch ( DataBackendException e )</span>
+              {
+<span class="nc" id="L367">                  throw new TorqueException( e );</span>
+<span class="fc" id="L368">              }</span>
+          }
+      }
+<span class="fc" id="L371">  }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

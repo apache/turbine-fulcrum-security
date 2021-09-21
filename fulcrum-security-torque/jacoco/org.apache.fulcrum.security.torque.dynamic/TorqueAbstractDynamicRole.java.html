@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TorqueAbstractDynamicRole.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.torque.dynamic</a> &gt; <span class="el_source">TorqueAbstractDynamicRole.java</span></div><h1>TorqueAbstractDynamicRole.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.torque.dynamic;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.sql.Connection;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.fulcrum.security.entity.Group;
+import org.apache.fulcrum.security.entity.Permission;
+import org.apache.fulcrum.security.model.dynamic.entity.DynamicRole;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupRole;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicGroupRolePeer;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicPermissionPeer;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePeer;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePermission;
+import org.apache.fulcrum.security.torque.om.TorqueDynamicRolePermissionPeer;
+import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.GroupSet;
+import org.apache.fulcrum.security.util.PermissionSet;
+import org.apache.torque.TorqueException;
+import org.apache.torque.criteria.Criteria;
+import org.apache.torque.om.SimpleKey;
+/**
+ * This abstract class provides the SecurityInterface to the managers.
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id:$
+ */
+<span class="fc" id="L46">public abstract class TorqueAbstractDynamicRole extends TorqueAbstractSecurityEntity</span>
+    implements DynamicRole
+{
+    /** Serial version */
+	private static final long serialVersionUID = 2163956770966574224L;
+
+	/** a cache of group objects */
+<span class="fc" id="L53">    private Set&lt;Group&gt; groupSet = null;</span>
+
+    /** a cache of permission objects */
+<span class="fc" id="L56">    private Set&lt;Permission&gt; permissionSet = null;</span>
+
+    /**
+     * Forward reference to generated code
+     *
+     * Get a list of association objects, pre-populated with their TorqueDynamicPermission
+     * objects.
+     *
+     * @param criteria Criteria to define the selection of records
+     * @param con a database connection
+     * @throws TorqueException  if any database error occurs
+     *
+     * @return a list of Role/Permission relations
+     */
+    protected List&lt;TorqueDynamicRolePermission&gt; getTorqueDynamicRolePermissionsJoinTorqueDynamicPermission(Criteria criteria, Connection con)
+        throws TorqueException
+    {
+<span class="nc" id="L73">        criteria.and(TorqueDynamicRolePermissionPeer.ROLE_ID, getEntityId() );</span>
+<span class="nc" id="L74">        return TorqueDynamicRolePermissionPeer.doSelectJoinTorqueDynamicPermission(criteria, con);</span>
+    }
+
+    /**
+     * Forward reference to generated code
+     *
+     * Get a list of association objects, pre-populated with their TorqueDynamicGroup
+     * objects.
+     *
+     * @param criteria Criteria to define the selection of records
+     * @param con a database connection
+     * @throws TorqueException  if any database error occurs
+     *
+     * @return a list of Group/Role relations
+     */
+    protected List&lt;TorqueDynamicGroupRole&gt; getTorqueDynamicGroupRolesJoinTorqueDynamicGroup(Criteria criteria, Connection con)
+        throws TorqueException
+    {
+<span class="nc" id="L92">        criteria.and(TorqueDynamicGroupRolePeer.ROLE_ID, getEntityId() );</span>
+<span class="nc" id="L93">        return TorqueDynamicGroupRolePeer.doSelectJoinTorqueDynamicGroup(criteria, con);</span>
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicRole#addGroup(org.apache.fulcrum.security.entity.Group)
+     */
+    public void addGroup(Group group)
+    {
+<span class="fc" id="L101">        getGroups().add(group);</span>
+<span class="fc" id="L102">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicRole#addPermission(org.apache.fulcrum.security.entity.Permission)
+     */
+    public void addPermission(Permission permission)
+    {
+<span class="fc" id="L109">        getPermissions().add(permission);</span>
+<span class="fc" id="L110">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicRole#getGroups()
+     */
+    public GroupSet getGroups()
+    {
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        if (groupSet == null)</span>
+        {
+<span class="fc" id="L119">            groupSet = new GroupSet();</span>
+        }
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">        else if(!(groupSet instanceof GroupSet))</span>
+        {
+<span class="nc" id="L123">            groupSet = new GroupSet(groupSet);</span>
+        }
+
+<span class="fc" id="L126">        return (GroupSet)groupSet;</span>
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicRole#getGroupsAsSet()
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Group&gt; Set&lt;T&gt; getGroupsAsSet()
+    {
+<span class="nc" id="L135">        return (Set&lt;T&gt;)groupSet;</span>
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicRole#getPermissions()
+     */
+    public PermissionSet getPermissions()
+    {
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (permissionSet == null)</span>
+        {
+<span class="fc" id="L145">            permissionSet = new PermissionSet();</span>
+        }
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        else if(!(permissionSet instanceof PermissionSet))</span>
+        {
+<span class="nc" id="L149">            permissionSet = new PermissionSet(permissionSet);</span>
+        }
+
+<span class="fc" id="L152">        return (PermissionSet)permissionSet;</span>
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicRole#getPermissionsAsSet()
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Permission&gt; Set&lt;T&gt; getPermissionsAsSet()
+    {
+<span class="nc" id="L161">        return (Set&lt;T&gt;)permissionSet;</span>
+    }
+
+    /**
+     * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicRole#removeGroup(org.apache.fulcrum.security.entity.Group)
+     */
+    public void removeGroup(Group group)
+    {
+<span class="fc" id="L169">        getGroups().remove(group);</span>
+<span class="fc" id="L170">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicRole#removePermission(org.apache.fulcrum.security.entity.Permission)
+     */
+    public void removePermission(Permission permission)
+    {
+<span class="fc" id="L177">        getPermissions().remove(permission);</span>
+<span class="fc" id="L178">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicRole#setGroups(org.apache.fulcrum.security.util.GroupSet)
+     */
+    public void setGroups(GroupSet groups)
+    {
+<span class="nc bnc" id="L185" title="All 2 branches missed.">        if (groups != null)</span>
+        {
+<span class="nc" id="L187">            this.groupSet = groups;</span>
+        }
+        else
+        {
+<span class="nc" id="L191">            this.groupSet = new GroupSet();</span>
+        }
+<span class="nc" id="L193">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicRole#setGroupsAsSet(java.util.Set)
+     */
+    public &lt;T extends Group&gt; void setGroupsAsSet(Set&lt;T&gt; groups)
+    {
+<span class="nc" id="L200">        setGroups(new GroupSet(groups));</span>
+<span class="nc" id="L201">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicRole#setPermissions(org.apache.fulcrum.security.util.PermissionSet)
+     */
+    public void setPermissions(PermissionSet permissionSet)
+    {
+<span class="nc bnc" id="L208" title="All 2 branches missed.">        if (permissionSet != null)</span>
+        {
+<span class="nc" id="L210">            this.permissionSet = permissionSet;</span>
+        }
+        else
+        {
+<span class="nc" id="L214">            this.permissionSet = new PermissionSet();</span>
+        }
+<span class="nc" id="L216">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.model.dynamic.entity.DynamicRole#setPermissionsAsSet(java.util.Set)
+     */
+    public &lt;T extends Permission&gt; void setPermissionsAsSet(Set&lt;T&gt; permissions)
+    {
+<span class="nc" id="L223">        setPermissions(new PermissionSet(permissions));</span>
+<span class="nc" id="L224">    }</span>
+
+    /**
+     * @return the database name
+     */
+    public String getDatabaseName()
+    {
+<span class="nc" id="L231">        return TorqueDynamicPermissionPeer.DATABASE_NAME;</span>
+    }
+    
+    @Override
+    public void retrieveAttachedObjects( Connection con )
+        throws DataBackendException
+    {
+<span class="nc" id="L238">        retrieveAttachedObjects( con, false );</span>
+<span class="nc" id="L239">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#retrieveAttachedObjects(Connection, Boolean)
+     */
+    @Override
+    public void retrieveAttachedObjects( Connection con, Boolean lazy )
+        throws DataBackendException
+    {
+<span class="fc" id="L248">        this.permissionSet = new PermissionSet();</span>
+        
+        try {
+<span class="fc" id="L251">            List&lt;TorqueDynamicRolePermission&gt; rolepermissions = getTorqueDynamicRolePermissionsJoinTorqueDynamicPermission(new Criteria(), con);</span>
+    
+<span class="fc bfc" id="L253" title="All 2 branches covered.">            for (TorqueDynamicRolePermission tdrp : rolepermissions)</span>
+            {
+<span class="fc" id="L255">                permissionSet.add(tdrp.getTorqueDynamicPermission());</span>
+<span class="fc" id="L256">            }</span>
+    
+<span class="fc" id="L258">            this.groupSet = new GroupSet();</span>
+    
+<span class="fc" id="L260">            List&lt;TorqueDynamicGroupRole&gt; grouproles = getTorqueDynamicGroupRolesJoinTorqueDynamicGroup(new Criteria(), con);</span>
+    
+<span class="pc bpc" id="L262" title="1 of 2 branches missed.">            for (TorqueDynamicGroupRole tdgr : grouproles)</span>
+            {
+<span class="nc" id="L264">                groupSet.add(tdgr.getTorqueDynamicGroup());</span>
+<span class="nc" id="L265">            }</span>
+<span class="nc" id="L266">        } catch (TorqueException e ) {</span>
+<span class="nc" id="L267">            throw new DataBackendException( e.getMessage(),e );</span>
+<span class="fc" id="L268">        }</span>
+<span class="fc" id="L269">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#update(java.sql.Connection)
+     */
+    public void update(Connection con) throws TorqueException
+    {
+<span class="fc bfc" id="L276" title="All 2 branches covered.">        if (permissionSet != null)</span>
+        {
+<span class="fc" id="L278">            Criteria criteria = new Criteria();</span>
+
+            /* remove old entries */
+<span class="fc" id="L281">            criteria.where(TorqueDynamicRolePermissionPeer.ROLE_ID, getEntityId());</span>
+<span class="fc" id="L282">            TorqueDynamicRolePermissionPeer.doDelete(criteria, con);</span>
+
+<span class="fc bfc" id="L284" title="All 2 branches covered.">            for (Permission p : permissionSet)</span>
+            {
+<span class="fc" id="L286">                TorqueDynamicRolePermission rp = new TorqueDynamicRolePermission();</span>
+<span class="fc" id="L287">                rp.setPermissionId((Integer)p.getId());</span>
+<span class="fc" id="L288">                rp.setRoleId(getEntityId());</span>
+<span class="fc" id="L289">                rp.save(con);</span>
+<span class="fc" id="L290">            }</span>
+        }
+
+<span class="fc bfc" id="L293" title="All 2 branches covered.">        if (groupSet != null)</span>
+        {
+<span class="fc" id="L295">            Criteria criteria = new Criteria();</span>
+
+            /* remove old entries */
+<span class="fc" id="L298">            criteria.where(TorqueDynamicGroupRolePeer.ROLE_ID, getEntityId());</span>
+<span class="fc" id="L299">            TorqueDynamicGroupRolePeer.doDelete(criteria, con);</span>
+
+<span class="fc bfc" id="L301" title="All 2 branches covered.">            for (Group g : groupSet)</span>
+            {
+<span class="fc" id="L303">                TorqueDynamicGroupRole gr = new TorqueDynamicGroupRole();</span>
+<span class="fc" id="L304">                gr.setGroupId((Integer)g.getId());</span>
+<span class="fc" id="L305">                gr.setRoleId(getEntityId());</span>
+<span class="fc" id="L306">                gr.save(con);</span>
+<span class="fc" id="L307">            }</span>
+        }
+
+        try
+        {
+<span class="fc" id="L312">            save(con);</span>
+        }
+<span class="nc" id="L314">        catch (Exception e)</span>
+        {
+<span class="nc" id="L316">            throw new TorqueException(e);</span>
+<span class="fc" id="L317">        }</span>
+<span class="fc" id="L318">    }</span>
+
+    /**
+     * @see org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity#delete()
+     */
+    public void delete() throws TorqueException
+    {
+<span class="fc" id="L325">        TorqueDynamicRolePeer.doDelete(SimpleKey.keyFor(getEntityId()));</span>
+<span class="fc" id="L326">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

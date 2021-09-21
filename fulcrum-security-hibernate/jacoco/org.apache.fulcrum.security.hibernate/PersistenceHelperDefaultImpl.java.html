@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PersistenceHelperDefaultImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Hibernate Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.hibernate</a> &gt; <span class="el_source">PersistenceHelperDefaultImpl.java</span></div><h1>PersistenceHelperDefaultImpl.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.hibernate;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.configuration.Configurable;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.fulcrum.security.entity.SecurityEntity;
+import org.apache.fulcrum.security.spi.AbstractManager;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
+/**
+ * 
+ * This persistenceHelper expects you to either pass in a SessionFactory to use,
+ * or it will create one from a hibernate.cfg.xml in the root of the classpath.
+ * 
+ * @author &lt;a href=&quot;mailto:epugh@upstate.com&quot;&gt;Eric Pugh&lt;/a&gt;
+ * @version $Id: PersistenceHelperDefaultImpl.java 1374014 2012-08-16 19:47:27Z
+ *          tv $
+ */
+<span class="fc" id="L44">public class PersistenceHelperDefaultImpl extends AbstractManager implements PersistenceHelper, Configurable, Initializable, Disposable</span>
+{
+    private Configuration configuration;
+    private SessionFactory sessionFactory;
+    private Session session;
+
+    /**
+     * Deletes an entity object
+     * 
+     * @param entity
+     *            The object to be removed
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     */
+    public void removeEntity(SecurityEntity entity) throws DataBackendException
+    {
+<span class="fc" id="L60">        Transaction transaction = null;</span>
+
+        try
+        {
+<span class="fc" id="L64">            Session session = retrieveSession();</span>
+<span class="fc" id="L65">            transaction = session.beginTransaction();</span>
+<span class="fc" id="L66">            session.delete(entity);</span>
+<span class="fc" id="L67">            transaction.commit();</span>
+<span class="fc" id="L68">            transaction = null;</span>
+        }
+<span class="nc" id="L70">        catch (HibernateException he)</span>
+        {
+<span class="nc" id="L72">            throw new DataBackendException(&quot;Problem removing entity:&quot; + he.getMessage(), he);</span>
+        }
+        finally
+        {
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">            if (transaction != null)</span>
+            {
+<span class="nc" id="L78">                transaction.rollback();</span>
+            }
+        }
+<span class="fc" id="L81">    }</span>
+
+    /**
+     * Stores changes made to an object
+     * 
+     * @param entity
+     *            The object to be saved
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     */
+    public void updateEntity(SecurityEntity entity) throws DataBackendException
+    {
+<span class="fc" id="L93">        Transaction transaction = null;</span>
+
+        try
+        {
+<span class="fc" id="L97">            Session session = retrieveSession();</span>
+<span class="fc" id="L98">            transaction = session.beginTransaction();</span>
+<span class="fc" id="L99">            session.update(entity);</span>
+<span class="fc" id="L100">            transaction.commit();</span>
+<span class="fc" id="L101">            transaction = null;</span>
+        }
+<span class="nc" id="L103">        catch (HibernateException he)</span>
+        {
+<span class="nc bnc" id="L105" title="All 2 branches missed.">            if (he.getMessage().indexOf(&quot;Another object was associated with this id&quot;) &gt; -1)</span>
+            {
+<span class="nc" id="L107">                session.close();</span>
+<span class="nc" id="L108">                updateEntity(entity);</span>
+            }
+            else
+            {
+<span class="nc" id="L112">                throw new DataBackendException(&quot;updateEntity(&quot; + entity + &quot;)&quot;, he);</span>
+            }
+        }
+        finally
+        {
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">            if (transaction != null)</span>
+            {
+<span class="nc" id="L119">                transaction.rollback();</span>
+            }
+        }
+<span class="fc" id="L122">    }</span>
+
+    /**
+     * adds an entity
+     * 
+     * @param entity
+     *            The object to be saved
+     * @throws DataBackendException
+     *             if there was an error accessing the data backend.
+     */
+    public void addEntity(SecurityEntity entity) throws DataBackendException
+    {
+<span class="fc" id="L134">        Transaction transaction = null;</span>
+
+        try
+        {
+<span class="fc" id="L138">            Session session = retrieveSession();</span>
+<span class="fc" id="L139">            transaction = session.beginTransaction();</span>
+<span class="fc" id="L140">            session.save(entity);</span>
+<span class="fc" id="L141">            transaction.commit();</span>
+<span class="fc" id="L142">            transaction = null;</span>
+        }
+<span class="nc" id="L144">        catch (HibernateException he)</span>
+        {
+<span class="nc" id="L146">            throw new DataBackendException(&quot;addEntity(entity)&quot;, he);</span>
+        }
+        finally
+        {
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">            if (transaction != null)</span>
+            {
+<span class="nc" id="L152">                transaction.rollback();</span>
+            }
+        }
+<span class="fc" id="L155">    }</span>
+
+    /**
+     * Returns a hibernate session, or if is null, opens one.
+     * 
+     * @return An Open hibernate session.
+     * @throws HibernateException generic exception
+     */
+    public Session retrieveSession() throws HibernateException
+    {
+<span class="fc bfc" id="L165" title="All 2 branches covered.">        if (session == null)</span>
+        {
+<span class="fc" id="L167">            session = getSessionFactory().openSession();</span>
+        }
+<span class="fc" id="L169">        return session;</span>
+    }
+
+    /**
+     * @return the hibernate configuration
+     */
+    public Configuration getConfiguration()
+    {
+<span class="fc" id="L177">        return configuration;</span>
+    }
+
+    /**
+     * In some environments we will load the session factory up and pass it in.
+     * 
+     * @param sessionFactory
+     *            The hibernateService to set.
+     */
+    public void setSessionFactory(SessionFactory sessionFactory)
+    {
+<span class="nc" id="L188">        this.sessionFactory = sessionFactory;</span>
+<span class="nc" id="L189">    }</span>
+
+    /**
+     * Lazy loads the sessionFactory if it hasn't been requested yet.
+     * 
+     * @return the hibernate service
+     */
+    public SessionFactory getSessionFactory() throws HibernateException
+    {
+<span class="fc" id="L198">        return sessionFactory;</span>
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.activity.Initializable#initialize()
+     */
+    public void initialize() throws Exception
+    {
+<span class="fc" id="L206">        sessionFactory = configuration.buildSessionFactory();</span>
+<span class="fc" id="L207">    }</span>
+
+    /* (non-Javadoc)
+     * @see org.apache.fulcrum.security.spi.AbstractManager#dispose()
+     */
+    @Override
+    public void dispose()
+    {
+<span class="fc" id="L215">        sessionFactory.close();</span>
+<span class="fc" id="L216">        super.dispose();</span>
+<span class="fc" id="L217">    }</span>
+
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
+     */
+    public void configure(org.apache.avalon.framework.configuration.Configuration conf) throws ConfigurationException
+    {
+<span class="fc" id="L224">        configuration = new Configuration();</span>
+
+        // read properties
+<span class="fc" id="L227">        org.apache.avalon.framework.configuration.Configuration[] props = conf.getChild(&quot;session-factory&quot;).getChildren(&quot;property&quot;);</span>
+
+<span class="fc bfc" id="L229" title="All 2 branches covered.">        for (org.apache.avalon.framework.configuration.Configuration prop : props)</span>
+        {
+<span class="fc" id="L231">            String value = prop.getValue(null);</span>
+<span class="fc" id="L232">            String key = prop.getAttribute(&quot;name&quot;, null);</span>
+
+<span class="pc bpc" id="L234" title="2 of 4 branches missed.">            if (key != null &amp;&amp; value != null)</span>
+            {
+<span class="fc" id="L236">                configuration.setProperty(key, value);</span>
+            }
+            else
+            {
+<span class="nc" id="L240">                throw new ConfigurationException(&quot;Invalid configuration&quot;, prop);</span>
+            }
+        }
+
+        // read mappings
+<span class="fc" id="L245">        org.apache.avalon.framework.configuration.Configuration[] maps = conf.getChild(&quot;mappings&quot;).getChildren(&quot;resource&quot;);</span>
+
+<span class="fc bfc" id="L247" title="All 2 branches covered.">        for (org.apache.avalon.framework.configuration.Configuration map : maps)</span>
+        {
+<span class="fc" id="L249">            String value = map.getValue(null);</span>
+
+<span class="pc bpc" id="L251" title="1 of 2 branches missed.">            if (value != null)</span>
+            {
+<span class="fc" id="L253">                configuration.addResource(value);</span>
+            }
+            else
+            {
+<span class="nc" id="L257">                throw new ConfigurationException(&quot;Invalid configuration&quot;, map);</span>
+            }
+        }
+<span class="fc" id="L260">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

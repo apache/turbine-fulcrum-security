@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TorqueAbstractPermissionManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fulcrum Security Torque Impl</a> &gt; <a href="index.source.html" class="el_package">org.apache.fulcrum.security.torque</a> &gt; <span class="el_source">TorqueAbstractPermissionManager.java</span></div><h1>TorqueAbstractPermissionManager.java</h1><pre class="source lang-java linenums">package org.apache.fulcrum.security.torque;
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import java.sql.Connection;
+import java.util.List;
+
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.fulcrum.security.entity.Permission;
+import org.apache.fulcrum.security.spi.AbstractPermissionManager;
+import org.apache.fulcrum.security.torque.security.TorqueAbstractSecurityEntity;
+import org.apache.fulcrum.security.util.DataBackendException;
+import org.apache.fulcrum.security.util.EntityExistsException;
+import org.apache.fulcrum.security.util.PermissionSet;
+import org.apache.fulcrum.security.util.UnknownEntityException;
+import org.apache.torque.NoRowsException;
+import org.apache.torque.TooManyRowsException;
+import org.apache.torque.TorqueException;
+import org.apache.torque.util.Transaction;
+
+/**
+ * This implementation persists to a database via Torque.
+ *
+ * @author &lt;a href=&quot;mailto:tv@apache.org&quot;&gt;Thomas Vandahl&lt;/a&gt;
+ * @version $Id:$
+ */
+<span class="fc" id="L44">public abstract class TorqueAbstractPermissionManager extends AbstractPermissionManager {</span>
+
+	/** Serial version */
+	private static final long serialVersionUID = 194503017446833485L;
+
+	// no lazyLoading
+
+	/**
+	 * Avalon Service lifecycle method
+	 */
+	@Override
+	public void configure(Configuration conf) throws ConfigurationException {
+<span class="fc" id="L56">		super.configure(conf);</span>
+
+<span class="fc" id="L58">	}</span>
+
+	/**
+	 * Get all specialized Permissions
+	 *
+	 * @param con a database connection
+	 * @return a List of Permission instances
+	 * @throws TorqueException if any database error occurs
+	 */
+	protected abstract &lt;T extends Permission&gt; List&lt;T&gt; doSelectAllPermissions(Connection con) throws TorqueException;
+
+	/**
+	 * Get a specialized Permission by name
+	 *
+	 * @param name the name of the group
+	 * @param con  a database connection
+	 *
+	 * @return a Permission instance
+	 *
+	 * @throws NoRowsException      if no such group exists
+	 * @throws TooManyRowsException if multiple groups with the given name exist
+	 * @throws TorqueException      if any database error occurs if any other
+	 *                              database error occurs
+	 */
+	protected abstract &lt;T extends Permission&gt; T doSelectByName(String name, Connection con)
+			throws NoRowsException, TooManyRowsException, TorqueException;
+
+	/**
+	 * Get a specialized Permission by id
+	 *
+	 * @param id  the id of the group
+	 * @param con a database connection
+	 *
+	 * @return a Permission instance
+	 *
+	 * @throws NoRowsException      if no such group exists
+	 * @throws TooManyRowsException if multiple groups with the given id exist
+	 * @throws TorqueException      if any database error occurs if any other
+	 *                              database error occurs
+	 */
+	protected abstract &lt;T extends Permission&gt; T doSelectById(Integer id, Connection con)
+			throws NoRowsException, TooManyRowsException, TorqueException;
+
+	/**
+	 * Renames an existing Permission.
+	 *
+	 * @param permission The object describing the permission to be renamed.
+	 * @param name       the new name for the permission.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if the permission does not exist.
+	 */
+	@Override
+	public synchronized void renamePermission(Permission permission, String name)
+			throws DataBackendException, UnknownEntityException {
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">		if (checkExists(permission)) {</span>
+<span class="fc" id="L114">			permission.setName(name);</span>
+
+			try {
+<span class="fc" id="L117">				TorqueAbstractSecurityEntity p = (TorqueAbstractSecurityEntity) permission;</span>
+<span class="fc" id="L118">				p.setNew(false);</span>
+<span class="fc" id="L119">				p.save();</span>
+<span class="nc" id="L120">			} catch (Exception e) {</span>
+<span class="nc" id="L121">				throw new DataBackendException(&quot;Renaming Permission '&quot; + permission.getName() + &quot;' failed&quot;, e);</span>
+<span class="fc" id="L122">			}</span>
+		} else {
+<span class="nc" id="L124">			throw new UnknownEntityException(&quot;Unknown permission '&quot; + permission.getName() + &quot;'&quot;);</span>
+		}
+<span class="fc" id="L126">	}</span>
+
+	/**
+	 * Removes a Permission from the system.
+	 *
+	 * @param permission The object describing the permission to be removed.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if the permission does not exist.
+	 */
+	@Override
+	public synchronized void removePermission(Permission permission)
+			throws DataBackendException, UnknownEntityException {
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">		if (checkExists(permission)) {</span>
+			try {
+
+<span class="fc" id="L142">				((TorqueAbstractSecurityEntity) permission).delete();</span>
+<span class="nc" id="L143">			} catch (TorqueException e) {</span>
+<span class="nc" id="L144">				throw new DataBackendException(&quot;Removing Permission '&quot; + permission.getName() + &quot;' failed&quot;, e);</span>
+<span class="fc" id="L145">			}</span>
+		} else {
+<span class="nc" id="L147">			throw new UnknownEntityException(&quot;Unknown permission '&quot; + permission.getName() + &quot;'&quot;);</span>
+		}
+<span class="fc" id="L149">	}</span>
+
+	/**
+	 * Creates a new permission with specified attributes.
+	 *
+	 * @param permission the object describing the permission to be created.
+	 * @return a new Permission object that has id set up properly.
+	 * @throws DataBackendException  if there was an error accessing the data
+	 *                               backend.
+	 */
+	@Override
+	protected synchronized &lt;T extends Permission&gt; T persistNewPermission(T permission) throws DataBackendException {
+		try {
+<span class="fc" id="L162">			((TorqueAbstractSecurityEntity) permission).save();</span>
+<span class="nc" id="L163">		} catch (Exception e) {</span>
+<span class="nc" id="L164">			throw new DataBackendException(&quot;Adding Permission '&quot; + permission.getName() + &quot;' failed&quot;, e);</span>
+<span class="fc" id="L165">		}</span>
+
+<span class="fc" id="L167">		return permission;</span>
+	}
+
+	/**
+	 * Retrieves all permissions defined in the system.
+	 *
+	 * @return the names of all roles defined in the system.
+	 * @throws DataBackendException if there was an error accessing the data
+	 *                              backend.
+	 */
+	@Override
+	public PermissionSet getAllPermissions() throws DataBackendException {
+<span class="fc" id="L179">		PermissionSet permissionSet = new PermissionSet();</span>
+<span class="fc" id="L180">		Connection con = null;</span>
+
+		try {
+<span class="fc" id="L183">			con = Transaction.begin();</span>
+
+<span class="fc" id="L185">			List&lt;Permission&gt; permissions = doSelectAllPermissions(con);</span>
+
+<span class="fc bfc" id="L187" title="All 2 branches covered.">			for (Permission p : permissions) {</span>
+				// Add attached objects if they exist
+<span class="fc" id="L189">				((TorqueAbstractSecurityEntity) p).retrieveAttachedObjects(con, false);</span>
+<span class="fc" id="L190">				permissionSet.add(p);</span>
+<span class="fc" id="L191">			}</span>
+
+<span class="fc" id="L193">			Transaction.commit(con);</span>
+<span class="fc" id="L194">			con = null;</span>
+<span class="nc" id="L195">		} catch (TorqueException e) {</span>
+<span class="nc" id="L196">			throw new DataBackendException(&quot;Error retrieving permission information&quot;, e);</span>
+		} finally {
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">			if (con != null) {</span>
+<span class="nc" id="L199">				Transaction.safeRollback(con);</span>
+			}
+		}
+
+<span class="fc" id="L203">		return permissionSet;</span>
+	}
+
+	/**
+	 * Determines if the &lt;code&gt;Permission&lt;/code&gt; exists in the security system.
+	 *
+	 * @param permissionName a &lt;code&gt;Permission&lt;/code&gt; value
+	 * @return true if the permission name exists in the system, false otherwise
+	 * @throws DataBackendException when more than one Permission with the same name
+	 *                              exists.
+	 */
+	@Override
+	public boolean checkExists(String permissionName) throws DataBackendException {
+<span class="fc" id="L216">		boolean exists = false;</span>
+
+<span class="fc" id="L218">		Connection con = null;</span>
+
+		try {
+<span class="fc" id="L221">			con = Transaction.begin();</span>
+
+<span class="fc" id="L223">			doSelectByName(permissionName, con);</span>
+
+<span class="fc" id="L225">			Transaction.commit(con);</span>
+<span class="fc" id="L226">			con = null;</span>
+
+<span class="fc" id="L228">			exists = true;</span>
+<span class="fc" id="L229">		} catch (NoRowsException e) {</span>
+<span class="fc" id="L230">			exists = false;</span>
+<span class="nc" id="L231">		} catch (TooManyRowsException e) {</span>
+<span class="nc" id="L232">			throw new DataBackendException(&quot;Multiple permissions with same name '&quot; + permissionName + &quot;'&quot;);</span>
+<span class="nc" id="L233">		} catch (TorqueException e) {</span>
+<span class="nc" id="L234">			throw new DataBackendException(&quot;Error retrieving permission information&quot;, e);</span>
+		} finally {
+<span class="fc bfc" id="L236" title="All 2 branches covered.">			if (con != null) {</span>
+<span class="fc" id="L237">				Transaction.safeRollback(con);</span>
+			}
+		}
+
+<span class="fc" id="L241">		return exists;</span>
+	}
+
+	/**
+	 * Retrieve a Permission object with specified id.
+	 *
+	 * @param id the id of the Permission.
+	 * @return an object representing the Permission with specified id.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if the permission does not exist.
+	 */
+	@Override
+	public &lt;T extends Permission&gt; T getPermissionById(Object id) throws DataBackendException, UnknownEntityException {
+		T permission;
+
+<span class="pc bpc" id="L257" title="2 of 4 branches missed.">		if (id != null &amp;&amp; id instanceof Integer) {</span>
+<span class="fc" id="L258">			Connection con = null;</span>
+
+			try {
+<span class="fc" id="L261">				con = Transaction.begin();</span>
+
+<span class="fc" id="L263">				permission = doSelectById((Integer) id, con);</span>
+
+				// Add attached objects if they exist
+<span class="fc" id="L266">				((TorqueAbstractSecurityEntity) permission).retrieveAttachedObjects(con, false);</span>
+
+<span class="fc" id="L268">				Transaction.commit(con);</span>
+<span class="fc" id="L269">				con = null;</span>
+<span class="fc" id="L270">			} catch (NoRowsException e) {</span>
+<span class="fc" id="L271">				throw new UnknownEntityException(&quot;Permission with id '&quot; + id + &quot;' does not exist.&quot;, e);</span>
+<span class="nc" id="L272">			} catch (TorqueException e) {</span>
+<span class="nc" id="L273">				throw new DataBackendException(&quot;Error retrieving permission information&quot;, e);</span>
+			} finally {
+<span class="fc bfc" id="L275" title="All 2 branches covered.">				if (con != null) {</span>
+<span class="fc" id="L276">					Transaction.safeRollback(con);</span>
+				}
+			}
+<span class="fc" id="L279">		} else {</span>
+<span class="nc" id="L280">			throw new UnknownEntityException(&quot;Invalid permission id '&quot; + id + &quot;'&quot;);</span>
+		}
+
+<span class="fc" id="L283">		return permission;</span>
+	}
+
+	/**
+	 * Retrieve a Permission object with specified name.
+	 *
+	 * @param name the name of the Group.
+	 * @return an object representing the Group with specified name.
+	 * @throws DataBackendException   if there was an error accessing the data
+	 *                                backend.
+	 * @throws UnknownEntityException if the group does not exist.
+	 */
+	@Override
+	public &lt;T extends Permission&gt; T getPermissionByName(String name)
+			throws DataBackendException, UnknownEntityException {
+<span class="fc" id="L298">		T permission = null;</span>
+<span class="fc" id="L299">		Connection con = null;</span>
+
+		try {
+<span class="fc" id="L302">			con = Transaction.begin();</span>
+
+<span class="fc" id="L304">			permission = doSelectByName(name, con);</span>
+
+			// Add attached objects if they exist
+<span class="fc" id="L307">			((TorqueAbstractSecurityEntity) permission).retrieveAttachedObjects(con, false);</span>
+
+<span class="fc" id="L309">			Transaction.commit(con);</span>
+<span class="fc" id="L310">			con = null;</span>
+<span class="nc" id="L311">		} catch (NoRowsException e) {</span>
+<span class="nc" id="L312">			throw new UnknownEntityException(&quot;Could not find permission &quot; + name);</span>
+<span class="nc" id="L313">		} catch (TooManyRowsException e) {</span>
+<span class="nc" id="L314">			throw new DataBackendException(&quot;Multiple Permissions with same name '&quot; + name + &quot;'&quot;);</span>
+<span class="nc" id="L315">		} catch (TorqueException e) {</span>
+<span class="nc" id="L316">			throw new DataBackendException(&quot;Error retrieving permission information&quot;, e);</span>
+		} finally {
+<span class="pc bpc" id="L318" title="1 of 2 branches missed.">			if (con != null) {</span>
+<span class="nc" id="L319">				Transaction.safeRollback(con);</span>
+			}
+		}
+
+<span class="fc" id="L323">		return permission;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
