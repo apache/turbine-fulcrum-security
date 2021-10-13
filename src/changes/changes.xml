@@ -29,7 +29,8 @@
         - add groupSet to interface to TurbineAccessControlList
         - add transient avalon logger to TurbineAccessControlList constructor
         - use model manager to fetch global group (model manager should be set always)
-        -  Add Torque 5.0. schemata, update to Turbine parent v8
+        -  Add Torque 5.0 schemata, update to Turbine parent v9
+        - Java Dependency updates: Update to commons-dbcp2 2.9.0 (Torque)
       </action>
    </release>
   <release version="2.0.0" description="2020-01-04">
