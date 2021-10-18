@@ -36,6 +36,10 @@
               Try and figure out how to get both NTLM authentication, as well as retrieving the password, or the groups
               directly to use with "Basic" security model.
             </li>
+              <li>
+             Add a <a href="https://db.apache.org/jdo/jdo_v_jpa.html" target="'blank">JDO and/or JPA</a> module (helper). 
+             Provide migration help for the Torque module (Turbine security reference implementation).
+            </li>
           </ul>
         </p>
 

@@ -196,7 +196,8 @@
 
     <modules>
         <module>api</module>
-        <module>hibernate</module>
+        <!-- disable it until https://issues.apache.org/jira/browse/TRB-103 is resolved --> 
+        <!--module>hibernate</module-->
         <module>memory</module>
         <!-- module>nt</module -->
         <!-- module>ldap</module -->

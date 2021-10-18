@@ -23,13 +23,14 @@
     <author email="epugh@upstate.com">Eric Pugh</author>
   </properties>
   <body>
-  <release version="2.0.1" description="In VC">
-      <action type="update" dev="gk">
+  <release version="2.1.0" description="In VC">
+     <action type="update" dev="gk">
+        -  Update to Turbine parent v9
         -  Torque: use by default Turbinegroup not TurbineRole from generated doSelectJoinTurbine* method, as this will be used as key in lookup in acl roleSets.
         - add groupSet to interface to TurbineAccessControlList
         - add transient avalon logger to TurbineAccessControlList constructor
         - use model manager to fetch global group (model manager should be set always)
-        -  Add Torque 5.0 schemata, update to Turbine parent v9
+        -  Add Torque 5.0 schemata
         - Java Dependency updates: Update to commons-dbcp2 2.9.0 (Torque)
       </action>
    </release>
