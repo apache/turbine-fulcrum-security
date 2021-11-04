@@ -49,10 +49,11 @@
           <th/><th>User</th><th>Group</th><th>User</th><th>Group</th><th>Role</th><th>Permission</th><th>Delegates</th><th>User</th><th>Group</th><th>Role</th><th>Permission</th><th>UserGroupRole</th>
         </tr>
         <tr><th>Memory</th><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td></tr>
-        <tr><th>Hibernate</th><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td></tr>
+        <tr><th>Hibernate*</th><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td></tr>
         <tr><th>Torque</th><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td><td>X</td></tr>
         <tr><th>NT</th><td>X</td><td>X</td><td>X</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
       </table>
+      <p>Hiberate support suspended since v.2.1.0 due to security reasons.</p>
     </subsection>
   </section>
 

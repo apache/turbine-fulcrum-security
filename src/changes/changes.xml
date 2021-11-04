@@ -23,15 +23,36 @@
     <author email="epugh@upstate.com">Eric Pugh</author>
   </properties>
   <body>
-  <release version="2.1.0" description="In VC">
+  <release version="2.1.1" description="In VC">
+    <action type="update" dev="gk">
+        Update to Turbine parent v10
+     </action>
+   </release>
+  <release version="2.1.0" description="2021-11-04">
      <action type="update" dev="gk">
-        -  Update to Turbine parent v9
-        -  Torque: use by default Turbinegroup not TurbineRole from generated doSelectJoinTurbine* method, as this will be used as key in lookup in acl roleSets.
-        - add groupSet to interface to TurbineAccessControlList
-        - add transient avalon logger to TurbineAccessControlList constructor
-        - use model manager to fetch global group (model manager should be set always)
-        -  Add Torque 5.0 schemata
-        - Java Dependency updates: Update to commons-dbcp2 2.9.0 (Torque)
+        Update to Turbine parent v9
+     </action>
+     <action type="fix" dev="gk">
+       Torque: use by default Turbinegroup not TurbineRole from generated doSelectJoinTurbine* method, as this will be used as key in lookup in acl roleSets.
+     </action>
+     <action type="update" dev="gk">
+        Add groupSet to interface to TurbineAccessControlList
+     </action>
+     <action type="update" dev="gk">
+        Add transient avalon logger to TurbineAccessControlList constructor
+      </action>
+     <action type="update" dev="gk">
+         Use model manager to fetch global group (model manager should be set always)
+     </action>
+     <action type="update" dev="gk">
+        Add Torque 5.0 schemata
+      </action>
+     <action type="update" dev="painter">
+         Java Dependency updates: Update to commons-dbcp2 2.9.0 (Torque)
+      </action>
+     <action type="update" dev="gk">
+         Suspended  Hibernate support due to security reasons. hibernate needs update to 5.x version to resolve it in issue:
+        https://issues.apache.org/jira/browse/TRB-103
       </action>
    </release>
   <release version="2.0.0" description="2020-01-04">
