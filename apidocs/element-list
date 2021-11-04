@@ -3,10 +3,6 @@ org.apache.fulcrum.security.acl
 org.apache.fulcrum.security.authenticator
 org.apache.fulcrum.security.entity
 org.apache.fulcrum.security.entity.impl
-org.apache.fulcrum.security.hibernate
-org.apache.fulcrum.security.hibernate.basic
-org.apache.fulcrum.security.hibernate.dynamic
-org.apache.fulcrum.security.hibernate.turbine
 org.apache.fulcrum.security.memory
 org.apache.fulcrum.security.memory.basic
 org.apache.fulcrum.security.memory.dynamic
