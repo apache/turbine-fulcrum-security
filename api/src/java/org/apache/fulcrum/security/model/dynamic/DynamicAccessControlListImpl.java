@@ -182,15 +182,9 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 			return false;
 		}
 
-		for (Group group : groupset) 
-		{
-			RoleSet roles = getRoles(group);
-			if (roles != null && roles.contains(role)) 
-			{
-				return true;
-			}
-		}
-		return false;
+		return groupset.stream()
+				.map(this::getRoles)
+				.anyMatch(roles -> roles != null && roles.contains(role));
 	}
 
 	/**
@@ -244,16 +238,10 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 		{
 			return false;
 		}
-		
-		for (Group group : groupset) 
-		{
-			RoleSet roles = getRoles(group);
-			if (roles != null && roles.contains(role)) 
-			{
-				return true;
-			}
-		}
-		return false;
+
+		return groupset.stream()
+				.map(this::getRoles)
+				.anyMatch(roles -> roles != null && roles.contains(role));
 	}
 
 	/**
@@ -315,16 +303,10 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 		{
 			return false;
 		}
-		
-		for (Group group : groupset) 
-		{
-			PermissionSet permissions = getPermissions(group);
-			if (permissions != null && permissions.contains(permission)) 
-			{
-				return true;
-			}
-		}
-		return false;
+
+		return groupset.stream()
+				.map(this::getPermissions)
+				.anyMatch(permissions -> permissions != null && permissions.contains(permission));
 	}
 
 	/**
@@ -387,16 +369,11 @@ public class DynamicAccessControlListImpl implements DynamicAccessControlList
 		{
 			return false;
 		}
-		
-		for (Group group : groupset) 
-		{
-			PermissionSet permissions = getPermissions(group);
-			if (permissions != null && permissions.contains(permission)) 
-			{
-				return true;
-			}
-		}
-		return false;
+
+		return groupset.stream()
+				.map(this::getPermissions)
+				.anyMatch(permissions -> permissions != null
+						&& permissions.contains(permission));
 	}
 
 	/**

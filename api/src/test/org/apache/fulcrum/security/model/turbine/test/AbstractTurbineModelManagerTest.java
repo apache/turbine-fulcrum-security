@@ -271,15 +271,12 @@ public abstract class AbstractTurbineModelManagerTest extends BaseUnit5Test
         roleManager.addRole(role);
         modelManager.grant(user, group, role);
         modelManager.revoke(user, group, role);
-        boolean ugrFound = false;
-        for (TurbineUserGroupRole ugr : ((TurbineUser) user).getUserGroupRoleSet())
-        {
-            if (ugr.getUser().equals(user) && ugr.getGroup().equals(group) && ugr.getRole().equals(role))
-            {
-                ugrFound = true;
-                break;
-            }
-        }
+        boolean ugrFound = ((TurbineUser) user)
+                .getUserGroupRoleSet().stream()
+                .anyMatch(ugr -> ugr.getUser().equals(user)
+                        && ugr.getGroup().equals(group)
+                        && ugr.getRole().equals(role));
+
         assertFalse(ugrFound);
     }
     
