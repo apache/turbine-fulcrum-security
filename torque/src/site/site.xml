@@ -19,20 +19,9 @@
 -->
 <project  name="Fulcrum Security Torque Implementation">
 
-    <skin>
-    <groupId>org.apache.maven.skins</groupId>
-    <artifactId>maven-fluido-skin</artifactId>
-    <version>1.9</version>
-  </skin>
 
 <body>
 </body>
-
-<custom>
-      <fluidoSkin>
-        <topBarEnabled>false</topBarEnabled>
-        <sideBarEnabled>true</sideBarEnabled>
-      </fluidoSkin>
-  </custom> 
+ 
 
 </project>

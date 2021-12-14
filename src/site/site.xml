@@ -19,11 +19,6 @@
 -->
 <project name="Fulcrum Security">
   
-      <skin>
-    <groupId>org.apache.maven.skins</groupId>
-    <artifactId>maven-fluido-skin</artifactId>
-    <version>1.9</version>
-  </skin>
 
 <body>
     <menu name="Overview" inherit="top">
@@ -37,12 +32,6 @@
       <item name="Example"              href="example.html"/>
       <item name="Tasks"                href="tasks.html"/>
     </menu>
-</body>
-<custom>
-      <fluidoSkin>
-        <topBarEnabled>false</topBarEnabled>
-        <sideBarEnabled>true</sideBarEnabled>
-      </fluidoSkin>
-  </custom>  
+</body>  
 
 </project>
