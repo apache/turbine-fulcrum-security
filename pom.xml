@@ -159,7 +159,6 @@
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-javadoc-plugin</artifactId>
               <configuration>
-                    <source>1.8</source>
                     <detectJavaApiLink>false</detectJavaApiLink>
                     <!--  TODO : figure out why javadoc warnings are not ignored
                         as this is breaking mvn site generation 
@@ -211,7 +210,6 @@
         <plugin>
            <groupId>org.apache.maven.plugins</groupId>
            <artifactId>maven-javadoc-plugin</artifactId>
-           <version>3.2.0</version>
            <reportSets>
              <reportSet>
                <id>aggregate</id>
@@ -229,7 +227,6 @@
               </reportSet>
            </reportSets>
            <configuration>
-                 <source>1.8</source>
                  <detectJavaApiLink>false</detectJavaApiLink>
                  <!-- required here -->
                  <doclint>none</doclint>
