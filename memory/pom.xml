@@ -50,7 +50,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M2</version>
 				<configuration>
 					<!--default setting is forkCount=1/reuseForks=true -->
 					<reuseForks>false</reuseForks>
@@ -65,7 +64,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.11</version>
+            <version>3.12.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.fulcrum</groupId>

@@ -133,7 +133,6 @@
                <artifactId>log4j-1.2-api</artifactId>
                <version>${turbine.log4j2.version}</version>
           </dependency>
-        
 
         <!-- testing dependencies -->
         <dependency>
