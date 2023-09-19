@@ -227,51 +227,73 @@ public class TorqueTurbineUserManagerImpl extends PeerUserManager implements Tur
 
         return user;
     }
+  
+  
+  /**
+   * Retrieves a filtered user list with attached related objects (user group role relationships) defined in the system.
+   *
+   * @return the names of all users defined in the system.
+   * @throws DataBackendException if there was an error accessing the data
+   *         backend.
+   */
+   @Override
+   public <T extends User> UserSet<T> retrieveUserList(Object criteriaObject) throws DataBackendException
+    {
+       
+        Criteria criteria = (Criteria) criteriaObject;
+        UserSet<T> userSet = new UserSet<T>();
+        Connection con = null;
     
-    /**
-     * Retrieves all users with attached related objects (user group role relationships) defined in the system.
-     *
-     * @return the names of all users defined in the system.
-     * @throws DataBackendException if there was an error accessing the data
-     *         backend.
-     */
-  @Override
-  public <T extends User> UserSet<T> getAllUsers() throws DataBackendException
-  {
-      UserSet<T> userSet = new UserSet<T>();
-      Connection con = null;
+        try
+        {
+            con = Transaction.begin();
+    
+            List<User> users = doSelectUsers(con, criteria);
+    
+            for (User user : users)
+            {
+                // Add attached objects if they exist
+                attachRelatedObjects( user, con ); 
+    
+                userSet.add(user);
+            }
+    
+            Transaction.commit(con);
+            con = null;
+        }
+        catch (TorqueException e)
+        {
+            throw new DataBackendException("Error retrieving all users", e);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
+        }
+    
+        return userSet;
+    }
 
-      try
-      {
-          con = Transaction.begin();
+    protected <T extends User> List<T> doSelectUsers(Connection con, Criteria criteria) throws TorqueException
+    {
+        
+        if ( (getCustomPeer())) {
+            try
+            {
+                TorqueTurbinePeer<T> peerInstance = (TorqueTurbinePeer<T>)getPeerInstance();
+                return peerInstance.doSelect( criteria, con );
+            }
+            catch ( DataBackendException e )
+            {
+                throw new TorqueException( e );
+            }
+        } else {
+            return (List<T>) TorqueTurbineUserPeer.doSelect(criteria, con);
+        }
+    }
 
-          List<User> users = doSelectAllUsers(con);
-
-          for (User user : users)
-          {
-              // Add attached objects if they exist
-              attachRelatedObjects( user, con ); 
-
-              userSet.add(user);
-          }
-
-          Transaction.commit(con);
-          con = null;
-      }
-      catch (TorqueException e)
-      {
-          throw new DataBackendException("Error retrieving all users", e);
-      }
-      finally
-      {
-          if (con != null)
-          {
-              Transaction.safeRollback(con);
-          }
-      }
-
-      return userSet;
-  }
 
   /**
    * Retrieve a User object with specified id and all attached objects (user group role relationships).

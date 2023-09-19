@@ -157,6 +157,17 @@ public interface UserManager extends Serializable
      *             if there was an error accessing the data backend.
      */
     <T extends User> UserSet<T> getAllUsers() throws DataBackendException;
+    
+    /**
+     * Retrieve a list of users that meet the specified criteria.
+     *
+     * @param criteria The criteria of selection.
+     * @return a List of users meeting the criteria.
+     * @throws DataBackendException if there is a problem accessing the
+     *         storage.
+     */
+    <T extends User> UserSet<T> retrieveUserList(Object criteria)
+        throws DataBackendException;
 
     /**
      * Saves User's data in the permanent storage. The user account is required

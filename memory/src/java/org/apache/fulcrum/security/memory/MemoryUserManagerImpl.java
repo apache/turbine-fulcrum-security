@@ -20,6 +20,7 @@ package org.apache.fulcrum.security.memory;
  */
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.spi.AbstractUserManager;
@@ -72,6 +73,13 @@ public class MemoryUserManagerImpl extends AbstractUserManager {
 	public UserSet getAllUsers() throws DataBackendException {
 		return new UserSet(users);
 	}
+	
+    @Override
+    public <T extends User> UserSet<T> retrieveUserList(Object criteria) throws DataBackendException
+    {
+        List filteredusers = users.stream().filter( x-> x.getName().contains( criteria.toString() ) ).collect( Collectors.toList() );
+        return new UserSet(filteredusers);
+    }
 
 	/**
 	 * Removes an user account from the system.

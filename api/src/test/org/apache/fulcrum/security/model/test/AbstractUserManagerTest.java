@@ -122,6 +122,19 @@ public abstract class AbstractUserManagerTest extends BaseUnit5Test
         assertEquals(size + 1, userSet.size());
     }
     @Test
+    public void testRetrieveUserList() throws Exception
+    {
+        int size = userManager.getAllUsers().size();
+        user = userManager.getUserInstance("Bob");
+        userManager.addUser(user, "");
+        user = userManager.getUserInstance("Claire");
+        userManager.addUser(user, "");
+        user = userManager.getUserInstance("Clairanne");
+        userManager.addUser(user, "");
+        UserSet userSet = userManager.retrieveUserList( "Clair" );
+        assertEquals(2, userSet.size());
+    }
+    @Test
     public void testAuthenticate() throws Exception
     {
         user = userManager.getUserInstance("Kay");

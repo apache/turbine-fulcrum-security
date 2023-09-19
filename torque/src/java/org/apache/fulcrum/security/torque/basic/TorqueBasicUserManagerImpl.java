@@ -51,6 +51,13 @@ public class TorqueBasicUserManagerImpl extends TorqueAbstractUserManager
 
         return (List<T>)TorqueBasicUserPeer.doSelect(criteria, con);
     }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    protected <T extends User> List<T> doSelectUsers(Connection con, Criteria criteria) throws TorqueException
+    {
+        return (List<T>)TorqueBasicUserPeer.doSelect(criteria, con);
+    }
 
     /**
      * @see org.apache.fulcrum.security.torque.TorqueAbstractUserManager#doSelectById(java.lang.Integer, java.sql.Connection)
@@ -80,4 +87,5 @@ public class TorqueBasicUserManagerImpl extends TorqueAbstractUserManager
 
         return t;
     }
+
 }

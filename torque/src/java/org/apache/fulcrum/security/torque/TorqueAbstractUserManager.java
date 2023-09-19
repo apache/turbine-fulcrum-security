@@ -32,6 +32,7 @@ import org.apache.fulcrum.security.util.UserSet;
 import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
+import org.apache.torque.criteria.Criteria;
 import org.apache.torque.util.Transaction;
 
 /**
@@ -63,6 +64,19 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager {
 	 * @throws TorqueException if any database error occurs
 	 */
 	protected abstract <T extends User> List<T> doSelectAllUsers(Connection con) throws TorqueException;
+	
+	/**
+     * Get filtered specialized Users
+     *
+     * @param con a database connection
+     * 
+     * @param criteria the criteria filter
+     *
+     * @return a List of User instances
+     *
+     * @throws TorqueException if any database error occurs
+     */
+	protected abstract <T extends User> List<T> doSelectUsers(Connection con, Criteria criteria) throws TorqueException;
 
 	/**
 	 * Get a specialized User by name
@@ -274,6 +288,38 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager {
 
 		return userSet;
 	}
+	
+    @Override
+    public <T extends User> UserSet<T> retrieveUserList(Object criteriaO) throws DataBackendException
+    {
+        Criteria criteria = (Criteria) criteriaO;
+        UserSet<T> userSet = new UserSet<T>();
+        Connection con = null;
+
+        try {
+            con = Transaction.begin();
+
+            List<User> users = doSelectUsers(con, criteria);
+
+            for (User user : users) {
+                // Add attached objects if they exist
+                ((TorqueAbstractSecurityEntity) user).retrieveAttachedObjects(con, false);
+
+                userSet.add(user);
+            }
+
+            Transaction.commit(con);
+            con = null;
+        } catch (TorqueException e) {
+            throw new DataBackendException("Error retrieving all users", e);
+        } finally {
+            if (con != null) {
+                Transaction.safeRollback(con);
+            }
+        }
+
+        return userSet;
+    }
 
 	/**
 	 * Retrieve a User object with specified id.

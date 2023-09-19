@@ -24,6 +24,7 @@ import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.torque.TorqueAbstractUserManager;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUser;
 import org.apache.fulcrum.security.torque.om.TorqueDynamicUserPeer;
+import org.apache.fulcrum.security.util.DataBackendException;
 import org.apache.torque.NoRowsException;
 import org.apache.torque.TooManyRowsException;
 import org.apache.torque.TorqueException;
@@ -45,10 +46,18 @@ public class TorqueDynamicUserManagerImpl extends TorqueAbstractUserManager
      * @see org.apache.fulcrum.security.torque.TorqueAbstractUserManager#doSelectAllUsers(java.sql.Connection)
      */
     @SuppressWarnings("unchecked")
+    @Override
 	protected <T extends User> List<T> doSelectAllUsers(Connection con) throws TorqueException
     {
         Criteria criteria = new Criteria(TorqueDynamicUserPeer.DATABASE_NAME);
 
+        return (List<T>)TorqueDynamicUserPeer.doSelect(criteria, con);
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    protected <T extends User> List<T> doSelectUsers(Connection con, Criteria criteria) throws TorqueException
+    {
         return (List<T>)TorqueDynamicUserPeer.doSelect(criteria, con);
     }
 
@@ -81,4 +90,5 @@ public class TorqueDynamicUserManagerImpl extends TorqueAbstractUserManager
 
         return (T) users.get(0);
     }
+
 }
