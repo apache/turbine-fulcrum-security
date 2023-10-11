@@ -1,5 +1,8 @@
 package org.apache.fulcrum.security.model;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -48,11 +51,6 @@ import org.apache.fulcrum.security.model.turbine.entity.impl.TurbineRoleImpl;
 import org.apache.fulcrum.security.model.turbine.entity.impl.TurbineUserImpl;
 import org.apache.fulcrum.security.util.RoleSet;
 import org.apache.fulcrum.testcontainer.BaseUnit5Test;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -81,16 +79,16 @@ public class ACLFactoryTest extends BaseUnit5Test
         //factory.ge
         TurbineUser user = new TurbineUserImpl();
         user.setName("bob");
-        user.setId(new Integer(1));
+        user.setId( Integer.valueOf( 1 ));
         TurbineGroup group = new TurbineGroupImpl();
         group.setName("group1");
-        group.setId(new Integer(1));
+        group.setId( Integer.valueOf(1));
         TurbineRole role = new TurbineRoleImpl();
         role.setName("role1");
-        role.setId(new Integer(1));
+        role.setId( Integer.valueOf(1));
         TurbinePermission permission = new TurbinePermissionImpl();
         permission.setName("permission1");
-        permission.setId(new Integer(1));
+        permission.setId( Integer.valueOf(1));
         role.addPermission(permission);
         TurbineUserGroupRole ugr = new TurbineUserGroupRole();
         ugr.setGroup(group);
@@ -125,16 +123,16 @@ public class ACLFactoryTest extends BaseUnit5Test
         
         DynamicUser user = new DynamicUserImpl();
         user.setName("bob");
-        user.setId(new Integer(1));
+        user.setId( Integer.valueOf(1));
         DynamicGroup group = new DynamicGroupImpl();
         group.setName("group1");
-        group.setId(new Integer(1));
+        group.setId(  Integer.valueOf(1));
         DynamicRole role = new DynamicRoleImpl();
         role.setName("role1");
-        role.setId(new Integer(1));
+        role.setId( Integer.valueOf(1));
         DynamicPermission permission = new DynamicPermissionImpl();
         permission.setName("permission1");
-        permission.setId(new Integer(1));
+        permission.setId(Integer.valueOf(1));
         role.addPermission(permission);
         group.addRole(role);
         user.addGroup(group);
@@ -153,10 +151,10 @@ public class ACLFactoryTest extends BaseUnit5Test
         ACLFactory factory = (ACLFactory) lookup(ACLFactory.ROLE);
         BasicUser user = new BasicUserImpl();
         user.setName("bob");
-        user.setId(new Integer(1));
+        user.setId( Integer.valueOf(1));
         BasicGroup group = new BasicGroupImpl();
         group.setName("group1");
-        group.setId(new Integer(1));
+        group.setId( Integer.valueOf(1));
         user.addGroup(group);
         AccessControlList acl = factory.getAccessControlList(user);
         assertTrue(acl instanceof BasicAccessControlList);

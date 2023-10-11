@@ -77,7 +77,9 @@ public class MemoryUserManagerImpl extends AbstractUserManager {
     @Override
     public <T extends User> UserSet<T> retrieveUserList(Object criteria) throws DataBackendException
     {
-        List filteredusers = users.stream().filter( x-> x.getName().contains( criteria.toString() ) ).collect( Collectors.toList() );
+        List filteredusers = users.stream()
+                .filter(  x-> x.getName().toLowerCase().contains( criteria.toString().toLowerCase() ) )
+                .collect( Collectors.toList() );
         return new UserSet(filteredusers);
     }
 

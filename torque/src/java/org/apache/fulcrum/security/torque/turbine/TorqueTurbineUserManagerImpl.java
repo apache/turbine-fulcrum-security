@@ -240,7 +240,10 @@ public class TorqueTurbineUserManagerImpl extends PeerUserManager implements Tur
    public <T extends User> UserSet<T> retrieveUserList(Object criteriaObject) throws DataBackendException
     {
        
-        Criteria criteria = (Criteria) criteriaObject;
+       if (! (criteriaObject instanceof Criteria)) {
+           throw new DataBackendException("Query object has to be of type " + Criteria.class.getName());
+       } 
+       Criteria criteria = (Criteria) criteriaObject;
         UserSet<T> userSet = new UserSet<T>();
         Connection con = null;
     
@@ -263,7 +266,7 @@ public class TorqueTurbineUserManagerImpl extends PeerUserManager implements Tur
         }
         catch (TorqueException e)
         {
-            throw new DataBackendException("Error retrieving all users", e);
+            throw new DataBackendException("Error retrieving filtered user list", e);
         }
         finally
         {

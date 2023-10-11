@@ -66,11 +66,10 @@ import org.junit.jupiter.api.Test;
  * @author <a href="mailto:gk@apache.org">Georg Kallidis</a>
  * @version $Id$
  */
-public class TurbineUserManagerTest
-    extends BaseUnit5Test
-   
+public class TurbineUserManagerTest extends BaseUnit5Test
+
 {
-	
+
     private User user;
 
     private UserManager userManager;
@@ -84,10 +83,10 @@ public class TurbineUserManagerTest
     private Group group;
 
     private Role role;
-    
+
     private Logger logger = LogManager.getLogger();
-	
-	private static HsqlDB hsqlDB = null;
+
+    private static HsqlDB hsqlDB = null;
 
     @BeforeEach
     public void setUp()
@@ -111,13 +110,11 @@ public class TurbineUserManagerTest
             role.setName( TEST_ROLE );
             securityService.getRoleManager().addRole( role );
 
-        }
-        catch ( Exception e )
+        } catch (Exception e)
         {
             fail( e.toString() );
         }
     }
-
 
     @AfterEach
     public void tearDown()
@@ -156,14 +153,12 @@ public class TurbineUserManagerTest
 
             con.commit();
             con = null;
-        }
-        catch ( TorqueException e )
+        } catch (TorqueException e)
         {
             fail( e.toString() );
-        }
-        catch ( SQLException e )
+        } catch (SQLException e)
         {
-            if ( con != null )
+            if (con != null)
             {
                 Transaction.safeRollback( con );
             }
@@ -174,12 +169,10 @@ public class TurbineUserManagerTest
         userManager = null;
         securityService = null;
     }
-   
 
     // requires default user in setup
     @Test
-    public void testCheckExists()
-        throws Exception
+    public void testCheckExists() throws Exception
     {
         user = userManager.getUserInstance( "Philip" );
         userManager.addUser( user, "bobo" );
@@ -193,8 +186,7 @@ public class TurbineUserManagerTest
     }
 
     @Test
-    public void testCheckExistsWithString()
-        throws Exception
+    public void testCheckExistsWithString() throws Exception
     {
         user = userManager.getUserInstance( "Philip2" );
         userManager.addUser( user, "bobo" );
@@ -211,8 +203,7 @@ public class TurbineUserManagerTest
      * Class to test for User retrieve(String)
      */
     @Test
-    public void testGetUserString()
-        throws Exception
+    public void testGetUserString() throws Exception
     {
         user = userManager.getUserInstance( "QuietMike" );
         userManager.addUser( user, "bobo" );
@@ -223,8 +214,7 @@ public class TurbineUserManagerTest
     }
 
     @Test
-    public void testGetUserById()
-        throws Exception
+    public void testGetUserById() throws Exception
     {
         user = userManager.getUserInstance( "QuietMike2" );
         userManager.addUser( user, "bobo" );
@@ -237,8 +227,7 @@ public class TurbineUserManagerTest
      * Class to test for User retrieve(String, String)
      */
     @Test
-    public void testGetUserStringString()
-        throws Exception
+    public void testGetUserStringString() throws Exception
     {
         user = userManager.getUserInstance( "Richard" );
         userManager.addUser( user, "va" );
@@ -253,16 +242,14 @@ public class TurbineUserManagerTest
         {
             user = userManager.getUser( "richard", "VA" );
             fail( "should have thrown PasswordMismatchException" );
-        }
-        catch ( PasswordMismatchException pme )
+        } catch (PasswordMismatchException pme)
         {
             // good
         }
     }
 
     @Test
-    public void testGetAllUsers()
-        throws Exception
+    public void testGetAllUsers() throws Exception
     {
         int size = userManager.getAllUsers().size();
         user = userManager.getUserInstance( "Bob" );
@@ -274,8 +261,7 @@ public class TurbineUserManagerTest
     }
 
     @Test
-    public void testAuthenticate()
-        throws Exception
+    public void testAuthenticate() throws Exception
     {
         user = userManager.getUserInstance( "Kay" );
         userManager.addUser( user, "jc" );
@@ -285,16 +271,14 @@ public class TurbineUserManagerTest
         {
             userManager.authenticate( user, "JC" );
             fail( "should have thrown PasswordMismatchException" );
-        }
-        catch ( PasswordMismatchException pme )
+        } catch (PasswordMismatchException pme)
         {
             // good
         }
     }
 
     @Test
-    public void testChangePassword()
-        throws Exception
+    public void testChangePassword() throws Exception
     {
         user = userManager.getUserInstance( "Jonathan" );
         userManager.addUser( user, "jc" );
@@ -303,8 +287,7 @@ public class TurbineUserManagerTest
         {
             userManager.changePassword( user, "WrongPWD", "JC" );
             fail( "should have thrown PasswordMismatchException" );
-        }
-        catch ( PasswordMismatchException pme )
+        } catch (PasswordMismatchException pme)
         {
             // good
         }
@@ -313,8 +296,7 @@ public class TurbineUserManagerTest
     }
 
     @Test
-    public void testForcePassword()
-        throws Exception
+    public void testForcePassword() throws Exception
     {
         user = userManager.getUserInstance( "Connor" );
         userManager.addUser( user, "jc_subset" );
@@ -328,8 +310,7 @@ public class TurbineUserManagerTest
      * Class to test for User getUserInstance()
      */
     @Test
-    public void testGetUserInstance()
-        throws Exception
+    public void testGetUserInstance() throws Exception
     {
         user = userManager.getUserInstance();
         assertNotNull( user );
@@ -340,22 +321,21 @@ public class TurbineUserManagerTest
      * Class to test for User getUserInstance(String)
      */
     @Test
-    public void testGetUserInstanceString()
-        throws Exception
+    public void testGetUserInstanceString() throws Exception
     {
         user = userManager.getUserInstance( "Philip" );
         assertEquals( "philip", user.getName() );
     }
 
     /**
-     * Need to figure out if save is something we want.. right now it just bloes up if you actually change anything.
+     * Need to figure out if save is something we want.. right now it just bloes up if you
+     * actually change anything.
      * 
      * @todo figur out what to do here...
      * @throws Exception
      */
     @Test
-    public void testSaveUser()
-        throws Exception
+    public void testSaveUser() throws Exception
     {
         user = userManager.getUserInstance( "Kate" );
         userManager.addUser( user, "katiedid" );
@@ -369,8 +349,7 @@ public class TurbineUserManagerTest
     }
 
     @Test
-    public void testGetACL()
-        throws Exception
+    public void testGetACL() throws Exception
     {
         user = userManager.getUserInstance( "Tony" );
         userManager.addUser( user, "california" );
@@ -382,19 +361,18 @@ public class TurbineUserManagerTest
 
         Role testRole = securityService.getRoleManager().getRoleByName( TEST_ROLE );
         Group testGroup = securityService.getGroupManager().getGroupByName( TEST_GROUP );
-        assertTrue( ( (TurbineAccessControlList) acl ).hasRole( testRole, testGroup ) );
+        assertTrue( ((TurbineAccessControlList) acl).hasRole( testRole, testGroup ) );
 
-        Group globalGroup = securityService.<TurbineModelManager> getModelManager().getGlobalGroup();
-        securityService.<TurbineModelManager> getModelManager().grant( user, globalGroup, testRole );
+        Group globalGroup = securityService.<TurbineModelManager>getModelManager().getGlobalGroup();
+        securityService.<TurbineModelManager>getModelManager().grant( user, globalGroup, testRole );
         // immutable
         acl = userManager.getACL( user );
 
-        assertTrue( ( (TurbineAccessControlList) acl ).hasRole( testRole ) );
+        assertTrue( ((TurbineAccessControlList) acl).hasRole( testRole ) );
     }
 
     @Test
-    public void testRemoveUser()
-        throws Exception
+    public void testRemoveUser() throws Exception
     {
         user = userManager.getUserInstance( "Rick" );
         userManager.addUser( user, "nb" );
@@ -406,16 +384,14 @@ public class TurbineUserManagerTest
         {
             User user2 = userManager.getUser( user.getName() );
             fail( "Should have thrown UEE" );
-        }
-        catch ( UnknownEntityException uee )
+        } catch (UnknownEntityException uee)
         {
             // good
         }
     }
 
     @Test
-    public void testAddUser()
-        throws Exception
+    public void testAddUser() throws Exception
     {
         user = userManager.getUserInstance( "Joe1" );
         assertNull( user.getId() );
@@ -431,8 +407,7 @@ public class TurbineUserManagerTest
     /*
      * Class to test for boolean checkExists(string)
      */
-    public void testAddUserTwiceFails()
-        throws Exception
+    public void testAddUserTwiceFails() throws Exception
     {
         user = userManager.getUserInstance( "EATLUNCH" );
         userManager.addUser( user, "bob" );
@@ -442,24 +417,21 @@ public class TurbineUserManagerTest
         try
         {
             userManager.addUser( user2, "bob" );
-        }
-        catch ( EntityExistsException uee )
+        } catch (EntityExistsException uee)
         {
             // good
         }
         try
         {
             userManager.addUser( user2, "differentpassword" );
-        }
-        catch ( EntityExistsException uee )
+        } catch (EntityExistsException uee)
         {
             // good
         }
     }
 
     @Test
-    public void testCheckUserCaseSensitiveExists()
-        throws Exception
+    public void testCheckUserCaseSensitiveExists() throws Exception
     {
         user = userManager.getUserInstance( "borrisJohnson" );
         userManager.addUser( user, "bob" );
@@ -467,15 +439,39 @@ public class TurbineUserManagerTest
         assertTrue( userManager.checkExists( "borrisJohnson" ) );
     }
 
-    private void addDefaultGrantUserGroupRole( User user )
-        throws Exception
+    @Test
+    public void testRetrieveUserList() throws Exception
     {
-        securityService.<TurbineModelManager> getModelManager().grant( user, group, role );
+        int size = userManager.getAllUsers().size();
+        assertEquals( 0, size );
+        user = userManager.getUserInstance( "Bob" );
+        userManager.addUser( user, "" );
+        user = userManager.getUserInstance( "Claire" );
+        userManager.addUser( user, "" );
+        user = userManager.getUserInstance( "Clairanne" );
+        userManager.addUser( user, "" );
+
+        UserSet allUserSet = userManager.getAllUsers();
+        assertEquals( 3, allUserSet.size() );
+
+        Criteria nameCriteria1 = new Criteria();
+        nameCriteria1.where( TorqueTurbineUserPeer.LOGIN_NAME, "claire" );
+        UserSet userSet1 = userManager.retrieveUserList( nameCriteria1 );
+        assertEquals( 1, userSet1.size() );
+        Criteria nameCriteria = new Criteria();
+        nameCriteria.where( TorqueTurbineUserPeer.LOGIN_NAME, "clair%", Criteria.LIKE );
+        UserSet userSet = userManager.retrieveUserList( nameCriteria );
+        assertEquals( 2, userSet.size() );
+    }
+
+    private void addDefaultGrantUserGroupRole(User user) throws Exception
+    {
+        securityService.<TurbineModelManager>getModelManager().grant( user, group, role );
         boolean ugrFound = false;
         TurbineUserGroupRole ugrTest = null;
-        for ( TurbineUserGroupRole ugr : ( (TurbineUser) user ).getUserGroupRoleSet() )
+        for (TurbineUserGroupRole ugr : ((TurbineUser) user).getUserGroupRoleSet())
         {
-            if ( ugr.getUser().equals( user ) && ugr.getGroup().equals( group ) && ugr.getRole().equals( role ) )
+            if (ugr.getUser().equals( user ) && ugr.getGroup().equals( group ) && ugr.getRole().equals( role ))
             {
                 ugrFound = true;
                 ugrTest = ugr;
@@ -487,14 +483,13 @@ public class TurbineUserManagerTest
         assertTrue( ugrTest.getUser().equals( user ) );
     }
 
-    private void revokeDefaultGrantUserGroupRole( User user )
-        throws Exception
+    private void revokeDefaultGrantUserGroupRole(User user) throws Exception
     {
-        securityService.<TurbineModelManager> getModelManager().revoke( user, group, role );
+        securityService.<TurbineModelManager>getModelManager().revoke( user, group, role );
         boolean ugrFound = false;
-        for ( TurbineUserGroupRole ugr : ( (TurbineUser) user ).getUserGroupRoleSet() )
+        for (TurbineUserGroupRole ugr : ((TurbineUser) user).getUserGroupRoleSet())
         {
-            if ( ugr.getUser().equals( user ) && ugr.getGroup().equals( group ) && ugr.getRole().equals( role ) )
+            if (ugr.getUser().equals( user ) && ugr.getGroup().equals( group ) && ugr.getRole().equals( role ))
             {
                 ugrFound = true;
                 break;

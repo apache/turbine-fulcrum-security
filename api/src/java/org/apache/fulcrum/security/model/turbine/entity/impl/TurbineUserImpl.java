@@ -42,6 +42,12 @@ public class TurbineUserImpl extends AbstractTurbineSecurityEntityImpl implement
     private String lastName;
     private String email;
     private transient byte[] objectData;
+    
+    
+    public TurbineUserImpl()
+    {
+      
+    }
 
     /**
      * Get the password

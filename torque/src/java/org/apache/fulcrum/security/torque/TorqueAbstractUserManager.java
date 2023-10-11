@@ -292,6 +292,9 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager {
     @Override
     public <T extends User> UserSet<T> retrieveUserList(Object criteriaO) throws DataBackendException
     {
+        if (! (criteriaO instanceof Criteria)) {
+            throw new DataBackendException("Query object has to be of type " + Criteria.class.getName());
+        }
         Criteria criteria = (Criteria) criteriaO;
         UserSet<T> userSet = new UserSet<T>();
         Connection con = null;
@@ -311,7 +314,7 @@ public abstract class TorqueAbstractUserManager extends AbstractUserManager {
             Transaction.commit(con);
             con = null;
         } catch (TorqueException e) {
-            throw new DataBackendException("Error retrieving all users", e);
+            throw new DataBackendException("Error retrieving filtered user list.", e);
         } finally {
             if (con != null) {
                 Transaction.safeRollback(con);
