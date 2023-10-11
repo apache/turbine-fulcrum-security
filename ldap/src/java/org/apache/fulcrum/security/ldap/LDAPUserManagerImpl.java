@@ -501,6 +501,12 @@ public class LDAPUserManagerImpl extends AbstractUserManager
                     "The LDAP server specified is unavailable", ex);
         }
     }
+    
+    @Override
+    public <T extends User> UserSet<T> retrieveUserList(Object arg0) throws DataBackendException
+    {
+        throw new DataBackendException("Not implemented yet");
+    }
 
     /**
      * Avalon Service lifecycle method

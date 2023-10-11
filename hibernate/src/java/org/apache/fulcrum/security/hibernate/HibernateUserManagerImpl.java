@@ -230,4 +230,10 @@ public class HibernateUserManagerImpl extends AbstractUserManager
 
         return user;
     }
+
+    @Override
+    public <T extends User> UserSet<T> retrieveUserList(Object arg0) throws DataBackendException
+    {
+        throw new DataBackendException("Not implemented yet");
+    }
 }

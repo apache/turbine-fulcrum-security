@@ -21,7 +21,7 @@
    <parent>
        <artifactId>turbine-parent</artifactId>
        <groupId>org.apache.turbine</groupId>
-       <version>12-SNAPSHOT</version>
+       <version>12</version>
        <relativePath />
    </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -99,12 +99,12 @@
         <dependency>
           <groupId>org.apache.fulcrum</groupId>
           <artifactId>fulcrum-security-api</artifactId>
-          <version>2.1.1-SNAPSHOT</version>
+          <version>${project.version}</version>
         </dependency>
         <dependency>
           <groupId>org.apache.fulcrum</groupId>
           <artifactId>fulcrum-security-api</artifactId>
-          <version>2.1.1-SNAPSHOT</version>
+          <version>${project.version}</version>
           <type>test-jar</type>
           <scope>test</scope>
         </dependency>
@@ -112,19 +112,19 @@
           <groupId>org.apache.fulcrum</groupId>
           <artifactId>fulcrum-testcontainer</artifactId>
           <!-- junit 5 seems to have problems to find unit tests in test scoped jar org.apache.fulcrum:fulcrum-security-api:test-jar, upgrade from 1.0.8, classpath loading issue?  -->
-          <version>1.0.9</version>
+          <version>2.0.0</version>
           <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.apache.fulcrum</groupId>
           <artifactId>fulcrum-yaafi</artifactId>
-          <version>1.0.8</version>
+          <version>2.0.0</version>
           <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>org.apache.fulcrum</groupId>
           <artifactId>fulcrum-security-memory</artifactId>
-          <version>2.1.1-SNAPSHOT</version>
+          <version>${project.version}</version>
           <scope>test</scope>
         </dependency>
         <dependency>
@@ -134,11 +134,22 @@
           <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${turbine.log4j2.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.avalon.framework</groupId>
             <artifactId>avalon-framework-api</artifactId>
             <version>4.3.1</version>
              <scope>provided</scope>
-           </dependency>
+         </dependency>
+         <dependency>
+             <groupId>org.apache.commons</groupId>
+             <artifactId>commons-lang3</artifactId>
+             <version>3.12.0</version>
+          </dependency>
       </dependencies>
     </dependencyManagement>
     
@@ -199,7 +210,7 @@
         <!--module>hibernate</module-->
         <module>memory</module>
         <!-- module>nt</module -->
-        <!-- module>ldap</module -->
+        <!--module>ldap</module-->
         <module>torque</module>
         <module>dist</module>
     </modules>

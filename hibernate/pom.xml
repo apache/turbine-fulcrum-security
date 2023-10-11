@@ -21,7 +21,7 @@
     <parent>
         <artifactId>fulcrum-security</artifactId>
         <groupId>org.apache.fulcrum</groupId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>3.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -84,17 +84,17 @@
             <artifactId>cglib</artifactId>
             <version>2.2.2</version>
         </dependency>     
-           
-        <dependency>
+         <dependency>
             <groupId>org.apache.fulcrum</groupId>
             <artifactId>fulcrum-security-api</artifactId>
+            <version>${project.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
-        </dependency>
+        </dependency>           
         <dependency>
-            <groupId>hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
-            <version>1.8.0.7</version>
+            <groupId>org.hsqldb</groupId>
+            <version>2.7.0</version>
             <scope>test</scope>
         </dependency>
         <!-- testing dependencies -->
@@ -119,12 +119,11 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-1.2-api</artifactId>
             <version>${turbine.log4j2.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
-            <version>2.20.0</version>
+            <version>${turbine.log4j2.version}</version>
         </dependency>
 
     </dependencies>
