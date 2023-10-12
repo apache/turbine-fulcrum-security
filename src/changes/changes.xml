@@ -23,9 +23,18 @@
     <author email="epugh@upstate.com">Eric Pugh</author>
   </properties>
   <body>
-  <release version="2.1.1" description="In VC">
+  <release version="3.0.0" description="In GIT">
+    <action type="add" dev="gk">
+        Add UserManager UserSet<T> retrieveUserList(Object criteria) , impl and tests
+     </action>
+     <action type="update" dev="gk">
+         Java Dependency updates: Update to commons-dbcp2 2.10.0 (Torque)
+     </action>
+     <action type="update" dev="gk">
+         Java 11 baseline
+      </action>
     <action type="update" dev="gk">
-        Update to Turbine parent v10
+        Update to Turbine parent v12
      </action>
    </release>
   <release version="2.1.0" description="2021-11-04">
