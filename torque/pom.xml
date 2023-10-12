@@ -88,6 +88,13 @@
             <artifactId>torque-runtime</artifactId>
             <version>${torque.version}</version>
         </dependency>
+        <!-- override transisitve dep in torque-runtime due to CVE-2022-42889 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.10.0</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.fulcrum</groupId>
             <artifactId>fulcrum-security-api</artifactId>
@@ -110,7 +117,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-dbcp2</artifactId>
-            <version>2.9.0</version>
+            <version>2.10.0</version>
         </dependency>
         
         <!-- override from torque -->
