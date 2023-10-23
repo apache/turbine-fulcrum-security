@@ -23,7 +23,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.fulcrum</groupId>
     <artifactId>fulcrum-security-ldap</artifactId>
     <name>Fulcrum Security LDAP Impl</name>
     
@@ -45,7 +44,7 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <forkMode>always</forkMode>
+                    <!-- reuseForks>false</reuseForks-->
                     <includes>
                         <include>**/*Test.*</include>
                         <include>**/*TestCase.*</include>
