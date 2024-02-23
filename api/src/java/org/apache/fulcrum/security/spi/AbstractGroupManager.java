@@ -57,7 +57,7 @@ public abstract class AbstractGroupManager extends AbstractEntityManager impleme
         try
         {
             @SuppressWarnings("unchecked")
-			T group = (T) Class.forName(getClassName()).newInstance();
+			T group = (T) Class.forName(getClassName()).getConstructor( null ).newInstance();
             return group;
         }
         catch (Exception e)

@@ -40,7 +40,7 @@ public abstract class AbstractTurbineSecurityEntityImpl extends SecurityEntityIm
      * 
      */
     private static final long serialVersionUID = 1L;
-    private Set<? extends TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
+    private transient Set<? extends TurbineUserGroupRole> userGroupRoleSet = new HashSet<TurbineUserGroupRole>();
 
     /**
      * Get the User/Group/Role set associated with this entity

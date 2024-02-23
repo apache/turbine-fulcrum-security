@@ -1,5 +1,7 @@
 package org.apache.fulcrum.security.model.turbine.entity;
 
+import java.io.Serializable;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -31,7 +33,7 @@ import org.apache.fulcrum.security.util.DataBackendException;
  * @author <a href="mailto:epugh@upstate.com">Eric Pugh </a>
  * @version $Id: TurbineRole.java 535465 2007-05-05 06:58:06Z tv $
  */
-public interface TurbineUserGroupRoleEntity {
+public interface TurbineUserGroupRoleEntity extends Serializable {
 
 	/**
 	 * Get the User/Group/Role set associated with this entity

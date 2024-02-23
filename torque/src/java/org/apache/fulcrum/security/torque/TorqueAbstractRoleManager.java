@@ -366,7 +366,7 @@ public abstract class TorqueAbstractRoleManager extends AbstractRoleManager impl
         }
         catch (NoRowsException e)
         {
-            throw new UnknownEntityException("Could not find role" + name);
+            throw new UnknownEntityException("Could not find role " + name);
         }
         catch (TooManyRowsException e)
         {

@@ -26,9 +26,19 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Set;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.fulcrum.security.SecurityService;
 import org.apache.fulcrum.security.UserManager;
 import org.apache.fulcrum.security.acl.AccessControlList;
@@ -38,11 +48,14 @@ import org.apache.fulcrum.security.entity.User;
 import org.apache.fulcrum.security.model.test.AbstractUserManagerTest;
 import org.apache.fulcrum.security.model.turbine.TurbineAccessControlList;
 import org.apache.fulcrum.security.model.turbine.TurbineModelManager;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineGroup;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUser;
 import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole;
+import org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRoleEntity;
 import org.apache.fulcrum.security.torque.HsqlDB;
 import org.apache.fulcrum.security.torque.om.TurbineGroupPeer;
 import org.apache.fulcrum.security.torque.om.TurbinePermissionPeer;
+import org.apache.fulcrum.security.torque.om.TurbineRole;
 import org.apache.fulcrum.security.torque.om.TurbineRolePeer;
 import org.apache.fulcrum.security.torque.om.TurbineRolePermissionPeer;
 import org.apache.fulcrum.security.torque.om.TurbineUserPeer;
@@ -404,7 +417,60 @@ public class TurbineUserManagerWithDefaultPeerLazyTest
         acl = userManager.getACL( user );
 
         assertTrue( ( (TurbineAccessControlList) acl ).hasRole( testRole ) );
+        
+        TurbineAccessControlList dacl = (TurbineAccessControlList) acl;
+        Serializable serDeSer1 = SerializationUtils.roundtrip(dacl.getPermissions()); 
+        Serializable serDeSer3 = SerializationUtils.roundtrip(dacl.getAllGroups());
+        
+        Set<TurbineUserGroupRole> tugrs_group = ((TurbineGroup) dacl.getGroupSet().getByName( TEST_GROUP )).getUserGroupRoleSet();
+        assertTrue(tugrs_group.size()>0);
+        assertTrue(tugrs_group instanceof Serializable, "Expected Set of TurbineUserGroupRole is serializable: " + tugrs_group.getClass());
+
+        TurbineUserGroupRole tugr_group = tugrs_group.iterator().next();
+        assertTrue(tugr_group instanceof Serializable, "Expected TurbineUserGroupRole is serializable: " + tugr_group.getClass());
+        
+        Serializable serDeSer0001 = SerializationUtils.roundtrip((Serializable) tugr_group);
+
+        Serializable serDeSer0002 = SerializationUtils.roundtrip(tugr_group.getUser());
+        // lower limit class check
+        TurbineRole tr = new TurbineRole();
+        Serializable serDeSer0003 = SerializationUtils.roundtrip(tr);
+        
+        Serializable serDeSer00031 = SerializationUtils.roundtrip(tugr_group.getRole());
+        Serializable serDeSer0004 = SerializationUtils.roundtrip(tugr_group.getGroup());
+        Serializable serDeSer0005 = SerializationUtils.roundtrip(dacl.getGroupSet().getByName( TEST_GROUP ));
+        
+        Set<TurbineUserGroupRole> tugrs_role = ((TurbineRole) dacl.getRoles().getByName( TEST_ROLE )).getUserGroupRoleSet();
+        assertTrue(tugrs_role instanceof Serializable, "Expected TurbineUserGroupRole is serializable: " + tugrs_role.getClass());
+        TurbineUserGroupRole tugr_role = tugrs_role.iterator().next();
+        assertTrue(tugr_role instanceof Serializable, "Expected TurbineUserGroupRole is serializable: " + tugr_role.getClass());
+        
+        System.out.println( "tugr.getUser():" + tugr_role.getUser().getClass() );
+        System.out.println( "tugr.getGroup():" + tugr_role.getGroup().getClass() );
+        System.out.println( "tugr.getRole():" + tugr_role.getRole().getClass() );
+        System.out.println( "set role tugr has next:" + tugrs_role.iterator().hasNext() );
+        
+        Serializable serDeSer010 = SerializationUtils.roundtrip(tugr_role.getUser());
+        ((org.apache.fulcrum.security.torque.om.TurbineGroup)tugr_role.getGroup()).resetTurbineUserGroupRole();
+        Serializable serDeSer0011 = SerializationUtils.roundtrip(tugr_role.getGroup());
+        
+//        ((org.apache.fulcrum.security.torque.om.TurbineRole)tugr_role.getRole()).resetTurbineUserGroupRole();
+//        ((org.apache.fulcrum.security.torque.om.TurbineRole)tugr_role.getRole()).resetTurbineRolePermission();
+//        ((org.apache.fulcrum.security.torque.om.TurbineRole)tugr_role.getRole()).setUserGroupRoleSet( null );
+//        // this will as role.lastTurbineRolePermissionCriteria and lastTurbineUserGroupRoleCriteria not serializable
+//        Serializable serDeSer0012 = SerializationUtils.roundtrip(tugr_role.getRole());
+//        Serializable serDeSer0013 = SerializationUtils.roundtrip((Serializable) tugr_role);
+//        Serializable serDeSer0014 = SerializationUtils.roundtrip(dacl.getRoles().getByName( TEST_ROLE ));
+//        Serializable serDeSer0015 = SerializationUtils.roundtrip(dacl.getRoles());
+
+        Serializable serDeSer020 = SerializationUtils.roundtrip(dacl.getGroupSet());
+        
+        // this will fail as role fails
+//        Serializable serDeSer = SerializationUtils.roundtrip(acl);
+//        assertTrue( ((TurbineAccessControlList)serDeSer).getRoles().toString().equals(dacl.getRoles().toString()),
+//                "Expected RoleSet: ... GroupSet: ..");
     }
+
 
     @Test
     public void testRemoveUser()

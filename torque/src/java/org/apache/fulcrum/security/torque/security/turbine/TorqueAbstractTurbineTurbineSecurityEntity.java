@@ -39,7 +39,7 @@ public abstract class TorqueAbstractTurbineTurbineSecurityEntity extends TorqueA
 	private static final long serialVersionUID = -6230312046016785990L;
 
 	/** a cache of user_group_role objects */
-    private Set<? extends TurbineUserGroupRole> userGroupRoleSet = null;
+    private transient Set<? extends TurbineUserGroupRole> userGroupRoleSet = null;
     
     /* (non-Javadoc)
      * @see org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRoleEntity#addUserGroupRole(org.apache.fulcrum.security.model.turbine.entity.TurbineUserGroupRole)
