@@ -111,7 +111,6 @@
         <dependency>
           <groupId>org.apache.fulcrum</groupId>
           <artifactId>fulcrum-testcontainer</artifactId>
-          <!-- junit 5 seems to have problems to find unit tests in test scoped jar org.apache.fulcrum:fulcrum-security-api:test-jar, upgrade from 1.0.8, classpath loading issue?  -->
           <version>2.0.0</version>
           <scope>test</scope>
         </dependency>
@@ -148,7 +147,7 @@
          <dependency>
              <groupId>org.apache.commons</groupId>
              <artifactId>commons-lang3</artifactId>
-             <version>3.13.0</version>
+             <version>3.14.0</version>
           </dependency>
       </dependencies>
     </dependencyManagement>
