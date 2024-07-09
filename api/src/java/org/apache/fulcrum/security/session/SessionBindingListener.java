@@ -22,7 +22,7 @@ package org.apache.fulcrum.security.session;
 
 /**
  * This interface is modelled after
- * javax.servlet.http.HttpSessionBindingListener.
+ * jakarta.servlet.http.HttpSessionBindingListener.
  * 
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$

@@ -21,7 +21,7 @@ package org.apache.fulcrum.security.session;
 
 
 /**
- * This interface provides access to the <code>javax.servlet.HttpSession</code>
+ * This interface provides access to the <code>jakarta.servlet.HttpSession</code>
  * interface.
  * 
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
