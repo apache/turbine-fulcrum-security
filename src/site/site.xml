@@ -17,8 +17,27 @@
  specific language governing permissions and limitations
  under the License.
 -->
-<project name="Fulcrum Security">
+<site xmlns="http://maven.apache.org/SITE/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd"
+  name="Apache Turbine - Fulcrum Security" combine.self="merge">  
+
+  <bannerLeft href="https://turbine.apache.org/">
+    <image src="https://turbine.apache.org/images/turbine-project.png" alt="Apache Turbine" />
+  </bannerLeft>
   
+   <bannerRight name="Fulcrum Security">
+   </bannerRight>
+    
+    <publishDate format="dd MMMM yyyy" position="left" />
+    
+    <version position="left" />
+  
+   <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>2.0.0-M11</version>
+  </skin>
+
 
 <body>
     <menu name="Overview" inherit="top">
@@ -34,4 +53,4 @@
     </menu>
 </body>  
 
-</project>
+</site>
