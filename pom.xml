@@ -27,7 +27,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.fulcrum</groupId>
     <artifactId>fulcrum-security</artifactId>
-    <version>4.0.0</version>
+    <version>4.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Fulcrum Security Master Build</name>
     <url>https://turbine.apache.org/fulcrum/fulcrum-security/</url>
@@ -36,7 +36,7 @@
         <connection>scm:git:https://gitbox.apache.org/repos/asf/turbine-fulcrum-security.git</connection>
         <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/turbine-fulcrum-security.git</developerConnection>
         <url>https://github.com/apache/${turbine.site.path}/tree/${project.scm.tag}</url>
-        <tag>fulcrum-security-4.0.0-candidate</tag>
+        <tag>HEAD</tag>
     </scm>
     
      <!-- distributionManagement required for staging to work, id and url defined in parent, adapt turbine.site.path -->

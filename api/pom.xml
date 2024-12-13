@@ -19,7 +19,7 @@
     <parent>
         <artifactId>fulcrum-security</artifactId>
         <groupId>org.apache.fulcrum</groupId>
-        <version>4.0.0</version>
+        <version>4.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -30,7 +30,7 @@
     
     <scm>
       <url>https://github.com/apache/${turbine.site.path}/tree/${project.scm.tag}</url>
-      <tag>fulcrum-security-4.0.0-candidate</tag>
+      <tag>HEAD</tag>
     <connection>scm:git:https://gitbox.apache.org/repos/asf/turbine-fulcrum-security.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/turbine-fulcrum-security.git</developerConnection>
   </scm>
