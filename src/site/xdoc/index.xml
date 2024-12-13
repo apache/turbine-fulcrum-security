@@ -29,7 +29,7 @@
 
   <section name="Overview">
     <p>
-      This component provides a highly flexible security framework  It is based on code from the
+      This component provides a highly flexible security framework. It is based on code from the
       Turbine framework, but has been expanded and can be used in any container compatible
       with the Avalon framework.
     <ul>

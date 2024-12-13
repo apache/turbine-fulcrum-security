@@ -22,6 +22,7 @@
   name="Apache Turbine - Fulcrum Security Memory Implementation" combine.self="merge"> 
 
 <body>
+  <menu ref="reports"></menu>
 </body>
 
 </site>

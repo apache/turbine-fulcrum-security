@@ -23,6 +23,7 @@
 
 
 <body>
+  <menu ref="reports"></menu>
 </body>
  
 
