@@ -21,7 +21,7 @@
    <parent>
        <artifactId>turbine-parent</artifactId>
        <groupId>org.apache.turbine</groupId>
-       <version>13</version>
+       <version>14</version>
        <relativePath />
    </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -183,7 +183,7 @@
               </configuration>
             </plugin>
 
-             <plugin>
+           <plugin>
               <groupId>org.owasp</groupId>
               <artifactId>dependency-check-maven</artifactId>
               <executions>
@@ -194,6 +194,7 @@
                   </execution>
               </executions>
               <configuration>
+                   <skip>${dependency.check.skip}</skip>
                    <!-- suppress false positive -->
                    <suppressionFiles>
                     <suppressionFile>${project.basedir}/suppression-owasp.xml</suppressionFile>
